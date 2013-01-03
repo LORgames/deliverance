@@ -686,7 +686,6 @@ namespace CityTools {
                 rotationAngle -= 360;
 
             float a_rotationAngle = Math.Abs(rotationAngle);
-
             float scale = (float)obj_scale.Value;
 
             bool flipX = obj_flipX.Checked;
@@ -711,10 +710,14 @@ namespace CityTools {
                 iH = (int)(dH * dSin + dW * dCos);
             }
 
-            int iX = (iW - obj_paint_original.Width) / 2;
-            int iY = (iH - obj_paint_original.Height) / 2;
+            //int iX = (iW - obj_paint_original.Width) / 2;
+            //int iY = (iH - obj_paint_original.Height) / 2;
+
+            int iX = obj_paint_original.Width / 2;
+            int iY = obj_paint_original.Height / 2;
 
             obj_paint_image = new Bitmap(iW, iH);
+            ((Bitmap)obj_paint_image).SetResolution(obj_paint_original.HorizontalResolution, obj_paint_original.VerticalResolution);
 
             Graphics g = Graphics.FromImage(obj_paint_image);
 
@@ -722,8 +725,8 @@ namespace CityTools {
             g.RotateTransform(rotationAngle);
             g.TranslateTransform(-iX, -iY);
             
-            //g.DrawImage(obj_paint_original, new Point(iX, iY));
-            g.DrawImage(obj_paint_original, Point.Empty);
+            g.DrawImage(obj_paint_original, new Point(iX, iY));
+            //g.DrawImage(obj_paint_original, Point.Empty);
 
             g.Dispose();
         }
