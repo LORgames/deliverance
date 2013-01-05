@@ -86,8 +86,7 @@ namespace CityToolsServer {
                             string command = currentInput;
                             currentInput = "";
 
-                            //TODO: Implement this.
-                            //Program.ProcessInput(command);
+                            Program.ProcessInput(command);
                         } else {
                             if (currentInput.Length < 30) {
                                 currentInput += nextChar.KeyChar;

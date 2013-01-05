@@ -46,7 +46,6 @@ namespace CityTools {
                     foreach (var pl in Enum.GetValues(typeof(PaintLayers))) {
                         if (!File.Exists(GetTileFilename(i, j, (PaintLayers)pl))) {
                             File.Copy(MAP_EMPTY, GetTileFilename(i, j, (PaintLayers)pl));
-
                             File.SetLastWriteTimeUtc(GetTileFilename(i, j, (PaintLayers)pl), DateTime.MinValue.AddYears(1969));
                         }
 

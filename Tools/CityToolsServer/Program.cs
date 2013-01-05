@@ -13,5 +13,11 @@ namespace CityToolsServer {
 
             mcs = new MultiuserConnectionServer();
         }
+
+        internal static void ProcessInput(string command) {
+            if (command == "quit") {
+                mcs.Shutdown();
+            }
+        }
     }
 }

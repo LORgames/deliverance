@@ -5,9 +5,13 @@ using System.Text;
 using ElephantNetworking;
 using System.Windows.Forms;
 using System.IO;
+using System.Drawing;
 
 namespace CityTools {
     class NetworkListener : INetworkListen {
+
+        private List<Rectangle> neededFiles = new List<Rectangle>();
+        private bool isAwaitingFile = false;
 
         public NetworkListener() {
             //Not sure it needs to do anything?
@@ -27,6 +31,8 @@ namespace CityTools {
                 File.SetLastWriteTimeUtc(fname, time);
                 MapCache.FetchUpdate(i, j, (PaintLayers)layer);
 
+                isAwaitingFile = false;
+                RequestNext();
             } else if(data.Type == NetworkMessageTypes.AssignmentGetLog) {
                 int serv_TX = data.GetInt(); //X stuff
                 int serv_TY = data.GetInt(); //Y stuff
@@ -45,18 +51,33 @@ namespace CityTools {
                             filetimes[i, j, l] = data.GetLong();
 
                             if (filetimes[i, j, l] > MapCache.Filetimes[i, j, l]) {
-                                NetworkMessage nm7 = new NetworkMessage(NetworkMessageTypes.AssignmentCopyAddress);
-                                nm7.AddInt(i);
-                                nm7.AddInt(j);
-                                nm7.AddInt(l);
-                                MapCache.client.SendMessage(nm7);
+                                neededFiles.Add(new Rectangle(i, j, l, 0));
                             }
                         }
                     }
                 }
+
+                RequestNext();
             }
 
             return true;
+        }
+
+        private void RequestNext() {
+            if (!isAwaitingFile && neededFiles.Count > 0) {
+                isAwaitingFile = true;
+
+                int i = neededFiles[0].Left;
+                int j = neededFiles[0].Right;
+                int l = neededFiles[0].Width;
+                neededFiles.RemoveAt(0);
+
+                NetworkMessage nm7 = new NetworkMessage(NetworkMessageTypes.AssignmentCopyAddress);
+                nm7.AddInt(i);
+                nm7.AddInt(j);
+                nm7.AddInt(l);
+                MapCache.client.SendMessage(nm7);
+            }
         }
     }
 }
