@@ -409,6 +409,7 @@
             this.obj_rot.Name = "obj_rot";
             this.obj_rot.Size = new System.Drawing.Size(45, 20);
             this.obj_rot.TabIndex = 2;
+            this.obj_rot.ValueChanged += new System.EventHandler(this.obj_settings_ValueChanged);
             // 
             // label3
             // 
@@ -543,9 +544,9 @@
         private System.Windows.Forms.SplitContainer main_splitter;
         private System.Windows.Forms.Panel mapViewPanel_c;
         private System.Windows.Forms.SplitContainer toolpanel_splitter;
-        private System.Windows.Forms.CheckBox layer_ceiling;
-        private System.Windows.Forms.CheckBox layer_objects;
-        private System.Windows.Forms.CheckBox layer_floor;
+        internal System.Windows.Forms.CheckBox layer_ceiling;
+        internal System.Windows.Forms.CheckBox layer_objects;
+        internal System.Windows.Forms.CheckBox layer_floor;
         private System.Windows.Forms.TabControl tool_tabs;
         private System.Windows.Forms.TabPage terrain_tab;
         private System.Windows.Forms.TabPage objects_tab;

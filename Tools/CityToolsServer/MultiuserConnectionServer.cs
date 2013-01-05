@@ -16,9 +16,29 @@ namespace CityToolsServer {
         public bool OnData(NetworkMessage data) {
             if (data.Type == NetworkMessageTypes.AssignmentGetLog) {
 
+            } else if (data.Type == NetworkMessageTypes.AssignmentUpload) {
+                int i = data.GetInt();
+                int j = data.GetInt();
+                int layer = data.GetInt();
+
+                string fname = MapCache.GetTileFilename(i, j, layer);
+                data.DecodeFile(fname);
             }
 
             return true;
+        }
+
+        private void UpdateToTileAlert(int i, int j, int layer) {
+            NetworkMessage nm = new NetworkMessage(NetworkMessageTypes.AssignmentUpload);
+            nm.AddInt(i);
+            nm.AddInt(j);
+            nm.AddInt(layer);
+
+            string fname = MapCache.GetTileFilename(i, j, layer);
+
+            nm.EncodeFile(fname);
+
+            server.SendMessage(nm);
         }
     }
 }

@@ -34,37 +34,29 @@ namespace CityTools {
         public const int TILE_TX = 16; //How many image blocks across
         public const int TILE_TY = 16; //How many image blocks down
 
-        public const string MAP_CACHE = ".\\mapcache\\";
-
-        public const string MAP_BASE_PREFIX = "base_";
-        public const string MAP_CEIL_PREFIX = "ceil_";
-        public const string MAP_OBJECTS_PREFIX = "objects_";
-
         public const string MAP_MINI_GROUND_CACHE = "minimap_ground.png";
         public const string MAP_MINI_OBJECT_CACHE = "minimap_object.png";
 
-        public const string MAP_SEPERATOR = "_";
-        public const string MAP_FILETYPE = ".png";
-        public const string MAP_EMPTY = ".\\blank.png";
-
         public Color BACKGROUND_COLOR = Color.CornflowerBlue;
-
-        private Image[,] base_images;
-        private Image[,] top_images;
-        private Image[,] object_images;
 
         private float offsetX = 0.0f;
         private float offsetY = 0.0f;
         private float offsetZ = 1.0f;
 
         public static MainWindow instance;
-        private bool REQUIRES_CLOSE = false;
+        public bool REQUIRES_CLOSE = false;
+
+        //Our cache
+        public Boolean[,] needsToBeSaved;
+        public Image[,] base_images;
+        public Image[,] top_images;
+        public Image[,] object_images;
 
         //Our drawing settings
         public Rectangle drawArea = new Rectangle();
         public Rectangle viewArea = new Rectangle();
 
-        private Rectangle cachedMapArea = new Rectangle();
+        public Rectangle cachedMapArea = new Rectangle();
 
         private Point mousePos = Point.Empty;
         private Point snapPoint = Point.Empty;
@@ -72,23 +64,23 @@ namespace CityTools {
         private PaintLayers activeLayer = PaintLayers.Ground;
 
         //Our drawing buffers
-        private LBuffer floor_buffer;
-        private LBuffer ceiling_buffer;
-        private LBuffer objects_buffer;
-        private LBuffer input_buffer;
+        public LBuffer floor_buffer;
+        public LBuffer ceiling_buffer;
+        public LBuffer objects_buffer;
+        public LBuffer input_buffer;
 
-        private LBuffer mapBuffer_ground;
-        private LBuffer mapBuffer_object;
+        public LBuffer mapBuffer_ground;
+        public LBuffer mapBuffer_object;
 
         //Terrain painting things
-        private bool terrainRedrawRequired = true;
-        private Brush terrainPaintBrush = new SolidBrush(Color.White);
-        private PaintShape paintShape = PaintShape.Circle;
+        public bool terrainRedrawRequired = true;
+        public Brush terrainPaintBrush = new SolidBrush(Color.White);
+        public PaintShape paintShape = PaintShape.Circle;
 
         //Object painting things
-        private Image obj_paint_image = null;
-        private Image obj_paint_original = null;
-        private bool was_mouse_down = false;
+        public Bitmap obj_paint_image = null;
+        public Image obj_paint_original = null;
+        public bool was_mouse_down = false;
 
         public MainWindow() {
             instance = this;
@@ -98,38 +90,15 @@ namespace CityTools {
             obj_collection_buildings.Controls.Add(new ObjectCacheControl("buildings"));
             obj_collection_roads.Controls.Add(new ObjectCacheControl("roads"));
             obj_collection_environment.Controls.Add(new ObjectCacheControl("environment"));
-            
+
+            needsToBeSaved = new Boolean[TILE_TX, TILE_TY];
             base_images = new Image[TILE_TX, TILE_TY];
             top_images = new Image[TILE_TX, TILE_TY];
             object_images = new Image[TILE_TX, TILE_TY];
 
-            if (!Directory.Exists(MAP_CACHE)) Directory.CreateDirectory(MAP_CACHE);
-            if (!Directory.Exists(ObjectCacheControl.OBJECT_CACHE_FOLDER)) Directory.CreateDirectory(ObjectCacheControl.OBJECT_CACHE_FOLDER);
+            MapCache.VerifyCacheFiles();
 
-            if (!File.Exists(MAP_EMPTY)) {
-                MessageBox.Show("You need a 'blank' tile stored as " + MAP_EMPTY + "\n\n (such a baddie...)");
-                REQUIRES_CLOSE = true;
-                return;
-            }
-
-            //Do a file check to make sure they all exist
-            for (int i = 0; i < TILE_TX; i++) {
-                for (int j = 0; j < TILE_TY; j++) {
-                    if (!File.Exists(MAP_CACHE + MAP_BASE_PREFIX + i + MAP_SEPERATOR + j + MAP_FILETYPE)) {
-                        File.Copy(MAP_EMPTY, MAP_CACHE + MAP_BASE_PREFIX + i + MAP_SEPERATOR + j + MAP_FILETYPE);
-                    }
-
-                    if (!File.Exists(MAP_CACHE + MAP_CEIL_PREFIX + i + MAP_SEPERATOR + j + MAP_FILETYPE)) {
-                        File.Copy(MAP_EMPTY, MAP_CACHE + MAP_CEIL_PREFIX + i + MAP_SEPERATOR + j + MAP_FILETYPE);
-                    }
-
-                    if (!File.Exists(MAP_CACHE + MAP_OBJECTS_PREFIX + i + MAP_SEPERATOR + j + MAP_FILETYPE)) {
-                        File.Copy(MAP_EMPTY, MAP_CACHE + MAP_OBJECTS_PREFIX + i + MAP_SEPERATOR + j + MAP_FILETYPE);
-                    }
-                }
-            }
-
-            Fetchmap(0, 0, 1, 1);
+            MapCache.Fetchmap(0, 0, 1, 1, ref cachedMapArea);
 
             drawArea = mapViewPanel.DisplayRectangle;
             FixViewArea();
@@ -148,69 +117,6 @@ namespace CityTools {
             mapViewPanel.Invalidate();
         }
 
-        private void Fetchmap(int mX, int mY, int wX, int wY, int tries = 0) {
-            if (cachedMapArea.Left <= mX && cachedMapArea.Right >= wX && cachedMapArea.Top <= mY && cachedMapArea.Bottom >= wY) {
-                return;
-            }
-
-            int totalErrors = 0;
-
-            for (int x = cachedMapArea.Left; x < cachedMapArea.Right; x++) {
-                for (int y = cachedMapArea.Top; y < cachedMapArea.Bottom; y++) {
-                    try {
-                        if (base_images[x, y] != null) {
-                            base_images[x, y].Dispose();
-                        }
-                    } catch {
-                        totalErrors++;
-                    }
-
-                    try {
-                        if (top_images[x, y] != null) {
-                            top_images[x, y].Dispose();
-                        }
-                    } catch {
-                        totalErrors++;
-                    }
-
-                    try {
-                        if (object_images[x, y] != null) {
-                            object_images[x, y].Dispose();
-                        }
-                    } catch {
-                        totalErrors++;
-                    }
-                }
-            }
-
-            if (totalErrors > 0) MessageBox.Show("There are now locked tiles. \n" + totalErrors + " Errors occurred.");
-
-            base_images = new Image[TILE_TX, TILE_TY];
-            top_images = new Image[TILE_TX, TILE_TY];
-
-            try {
-                for (int i = mX; i <= wX; i++) {
-                    for (int j = mY; j <= wY; j++) {
-                        if(layer_floor.Checked)
-                            base_images[i, j] = Image.FromFile(MAP_CACHE + MAP_BASE_PREFIX + i + MAP_SEPERATOR + j + MAP_FILETYPE);
-
-                        if(layer_ceiling.Checked)
-                            top_images[i, j] = Image.FromFile(MAP_CACHE + MAP_CEIL_PREFIX + i + MAP_SEPERATOR + j + MAP_FILETYPE);
-
-                        if (layer_objects.Checked)
-                            object_images[i, j] = Image.FromFile(MAP_CACHE + MAP_OBJECTS_PREFIX + i + MAP_SEPERATOR + j + MAP_FILETYPE);
-                    }
-                }
-            } catch {
-                if (tries == 0) {
-                    GC.Collect();
-                    Fetchmap(mX, mY, wX, wY, tries + 1);
-                }
-            }
-
-            cachedMapArea = new Rectangle(mX, mY, wX-mX, wY-mY);
-        }
-
         private void mapViewPanel_Paint(object sender, PaintEventArgs e) {
             if (REQUIRES_CLOSE) { this.Close(); return; }
 
@@ -227,7 +133,6 @@ namespace CityTools {
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
             if (keyData == Keys.W || keyData == Keys.A || keyData == Keys.S || keyData == Keys.D || keyData == Keys.Q || keyData == Keys.E) {
-
                 if (keyData == Keys.W) {
                     offsetY -= 0.25f / offsetZ;
                 } else if (keyData == Keys.A) {
@@ -263,6 +168,18 @@ namespace CityTools {
                 paintMode = PaintMode.Off;
                 pen_btn.Text = "Pen Tool (Off)";
                 mapViewPanel.Invalidate();
+            } else if (keyData == Keys.Left) {
+                if (obj_rot.Value < 315) {
+                    obj_rot.Value += 45;
+                } else {
+                    obj_rot.Value = 0;
+                }
+            } else if (keyData == Keys.Right) {
+                if (obj_rot.Value > 0) {
+                    obj_rot.Value -= 45;
+                } else {
+                    obj_rot.Value = 315;
+                }
             }
 
             return base.ProcessCmdKey(ref msg, keyData);
@@ -322,12 +239,7 @@ namespace CityTools {
 
                     while (true) {
                         try {
-
-                            if (activeLayer == PaintLayers.Ground) {
-                                bmp.Save(MAP_CACHE + MAP_BASE_PREFIX + i + MAP_SEPERATOR + j + MAP_FILETYPE);
-                            } else if (activeLayer == PaintLayers.Objects) {
-                                bmp.Save(MAP_CACHE + MAP_OBJECTS_PREFIX + i + MAP_SEPERATOR + j + MAP_FILETYPE);
-                            }
+                            bmp.Save(MapCache.GetTileFilename(i, j, activeLayer));
 
                             break;
                         } catch (System.Runtime.InteropServices.ExternalException ex) {
@@ -355,8 +267,8 @@ namespace CityTools {
                         }
                     }
 
-                    base_images[i, j] = Image.FromFile(MAP_CACHE + MAP_BASE_PREFIX + i + MAP_SEPERATOR + j + MAP_FILETYPE);
-                    object_images[i, j] = Image.FromFile(MAP_CACHE + MAP_OBJECTS_PREFIX + i + MAP_SEPERATOR + j + MAP_FILETYPE);
+                    base_images[i, j] = Image.FromFile(MapCache.GetTileFilename(i, j, PaintLayers.Ground));
+                    object_images[i, j] = Image.FromFile(MapCache.GetTileFilename(i, j, PaintLayers.Objects));
                 }
             }
 
@@ -364,10 +276,12 @@ namespace CityTools {
         }
 
         private void drawPanel_ME_move(object sender, MouseEventArgs e) {
+            mapViewPanel.Focus();
+            mousePos = e.Location;
+
             if (paintMode == PaintMode.Terrain) {
                 Rectangle effectedArea = new Rectangle((int)(mousePos.X - terrain_penSize.Value / 2), (int)(mousePos.Y - terrain_penSize.Value / 2), (int)terrain_penSize.Value, (int)terrain_penSize.Value);
                 
-                mousePos = e.Location;
                 input_buffer.gfx.Clear(Color.Transparent);
 
                 if (paintShape == PaintShape.Square) {
@@ -426,8 +340,6 @@ namespace CityTools {
 
                 mapViewPanel.Invalidate();
             } else if(paintMode == PaintMode.Objects) {
-                mousePos = e.Location;
-
                 RectangleF effectedArea = new RectangleF(mousePos.X - (obj_paint_image.Width * offsetZ / 2), mousePos.Y - (obj_paint_image.Height * offsetZ / 2), obj_paint_image.Width * offsetZ, obj_paint_image.Height * offsetZ);
 
                 Rectangle eD = new Rectangle((int)effectedArea.Left, (int)effectedArea.Top, (int)Math.Round(effectedArea.Width), (int)Math.Round(effectedArea.Height));
@@ -510,7 +422,7 @@ namespace CityTools {
                 if (wTileX > TILE_TX) wTileX = TILE_TX;
                 if (hTileY > TILE_TY) hTileY = TILE_TY;
 
-                Fetchmap(oTileX, oTileY, wTileX, hTileY);
+                MapCache.Fetchmap(oTileX, oTileY, wTileX, hTileY, ref cachedMapArea);
 
                 float tileXPos = 0.0f;
                 float tileYPos = 0.0f;
@@ -593,11 +505,11 @@ namespace CityTools {
 
                 for (int i = 0; i < TILE_TX; i++) {
                     for (int j = 0; j < TILE_TY; j++) {
-                        currentMapChunk = Image.FromFile(MAP_CACHE + MAP_BASE_PREFIX + i + MAP_SEPERATOR + j + MAP_FILETYPE);
+                        currentMapChunk = Image.FromFile(MapCache.GetTileFilename(i, j, PaintLayers.Ground));
                         mapBuffer_ground.gfx.DrawImage(currentMapChunk, new Rectangle((int)(i * TILE_SX * scaleX), (int)(j * TILE_SY * scaleY), (int)(TILE_SX * scaleX), (int)(TILE_SY * scaleY)));
                         currentMapChunk.Dispose();
 
-                        currentMapChunk = Image.FromFile(MAP_CACHE + MAP_OBJECTS_PREFIX + i + MAP_SEPERATOR + j + MAP_FILETYPE);
+                        currentMapChunk = Image.FromFile(MapCache.GetTileFilename(i, j, PaintLayers.Objects));
                         mapBuffer_object.gfx.DrawImage(currentMapChunk, new Rectangle((int)(i * TILE_SX * scaleX), (int)(j * TILE_SY * scaleY), (int)(TILE_SX * scaleX), (int)(TILE_SY * scaleY)));
                         currentMapChunk.Dispose();
                     }
@@ -616,24 +528,20 @@ namespace CityTools {
 
             for (int i = redrawArea.Left; i <= redrawArea.Right; i++) {
                 for (int j = redrawArea.Top; j <= redrawArea.Bottom; j++) {
-                    if (activeLayer == PaintLayers.Ground) {
-                        mapBuffer_ground.gfx.FillRectangle(new SolidBrush(Color.Transparent), new Rectangle((int)(i * TILE_SX * scaleX), (int)(j * TILE_SY * scaleY), (int)(TILE_SX * scaleX), (int)(TILE_SY * scaleY)));
+                    mapBuffer_object.gfx.FillRectangle(new SolidBrush(Color.Transparent), new Rectangle((int)(i * TILE_SX * scaleX), (int)(j * TILE_SY * scaleY), (int)(TILE_SX * scaleX), (int)(TILE_SY * scaleY)));
 
-                        currentMapChunk = Image.FromFile(MAP_CACHE + MAP_BASE_PREFIX + i + MAP_SEPERATOR + j + MAP_FILETYPE);
-                        mapBuffer_ground.gfx.DrawImage(currentMapChunk, new Rectangle((int)(i * TILE_SX * scaleX), (int)(j * TILE_SY * scaleY), (int)(TILE_SX * scaleX), (int)(TILE_SY * scaleY)));
-                        currentMapChunk.Dispose();
-                    } else if (activeLayer == PaintLayers.Objects) {
-                        mapBuffer_object.gfx.FillRectangle(new SolidBrush(Color.Transparent), new Rectangle((int)(i * TILE_SX * scaleX), (int)(j * TILE_SY * scaleY), (int)(TILE_SX * scaleX), (int)(TILE_SY * scaleY)));
-
-                        currentMapChunk = Image.FromFile(MAP_CACHE + MAP_OBJECTS_PREFIX + i + MAP_SEPERATOR + j + MAP_FILETYPE);
-                        mapBuffer_object.gfx.DrawImage(currentMapChunk, new Rectangle((int)(i * TILE_SX * scaleX), (int)(j * TILE_SY * scaleY), (int)(TILE_SX * scaleX), (int)(TILE_SY * scaleY)));
-                        currentMapChunk.Dispose();
-                    }
+                    currentMapChunk = Image.FromFile(MapCache.GetTileFilename(i, j, activeLayer));
+                    mapBuffer_object.gfx.DrawImage(currentMapChunk, new Rectangle((int)(i * TILE_SX * scaleX), (int)(j * TILE_SY * scaleY), (int)(TILE_SX * scaleX), (int)(TILE_SY * scaleY)));
+                    currentMapChunk.Dispose();
                 }
             }
 
-            mapBuffer_ground.bmp.Save(MAP_MINI_GROUND_CACHE);
-            mapBuffer_object.bmp.Save(MAP_MINI_OBJECT_CACHE);
+            try {
+                mapBuffer_ground.bmp.Save(MAP_MINI_GROUND_CACHE);
+                mapBuffer_object.bmp.Save(MAP_MINI_OBJECT_CACHE);
+            } catch {
+                MessageBox.Show("Minimap failed to save.");
+            }
 
             minimap.Invalidate();
         }
@@ -676,59 +584,7 @@ namespace CityTools {
             activeLayer = PaintLayers.Objects;
             obj_paint_original = objectName;
 
-            FixObjectPaintingTransformation();
-        }
-
-        private void FixObjectPaintingTransformation() {
-            float rotationAngle = (float)obj_rot.Value;
-
-            if(rotationAngle > 180)
-                rotationAngle -= 360;
-
-            float a_rotationAngle = Math.Abs(rotationAngle);
-            float scale = (float)obj_scale.Value;
-
-            bool flipX = obj_flipX.Checked;
-            bool flipY = obj_flipY.Checked;
-
-            float dW = (float)obj_paint_original.Width;
-            float dH = (float)obj_paint_original.Height;
-
-            if (a_rotationAngle > 90) a_rotationAngle -= 90;
-
-            float radians = 0.0174532925f * a_rotationAngle;
-            float dSin = (float)Math.Sin(radians);
-            float dCos = (float)Math.Cos(radians);
-
-            int iW, iH;
-
-            if (a_rotationAngle <= 90) {
-                iW = (int)(dH * dSin + dW * dCos);
-                iH = (int)(dW * dSin + dH * dCos);
-            } else {
-                iW = (int)(dW * dSin + dH * dCos);
-                iH = (int)(dH * dSin + dW * dCos);
-            }
-
-            //int iX = (iW - obj_paint_original.Width) / 2;
-            //int iY = (iH - obj_paint_original.Height) / 2;
-
-            int iX = obj_paint_original.Width / 2;
-            int iY = obj_paint_original.Height / 2;
-
-            obj_paint_image = new Bitmap(iW, iH);
-            ((Bitmap)obj_paint_image).SetResolution(obj_paint_original.HorizontalResolution, obj_paint_original.VerticalResolution);
-
-            Graphics g = Graphics.FromImage(obj_paint_image);
-
-            g.TranslateTransform(iX, iY);
-            g.RotateTransform(rotationAngle);
-            g.TranslateTransform(-iX, -iY);
-            
-            g.DrawImage(obj_paint_original, new Point(iX, iY));
-            //g.DrawImage(obj_paint_original, Point.Empty);
-
-            g.Dispose();
+            DrawingHelper.FixObjectPaintingTransformation((float)obj_rot.Value, (float)obj_scale.Value, obj_flipX.Checked, obj_flipY.Checked, obj_paint_original, out obj_paint_image);
         }
 
         private void terrain_shape_btn_Click(object sender, EventArgs e) {
@@ -740,27 +596,10 @@ namespace CityTools {
                 terrain_shape_btn.Text = "Shape (Circle)";
             }
         }
-    }
 
-    public class LBuffer {
-        public Bitmap bmp;
-        public Graphics gfx;
-
-        public LBuffer(object _s = null) {
-            Rectangle size;
-
-            if (_s == null || !(_s is Rectangle)) {
-                size = MainWindow.instance.drawArea;
-            } else {
-                size = (Rectangle)_s;
-            }
-
-            bmp = new Bitmap(size.Width, size.Height, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
-            gfx = Graphics.FromImage(bmp);
-
-            gfx.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear;
-            gfx.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
-            gfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+        private void obj_settings_ValueChanged(object sender, EventArgs e) {
+            DrawingHelper.FixObjectPaintingTransformation((float)obj_rot.Value, (float)obj_scale.Value, obj_flipX.Checked, obj_flipY.Checked, obj_paint_original, out obj_paint_image);
+            drawPanel_ME_move(null, new MouseEventArgs(System.Windows.Forms.MouseButtons.None, 0, mousePos.X, mousePos.Y, 0));
         }
     }
 }

@@ -65,8 +65,15 @@ namespace ElephantNetworking {
         }
 
         public bool SendMessage(NetworkMessage message) {
+            message.CanDispose = false;
+
+            foreach (NetworkStream ns in clients) {
+                SendMessageTo(ns, message);
+            }
+
+            message.CanDispose = true;
             message.Dispose();
-            throw new NotImplementedException("This method is not used in elephant. Please stop calling it.");
+            return true;
         }
 
         public void Shutdown() {

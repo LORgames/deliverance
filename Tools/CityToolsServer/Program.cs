@@ -5,8 +5,13 @@ using System.Text;
 
 namespace CityToolsServer {
     class Program {
-        static void Main(string[] args) {
+        private static MultiuserConnectionServer mcs;
 
+        static void Main(string[] args) {
+            Logger.Initialize();
+            MapCache.VerifyCacheFiles();
+
+            mcs = new MultiuserConnectionServer();
         }
     }
 }
