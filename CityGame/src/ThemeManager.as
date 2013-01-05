@@ -91,7 +91,7 @@ package {
 			
 			zipLib.formatAsBitmapData(".gif");
 			zipLib.formatAsBitmapData(".jpg");
-			zipLib.formatAsBitmapData(".png");
+			//zipLib.formatAsBitmapData(".png");
 			zipLib.formatAsDisplayObject(".swf");
 			
 			zipLib.addEventListener(Event.COMPLETE, ProcessedThemeZip, false, 0, true);
@@ -109,7 +109,7 @@ package {
 				f = zip.getFileAt(i);
 				
 				var ext:String = f.filename.substr(f.filename.lastIndexOf("."));
-				if (ext == ".png" || ext == ".jpg" || ext == ".bmp") {
+				if (/*ext == ".png" || */ext == ".jpg" || ext == ".bmp") {
 					themeSet[currentlyLoading][f.filename] = zipLib.getBitmapData(f.filename);
 				} else {
 					themeSet[currentlyLoading][f.filename] = f.content;

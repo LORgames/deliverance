@@ -6,6 +6,7 @@ package GameCom.States {
 	import Box2D.Dynamics.b2DebugDraw;
 	import Box2D.Dynamics.b2World;
 	import flash.display.GradientType;
+	import flash.display.SpreadMethod;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
@@ -16,6 +17,7 @@ package GameCom.States {
 	import GameCom.GameComponents.PlayerTruck;
 	import LORgames.Engine.Keys;
 	import GameCom.Helpers.StaticBoxCreator;
+	import GameCom.GameComponents.BGManager;
 	/**
 	 * ...
 	 * @author P. Fox
@@ -32,8 +34,18 @@ package GameCom.States {
 		// Playing the world
 		private var simulating:Boolean = true;
 		
-		// Sprite to draw in to
+		// Sprites to draw in to
+		// worldSpr contains the 3 layers
+		// groundLayer contains images drawn on the ground layer
+		// objectLayer contains images drawn on the ground layer
+		// roofLayer contains images drawn on the ground layer
 		private var worldSpr:Sprite = new Sprite();
+		private var groundLayer:Sprite = new Sprite();
+		private var objectLayer:Sprite = new Sprite();
+		private var roofLayer:Sprite = new Sprite();
+		
+		private var groundManager:BGManager;
+		private var roofManager:BGManager;
 		
 		// The scrolling/scalling container
 		private var myContainer:Sprite = new Sprite();
@@ -54,7 +66,7 @@ package GameCom.States {
 			
 			// set debug draw
 			var dbgDraw:b2DebugDraw = new b2DebugDraw();
-			dbgDraw.SetSprite(worldSpr);
+			dbgDraw.SetSprite(objectLayer);
 			dbgDraw.SetDrawScale(Global.PHYSICS_SCALE);
 			dbgDraw.SetFillAlpha(0.3);
 			dbgDraw.SetLineThickness(1.0);
@@ -67,8 +79,21 @@ package GameCom.States {
 			
 			this.addChild(worldSpr);
 			
+			worldSpr.addChild(groundLayer);
+			worldSpr.addChild(objectLayer);
+			worldSpr.addChild(roofLayer);
+			
 			StaticBoxCreator.CreateBoxes(world);
-			player = new PlayerTruck(new b2Vec2(10, 10), world, worldSpr);
+			
+			//TODO: bgManager (ground) is added to groundLayer
+			groundManager = new BGManager("base", groundLayer);
+			
+			//TODO: objManager is added to objectLayer
+			// player is added to objectLayer
+			player = new PlayerTruck(new b2Vec2(10, 10), world, objectLayer);
+			
+			//TODO: bgManager (roof) is added to groundLayer
+			
 		}
 		
 		private function Update(e:Event):void {
@@ -77,6 +102,9 @@ package GameCom.States {
 			if (simulating) {
 				world.Step(Global.TIME_STEP, Global.VELOCITY_ITERATIONS, Global.POSITION_ITERATIONS);
 				world.ClearForces();
+				
+				worldSpr.x = -player.x + stage.stageWidth/2;
+				worldSpr.y = -player.y + stage.stageHeight/2;
 				
 				//TODO: Make objects register for updates rather than checking EVERY object for updates...
 				

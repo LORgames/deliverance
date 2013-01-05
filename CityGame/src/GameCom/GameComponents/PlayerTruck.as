@@ -14,16 +14,19 @@ package GameCom.GameComponents {
 	 * ...
 	 * @author Paul
 	 */
-	public class PlayerTruck {
+	public class PlayerTruck extends Sprite{
 		private const MAX_STEER_ANGLE:Number = Math.PI/3;
 		private const STEER_SPEED:Number = 1.5;
 		private const SIDEWAYS_FRICTION_FORCE:Number = 10;
-		private const HORSEPOWER:Number = 40
+		private const HORSEPOWER:Number = 150;
+		private const NOSFACTOR:Number = 2;
 		
-		private const leftRearWheelPosition:b2Vec2 = new b2Vec2(-1.5,1.90);
-		private const rightRearWheelPosition:b2Vec2 = new b2Vec2(1.5,1.9);
-		private const leftFrontWheelPosition:b2Vec2 = new b2Vec2(-1.5,-1.9);
-		private const rightFrontWheelPosition:b2Vec2 = new b2Vec2(1.5,-1.9);
+		private const leftRearWheelPosition:b2Vec2 = new b2Vec2(-1.5,2.5);
+		private const rightRearWheelPosition:b2Vec2 = new b2Vec2(1.5, 2.5);
+		private const leftMidWheelPosition:b2Vec2 = new b2Vec2(-1.5,1.0);
+		private const rightMidWheelPosition:b2Vec2 = new b2Vec2(1.5, 1.0)
+		private const leftFrontWheelPosition:b2Vec2 = new b2Vec2(-1.5,-2.5);
+		private const rightFrontWheelPosition:b2Vec2 = new b2Vec2(1.5,-2.5);
 		
 		private var engineSpeed:Number =0;
 		private var steeringAngle:Number = 0;
@@ -31,6 +34,8 @@ package GameCom.GameComponents {
 		private var body:b2Body;
 		private var leftWheel:b2Body;
 		private var rightWheel:b2Body;
+		private var leftMidWheel:b2Body;
+		private var rightMidWheel:b2Body;
 		private var leftRearWheel:b2Body;
 		private var rightRearWheel:b2Body;
 		
@@ -42,7 +47,7 @@ package GameCom.GameComponents {
 			// TRUCK BODY
 			
 			var bodyShape:b2PolygonShape = new b2PolygonShape();
-			bodyShape.SetAsBox(1.5,2.5);
+			bodyShape.SetAsBox(1.2,4.0);
 			
 			//Create the fixture
 			var bodyFixtureDef:b2FixtureDef = new b2FixtureDef();
@@ -88,6 +93,16 @@ package GameCom.GameComponents {
 			rightWheel.CreateFixture(wheelFixtureDef);
 			wheelBodyDef.position.Subtract(rightFrontWheelPosition);
 			
+			wheelBodyDef.position.Add(leftMidWheelPosition);
+			leftMidWheel = world.CreateBody(wheelBodyDef);
+			leftMidWheel.CreateFixture(wheelFixtureDef);
+			wheelBodyDef.position.Subtract(leftMidWheelPosition);
+			
+			wheelBodyDef.position.Add(rightMidWheelPosition);
+			rightMidWheel = world.CreateBody(wheelBodyDef);
+			rightMidWheel.CreateFixture(wheelFixtureDef);
+			wheelBodyDef.position.Subtract(rightMidWheelPosition);
+			
 			wheelBodyDef.position.Add(leftRearWheelPosition);
 			leftRearWheel = world.CreateBody(wheelBodyDef);
 			leftRearWheel.CreateFixture(wheelFixtureDef);
@@ -111,7 +126,20 @@ package GameCom.GameComponents {
 			 
 			leftJoint = b2RevoluteJoint(world.CreateJoint(leftJointDef));
 			rightJoint = b2RevoluteJoint(world.CreateJoint(rightJointDef));
+			
+			var leftMidJointDef:b2PrismaticJointDef = new b2PrismaticJointDef();
+			leftMidJointDef.Initialize(body, leftMidWheel, leftMidWheel.GetWorldCenter(), new b2Vec2(1,0));
+			leftMidJointDef.enableLimit = true;
+			leftMidJointDef.lowerTranslation = leftMidJointDef.upperTranslation = 0;
 			 
+			var rightMidJointDef:b2PrismaticJointDef = new b2PrismaticJointDef();
+			rightMidJointDef.Initialize(body, rightMidWheel, rightMidWheel.GetWorldCenter(), new b2Vec2(1,0));
+			rightMidJointDef.enableLimit = true;
+			rightMidJointDef.lowerTranslation = rightMidJointDef.upperTranslation = 0;
+			
+			world.CreateJoint(leftMidJointDef);
+			world.CreateJoint(rightMidJointDef);
+			
 			var leftRearJointDef:b2PrismaticJointDef = new b2PrismaticJointDef();
 			leftRearJointDef.Initialize(body, leftRearWheel, leftRearWheel.GetWorldCenter(), new b2Vec2(1,0));
 			leftRearJointDef.enableLimit = true;
@@ -156,10 +184,14 @@ package GameCom.GameComponents {
 				steeringAngle = 0;
 			}
 			
-			killOrthogonalVelocity(leftWheel);
-			killOrthogonalVelocity(rightWheel);
-			killOrthogonalVelocity(leftRearWheel);
-			killOrthogonalVelocity(rightRearWheel);
+			if (!Keys.isKeyDown(Keyboard.SPACE)) {
+				killOrthogonalVelocity(leftWheel);
+				killOrthogonalVelocity(rightWheel);
+				killOrthogonalVelocity(leftRearWheel);
+				killOrthogonalVelocity(rightRearWheel);
+			} else {
+				engineSpeed *= NOSFACTOR;
+			}
 			
 			//Driving
 			var ldirection:b2Vec2 = leftWheel.GetTransform().R.col2.Copy();
@@ -167,8 +199,6 @@ package GameCom.GameComponents {
 			
 			var rdirection:b2Vec2 = rightWheel.GetTransform().R.col2.Copy()
 			rdirection.Multiply(engineSpeed);
-			
-			trace(ldirection.x + " " + ldirection.y + " " + engineSpeed);
 			
 			leftWheel.ApplyForce(ldirection, leftWheel.GetPosition());
 			rightWheel.ApplyForce(rdirection, rightWheel.GetPosition());
@@ -179,6 +209,9 @@ package GameCom.GameComponents {
 			leftJoint.SetMotorSpeed(mspeed * STEER_SPEED);
 			mspeed = steeringAngle - rightJoint.GetJointAngle();
 			rightJoint.SetMotorSpeed(mspeed * STEER_SPEED);
+			
+			this.x = body.GetPosition().x * Global.PHYSICS_SCALE;
+			this.y = body.GetPosition().y * Global.PHYSICS_SCALE;
 		}
 	}
 }

@@ -8,7 +8,7 @@ package GameCom.Helpers {
 	 */
 	public class StaticBoxCreator {
 		
-		public static const BOX_SIZE:Number = 30;
+		public static const BOX_SIZE:Number = 2048/Global.PHYSICS_SCALE;
 		public static const HALF_BOX:Number = BOX_SIZE / 2;
 		
 		public static function CreateBoxes(world:b2World) : void {

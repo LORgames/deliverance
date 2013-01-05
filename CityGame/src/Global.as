@@ -13,7 +13,7 @@ package  {
 		public static var UI_SCALE:Number = 1.0;
 		
 		// Pixels per Meter
-		public static const PHYSICS_SCALE:Number = 20.0;
+		public static const PHYSICS_SCALE:Number = 10.0;
 		
 		//Seconds between steps
 		public static const TIME_STEP:Number = 1.0 / 30.0;
