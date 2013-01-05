@@ -52,9 +52,9 @@ package GameCom.GameComponents {
 			//Create the defintion
 			var bodyBodyDef:b2BodyDef = new b2BodyDef();
 			bodyBodyDef.type = b2Body.b2_dynamicBody;
-			bodyBodyDef.linearDamping = 5;
-			bodyBodyDef.angularDamping = 5;
-			bodyBodyDef.position = spawnPosition.Copy()
+			bodyBodyDef.linearDamping = 1;
+			bodyBodyDef.angularDamping = 1;
+			bodyBodyDef.position = spawnPosition.Copy();
 			
 			//Create the body
 			body = world.CreateBody(bodyBodyDef);
@@ -124,6 +124,8 @@ package GameCom.GameComponents {
 			 
 			world.CreateJoint(leftRearJointDef);
 			world.CreateJoint(rightRearJointDef);
+			
+			body.SetAngle(Math.PI / 2);
 		}
 		
 		private function killOrthogonalVelocity(targetBody:b2Body):void {

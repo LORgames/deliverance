@@ -20,8 +20,8 @@ package  {
 		public static const INV_TIME_STEP:Number = 1 / TIME_STEP;
 		
 		//Number of iterations for things
-		public static const VELOCITY_ITERATIONS:int = 7;
-		public static const POSITION_ITERATIONS:int = 3;
+		public static const VELOCITY_ITERATIONS:int = 20;
+		public static const POSITION_ITERATIONS:int = 20;
 		
 		//Server name and directory
 		public static const SERVER_ADDR:String = "http://localhost/bridge/";

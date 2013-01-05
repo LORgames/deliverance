@@ -76,6 +76,7 @@ package GameCom.States {
 			
 			if (simulating) {
 				world.Step(Global.TIME_STEP, Global.VELOCITY_ITERATIONS, Global.POSITION_ITERATIONS);
+				world.ClearForces();
 				
 				//TODO: Make objects register for updates rather than checking EVERY object for updates...
 				
