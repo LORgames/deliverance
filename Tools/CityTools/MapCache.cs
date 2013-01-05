@@ -6,9 +6,12 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using CityTools.components;
+using ElephantNetworking;
 
 namespace CityTools {
     public class MapCache {
+        public static GenericClient client;
+
         public const string MAP_CACHE = ".\\mapcache\\";
 
         public const string MAP_BASE_PREFIX = "base_";
@@ -18,6 +21,10 @@ namespace CityTools {
         public const string MAP_SEPERATOR = "_";
         public const string MAP_FILETYPE = ".png";
         public const string MAP_EMPTY = ".\\blank.png";
+
+        public static void Initialize() {
+
+        }
 
         public static void VerifyCacheFiles() {
             if (!Directory.Exists(MAP_CACHE)) Directory.CreateDirectory(MAP_CACHE);
@@ -101,6 +108,64 @@ namespace CityTools {
             cachedMapArea = new Rectangle(mX, mY, wX - mX, wY - mY);
         }
 
+        public static void outputCurrentCachedMapToFile(Rectangle cachedMapArea) {
+            Bitmap bmp = new Bitmap(MainWindow.TILE_SX, MainWindow.TILE_SY);
+            Graphics gfx = Graphics.FromImage(bmp);
+
+            for (int i = cachedMapArea.Left; i <= cachedMapArea.Right; i++) {
+                for (int j = cachedMapArea.Top; j <= cachedMapArea.Bottom; j++) {
+                    if (!MainWindow.instance.needsToBeSaved[i, j]) continue;
+
+                    gfx.Clear(Color.Transparent);
+
+                    if (MainWindow.instance.activeLayer == PaintLayers.Ground) {
+                        gfx.DrawImage(MainWindow.instance.base_images[i, j], Point.Empty);
+                    } else if (MainWindow.instance.activeLayer == PaintLayers.Objects) {
+                        gfx.DrawImage(MainWindow.instance.object_images[i, j], Point.Empty);
+                    }
+
+                    gfx.Flush();
+
+                    MainWindow.instance.base_images[i, j].Dispose();
+                    MainWindow.instance.object_images[i, j].Dispose();
+
+                    int fails = 0;
+
+                    while (true) {
+                        try {
+                            bmp.Save(MapCache.GetTileFilename(i, j, MainWindow.instance.activeLayer));
+                            break;
+                        } catch (System.Runtime.InteropServices.ExternalException ex) {
+                            //Lame
+                            fails++;
+
+                            if (fails == 1) {
+                                //Maybe the gfx buffer is failing?
+                                gfx.Dispose();
+                                gfx = Graphics.FromImage(bmp);
+                            } else if (fails == 2) {
+                                //Try dispose again
+                                MainWindow.instance.base_images[i, j].Dispose();
+                                MainWindow.instance.object_images[i, j].Dispose();
+                            } else if (fails == 3) {
+                                //Maybe something is stuck in GC
+                                GC.Collect();
+                            } else if (fails > 3) {
+                                MessageBox.Show("Unable to save chunk. \n\n" + ex.Message);
+                                //Oh well, still no good, lets give up.
+                                break;
+                            }
+                        } catch (Exception ex) {
+                            MessageBox.Show("A programmer needs to be alerted (screenshot this message):\n\ncachesave 0x" + i + "x" + j + " failed with EX:\n\n" + ex.GetType().ToString() + "\n\n" + ex.Message);
+                        }
+                    }
+
+                    MainWindow.instance.base_images[i, j] = Image.FromFile(MapCache.GetTileFilename(i, j, PaintLayers.Ground));
+                    MainWindow.instance.object_images[i, j] = Image.FromFile(MapCache.GetTileFilename(i, j, PaintLayers.Objects));
+                }
+            }
+        }
+
         public static string GetTileFilename(int i, int j, PaintLayers layer) {
             if (layer == PaintLayers.Ground)
                 return MAP_CACHE + MAP_BASE_PREFIX + i + MAP_SEPERATOR + j + MAP_FILETYPE;
@@ -113,6 +178,5 @@ namespace CityTools {
             
             return "";
         }
-
     }
 }

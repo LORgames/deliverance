@@ -58,10 +58,10 @@ namespace CityTools {
 
         public Rectangle cachedMapArea = new Rectangle();
 
-        private Point mousePos = Point.Empty;
-        private Point snapPoint = Point.Empty;
-        private PaintMode paintMode = PaintMode.Off;
-        private PaintLayers activeLayer = PaintLayers.Ground;
+        public Point mousePos = Point.Empty;
+        public Point snapPoint = Point.Empty;
+        public PaintMode paintMode = PaintMode.Off;
+        public PaintLayers activeLayer = PaintLayers.Ground;
 
         //Our drawing buffers
         public LBuffer floor_buffer;
@@ -217,60 +217,7 @@ namespace CityTools {
         }
 
         private void outputCurrentCachedMapToFile() {
-            Bitmap bmp = new Bitmap(TILE_SX, TILE_SY);
-            Graphics gfx = Graphics.FromImage(bmp);
-
-            for (int i = cachedMapArea.Left; i <= cachedMapArea.Right; i++) {
-                for (int j = cachedMapArea.Top; j <= cachedMapArea.Bottom; j++) {
-                    gfx.Clear(Color.Transparent);
-
-                    if (activeLayer == PaintLayers.Ground) {
-                        gfx.DrawImage(base_images[i, j], Point.Empty);
-                    } else if (activeLayer == PaintLayers.Objects) {
-                        gfx.DrawImage(object_images[i, j], Point.Empty);
-                    }
-                    
-                    gfx.Flush();
-
-                    base_images[i, j].Dispose();
-                    object_images[i, j].Dispose();
-
-                    int fails = 0;
-
-                    while (true) {
-                        try {
-                            bmp.Save(MapCache.GetTileFilename(i, j, activeLayer));
-
-                            break;
-                        } catch (System.Runtime.InteropServices.ExternalException ex) {
-                            //Lame
-                            fails++;
-
-                            if (fails == 1) {
-                                //Maybe the gfx buffer is failing?
-                                gfx.Dispose();
-                                gfx = Graphics.FromImage(bmp);
-                            } else if (fails == 2) {
-                                //Try dispose again
-                                base_images[i, j].Dispose();
-                                object_images[i, j].Dispose();
-                            } else if (fails == 3) {
-                                //Maybe something is stuck in GC
-                                GC.Collect();
-                            } else if (fails > 3) {
-                                MessageBox.Show("Unable to save chunk. \n\n" + ex.Message);
-                                //Oh well, still no good, lets give up.
-                                break;
-                            }
-                        } catch (Exception ex) {
-                            MessageBox.Show("A programmer needs to be alerted (screenshot this message):\n\ncachesave 0x" + i + "x" + j + " failed with EX:\n\n" + ex.GetType().ToString() + "\n\n" + ex.Message);
-                        }
-                    }
-
-                    base_images[i, j] = Image.FromFile(MapCache.GetTileFilename(i, j, PaintLayers.Ground));
-                    object_images[i, j] = Image.FromFile(MapCache.GetTileFilename(i, j, PaintLayers.Objects));
-                }
-            }
+            MapCache.outputCurrentCachedMapToFile(cachedMapArea);
 
             PartiallyRedrawMinimap(cachedMapArea);
         }
@@ -308,6 +255,7 @@ namespace CityTools {
 
                     for (int i = oTileX; i <= wTileX; i++) {
                         for (int j = oTileY; j <= hTileY; j++) {
+                            needsToBeSaved[i, j] = true;
 
                             float tX = ((effectedArea.Left / scaledTileSizeX) + offsetX - i) * TILE_SX;
                             float tY = ((effectedArea.Top / scaledTileSizeY) + offsetY - j) * TILE_SY;
@@ -368,6 +316,8 @@ namespace CityTools {
 
                     for (int i = oTileX; i <= wTileX; i++) {
                         for (int j = oTileY; j <= hTileY; j++) {
+                            needsToBeSaved[i, j] = true;
+
                             float tX = effectedArea.Left + TILE_SX * (offsetX - i);
                             float tY = effectedArea.Top + TILE_SY * (offsetY - j);
                             float bX = effectedArea.Right + TILE_SX * (offsetX - i);
