@@ -6,12 +6,9 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using CityTools.components;
-using ElephantNetworking;
 
 namespace CityTools {
     public class MapCache {
-        public static GenericClient client;
-
         public const string MAP_CACHE = ".\\mapcache\\";
 
         public const string MAP_BASE_PREFIX = "base_";
@@ -25,10 +22,6 @@ namespace CityTools {
         public static long[, ,] Filetimes;
 
         public static void VerifyCacheFiles() {
-            client = new GenericClient("192.168.0.19", 12080);
-            client.SendMessage(new NetworkMessage(NetworkMessageTypes.AssignmentGetLog));
-            client.AddListener(new NetworkListener());
-
             Filetimes = new long[MainWindow.TILE_TX, MainWindow.TILE_TY, Enum.GetValues(typeof(PaintLayers)).Length];
             
             if (!Directory.Exists(MAP_CACHE)) Directory.CreateDirectory(MAP_CACHE);
@@ -184,13 +177,6 @@ namespace CityTools {
                             MessageBox.Show("A programmer needs to be alerted (screenshot this message):\n\ncachesave 0x" + i + "x" + j + " failed with EX:\n\n" + ex.GetType().ToString() + "\n\n" + ex.Message);
                         }
                     }
-
-                    NetworkMessage nm = new NetworkMessage(NetworkMessageTypes.AssignmentUpload);
-                    nm.AddInt(i);
-                    nm.AddInt(j);
-                    nm.AddInt((int)MainWindow.instance.activeLayer);
-                    nm.EncodeFile(MapCache.GetTileFilename(i, j, PaintLayers.Ground));
-                    client.SendMessage(nm);
 
                     MainWindow.instance.base_images[i, j] = Image.FromFile(MapCache.GetTileFilename(i, j, PaintLayers.Ground));
                     MainWindow.instance.object_images[i, j] = Image.FromFile(MapCache.GetTileFilename(i, j, PaintLayers.Objects));

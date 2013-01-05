@@ -67,7 +67,6 @@
     </Compile>
     <Compile Include="LBuffer.cs" />
     <Compile Include="MapCache.cs" />
-    <Compile Include="NetworkListener.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="components\CachedObject.resx">
@@ -97,12 +96,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ElephantNetworking_Clone_DoNotUseElsewhere\ElephantNetworking.csproj">
-      <Project>{58A4469B-B8A8-4AA5-B4C4-FCA12EAF19B1}</Project>
-      <Name>ElephantNetworking</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
