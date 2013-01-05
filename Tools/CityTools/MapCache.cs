@@ -185,6 +185,13 @@ namespace CityTools {
                         }
                     }
 
+                    NetworkMessage nm = new NetworkMessage(NetworkMessageTypes.AssignmentUpload);
+                    nm.AddInt(i);
+                    nm.AddInt(j);
+                    nm.AddInt((int)MainWindow.instance.activeLayer);
+                    nm.EncodeFile(MapCache.GetTileFilename(i, j, PaintLayers.Ground));
+                    client.SendMessage(nm);
+
                     MainWindow.instance.base_images[i, j] = Image.FromFile(MapCache.GetTileFilename(i, j, PaintLayers.Ground));
                     MainWindow.instance.object_images[i, j] = Image.FromFile(MapCache.GetTileFilename(i, j, PaintLayers.Objects));
                 }
