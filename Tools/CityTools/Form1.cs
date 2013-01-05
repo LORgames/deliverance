@@ -250,8 +250,8 @@ namespace CityTools {
 
                     if (oTileX < 0) oTileX = 0;
                     if (oTileY < 0) oTileY = 0;
-                    if (wTileX > TILE_TX) wTileX = TILE_TX;
-                    if (hTileY > TILE_TY) hTileY = TILE_TY;
+                    if (wTileX >= TILE_TX) wTileX = TILE_TX - 1;
+                    if (hTileY >= TILE_TY) hTileY = TILE_TY - 1;
 
                     for (int i = oTileX; i <= wTileX; i++) {
                         for (int j = oTileY; j <= hTileY; j++) {
@@ -465,8 +465,21 @@ namespace CityTools {
                     }
                 }
 
-                mapBuffer_ground.bmp.Save(MAP_MINI_GROUND_CACHE);
-                mapBuffer_object.bmp.Save(MAP_MINI_OBJECT_CACHE);
+                using (MemoryStream stream = new MemoryStream()) {
+                    using (FileStream file = new FileStream(MAP_MINI_GROUND_CACHE, FileMode.Create, FileAccess.Write)) {
+                        mapBuffer_ground.bmp.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                        stream.WriteTo(file);
+                    }
+                }
+                using (MemoryStream stream = new MemoryStream()) {
+                    using (FileStream file = new FileStream(MAP_MINI_OBJECT_CACHE, FileMode.Create, FileAccess.Write)) {
+                        mapBuffer_object.bmp.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                        stream.WriteTo(file);
+                    }
+                }
+
+                //mapBuffer_ground.bmp.Save(MAP_MINI_GROUND_CACHE);
+                //mapBuffer_object.bmp.Save(MAP_MINI_OBJECT_CACHE);
             }
         }
 
@@ -487,8 +500,20 @@ namespace CityTools {
             }
 
             try {
-                mapBuffer_ground.bmp.Save(MAP_MINI_GROUND_CACHE);
-                mapBuffer_object.bmp.Save(MAP_MINI_OBJECT_CACHE);
+                using (MemoryStream stream = new MemoryStream()) {
+                    using (FileStream file = new FileStream(MAP_MINI_GROUND_CACHE, FileMode.Create, FileAccess.Write)) {
+                        mapBuffer_ground.bmp.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                        stream.WriteTo(file);
+                    }
+                }
+                using (MemoryStream stream = new MemoryStream()) {
+                    using (FileStream file = new FileStream(MAP_MINI_OBJECT_CACHE, FileMode.Create, FileAccess.Write)) {
+                        mapBuffer_object.bmp.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                        stream.WriteTo(file);
+                    }
+                }
+                //mapBuffer_ground.bmp.Save(MAP_MINI_GROUND_CACHE);
+                //mapBuffer_object.bmp.Save(MAP_MINI_OBJECT_CACHE);
             } catch {
                 MessageBox.Show("Minimap failed to save.");
             }
@@ -548,8 +573,10 @@ namespace CityTools {
         }
 
         private void obj_settings_ValueChanged(object sender, EventArgs e) {
-            DrawingHelper.FixObjectPaintingTransformation((float)obj_rot.Value, (float)obj_scale.Value, obj_flipX.Checked, obj_flipY.Checked, obj_paint_original, out obj_paint_image);
-            drawPanel_ME_move(null, new MouseEventArgs(System.Windows.Forms.MouseButtons.None, 0, mousePos.X, mousePos.Y, 0));
+            if (obj_paint_original != null) {
+                DrawingHelper.FixObjectPaintingTransformation((float)obj_rot.Value, (float)obj_scale.Value, obj_flipX.Checked, obj_flipY.Checked, obj_paint_original, out obj_paint_image);
+                drawPanel_ME_move(null, new MouseEventArgs(System.Windows.Forms.MouseButtons.None, 0, mousePos.X, mousePos.Y, 0));
+            }
         }
     }
 }
