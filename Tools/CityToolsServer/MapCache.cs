@@ -21,17 +21,24 @@ namespace CityToolsServer {
 
         public const int TILE_TX = 16; //How many image blocks across
         public const int TILE_TY = 16; //How many image blocks down
+        public const int TILE_TZ = 3; //How many image blocks down
+
+        public static long[,,] filetimes;
 
         public static void VerifyCacheFiles() {
+            filetimes = new long[TILE_TX, TILE_TY, TILE_TZ];
+
             if (!Directory.Exists(MAP_CACHE)) Directory.CreateDirectory(MAP_CACHE);
 
             //Do a file check to make sure they all exist
             for (int i = 0; i < TILE_TX; i++) {
                 for (int j = 0; j < TILE_TY; j++) {
-                    for (int l = 0; l < 3; l++) {
+                    for (int l = 0; l < TILE_TZ; l++) {
                         if (!File.Exists(GetTileFilename(i, j, l))) {
                             File.Copy(MAP_EMPTY, GetTileFilename(i, j, l));
                         }
+
+                        filetimes[i, j, l] = File.GetLastWriteTimeUtc(GetTileFilename(i, j, l)).ToFileTime();
                     }
                 }
             }

@@ -22,11 +22,15 @@ namespace CityTools {
         public const string MAP_FILETYPE = ".png";
         public const string MAP_EMPTY = ".\\blank.png";
 
-        public static void Initialize() {
-
-        }
+        public static long[, ,] Filetimes;
 
         public static void VerifyCacheFiles() {
+            client = new GenericClient("192.168.0.19", 12080);
+            client.SendMessage(new NetworkMessage(NetworkMessageTypes.AssignmentGetLog));
+            client.AddListener(new NetworkListener());
+
+            Filetimes = new long[MainWindow.TILE_TX, MainWindow.TILE_TY, Enum.GetValues(typeof(PaintLayers)).Length];
+            
             if (!Directory.Exists(MAP_CACHE)) Directory.CreateDirectory(MAP_CACHE);
             if (!Directory.Exists(ObjectCacheControl.OBJECT_CACHE_FOLDER)) Directory.CreateDirectory(ObjectCacheControl.OBJECT_CACHE_FOLDER);
 
@@ -42,9 +46,24 @@ namespace CityTools {
                     foreach (var pl in Enum.GetValues(typeof(PaintLayers))) {
                         if (!File.Exists(GetTileFilename(i, j, (PaintLayers)pl))) {
                             File.Copy(MAP_EMPTY, GetTileFilename(i, j, (PaintLayers)pl));
+                            File.SetLastWriteTimeUtc(GetTileFilename(i, j, (PaintLayers)pl), DateTime.MinValue);
                         }
+
+                        Filetimes[i, j, (int)pl] = File.GetLastWriteTimeUtc(GetTileFilename(i, j, (PaintLayers)pl)).ToFileTime();
                     }
                 }
+            }
+
+            return;
+        }
+
+        public static void FetchUpdate(int i, int j, PaintLayers l) {
+            if (l == PaintLayers.Ground) {
+                MainWindow.instance.base_images[i, j] = Image.FromFile(GetTileFilename(i, j, l));
+            } else if (l == PaintLayers.Objects) {
+                MainWindow.instance.object_images[i, j] = Image.FromFile(GetTileFilename(i, j, l));
+            } else if (l == PaintLayers.Ceiling) {
+                MainWindow.instance.top_images[i, j] = Image.FromFile(GetTileFilename(i, j, l));
             }
         }
 

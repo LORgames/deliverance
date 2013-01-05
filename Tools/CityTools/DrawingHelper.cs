@@ -15,7 +15,7 @@ namespace CityTools {
             float dW = (float)original.Width;
             float dH = (float)original.Height;
 
-            if (a_rotationAngle > 90) a_rotationAngle -= 90;
+            if (a_rotationAngle > 90 && a_rotationAngle != 180) a_rotationAngle -= 90;
 
             float radians = 0.0174532925f * a_rotationAngle;
             float dSin = (float)Math.Sin(radians);
@@ -26,6 +26,9 @@ namespace CityTools {
             if (a_rotationAngle <= 90) {
                 iW = (int)(dH * dSin + dW * dCos);
                 iH = (int)(dW * dSin + dH * dCos);
+            } else if(rotationAngle == 180) {
+                iW = (int)original.Width;
+                iH = (int)original.Height;
             } else {
                 iW = (int)(dW * dSin + dH * dCos);
                 iH = (int)(dH * dSin + dW * dCos);
@@ -44,7 +47,6 @@ namespace CityTools {
             g.TranslateTransform(-iX - original.Width / 2, -iY - original.Height / 2);
 
             g.DrawImage(original, new Point(iX, iY));
-            //g.DrawImage(obj_paint_original, Point.Empty);
 
             g.Dispose();
         }
