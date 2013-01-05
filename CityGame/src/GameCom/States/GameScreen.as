@@ -15,6 +15,7 @@ package GameCom.States {
 	import flash.ui.Keyboard;
 	import GameCom.GameComponents.PlayerTruck;
 	import LORgames.Engine.Keys;
+	import GameCom.Helpers.StaticBoxCreator;
 	/**
 	 * ...
 	 * @author P. Fox
@@ -66,6 +67,7 @@ package GameCom.States {
 			
 			this.addChild(worldSpr);
 			
+			StaticBoxCreator.CreateBoxes(world);
 			player = new PlayerTruck(new b2Vec2(10, 10), world, worldSpr);
 		}
 		

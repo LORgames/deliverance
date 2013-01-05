@@ -15,7 +15,7 @@ package GameCom.GameComponents {
 	 * @author Paul
 	 */
 	public class PlayerTruck {
-		private const MAX_STEER_ANGLE:Number = Math.PI/2;
+		private const MAX_STEER_ANGLE:Number = Math.PI/3;
 		private const STEER_SPEED:Number = 1.5;
 		private const SIDEWAYS_FRICTION_FORCE:Number = 10;
 		private const HORSEPOWER:Number = 40
@@ -75,7 +75,7 @@ package GameCom.GameComponents {
 			//Create the defintion
 			var wheelBodyDef:b2BodyDef = new b2BodyDef();
 			wheelBodyDef.type = b2Body.b2_dynamicBody;
-			wheelBodyDef.position = spawnPosition.Copy()
+			wheelBodyDef.position = spawnPosition.Copy();
 			
 			//Create the body
 			wheelBodyDef.position.Add(leftFrontWheelPosition);
@@ -127,13 +127,14 @@ package GameCom.GameComponents {
 		}
 		
 		private function killOrthogonalVelocity(targetBody:b2Body):void {
-			var localPoint:b2Vec2 = new b2Vec2(0,0);
+			var localPoint:b2Vec2 = new b2Vec2(0, 0);
+			
 			var velocity:b2Vec2 = targetBody.GetLinearVelocityFromLocalPoint(localPoint);
 			
 			var sidewaysAxis:b2Vec2 = targetBody.GetTransform().R.col2.Copy();
 			sidewaysAxis.Multiply(b2Math.Dot(velocity, sidewaysAxis));
 			
-			targetBody.SetLinearVelocity(sidewaysAxis);//targetBody.GetWorldPoint(localPoint));
+			targetBody.SetLinearVelocity(sidewaysAxis); //targetBody.GetWorldPoint(localPoint));
 		}
 		
 		public function Update():void {
@@ -157,7 +158,7 @@ package GameCom.GameComponents {
 			killOrthogonalVelocity(rightWheel);
 			killOrthogonalVelocity(leftRearWheel);
 			killOrthogonalVelocity(rightRearWheel);
-		 
+			
 			//Driving
 			var ldirection:b2Vec2 = leftWheel.GetTransform().R.col2.Copy();
 			ldirection.Multiply(engineSpeed);
@@ -177,7 +178,5 @@ package GameCom.GameComponents {
 			mspeed = steeringAngle - rightJoint.GetJointAngle();
 			rightJoint.SetMotorSpeed(mspeed * STEER_SPEED);
 		}
-		
 	}
-
 }

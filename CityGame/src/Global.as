@@ -7,7 +7,7 @@ package  {
 	public class Global {
 		
 		//The name of the game
-		public static const GAME_NAME:String = "Construction Zone";
+		public static const GAME_NAME:String = "Ultimate Lorry Attack Extreme";
 		
 		//The UI scaling factor (pretty damned important now that its needed everywhere... sigh)
 		public static var UI_SCALE:Number = 1.0;
