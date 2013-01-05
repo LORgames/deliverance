@@ -19,14 +19,14 @@ package GameCom.GameComponents {
 		private const STEER_SPEED:Number = 1.5;
 		private const SIDEWAYS_FRICTION_FORCE:Number = 10;
 		private const HORSEPOWER:Number = 150;
-		private const NOSFACTOR:Number = 2;
+		private const NOSFACTOR:Number = 0;
 		
-		private const leftRearWheelPosition:b2Vec2 = new b2Vec2(-1.5,2.5);
-		private const rightRearWheelPosition:b2Vec2 = new b2Vec2(1.5, 2.5);
-		private const leftMidWheelPosition:b2Vec2 = new b2Vec2(-1.5,1.0);
-		private const rightMidWheelPosition:b2Vec2 = new b2Vec2(1.5, 1.0)
-		private const leftFrontWheelPosition:b2Vec2 = new b2Vec2(-1.5,-2.5);
-		private const rightFrontWheelPosition:b2Vec2 = new b2Vec2(1.5,-2.5);
+		private const leftRearWheelPosition:b2Vec2 = new b2Vec2(-1.3, 3.0);
+		private const rightRearWheelPosition:b2Vec2 = new b2Vec2(1.3, 3.0);
+		private const leftMidWheelPosition:b2Vec2 = new b2Vec2( -1.3, 1.5);
+		private const rightMidWheelPosition:b2Vec2 = new b2Vec2( 1.3, 1.5)
+		private const leftFrontWheelPosition:b2Vec2 =new b2Vec2(-1.3,-3.0);
+		private const rightFrontWheelPosition:b2Vec2= new b2Vec2(1.3,-3.0);
 		
 		private var engineSpeed:Number =0;
 		private var steeringAngle:Number = 0;
@@ -152,8 +152,6 @@ package GameCom.GameComponents {
 			 
 			world.CreateJoint(leftRearJointDef);
 			world.CreateJoint(rightRearJointDef);
-			
-			body.SetAngle(Math.PI / 2);
 		}
 		
 		private function killOrthogonalVelocity(targetBody:b2Body):void {
@@ -189,6 +187,8 @@ package GameCom.GameComponents {
 				killOrthogonalVelocity(rightWheel);
 				killOrthogonalVelocity(leftRearWheel);
 				killOrthogonalVelocity(rightRearWheel);
+				killOrthogonalVelocity(leftMidWheel);
+				killOrthogonalVelocity(rightMidWheel);
 			} else {
 				engineSpeed *= NOSFACTOR;
 			}
