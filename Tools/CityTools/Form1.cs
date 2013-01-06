@@ -491,9 +491,11 @@ namespace CityTools {
 
             for (int i = redrawArea.Left; i <= redrawArea.Right; i++) {
                 for (int j = redrawArea.Top; j <= redrawArea.Bottom; j++) {
-                    mapBuffer_object.gfx.FillRectangle(new SolidBrush(Color.Transparent), new Rectangle((int)(i * TILE_SX * scaleX), (int)(j * TILE_SY * scaleY), (int)(TILE_SX * scaleX), (int)(TILE_SY * scaleY)));
+                    currentMapChunk = Image.FromFile(MapCache.GetTileFilename(i, j, PaintLayers.Ground));
+                    mapBuffer_ground.gfx.DrawImage(currentMapChunk, new Rectangle((int)(i * TILE_SX * scaleX), (int)(j * TILE_SY * scaleY), (int)(TILE_SX * scaleX), (int)(TILE_SY * scaleY)));
+                    currentMapChunk.Dispose();
 
-                    currentMapChunk = Image.FromFile(MapCache.GetTileFilename(i, j, activeLayer));
+                    currentMapChunk = Image.FromFile(MapCache.GetTileFilename(i, j, PaintLayers.Objects));
                     mapBuffer_object.gfx.DrawImage(currentMapChunk, new Rectangle((int)(i * TILE_SX * scaleX), (int)(j * TILE_SY * scaleY), (int)(TILE_SX * scaleX), (int)(TILE_SY * scaleY)));
                     currentMapChunk.Dispose();
                 }
@@ -576,6 +578,14 @@ namespace CityTools {
             if (obj_paint_original != null) {
                 DrawingHelper.FixObjectPaintingTransformation((float)obj_rot.Value, (float)obj_scale.Value, obj_flipX.Checked, obj_flipY.Checked, obj_paint_original, out obj_paint_image);
                 drawPanel_ME_move(null, new MouseEventArgs(System.Windows.Forms.MouseButtons.None, 0, mousePos.X, mousePos.Y, 0));
+            }
+        }
+
+        private void minimapToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (sender.ToString() == "Redraw Current") {
+                PartiallyRedrawMinimap(cachedMapArea);
+            } else if (sender.ToString() == "Redraw All") {
+                MessageBox.Show("Redraw All");
             }
         }
     }

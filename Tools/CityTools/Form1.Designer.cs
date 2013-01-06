@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.main_splitter = new System.Windows.Forms.SplitContainer();
             this.mapViewPanel_c = new System.Windows.Forms.Panel();
             this.mapViewPanel = new System.Windows.Forms.PictureBox();
@@ -62,6 +63,9 @@
             this.places_tab = new System.Windows.Forms.TabPage();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.minimap_context = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.minimapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.redrawAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.main_splitter)).BeginInit();
             this.main_splitter.Panel1.SuspendLayout();
             this.main_splitter.Panel2.SuspendLayout();
@@ -84,6 +88,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.obj_scale)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.obj_rot)).BeginInit();
             this.obj_cats.SuspendLayout();
+            this.minimap_context.SuspendLayout();
             this.SuspendLayout();
             // 
             // main_splitter
@@ -153,6 +158,7 @@
             // 
             // minimap
             // 
+            this.minimap.ContextMenuStrip = this.minimap_context;
             this.minimap.Location = new System.Drawing.Point(0, 0);
             this.minimap.Name = "minimap";
             this.minimap.Size = new System.Drawing.Size(231, 224);
@@ -502,6 +508,28 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // minimap_context
+            // 
+            this.minimap_context.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.minimapToolStripMenuItem,
+            this.redrawAllToolStripMenuItem});
+            this.minimap_context.Name = "minimap_context";
+            this.minimap_context.Size = new System.Drawing.Size(157, 70);
+            // 
+            // minimapToolStripMenuItem
+            // 
+            this.minimapToolStripMenuItem.Name = "minimapToolStripMenuItem";
+            this.minimapToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.minimapToolStripMenuItem.Text = "Redraw Current";
+            this.minimapToolStripMenuItem.Click += new System.EventHandler(this.minimapToolStripMenuItem_Click);
+            // 
+            // redrawAllToolStripMenuItem
+            // 
+            this.redrawAllToolStripMenuItem.Name = "redrawAllToolStripMenuItem";
+            this.redrawAllToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.redrawAllToolStripMenuItem.Text = "Redraw All";
+            this.redrawAllToolStripMenuItem.Click += new System.EventHandler(this.minimapToolStripMenuItem_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -535,6 +563,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.obj_scale)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.obj_rot)).EndInit();
             this.obj_cats.ResumeLayout(false);
+            this.minimap_context.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -575,6 +604,9 @@
         private System.Windows.Forms.TabPage obj_collection_environment;
         private System.Windows.Forms.PictureBox minimap;
         private System.Windows.Forms.Button terrain_shape_btn;
+        private System.Windows.Forms.ContextMenuStrip minimap_context;
+        private System.Windows.Forms.ToolStripMenuItem minimapToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem redrawAllToolStripMenuItem;
     }
 }
 
