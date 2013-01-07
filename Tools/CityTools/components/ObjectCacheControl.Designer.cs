@@ -1,4 +1,4 @@
-﻿namespace CityTools.components {
+﻿namespace CityTools.Components {
     partial class ObjectCacheControl {
         /// <summary> 
         /// Required designer variable.

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace CityTools.components {
+namespace CityTools.Components {
     public partial class CachedObject : UserControl {
 
 

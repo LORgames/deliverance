@@ -46,16 +46,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="components\CachedObject.cs">
+    <Compile Include="Components\CachedObject.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="components\CachedObject.Designer.cs">
+    <Compile Include="Components\CachedObject.Designer.cs">
       <DependentUpon>CachedObject.cs</DependentUpon>
     </Compile>
-    <Compile Include="components\ObjectCacheControl.cs">
+    <Compile Include="Components\ObjectCacheControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="components\ObjectCacheControl.Designer.cs">
+    <Compile Include="Components\ObjectCacheControl.Designer.cs">
       <DependentUpon>ObjectCacheControl.cs</DependentUpon>
     </Compile>
     <Compile Include="DrawingHelper.cs" />
@@ -69,7 +69,6 @@
     <Compile Include="MapCache.cs" />
     <Compile Include="BinaryIO.cs" />
     <Compile Include="Object\ObjectDrawer.cs" />
-    <Compile Include="Physics\BinaryReader.cs" />
     <Compile Include="Physics\PhysicsCache.cs" />
     <Compile Include="Physics\PhysicsChunk.cs" />
     <Compile Include="Physics\PhysicsDrawer.cs" />
@@ -79,10 +78,10 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Terrain\TerrainDrawer.cs" />
-    <EmbeddedResource Include="components\CachedObject.resx">
+    <EmbeddedResource Include="Components\CachedObject.resx">
       <DependentUpon>CachedObject.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="components\ObjectCacheControl.resx">
+    <EmbeddedResource Include="Components\ObjectCacheControl.resx">
       <DependentUpon>ObjectCacheControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">

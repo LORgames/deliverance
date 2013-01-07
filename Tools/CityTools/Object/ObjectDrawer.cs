@@ -64,11 +64,9 @@ namespace CityTools.Object {
                         }
                     }
                 }
-
-                return true;
             }
 
-            return false;
+            return true;
         }
     }
 }

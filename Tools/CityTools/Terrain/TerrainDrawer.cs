@@ -69,11 +69,9 @@ namespace CityTools.Terrain {
                         }
                     }
                 }
-
-                return true;
             }
 
-            return false;
+            return true;
         }
     }
 }

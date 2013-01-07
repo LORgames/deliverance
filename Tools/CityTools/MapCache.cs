@@ -5,7 +5,7 @@ using System.Text;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using CityTools.components;
+using CityTools.Components;
 
 namespace CityTools {
     public class MapCache {

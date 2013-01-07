@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 
-namespace CityTools.components {
+namespace CityTools.Components {
     public partial class ObjectCacheControl : UserControl {
         public const string OBJECT_CACHE_FOLDER = ".\\objcache\\";
         public string folder;
