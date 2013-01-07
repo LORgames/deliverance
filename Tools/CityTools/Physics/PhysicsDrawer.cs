@@ -13,9 +13,11 @@ namespace CityTools.Physics {
         public static LBuffer physicsBuffer;
 
         private static bool downBefore = false;
-        private static PointF p0;
-        private static PointF p1;
-        private static PointF p2;
+        private static PointF p0 = Point.Empty;
+        private static PointF p1 = Point.Empty;
+        private static PointF p2 = Point.Empty;
+
+        private static int redrawID = 0;
 
         public static void SetShape(string btnName) {
             switch (btnName) {
@@ -72,6 +74,17 @@ namespace CityTools.Physics {
                 p1 = Point.Empty;
                 downBefore = false;
             }
+        }
+
+        internal static void RedrawBuffer(float offsetX, float offsetY, float offsetZ) {
+            redrawID++;
+
+            //Find valid chunks
+
+            //Foreach object in valid chunks:
+            //  make sure the object hasn't been drawn this update
+            //  draw the object
+            //  update the objects draw number
         }
     }
 }

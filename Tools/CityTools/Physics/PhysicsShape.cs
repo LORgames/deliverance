@@ -15,6 +15,9 @@ namespace CityTools.Physics {
         protected PhysicsShapes myShape;
         protected RectangleF aabb;
 
+        public int physics_ID = 0;
+        public int last_draw_ID = 0;
+
         public PhysicsShape(RectangleF aabb) {
             this.aabb = aabb;
         }
