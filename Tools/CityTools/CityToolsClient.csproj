@@ -67,6 +67,7 @@
     </Compile>
     <Compile Include="LBuffer.cs" />
     <Compile Include="MapCache.cs" />
+    <Compile Include="BinaryIO.cs" />
     <Compile Include="Object\ObjectDrawer.cs" />
     <Compile Include="Physics\BinaryReader.cs" />
     <Compile Include="Physics\PhysicsCache.cs" />

@@ -12,8 +12,8 @@ namespace CityTools.Physics {
     }
     
     public class PhysicsShape {
-        protected PhysicsShapes myShape;
-        protected RectangleF aabb;
+        public PhysicsShapes myShape;
+        public RectangleF aabb;
 
         public int physics_ID = 0;
         public int last_draw_ID = 0;
@@ -22,7 +22,7 @@ namespace CityTools.Physics {
             this.aabb = aabb;
         }
 
-        public virtual void DrawMe(Graphics gfx, Point offset, Pen outline, Brush middle) { }
+        public virtual void DrawMe(Graphics gfx, PointF offset, Pen outline, Brush middle) { }
     }
 
     public class PhysicsRectangle : PhysicsShape {
@@ -31,8 +31,9 @@ namespace CityTools.Physics {
                 myShape = PhysicsShapes.Rectangle;
         }
 
-        public override void DrawMe(Graphics gfx, Point offset, Pen outline, Brush middle) {
-            //TODO: Implement this
+        public override void DrawMe(Graphics gfx, PointF offset, Pen outline, Brush middle) {
+            gfx.FillRectangle(PhysicsDrawer.fillBrush, aabb);
+            gfx.DrawRectangle(PhysicsDrawer.outlinePen, aabb.Left, aabb.Top, aabb.Width, aabb.Height);
         }
     }
 
@@ -42,8 +43,9 @@ namespace CityTools.Physics {
             myShape = PhysicsShapes.Circle;
         }
 
-        public override void DrawMe(Graphics gfx, Point offset, Pen outline, Brush middle) {
-            //TODO: Implement this
+        public override void DrawMe(Graphics gfx, PointF offset, Pen outline, Brush middle) {
+            gfx.FillEllipse(PhysicsDrawer.fillBrush, aabb.Left, aabb.Top, aabb.Width, aabb.Width);
+            gfx.DrawEllipse(PhysicsDrawer.outlinePen, aabb.Left, aabb.Top, aabb.Width, aabb.Width);
         }
     }
 
@@ -61,7 +63,7 @@ namespace CityTools.Physics {
             return new RectangleF(minX, minY, maxX - minX, maxY - minY);
         }
 
-        public override void DrawMe(Graphics gfx, Point offset, Pen outline, Brush middle) {
+        public override void DrawMe(Graphics gfx, PointF offset, Pen outline, Brush middle) {
             //TODO: Implement this
         }
     }

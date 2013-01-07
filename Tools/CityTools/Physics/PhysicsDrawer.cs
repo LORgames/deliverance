@@ -18,6 +18,13 @@ namespace CityTools.Physics {
         private static PointF p2 = Point.Empty;
 
         private static int redrawID = 0;
+        private static PointF offset;
+
+        public static Pen outlinePen = new Pen(new SolidBrush(Color.Magenta));
+        public static Brush fillBrush = new SolidBrush(Color.FromArgb(128, Color.Magenta));
+
+        private static Pen outlinePen_draft = new Pen(new SolidBrush(Color.Green));
+        private static Brush fillBrush_draft = new SolidBrush(Color.FromArgb(128, Color.Green));
 
         public static void SetShape(string btnName) {
             switch (btnName) {
@@ -48,11 +55,11 @@ namespace CityTools.Physics {
                     p1 = e.Location;
 
                     if (drawingShape == PhysicsShapes.Rectangle) {
-                        inputBuffer.gfx.FillRectangle(new SolidBrush(Color.FromArgb(96, Color.Green)), Math.Min(p0.X, p1.X), Math.Min(p0.Y, p1.Y), Math.Abs(p1.X - p0.X), Math.Abs(p1.Y - p0.Y));
-                        inputBuffer.gfx.DrawRectangle(new Pen(new SolidBrush(Color.Green)), Math.Min(p0.X, p1.X), Math.Min(p0.Y, p1.Y), Math.Abs(p1.X - p0.X), Math.Abs(p1.Y - p0.Y));
+                        inputBuffer.gfx.FillRectangle(fillBrush_draft, Math.Min(p0.X, p1.X), Math.Min(p0.Y, p1.Y), Math.Abs(p1.X - p0.X), Math.Abs(p1.Y - p0.Y));
+                        inputBuffer.gfx.DrawRectangle(outlinePen_draft, Math.Min(p0.X, p1.X), Math.Min(p0.Y, p1.Y), Math.Abs(p1.X - p0.X), Math.Abs(p1.Y - p0.Y));
                     } else if (drawingShape == PhysicsShapes.Circle) {
-                        inputBuffer.gfx.FillEllipse(new SolidBrush(Color.FromArgb(96, Color.Green)), Math.Min(p0.X, p1.X), Math.Min(p0.Y, p1.Y), Math.Abs(p1.X - p0.X), Math.Abs(p1.X - p0.X));
-                        inputBuffer.gfx.DrawEllipse(new Pen(new SolidBrush(Color.Green)), Math.Min(p0.X, p1.X), Math.Min(p0.Y, p1.Y), Math.Abs(p1.X - p0.X), Math.Abs(p1.X - p0.X));
+                        inputBuffer.gfx.FillEllipse(fillBrush_draft, Math.Min(p0.X, p1.X), Math.Min(p0.Y, p1.Y), Math.Abs(p1.X - p0.X), Math.Abs(p1.X - p0.X));
+                        inputBuffer.gfx.DrawEllipse(outlinePen_draft, Math.Min(p0.X, p1.X), Math.Min(p0.Y, p1.Y), Math.Abs(p1.X - p0.X), Math.Abs(p1.X - p0.X));
                     }
 
                     return true;
@@ -65,15 +72,15 @@ namespace CityTools.Physics {
         internal static void ReleaseMouse(MouseEventArgs e) {
             if (downBefore) {
                 if (drawingShape == PhysicsShapes.Rectangle) {
-                    PhysicsCache.AddShape(new PhysicsRectangle(new RectangleF(p0.X, p0.Y, p1.X-p0.X, p1.Y-p0.Y)));
+                    PhysicsCache.AddShape(new PhysicsRectangle(new RectangleF(Math.Min(p0.X, p1.X), Math.Min(p0.Y, p1.Y), Math.Abs(p1.X - p0.X), Math.Abs(p1.Y - p0.Y))));
                 } else if(drawingShape == PhysicsShapes.Circle) {
-                    PhysicsCache.AddShape(new PhysicsCircle(new RectangleF(p0.X, p0.Y, p1.X - p0.X, p1.Y - p0.Y)));
+                    PhysicsCache.AddShape(new PhysicsCircle(new RectangleF(Math.Min(p0.X, p1.X), Math.Min(p0.Y, p1.Y), Math.Abs(p1.X - p0.X), Math.Abs(p1.X - p0.X))));
                 }
 
                 p0 = Point.Empty;
                 p1 = Point.Empty;
                 downBefore = false;
-            }
+            } 
         }
 
         internal static void RedrawBuffer(float offsetX, float offsetY, float offsetZ) {
@@ -81,10 +88,16 @@ namespace CityTools.Physics {
 
             //Find valid chunks
 
-            //Foreach object in valid chunks:
-            //  make sure the object hasn't been drawn this update
-            //  draw the object
-            //  update the objects draw number
+            offset = new PointF(offsetX, offsetY);
+
+            foreach (PhysicsShape shape in PhysicsCache.shapes) {
+                shape.DrawMe(physicsBuffer.gfx, offset, outlinePen, fillBrush);
+                shape.last_draw_ID = redrawID;
+            }
+        }
+
+        internal static void DrawShape(PhysicsShape shape) {
+            shape.DrawMe(physicsBuffer.gfx, offset, outlinePen, fillBrush);
         }
     }
 }

@@ -113,6 +113,7 @@ namespace CityTools {
             objects_buffer = new LBuffer();
             ceiling_buffer = new LBuffer();
             input_buffer = new LBuffer();
+            Physics.PhysicsDrawer.physicsBuffer = new LBuffer();
 
             terrainRedrawRequired = true;
             mapViewPanel.Invalidate();
@@ -129,6 +130,9 @@ namespace CityTools {
             if (layer_floor.Checked) e.Graphics.DrawImage(floor_buffer.bmp, Point.Empty);
             if (layer_objects.Checked) e.Graphics.DrawImage(objects_buffer.bmp, Point.Empty);
             if (layer_ceiling.Checked) e.Graphics.DrawImage(ceiling_buffer.bmp, Point.Empty);
+
+            e.Graphics.DrawImage(Physics.PhysicsDrawer.physicsBuffer.bmp, Point.Empty);
+
             if (paintMode != PaintMode.Off) e.Graphics.DrawImage(input_buffer.bmp, Point.Empty);
         }
 
@@ -212,6 +216,8 @@ namespace CityTools {
         private void drawPanel_ME_up(object sender, MouseEventArgs e) {
             if (paintMode == PaintMode.Physics) {
                 Physics.PhysicsDrawer.ReleaseMouse(e);
+                input_buffer.gfx.Clear(Color.Transparent);
+                mapViewPanel.Invalidate();
             } else if (paintMode != PaintMode.Off) {
                 outputCurrentCachedMapToFile();
             }
