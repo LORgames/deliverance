@@ -14,11 +14,14 @@ package GameCom.GameComponents {
 	 * ...
 	 * @author Paul
 	 */
-	public class PlayerTruck extends Sprite{
-		private const MAX_STEER_ANGLE:Number = Math.PI/3;
-		private const STEER_SPEED:Number = 1.5;
-		private const SIDEWAYS_FRICTION_FORCE:Number = 10;
-		private const HORSEPOWER:Number = 150;
+	public class PlayerTruck extends Sprite {
+		private const MAX_STEER_ANGLE:Number = Math.PI/4;
+		private const STEER_SPEED:Number = 5.0;
+		
+		private const SIDEWAYS_FRICTION_FORCE:Number = 1000;
+		private const HORSEPOWER_MAX:Number = 50;
+		private const HORSEPOWER_INC:Number = 5;
+		
 		private const NOSFACTOR:Number = 0;
 		
 		private const leftRearWheelPosition:b2Vec2 = new b2Vec2(-1.3, 3.0);
@@ -28,7 +31,7 @@ package GameCom.GameComponents {
 		private const leftFrontWheelPosition:b2Vec2 =new b2Vec2(-1.3,-3.0);
 		private const rightFrontWheelPosition:b2Vec2= new b2Vec2(1.3,-3.0);
 		
-		private var engineSpeed:Number =0;
+		private var engineSpeed:Number = 0;
 		private var steeringAngle:Number = 0;
 		
 		private var body:b2Body;
@@ -43,6 +46,8 @@ package GameCom.GameComponents {
 		private var rightJoint:b2RevoluteJoint;
 		
 		public function PlayerTruck(spawnPosition:b2Vec2, world:b2World, worldSpr:Sprite) {
+			worldSpr.addChild(this);
+			
 			//////////////////////////
 			// TRUCK BODY
 			
@@ -52,7 +57,7 @@ package GameCom.GameComponents {
 			//Create the fixture
 			var bodyFixtureDef:b2FixtureDef = new b2FixtureDef();
 			bodyFixtureDef.shape = bodyShape;
-			bodyFixtureDef.density = 1.0;
+			bodyFixtureDef.density = 0.2;
 			
 			//Create the defintion
 			var bodyBodyDef:b2BodyDef = new b2BodyDef();
@@ -157,19 +162,34 @@ package GameCom.GameComponents {
 		private function killOrthogonalVelocity(targetBody:b2Body):void {
 			var localPoint:b2Vec2 = new b2Vec2(0, 0);
 			
-			var velocity:b2Vec2 = targetBody.GetLinearVelocityFromLocalPoint(localPoint);
+			var velocity:b2Vec2 = targetBody.GetLinearVelocity();
 			
 			var sidewaysAxis:b2Vec2 = targetBody.GetTransform().R.col2.Copy();
 			sidewaysAxis.Multiply(b2Math.Dot(velocity, sidewaysAxis));
 			
 			targetBody.SetLinearVelocity(sidewaysAxis); //targetBody.GetWorldPoint(localPoint));
+			
+			var i:Number = targetBody.GetPosition().x * Global.PHYSICS_SCALE - this.x;
+			var j:Number = targetBody.GetPosition().y * Global.PHYSICS_SCALE - this.y;
+			
+			this.graphics.lineStyle(1, 0x0, 0.5);
+			this.graphics.moveTo(i, j);
+			this.graphics.lineTo(i + sidewaysAxis.x * Global.PHYSICS_SCALE, j + sidewaysAxis.y * Global.PHYSICS_SCALE);
+			
+			this.graphics.lineStyle(1, 0xFF0000, 0.5);
+			this.graphics.moveTo(i, j);
+			this.graphics.lineTo(i + velocity.x * Global.PHYSICS_SCALE, j + velocity.y * Global.PHYSICS_SCALE);
 		}
 		
 		public function Update():void {
-			if(Keys.isKeyDown(Keyboard.UP)) {
-				engineSpeed = -HORSEPOWER;
-			} else if(Keys.isKeyDown(Keyboard.DOWN)) {
-				engineSpeed = HORSEPOWER;
+			if (Keys.isKeyDown(Keyboard.UP)) {
+				if(engineSpeed > -HORSEPOWER_MAX) {
+					engineSpeed -= HORSEPOWER_INC;
+				}
+			} else if (Keys.isKeyDown(Keyboard.DOWN)) {
+				if(engineSpeed < HORSEPOWER_MAX) {
+					engineSpeed += HORSEPOWER_INC;
+				}
 			} else {
 				engineSpeed = 0;
 			}
@@ -181,6 +201,8 @@ package GameCom.GameComponents {
 			} else {
 				steeringAngle = 0;
 			}
+			
+			this.graphics.clear();
 			
 			if (!Keys.isKeyDown(Keyboard.SPACE)) {
 				killOrthogonalVelocity(leftWheel);

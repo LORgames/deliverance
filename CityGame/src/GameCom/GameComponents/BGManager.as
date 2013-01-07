@@ -55,7 +55,7 @@ package GameCom.GameComponents
 			if (currentlyLoading == null && reqLoad.length > 0) {
 				currentlyLoading = (reqLoad.pop() as Array);
 				
-				var loadedBytes:ByteArray = ThemeManager.Get("mapcache/" + bgType + "_" + currentlyLoading[0] + "_" + currentlyLoading[1] + ".png");
+				var loadedBytes:ByteArray = ThemeManager.Get("mapcache/" + bgType + "_" + currentlyLoading[0] + "_" + currentlyLoading[1] + ".png2");
 				ldr.loadBytes(loadedBytes);
 				ldr.contentLoaderInfo.addEventListener(Event.COMPLETE, completedLoad);
 			}

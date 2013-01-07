@@ -15,6 +15,7 @@ package GameCom.States {
 	import flash.geom.Rectangle;
 	import flash.ui.Keyboard;
 	import GameCom.GameComponents.PlayerTruck;
+	import GameCom.GameComponents.Water;
 	import LORgames.Engine.Keys;
 	import GameCom.Helpers.StaticBoxCreator;
 	import GameCom.GameComponents.BGManager;
@@ -40,6 +41,8 @@ package GameCom.States {
 		// objectLayer contains images drawn on the ground layer
 		// roofLayer contains images drawn on the ground layer
 		private var worldSpr:Sprite = new Sprite();
+		
+		private var waterLayer:Water = new Water();
 		private var groundLayer:Sprite = new Sprite();
 		private var objectLayer:Sprite = new Sprite();
 		private var roofLayer:Sprite = new Sprite();
@@ -79,6 +82,7 @@ package GameCom.States {
 			
 			this.addChild(worldSpr);
 			
+			worldSpr.addChild(waterLayer);
 			worldSpr.addChild(groundLayer);
 			worldSpr.addChild(objectLayer);
 			worldSpr.addChild(roofLayer);
@@ -97,9 +101,11 @@ package GameCom.States {
 		}
 		
 		private function Update(e:Event):void {
-			player.Update();
-			
 			if (simulating) {
+				//Update the objects
+				waterLayer.Update();
+				player.Update();
+				
 				world.Step(Global.TIME_STEP, Global.VELOCITY_ITERATIONS, Global.POSITION_ITERATIONS);
 				world.ClearForces();
 				
