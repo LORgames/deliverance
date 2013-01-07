@@ -145,13 +145,13 @@ namespace CityTools {
 
                     while (true) {
                         try {
-                            using (MemoryStream stream = new MemoryStream()) {
+                            /*using (MemoryStream stream = new MemoryStream()) {
                                 using (FileStream file = new FileStream(MapCache.GetTileFilename(i, j, MainWindow.instance.activeLayer), FileMode.Create, FileAccess.Write)) {
                                     bmp.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
                                     stream.WriteTo(file);
                                 }
-                            }
-                            //bmp.Save(MapCache.GetTileFilename(i, j, MainWindow.instance.activeLayer));
+                            }*/
+                            bmp.Save(MapCache.GetTileFilename(i, j, MainWindow.instance.activeLayer));
                             break;
                         } catch (System.Runtime.InteropServices.ExternalException ex) {
                             //Lame

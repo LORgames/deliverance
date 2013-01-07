@@ -34,6 +34,9 @@
             this.mapViewPanel = new System.Windows.Forms.PictureBox();
             this.toolpanel_splitter = new System.Windows.Forms.SplitContainer();
             this.minimap = new System.Windows.Forms.PictureBox();
+            this.minimap_context = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.minimapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.redrawAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.layer_ceiling = new System.Windows.Forms.CheckBox();
             this.layer_objects = new System.Windows.Forms.CheckBox();
             this.layer_floor = new System.Windows.Forms.CheckBox();
@@ -63,9 +66,9 @@
             this.places_tab = new System.Windows.Forms.TabPage();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.minimap_context = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.minimapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.redrawAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.phys_add_rect = new System.Windows.Forms.Button();
+            this.phys_add_ellipse = new System.Windows.Forms.Button();
+            this.phys_add_triangle = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.main_splitter)).BeginInit();
             this.main_splitter.Panel1.SuspendLayout();
             this.main_splitter.Panel2.SuspendLayout();
@@ -77,6 +80,7 @@
             this.toolpanel_splitter.Panel2.SuspendLayout();
             this.toolpanel_splitter.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.minimap)).BeginInit();
+            this.minimap_context.SuspendLayout();
             this.tool_tabs.SuspendLayout();
             this.terrain_tab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.terrain_penSize)).BeginInit();
@@ -88,7 +92,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.obj_scale)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.obj_rot)).BeginInit();
             this.obj_cats.SuspendLayout();
-            this.minimap_context.SuspendLayout();
+            this.physics_tab.SuspendLayout();
             this.SuspendLayout();
             // 
             // main_splitter
@@ -106,7 +110,7 @@
             // main_splitter.Panel2
             // 
             this.main_splitter.Panel2.Controls.Add(this.toolpanel_splitter);
-            this.main_splitter.Size = new System.Drawing.Size(853, 398);
+            this.main_splitter.Size = new System.Drawing.Size(853, 461);
             this.main_splitter.SplitterDistance = 618;
             this.main_splitter.TabIndex = 0;
             // 
@@ -116,7 +120,7 @@
             this.mapViewPanel_c.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mapViewPanel_c.Location = new System.Drawing.Point(0, 0);
             this.mapViewPanel_c.Name = "mapViewPanel_c";
-            this.mapViewPanel_c.Size = new System.Drawing.Size(618, 398);
+            this.mapViewPanel_c.Size = new System.Drawing.Size(618, 461);
             this.mapViewPanel_c.TabIndex = 0;
             // 
             // mapViewPanel
@@ -124,7 +128,7 @@
             this.mapViewPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mapViewPanel.Location = new System.Drawing.Point(0, 0);
             this.mapViewPanel.Name = "mapViewPanel";
-            this.mapViewPanel.Size = new System.Drawing.Size(618, 398);
+            this.mapViewPanel.Size = new System.Drawing.Size(618, 461);
             this.mapViewPanel.TabIndex = 0;
             this.mapViewPanel.TabStop = false;
             this.mapViewPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.mapViewPanel_Paint);
@@ -152,7 +156,7 @@
             // toolpanel_splitter.Panel2
             // 
             this.toolpanel_splitter.Panel2.Controls.Add(this.tool_tabs);
-            this.toolpanel_splitter.Size = new System.Drawing.Size(231, 398);
+            this.toolpanel_splitter.Size = new System.Drawing.Size(231, 461);
             this.toolpanel_splitter.SplitterDistance = 250;
             this.toolpanel_splitter.TabIndex = 0;
             // 
@@ -166,6 +170,28 @@
             this.minimap.TabStop = false;
             this.minimap.Paint += new System.Windows.Forms.PaintEventHandler(this.minimap_Paint);
             this.minimap.MouseClick += new System.Windows.Forms.MouseEventHandler(this.minimap_MouseClick);
+            // 
+            // minimap_context
+            // 
+            this.minimap_context.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.minimapToolStripMenuItem,
+            this.redrawAllToolStripMenuItem});
+            this.minimap_context.Name = "minimap_context";
+            this.minimap_context.Size = new System.Drawing.Size(157, 48);
+            // 
+            // minimapToolStripMenuItem
+            // 
+            this.minimapToolStripMenuItem.Name = "minimapToolStripMenuItem";
+            this.minimapToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.minimapToolStripMenuItem.Text = "Redraw Current";
+            this.minimapToolStripMenuItem.Click += new System.EventHandler(this.minimapToolStripMenuItem_Click);
+            // 
+            // redrawAllToolStripMenuItem
+            // 
+            this.redrawAllToolStripMenuItem.Name = "redrawAllToolStripMenuItem";
+            this.redrawAllToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.redrawAllToolStripMenuItem.Text = "Redraw All";
+            this.redrawAllToolStripMenuItem.Click += new System.EventHandler(this.minimapToolStripMenuItem_Click);
             // 
             // layer_ceiling
             // 
@@ -215,7 +241,7 @@
             this.tool_tabs.Location = new System.Drawing.Point(0, 0);
             this.tool_tabs.Name = "tool_tabs";
             this.tool_tabs.SelectedIndex = 0;
-            this.tool_tabs.Size = new System.Drawing.Size(231, 144);
+            this.tool_tabs.Size = new System.Drawing.Size(231, 207);
             this.tool_tabs.TabIndex = 0;
             // 
             // terrain_tab
@@ -230,7 +256,7 @@
             this.terrain_tab.Location = new System.Drawing.Point(4, 22);
             this.terrain_tab.Name = "terrain_tab";
             this.terrain_tab.Padding = new System.Windows.Forms.Padding(3);
-            this.terrain_tab.Size = new System.Drawing.Size(223, 118);
+            this.terrain_tab.Size = new System.Drawing.Size(223, 181);
             this.terrain_tab.TabIndex = 0;
             this.terrain_tab.Text = "Terrain";
             this.terrain_tab.UseVisualStyleBackColor = true;
@@ -479,9 +505,12 @@
             // 
             // physics_tab
             // 
+            this.physics_tab.Controls.Add(this.phys_add_triangle);
+            this.physics_tab.Controls.Add(this.phys_add_ellipse);
+            this.physics_tab.Controls.Add(this.phys_add_rect);
             this.physics_tab.Location = new System.Drawing.Point(4, 22);
             this.physics_tab.Name = "physics_tab";
-            this.physics_tab.Size = new System.Drawing.Size(223, 118);
+            this.physics_tab.Size = new System.Drawing.Size(223, 181);
             this.physics_tab.TabIndex = 2;
             this.physics_tab.Text = "Physics";
             this.physics_tab.UseVisualStyleBackColor = true;
@@ -508,33 +537,41 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // minimap_context
+            // phys_add_rect
             // 
-            this.minimap_context.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.minimapToolStripMenuItem,
-            this.redrawAllToolStripMenuItem});
-            this.minimap_context.Name = "minimap_context";
-            this.minimap_context.Size = new System.Drawing.Size(157, 70);
+            this.phys_add_rect.Location = new System.Drawing.Point(4, 4);
+            this.phys_add_rect.Name = "phys_add_rect";
+            this.phys_add_rect.Size = new System.Drawing.Size(216, 23);
+            this.phys_add_rect.TabIndex = 0;
+            this.phys_add_rect.Text = "Draw Physics Rectangle";
+            this.phys_add_rect.UseVisualStyleBackColor = true;
+            this.phys_add_rect.Click += new System.EventHandler(this.phys_add_shape);
             // 
-            // minimapToolStripMenuItem
+            // phys_add_ellipse
             // 
-            this.minimapToolStripMenuItem.Name = "minimapToolStripMenuItem";
-            this.minimapToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
-            this.minimapToolStripMenuItem.Text = "Redraw Current";
-            this.minimapToolStripMenuItem.Click += new System.EventHandler(this.minimapToolStripMenuItem_Click);
+            this.phys_add_ellipse.Location = new System.Drawing.Point(4, 34);
+            this.phys_add_ellipse.Name = "phys_add_ellipse";
+            this.phys_add_ellipse.Size = new System.Drawing.Size(216, 23);
+            this.phys_add_ellipse.TabIndex = 1;
+            this.phys_add_ellipse.Text = "Draw Physics Circle";
+            this.phys_add_ellipse.UseVisualStyleBackColor = true;
+            this.phys_add_ellipse.Click += new System.EventHandler(this.phys_add_shape);
             // 
-            // redrawAllToolStripMenuItem
+            // phys_add_triangle
             // 
-            this.redrawAllToolStripMenuItem.Name = "redrawAllToolStripMenuItem";
-            this.redrawAllToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
-            this.redrawAllToolStripMenuItem.Text = "Redraw All";
-            this.redrawAllToolStripMenuItem.Click += new System.EventHandler(this.minimapToolStripMenuItem_Click);
+            this.phys_add_triangle.Location = new System.Drawing.Point(4, 64);
+            this.phys_add_triangle.Name = "phys_add_triangle";
+            this.phys_add_triangle.Size = new System.Drawing.Size(216, 23);
+            this.phys_add_triangle.TabIndex = 2;
+            this.phys_add_triangle.Text = "Draw Physics Triangle";
+            this.phys_add_triangle.UseVisualStyleBackColor = true;
+            this.phys_add_triangle.Click += new System.EventHandler(this.phys_add_shape);
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(853, 398);
+            this.ClientSize = new System.Drawing.Size(853, 461);
             this.Controls.Add(this.main_splitter);
             this.Name = "MainWindow";
             this.Text = "City Builder";
@@ -550,6 +587,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.toolpanel_splitter)).EndInit();
             this.toolpanel_splitter.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.minimap)).EndInit();
+            this.minimap_context.ResumeLayout(false);
             this.tool_tabs.ResumeLayout(false);
             this.terrain_tab.ResumeLayout(false);
             this.terrain_tab.PerformLayout();
@@ -563,7 +601,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.obj_scale)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.obj_rot)).EndInit();
             this.obj_cats.ResumeLayout(false);
-            this.minimap_context.ResumeLayout(false);
+            this.physics_tab.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -607,6 +645,9 @@
         private System.Windows.Forms.ContextMenuStrip minimap_context;
         private System.Windows.Forms.ToolStripMenuItem minimapToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem redrawAllToolStripMenuItem;
+        private System.Windows.Forms.Button phys_add_triangle;
+        private System.Windows.Forms.Button phys_add_ellipse;
+        private System.Windows.Forms.Button phys_add_rect;
     }
 }
 

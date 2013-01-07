@@ -67,6 +67,9 @@
     </Compile>
     <Compile Include="LBuffer.cs" />
     <Compile Include="MapCache.cs" />
+    <Compile Include="Physics\PhysicsCache.cs" />
+    <Compile Include="Physics\PhysicsDrawer.cs" />
+    <Compile Include="Physics\PhysicsShape.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="components\CachedObject.resx">
