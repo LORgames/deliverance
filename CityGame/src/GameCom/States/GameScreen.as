@@ -14,6 +14,7 @@ package GameCom.States {
 	import flash.geom.Matrix;
 	import flash.geom.Rectangle;
 	import flash.ui.Keyboard;
+	import GameCom.GameComponents.ObjManager;
 	import GameCom.GameComponents.PlayerTruck;
 	import GameCom.GameComponents.Water;
 	import LORgames.Engine.Keys;
@@ -47,6 +48,7 @@ package GameCom.States {
 		private var objectLayer:Sprite = new Sprite();
 		private var roofLayer:Sprite = new Sprite();
 		
+		private var objManager:ObjManager;
 		private var groundManager:BGManager;
 		private var roofManager:BGManager;
 		
@@ -92,12 +94,14 @@ package GameCom.States {
 			//TODO: bgManager (ground) is added to groundLayer
 			groundManager = new BGManager("base", groundLayer);
 			
-			//TODO: objManager is added to objectLayer
 			// player is added to objectLayer
 			player = new PlayerTruck(new b2Vec2(10, 10), world, objectLayer);
 			
-			//TODO: bgManager (roof) is added to groundLayer
+			// objManager is added to objectLayer
+			objManager = new ObjManager(player, world, worldSpr);
 			
+			//TODO: bgManager (roof) is added to groundLayer
+			//roofManager = new BGManager("ceil", roofLayer);
 		}
 		
 		private function Update(e:Event):void {
@@ -105,6 +109,7 @@ package GameCom.States {
 				//Update the objects
 				waterLayer.Update();
 				player.Update();
+				objManager.Update();
 				
 				world.Step(Global.TIME_STEP, Global.VELOCITY_ITERATIONS, Global.POSITION_ITERATIONS);
 				world.ClearForces();
