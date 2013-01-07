@@ -40,9 +40,9 @@ namespace CityTools {
 
         public Color BACKGROUND_COLOR = Color.CornflowerBlue;
 
-        private float offsetX = 0.0f;
-        private float offsetY = 0.0f;
-        private float offsetZ = 1.0f;
+        public float offsetX = 0.0f;
+        public float offsetY = 0.0f;
+        public float offsetZ = 1.0f;
 
         public static MainWindow instance;
         public bool REQUIRES_CLOSE = false;
@@ -230,123 +230,13 @@ namespace CityTools {
             mousePos = e.Location;
 
             if (paintMode == PaintMode.Terrain) {
-                Rectangle effectedArea = new Rectangle((int)(mousePos.X - terrain_penSize.Value / 2), (int)(mousePos.Y - terrain_penSize.Value / 2), (int)terrain_penSize.Value, (int)terrain_penSize.Value);
-                
-                input_buffer.gfx.Clear(Color.Transparent);
-
-                if (paintShape == PaintShape.Square) {
-                    input_buffer.gfx.FillRectangle(terrainPaintBrush, effectedArea);
-                } else if (paintShape == PaintShape.Circle) {
-                    input_buffer.gfx.FillEllipse(terrainPaintBrush, effectedArea);
+                if (terrainRedrawRequired = Terrain.TerrainDrawer.UpdateMouse(e, input_buffer)) {
+                    mapViewPanel.Invalidate();
                 }
-
-                if (e.Button == System.Windows.Forms.MouseButtons.Left) {
-                    int oTileX, oTileY, wTileX, hTileY;
-
-                    float scaledTileSizeX = TILE_SX * offsetZ;
-                    float scaledTileSizeY = TILE_SY * offsetZ;
-
-                    oTileX = (int)Math.Floor((effectedArea.Left / scaledTileSizeX) + offsetX);
-                    oTileY = (int)Math.Floor((effectedArea.Top / scaledTileSizeY) + offsetY);
-                    wTileX = (int)Math.Floor((effectedArea.Right / scaledTileSizeX) + offsetX);
-                    hTileY = (int)Math.Floor((effectedArea.Bottom / scaledTileSizeY) + offsetY);
-
-                    if (oTileX < 0) oTileX = 0;
-                    if (oTileY < 0) oTileY = 0;
-                    if (wTileX >= TILE_TX) wTileX = TILE_TX - 1;
-                    if (hTileY >= TILE_TY) hTileY = TILE_TY - 1;
-
-                    for (int i = oTileX; i <= wTileX; i++) {
-                        for (int j = oTileY; j <= hTileY; j++) {
-                            needsToBeSaved[i, j] = true;
-
-                            float tX = ((effectedArea.Left / scaledTileSizeX) + offsetX - i) * TILE_SX;
-                            float tY = ((effectedArea.Top / scaledTileSizeY) + offsetY - j) * TILE_SY;
-                            float bX = ((effectedArea.Right / scaledTileSizeX) + offsetX - i) * TILE_SX;
-                            float bY = ((effectedArea.Bottom / scaledTileSizeY) + offsetY - j) * TILE_SY;
-
-                            Rectangle relativeRect = new Rectangle((int)tX, (int)tY, (int)(bX - tX), (int)(bY - tY));
-
-                            try {
-                                Graphics gfx = Graphics.FromImage(base_images[i, j]);
-                                gfx.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear;
-                                gfx.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
-                                gfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-
-                                if (paintShape == PaintShape.Square) {
-                                    gfx.FillRectangle(terrainPaintBrush, relativeRect);
-                                } else if (paintShape == PaintShape.Circle) {
-                                    gfx.FillEllipse(terrainPaintBrush, relativeRect);
-                                }
-
-                                gfx.Dispose();
-                            } catch {
-
-                            }
-                        }
-                    }
-
-                    terrainRedrawRequired = true;
-                }
-
-                mapViewPanel.Invalidate();
             } else if(paintMode == PaintMode.Objects) {
-                RectangleF effectedArea = new RectangleF(mousePos.X - (obj_paint_image.Width * offsetZ / 2), mousePos.Y - (obj_paint_image.Height * offsetZ / 2), obj_paint_image.Width * offsetZ, obj_paint_image.Height * offsetZ);
-
-                Rectangle eD = new Rectangle((int)effectedArea.Left, (int)effectedArea.Top, (int)Math.Round(effectedArea.Width), (int)Math.Round(effectedArea.Height));
-
-                input_buffer.gfx.Clear(Color.Transparent);
-                input_buffer.gfx.DrawImage(obj_paint_image, eD);
-                
-                if (e.Button == System.Windows.Forms.MouseButtons.Left && !was_mouse_down) {
-                    was_mouse_down = true;
-
-                    int oTileX, oTileY, wTileX, hTileY;
-
-                    RectangleF effectedCells = new RectangleF(effectedArea.Left / TILE_SX, effectedArea.Top / TILE_SY, 1 + effectedArea.Width / TILE_SX, 1 + effectedArea.Height / TILE_SY);
-
-                    effectedCells.Offset(offsetX, offsetY);
-
-                    oTileX = (int)effectedCells.Left;
-                    oTileY = (int)effectedCells.Top;
-                    wTileX = (int)Math.Ceiling(effectedCells.Right);
-                    hTileY = (int)Math.Ceiling(effectedCells.Bottom);
-
-                    if (oTileX < 0) oTileX = 0;
-                    if (oTileY < 0) oTileY = 0;
-                    if (wTileX > TILE_TX) wTileX = TILE_TX;
-                    if (hTileY > TILE_TY) hTileY = TILE_TY;
-
-                    for (int i = oTileX; i <= wTileX; i++) {
-                        for (int j = oTileY; j <= hTileY; j++) {
-                            needsToBeSaved[i, j] = true;
-
-                            float tX = effectedArea.Left + TILE_SX * (offsetX - i);
-                            float tY = effectedArea.Top + TILE_SY * (offsetY - j);
-                            float bX = effectedArea.Right + TILE_SX * (offsetX - i);
-                            float bY = effectedArea.Bottom + TILE_SY * (offsetY - j);
-
-                            Rectangle relativeRect = new Rectangle((int)Math.Round(tX), (int)Math.Round(tY), obj_paint_image.Width, obj_paint_image.Height);
-
-                            try {
-                                Graphics gfx = Graphics.FromImage(object_images[i, j]);
-                                gfx.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear;
-                                gfx.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
-                                gfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-
-                                gfx.DrawImage(obj_paint_image, relativeRect);
-
-                                gfx.Dispose();
-                            } catch {
-
-                            }
-                        }
-                    }
-
-                    terrainRedrawRequired = true;
+                if (terrainRedrawRequired = Object.ObjectDrawer.UpdateMouse(e, input_buffer)) {
+                    mapViewPanel.Invalidate();
                 }
-
-                mapViewPanel.Invalidate();
             } else if (paintMode == PaintMode.Physics) {
                 if (Physics.PhysicsDrawer.UpdateMouse(e, input_buffer)) {
                     mapViewPanel.Invalidate();

@@ -623,7 +623,7 @@
         private System.Windows.Forms.Button pen_btn;
         private System.Windows.Forms.Button texture_btn;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.NumericUpDown terrain_penSize;
+        internal System.Windows.Forms.NumericUpDown terrain_penSize;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.PictureBox mapViewPanel;
         private System.Windows.Forms.Button flush_textureCache;
