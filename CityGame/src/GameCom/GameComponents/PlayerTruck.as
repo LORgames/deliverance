@@ -1,4 +1,5 @@
 package GameCom.GameComponents {
+	import flash.geom.ColorTransform;
 	import GameCom.States.GameScreen;
 	import LORgames.Engine.Keys;
 	import flash.ui.Keyboard;
@@ -47,6 +48,15 @@ package GameCom.GameComponents {
 		
 		public function PlayerTruck(spawnPosition:b2Vec2, world:b2World, worldSpr:Sprite) {
 			worldSpr.addChild(this);
+			
+			this.addChild(ThemeManager.Get("TruckBits/Truck.swf"));
+			this.getChildAt(0).scaleX = 0.25;
+			this.getChildAt(0).scaleY = 0.25;
+			
+			this.getChildAt(0).x = -this.getChildAt(0).width / 2;
+			this.getChildAt(0).y = -this.getChildAt(0).height / 2 - 20;
+			
+			this.getChildAt(0).transform.colorTransform = new ColorTransform(1, 0.5, 0.1);
 			
 			//////////////////////////
 			// TRUCK BODY
@@ -234,6 +244,7 @@ package GameCom.GameComponents {
 			
 			this.x = body.GetPosition().x * Global.PHYSICS_SCALE;
 			this.y = body.GetPosition().y * Global.PHYSICS_SCALE;
+			this.rotation = body.GetAngle() / Math.PI * 180;
 		}
 	}
 }

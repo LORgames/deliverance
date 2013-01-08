@@ -12,8 +12,8 @@ package GameCom.GameComponents  {
 	 * @author Paul
 	 */
 	public class Water extends Sprite {
-		public const SIZE_X:int = 128;//512;
-		public const SIZE_Y:int = 128;//512;
+		public const SIZE_X:int = 256;//512;
+		public const SIZE_Y:int = 256;//512;
 		
 		private var drawnLayer:Sprite = new Sprite();
 		
@@ -27,8 +27,8 @@ package GameCom.GameComponents  {
 		
 		private var speeds:Array = [];
 		
-		private var baseX:Number = SIZE_X / 5;
-		private var baseY:Number = SIZE_Y / 5;
+		private var baseX:Number = 16;
+		private var baseY:Number = 16;
 		private var numOctaves:uint = 4;
 		private var randomSeed:int = 1257;
 		private var stitch:Boolean = true;
@@ -54,10 +54,10 @@ package GameCom.GameComponents  {
 			bitmapData_3.perlinNoise(baseX, baseY, 1, randomSeed + 2, true, fractalNoise, channelOptions, grayScale);
 			bitmapData_4.perlinNoise(baseX, baseY, 1, randomSeed + 3, true, fractalNoise, channelOptions, grayScale);
 			
-			bitmapData_1.colorTransform(new Rectangle(0, 0, SIZE_X, SIZE_Y), new ColorTransform(1, 1, 1, 1.00));
-			bitmapData_2.colorTransform(new Rectangle(0, 0, SIZE_X, SIZE_Y), new ColorTransform(1, 1, 1, 0.75));
-			bitmapData_3.colorTransform(new Rectangle(0, 0, SIZE_X, SIZE_Y), new ColorTransform(1, 1, 1, 0.50));
-			bitmapData_4.colorTransform(new Rectangle(0, 0, SIZE_X, SIZE_Y), new ColorTransform(1, 1, 1, 0.25));
+			bitmapData_1.colorTransform(new Rectangle(0, 0, SIZE_X, SIZE_Y), new ColorTransform(1, 1, 1, 0.25));
+			bitmapData_2.colorTransform(new Rectangle(0, 0, SIZE_X, SIZE_Y), new ColorTransform(1, 1, 1, 0.187));
+			bitmapData_3.colorTransform(new Rectangle(0, 0, SIZE_X, SIZE_Y), new ColorTransform(1, 1, 1, 0.125));
+			bitmapData_4.colorTransform(new Rectangle(0, 0, SIZE_X, SIZE_Y), new ColorTransform(1, 1, 1, 0.062));
 		}
 		
 		public function Update():void {

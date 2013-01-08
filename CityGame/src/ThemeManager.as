@@ -26,58 +26,44 @@ package {
         [Bindable]
         private static var DefaultBytes:Class;
 		
-		private static var currentTheme:String = "";
 		private static var themeSet:Array = new Array();
 		
 		private static var zipLib:FZipLibrary;
-		private static var currentlyLoading:String = "";
 		private static var zip:FZip = new FZip();
 		private static var loader:Loader = new Loader();
 		private static var imageLoadList:Array = new Array();
-		private static var themeLoadList:Array = new Array();
 		private static var finLoad:Array = new Array();
 		
 		public static function Initialize(run:Function = null):void {
-			LoadTheme("Default");
-			ChangeTheme("Default", run);
+			zip = new FZip();
+			zip.addEventListener(Event.COMPLETE, LoadedThemeZip, false, 0, true);
+			
+			var bytes:ByteArray = new DefaultBytes() as ByteArray;
+			zip.loadBytes(bytes);
+			
+			LoadHook(run);
 		}
 		
-		private static function LoadHook(theme:String, run:Function = null):void {
-			if (finLoad[theme] == null) {
-				finLoad[theme] = new Array();
-			}
-			
-			(finLoad[theme] as Array).push(run);
-		}
-		
-		public static function ChangeTheme(themeName:String, hook:Function):void {
-			//Exit if changing to the current theme
-			if (themeName == currentTheme) return;
-			
-			if (HasTheme(themeName)) {
-				hook();
-			} else {
-				LoadHook(themeName, hook);
-				LoadTheme(themeName);
-			}
-			
-			currentTheme = themeName;
+		private static function LoadHook(run:Function = null):void {
+			(finLoad as Array).push(run);
 		}
 		
 		public static function Get(string:String):* {
-			if (themeSet[currentTheme] is Array && themeSet[currentTheme][string]) {
-				return themeSet[currentTheme][string];
-			} else if (themeSet["Default"] is Array && themeSet["Default"][string]) {
-				return themeSet["Default"][string];
+			if (themeSet[string]) {
+				return themeSet[string];
 			} else {
 				return null;
 			}
 		}
 		
+		public static function GetClassFromSWF(swfFilename:String, classname:String):Class {
+			return (zipLib.getDefinition(swfFilename, classname) as Class);
+		}
+		
 		public static function GetFilenamesByWildcard(string:String):Array {
 			var retList:Array = new Array();
 			
-			for (var s:String in (themeSet[currentTheme] as Array)) {
+			for (var s:String in (themeSet as Array)) {
 				if (s.indexOf(string) != -1) {
 					retList.push(s);
 				}
@@ -99,10 +85,7 @@ package {
 		}
 		
 		private static function ProcessedThemeZip(e:Event):void {
-			if (currentlyLoading == "") return;
-			if (themeSet[currentlyLoading] != null) throw new Error("Uhoh!");
-			
-			themeSet[currentlyLoading] = new Array();
+			themeSet = new Array();
 			var f:FZipFile;
 			
 			for (var i:int = 0; i < zip.getFileCount(); i++) {
@@ -110,50 +93,16 @@ package {
 				
 				var ext:String = f.filename.substr(f.filename.lastIndexOf("."));
 				if (ext == ".png" || ext == ".jpg" || ext == ".bmp") {
-					themeSet[currentlyLoading][f.filename] = zipLib.getBitmapData(f.filename);
+					themeSet[f.filename] = zipLib.getBitmapData(f.filename);
+				} else if (ext == ".swf") {
+					themeSet[f.filename] = zipLib.getDisplayObject(f.filename);
 				} else {
-					themeSet[currentlyLoading][f.filename] = f.content;
+					themeSet[f.filename] = f.content;
 				}
 			}
 			
-			if (finLoad[currentlyLoading] != null) {
-				while ((finLoad[currentlyLoading] as Array).length > 0){
-					((finLoad[currentlyLoading] as Array).pop() as Function).call();
-				}
-				finLoad[currentlyLoading] = null;
-			}
-			
-			currentlyLoading = "";
-			if (themeLoadList.length > 0) {
-				LoadTheme(themeLoadList.pop());
-			}
-		}
-		
-		public static function HasTheme(themeName:String):Boolean {
-			return (themeSet[themeName] is Array);
-		}
-		
-		/**
-		 * Loads a theme; The location is not as important to this function as the
-		 * @param	themeName
-		 */
-		public static function LoadTheme(themeName:String):void {
-			if (!HasTheme(themeName)) {
-				if (currentlyLoading != "") {
-					themeLoadList.push(themeName);
-				} else {
-					currentlyLoading = themeName;
-					
-					zip = new FZip();
-					zip.addEventListener(Event.COMPLETE, LoadedThemeZip, false, 0, true);
-					
-					if(themeName != "Default") {
-						zip.load(new URLRequest(Global.SERVER_ADDR + "/themes/" + themeName + ".zip"));
-					} else {
-						var bytes:ByteArray = new DefaultBytes() as ByteArray;
-						zip.loadBytes(bytes);
-					}
-				}
+			while ((finLoad as Array).length > 0){
+				((finLoad as Array).pop() as Function).call();
 			}
 		}
 		

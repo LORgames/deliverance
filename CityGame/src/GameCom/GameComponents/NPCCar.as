@@ -1,5 +1,6 @@
 package GameCom.GameComponents 
 {
+	import flash.geom.ColorTransform;
 	import GameCom.States.GameScreen;
 	import LORgames.Engine.Keys;
 	import flash.ui.Keyboard;
@@ -16,10 +17,8 @@ package GameCom.GameComponents
 	 * @author Miles
 	 */
 	
-	public class NPCCar extends Sprite
-	{
+	public class NPCCar extends Sprite {
 		private var world:b2World;
-		private var worldSpr:Sprite;
 		
 		private const MAX_STEER_ANGLE:Number = Math.PI/4;
 		private const STEER_SPEED:Number = 5.0;
@@ -45,12 +44,16 @@ package GameCom.GameComponents
 		private var leftJoint:b2RevoluteJoint;
 		private var rightJoint:b2RevoluteJoint;
 		
-		public function NPCCar(spawnPosition:b2Vec2, world:b2World, worldSpr:Sprite) 
-		{
+		public function NPCCar(spawnPosition:b2Vec2, world:b2World) {
 			this.world = world;
-			this.worldSpr = worldSpr;
 			
-			worldSpr.addChild(this);
+			var CarA:Class = ThemeManager.GetClassFromSWF("TruckBits/Basic Car.swf", "LORgames.BasicCar");
+			this.addChild(new CarA());
+			
+			this.getChildAt(0).x = -this.getChildAt(0).width / 2;
+			this.getChildAt(0).y = -this.getChildAt(0).height / 2;
+			
+			(this.getChildAt(0) as MovieClip).getChildAt(0).transform.colorTransform = new ColorTransform(Math.random(), Math.random(), Math.random());
 			
 			// Car Body
 			var bodyShape:b2PolygonShape = new b2PolygonShape();
@@ -208,17 +211,15 @@ package GameCom.GameComponents
 			
 			this.x = body.GetPosition().x * Global.PHYSICS_SCALE;
 			this.y = body.GetPosition().y * Global.PHYSICS_SCALE;
+			this.rotation = body.GetAngle() * 180 / Math.PI;
 		}
 		
-		function Destroy():void
-		{
+		public function Destroy():void {
 			world.DestroyBody(body);
 			world.DestroyBody(leftWheel);
 			world.DestroyBody(rightWheel);
 			world.DestroyBody(leftRearWheel);
 			world.DestroyBody(rightRearWheel);
-			
-			worldSpr.removeChild(this);
 		}
 	}
 

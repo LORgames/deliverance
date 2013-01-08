@@ -154,7 +154,7 @@ package GameCom.States {
 			}
 			
 			if(renderWorld) {
-				world.DrawDebugData();
+				//world.DrawDebugData();
 			}
 		}
 		
