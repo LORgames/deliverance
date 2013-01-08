@@ -52,7 +52,7 @@ namespace CityTools.Terrain {
                         Rectangle relativeRect = new Rectangle((int)tX, (int)tY, (int)(bX - tX), (int)(bY - tY));
 
                         try {
-                            Graphics gfx = Graphics.FromImage(MainWindow.instance.base_images[i, j]);
+                            Graphics gfx = Graphics.FromImage(MainWindow.instance.terrain_images[i, j]);
                             gfx.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear;
                             gfx.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
                             gfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;

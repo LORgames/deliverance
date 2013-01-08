@@ -9,11 +9,12 @@ using System.Windows.Forms;
 
 namespace CityTools.Components {
     public partial class CachedObject : UserControl {
-
+        private string img_addr = "";
 
         public CachedObject(string image) {
             InitializeComponent();
 
+            img_addr = image;
             pictureBox1.Load(image);
         }
 
@@ -23,6 +24,7 @@ namespace CityTools.Components {
 
         private void pictureBox1_MouseClick(object sender, MouseEventArgs e) {
             MainWindow.instance.DrawWithObject(pictureBox1.Image);
+            CityTools.ObjectSystem.ObjectDrawer.image_name = img_addr;
         }
     }
 }

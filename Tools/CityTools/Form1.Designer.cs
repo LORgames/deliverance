@@ -37,42 +37,39 @@
             this.minimap_context = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.minimapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.redrawAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.layer_ceiling = new System.Windows.Forms.CheckBox();
-            this.layer_objects = new System.Windows.Forms.CheckBox();
-            this.layer_floor = new System.Windows.Forms.CheckBox();
-            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.first_level_tabControl = new System.Windows.Forms.TabControl();
             this.settings_tab = new System.Windows.Forms.TabPage();
-            this.palette_tab = new System.Windows.Forms.TabPage();
-            this.tool_tabs = new System.Windows.Forms.TabControl();
-            this.terrain_tab = new System.Windows.Forms.TabPage();
+            this.layer_objects_1 = new System.Windows.Forms.CheckBox();
+            this.layer_nodes = new System.Windows.Forms.CheckBox();
             this.flush_textureCache = new System.Windows.Forms.Button();
+            this.settings_lbl = new System.Windows.Forms.Label();
+            this.layer_floor = new System.Windows.Forms.CheckBox();
+            this.layer_physics = new System.Windows.Forms.CheckBox();
+            this.layer_objects_0 = new System.Windows.Forms.CheckBox();
+            this.tab_terrain_main = new System.Windows.Forms.TabPage();
+            this.terrain_penSize = new System.Windows.Forms.TrackBar();
             this.texture_btn = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.terrain_penSize = new System.Windows.Forms.NumericUpDown();
             this.terrain_shape_btn = new System.Windows.Forms.Button();
             this.pen_btn = new System.Windows.Forms.Button();
             this.colour_btn = new System.Windows.Forms.Button();
+            this.palette_tab = new System.Windows.Forms.TabPage();
+            this.tool_tabs = new System.Windows.Forms.TabControl();
             this.objects_tab = new System.Windows.Forms.TabPage();
             this.obj_splitter = new System.Windows.Forms.SplitContainer();
-            this.obj_flipY = new System.Windows.Forms.CheckBox();
-            this.obj_flipX = new System.Windows.Forms.CheckBox();
-            this.obj_scale = new System.Windows.Forms.NumericUpDown();
             this.obj_rot = new System.Windows.Forms.NumericUpDown();
-            this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.obj_cats = new System.Windows.Forms.TabControl();
-            this.obj_collection_buildings = new System.Windows.Forms.TabPage();
-            this.obj_collection_roads = new System.Windows.Forms.TabPage();
-            this.obj_collection_environment = new System.Windows.Forms.TabPage();
+            this.obj_scenary_objs = new System.Windows.Forms.Panel();
+            this.obj_scenary_cache_CB = new System.Windows.Forms.ComboBox();
             this.physics_tab = new System.Windows.Forms.TabPage();
             this.phys_add_triangle = new System.Windows.Forms.Button();
             this.phys_add_ellipse = new System.Windows.Forms.Button();
             this.phys_add_rect = new System.Windows.Forms.Button();
             this.nodes_tab = new System.Windows.Forms.TabPage();
             this.places_tab = new System.Windows.Forms.TabPage();
-            this.settings_lbl = new System.Windows.Forms.Label();
+            this.story_tab = new System.Windows.Forms.TabPage();
+            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.main_splitter)).BeginInit();
             this.main_splitter.Panel1.SuspendLayout();
             this.main_splitter.Panel2.SuspendLayout();
@@ -87,18 +84,16 @@
             this.minimap_context.SuspendLayout();
             this.first_level_tabControl.SuspendLayout();
             this.settings_tab.SuspendLayout();
+            this.tab_terrain_main.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.terrain_penSize)).BeginInit();
             this.palette_tab.SuspendLayout();
             this.tool_tabs.SuspendLayout();
-            this.terrain_tab.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.terrain_penSize)).BeginInit();
             this.objects_tab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.obj_splitter)).BeginInit();
             this.obj_splitter.Panel1.SuspendLayout();
             this.obj_splitter.Panel2.SuspendLayout();
             this.obj_splitter.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.obj_scale)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.obj_rot)).BeginInit();
-            this.obj_cats.SuspendLayout();
             this.physics_tab.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -197,29 +192,78 @@
             this.redrawAllToolStripMenuItem.Text = "Redraw All";
             this.redrawAllToolStripMenuItem.Click += new System.EventHandler(this.minimapToolStripMenuItem_Click);
             // 
-            // layer_ceiling
+            // first_level_tabControl
             // 
-            this.layer_ceiling.AutoSize = true;
-            this.layer_ceiling.Location = new System.Drawing.Point(6, 69);
-            this.layer_ceiling.Name = "layer_ceiling";
-            this.layer_ceiling.Size = new System.Drawing.Size(77, 17);
-            this.layer_ceiling.TabIndex = 2;
-            this.layer_ceiling.Text = "Flying Objs";
-            this.layer_ceiling.UseVisualStyleBackColor = true;
-            this.layer_ceiling.CheckedChanged += new System.EventHandler(this.layerSettingsChanged);
+            this.first_level_tabControl.Controls.Add(this.settings_tab);
+            this.first_level_tabControl.Controls.Add(this.tab_terrain_main);
+            this.first_level_tabControl.Controls.Add(this.palette_tab);
+            this.first_level_tabControl.Controls.Add(this.story_tab);
+            this.first_level_tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.first_level_tabControl.Location = new System.Drawing.Point(0, 0);
+            this.first_level_tabControl.Name = "first_level_tabControl";
+            this.first_level_tabControl.SelectedIndex = 0;
+            this.first_level_tabControl.Size = new System.Drawing.Size(231, 226);
+            this.first_level_tabControl.TabIndex = 0;
             // 
-            // layer_objects
+            // settings_tab
             // 
-            this.layer_objects.AutoSize = true;
-            this.layer_objects.Checked = true;
-            this.layer_objects.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.layer_objects.Location = new System.Drawing.Point(6, 46);
-            this.layer_objects.Name = "layer_objects";
-            this.layer_objects.Size = new System.Drawing.Size(85, 17);
-            this.layer_objects.TabIndex = 1;
-            this.layer_objects.Text = "Ground Objs";
-            this.layer_objects.UseVisualStyleBackColor = true;
-            this.layer_objects.CheckedChanged += new System.EventHandler(this.layerSettingsChanged);
+            this.settings_tab.Controls.Add(this.layer_objects_1);
+            this.settings_tab.Controls.Add(this.layer_nodes);
+            this.settings_tab.Controls.Add(this.flush_textureCache);
+            this.settings_tab.Controls.Add(this.settings_lbl);
+            this.settings_tab.Controls.Add(this.layer_floor);
+            this.settings_tab.Controls.Add(this.layer_physics);
+            this.settings_tab.Controls.Add(this.layer_objects_0);
+            this.settings_tab.Location = new System.Drawing.Point(4, 22);
+            this.settings_tab.Name = "settings_tab";
+            this.settings_tab.Padding = new System.Windows.Forms.Padding(3);
+            this.settings_tab.Size = new System.Drawing.Size(223, 200);
+            this.settings_tab.TabIndex = 0;
+            this.settings_tab.Text = "Settings";
+            this.settings_tab.UseVisualStyleBackColor = true;
+            // 
+            // layer_objects_1
+            // 
+            this.layer_objects_1.AutoSize = true;
+            this.layer_objects_1.Checked = true;
+            this.layer_objects_1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.layer_objects_1.Location = new System.Drawing.Point(6, 69);
+            this.layer_objects_1.Name = "layer_objects_1";
+            this.layer_objects_1.Size = new System.Drawing.Size(94, 17);
+            this.layer_objects_1.TabIndex = 15;
+            this.layer_objects_1.Text = "Objects (Over)";
+            this.layer_objects_1.UseVisualStyleBackColor = true;
+            this.layer_objects_1.CheckedChanged += new System.EventHandler(this.layerSettingsChanged);
+            // 
+            // layer_nodes
+            // 
+            this.layer_nodes.AutoSize = true;
+            this.layer_nodes.Location = new System.Drawing.Point(6, 115);
+            this.layer_nodes.Name = "layer_nodes";
+            this.layer_nodes.Size = new System.Drawing.Size(57, 17);
+            this.layer_nodes.TabIndex = 14;
+            this.layer_nodes.Text = "Nodes";
+            this.layer_nodes.UseVisualStyleBackColor = true;
+            this.layer_nodes.CheckedChanged += new System.EventHandler(this.layerSettingsChanged);
+            // 
+            // flush_textureCache
+            // 
+            this.flush_textureCache.Location = new System.Drawing.Point(112, 7);
+            this.flush_textureCache.Name = "flush_textureCache";
+            this.flush_textureCache.Size = new System.Drawing.Size(105, 23);
+            this.flush_textureCache.TabIndex = 13;
+            this.flush_textureCache.Text = "Flush";
+            this.flush_textureCache.UseVisualStyleBackColor = true;
+            this.flush_textureCache.Click += new System.EventHandler(this.flush_textureCache_Click);
+            // 
+            // settings_lbl
+            // 
+            this.settings_lbl.AutoSize = true;
+            this.settings_lbl.Location = new System.Drawing.Point(7, 7);
+            this.settings_lbl.Name = "settings_lbl";
+            this.settings_lbl.Size = new System.Drawing.Size(74, 13);
+            this.settings_lbl.TabIndex = 3;
+            this.settings_lbl.Text = "Layer Controls";
             // 
             // layer_floor
             // 
@@ -234,34 +278,104 @@
             this.layer_floor.UseVisualStyleBackColor = true;
             this.layer_floor.CheckedChanged += new System.EventHandler(this.layerSettingsChanged);
             // 
-            // openFileDialog1
+            // layer_physics
             // 
-            this.openFileDialog1.FileName = "openFileDialog1";
+            this.layer_physics.AutoSize = true;
+            this.layer_physics.Location = new System.Drawing.Point(6, 92);
+            this.layer_physics.Name = "layer_physics";
+            this.layer_physics.Size = new System.Drawing.Size(62, 17);
+            this.layer_physics.TabIndex = 2;
+            this.layer_physics.Text = "Physics";
+            this.layer_physics.UseVisualStyleBackColor = true;
+            this.layer_physics.CheckedChanged += new System.EventHandler(this.layerSettingsChanged);
             // 
-            // first_level_tabControl
+            // layer_objects_0
             // 
-            this.first_level_tabControl.Controls.Add(this.settings_tab);
-            this.first_level_tabControl.Controls.Add(this.palette_tab);
-            this.first_level_tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.first_level_tabControl.Location = new System.Drawing.Point(0, 0);
-            this.first_level_tabControl.Name = "first_level_tabControl";
-            this.first_level_tabControl.SelectedIndex = 0;
-            this.first_level_tabControl.Size = new System.Drawing.Size(231, 226);
-            this.first_level_tabControl.TabIndex = 0;
+            this.layer_objects_0.AutoSize = true;
+            this.layer_objects_0.Checked = true;
+            this.layer_objects_0.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.layer_objects_0.Location = new System.Drawing.Point(6, 46);
+            this.layer_objects_0.Name = "layer_objects_0";
+            this.layer_objects_0.Size = new System.Drawing.Size(100, 17);
+            this.layer_objects_0.TabIndex = 1;
+            this.layer_objects_0.Text = "Objects (Under)";
+            this.layer_objects_0.UseVisualStyleBackColor = true;
+            this.layer_objects_0.CheckedChanged += new System.EventHandler(this.layerSettingsChanged);
             // 
-            // settings_tab
+            // tab_terrain_main
             // 
-            this.settings_tab.Controls.Add(this.settings_lbl);
-            this.settings_tab.Controls.Add(this.layer_floor);
-            this.settings_tab.Controls.Add(this.layer_ceiling);
-            this.settings_tab.Controls.Add(this.layer_objects);
-            this.settings_tab.Location = new System.Drawing.Point(4, 22);
-            this.settings_tab.Name = "settings_tab";
-            this.settings_tab.Padding = new System.Windows.Forms.Padding(3);
-            this.settings_tab.Size = new System.Drawing.Size(223, 200);
-            this.settings_tab.TabIndex = 0;
-            this.settings_tab.Text = "Settings";
-            this.settings_tab.UseVisualStyleBackColor = true;
+            this.tab_terrain_main.Controls.Add(this.terrain_penSize);
+            this.tab_terrain_main.Controls.Add(this.texture_btn);
+            this.tab_terrain_main.Controls.Add(this.label1);
+            this.tab_terrain_main.Controls.Add(this.terrain_shape_btn);
+            this.tab_terrain_main.Controls.Add(this.pen_btn);
+            this.tab_terrain_main.Controls.Add(this.colour_btn);
+            this.tab_terrain_main.Location = new System.Drawing.Point(4, 22);
+            this.tab_terrain_main.Name = "tab_terrain_main";
+            this.tab_terrain_main.Size = new System.Drawing.Size(223, 200);
+            this.tab_terrain_main.TabIndex = 2;
+            this.tab_terrain_main.Text = "Terrain";
+            this.tab_terrain_main.UseVisualStyleBackColor = true;
+            // 
+            // terrain_penSize
+            // 
+            this.terrain_penSize.LargeChange = 25;
+            this.terrain_penSize.Location = new System.Drawing.Point(61, 66);
+            this.terrain_penSize.Maximum = 1000;
+            this.terrain_penSize.Minimum = 1;
+            this.terrain_penSize.Name = "terrain_penSize";
+            this.terrain_penSize.Size = new System.Drawing.Size(154, 45);
+            this.terrain_penSize.TabIndex = 12;
+            this.terrain_penSize.Value = 100;
+            // 
+            // texture_btn
+            // 
+            this.texture_btn.Location = new System.Drawing.Point(117, 33);
+            this.texture_btn.Name = "texture_btn";
+            this.texture_btn.Size = new System.Drawing.Size(98, 23);
+            this.texture_btn.TabIndex = 11;
+            this.texture_btn.Text = "Pick Texture";
+            this.texture_btn.UseVisualStyleBackColor = true;
+            this.texture_btn.Click += new System.EventHandler(this.terrain_texture_btn_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 75);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(49, 13);
+            this.label1.TabIndex = 10;
+            this.label1.Text = "Pen Size";
+            // 
+            // terrain_shape_btn
+            // 
+            this.terrain_shape_btn.Location = new System.Drawing.Point(117, 4);
+            this.terrain_shape_btn.Name = "terrain_shape_btn";
+            this.terrain_shape_btn.Size = new System.Drawing.Size(98, 23);
+            this.terrain_shape_btn.TabIndex = 7;
+            this.terrain_shape_btn.Text = "Shape (Circle)";
+            this.terrain_shape_btn.UseVisualStyleBackColor = true;
+            this.terrain_shape_btn.Click += new System.EventHandler(this.terrain_shape_btn_Click);
+            // 
+            // pen_btn
+            // 
+            this.pen_btn.Location = new System.Drawing.Point(6, 4);
+            this.pen_btn.Name = "pen_btn";
+            this.pen_btn.Size = new System.Drawing.Size(105, 23);
+            this.pen_btn.TabIndex = 8;
+            this.pen_btn.Text = "Pen Tool (Off)";
+            this.pen_btn.UseVisualStyleBackColor = true;
+            this.pen_btn.Click += new System.EventHandler(this.terrain_pen_Click);
+            // 
+            // colour_btn
+            // 
+            this.colour_btn.Location = new System.Drawing.Point(6, 33);
+            this.colour_btn.Name = "colour_btn";
+            this.colour_btn.Size = new System.Drawing.Size(105, 23);
+            this.colour_btn.TabIndex = 6;
+            this.colour_btn.Text = "Pick Colour";
+            this.colour_btn.UseVisualStyleBackColor = true;
+            this.colour_btn.Click += new System.EventHandler(this.terrain_colour_btn_Click);
             // 
             // palette_tab
             // 
@@ -271,12 +385,11 @@
             this.palette_tab.Name = "palette_tab";
             this.palette_tab.Size = new System.Drawing.Size(223, 200);
             this.palette_tab.TabIndex = 1;
-            this.palette_tab.Text = "Palette";
+            this.palette_tab.Text = "Objects";
             this.palette_tab.UseVisualStyleBackColor = true;
             // 
             // tool_tabs
             // 
-            this.tool_tabs.Controls.Add(this.terrain_tab);
             this.tool_tabs.Controls.Add(this.objects_tab);
             this.tool_tabs.Controls.Add(this.physics_tab);
             this.tool_tabs.Controls.Add(this.nodes_tab);
@@ -289,104 +402,6 @@
             this.tool_tabs.Size = new System.Drawing.Size(223, 200);
             this.tool_tabs.TabIndex = 1;
             // 
-            // terrain_tab
-            // 
-            this.terrain_tab.Controls.Add(this.flush_textureCache);
-            this.terrain_tab.Controls.Add(this.texture_btn);
-            this.terrain_tab.Controls.Add(this.label1);
-            this.terrain_tab.Controls.Add(this.terrain_penSize);
-            this.terrain_tab.Controls.Add(this.terrain_shape_btn);
-            this.terrain_tab.Controls.Add(this.pen_btn);
-            this.terrain_tab.Controls.Add(this.colour_btn);
-            this.terrain_tab.Location = new System.Drawing.Point(4, 22);
-            this.terrain_tab.Name = "terrain_tab";
-            this.terrain_tab.Padding = new System.Windows.Forms.Padding(3);
-            this.terrain_tab.Size = new System.Drawing.Size(215, 174);
-            this.terrain_tab.TabIndex = 0;
-            this.terrain_tab.Text = "Terrain";
-            this.terrain_tab.UseVisualStyleBackColor = true;
-            // 
-            // flush_textureCache
-            // 
-            this.flush_textureCache.Location = new System.Drawing.Point(6, 67);
-            this.flush_textureCache.Name = "flush_textureCache";
-            this.flush_textureCache.Size = new System.Drawing.Size(105, 23);
-            this.flush_textureCache.TabIndex = 5;
-            this.flush_textureCache.Text = "Flush";
-            this.flush_textureCache.UseVisualStyleBackColor = true;
-            this.flush_textureCache.Click += new System.EventHandler(this.flush_textureCache_Click);
-            // 
-            // texture_btn
-            // 
-            this.texture_btn.Location = new System.Drawing.Point(117, 35);
-            this.texture_btn.Name = "texture_btn";
-            this.texture_btn.Size = new System.Drawing.Size(98, 23);
-            this.texture_btn.TabIndex = 4;
-            this.texture_btn.Text = "Pick Texture";
-            this.texture_btn.UseVisualStyleBackColor = true;
-            this.texture_btn.Click += new System.EventHandler(this.texture_btn_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(114, 72);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(49, 13);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Pen Size";
-            // 
-            // terrain_penSize
-            // 
-            this.terrain_penSize.Location = new System.Drawing.Point(167, 68);
-            this.terrain_penSize.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.terrain_penSize.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.terrain_penSize.Name = "terrain_penSize";
-            this.terrain_penSize.Size = new System.Drawing.Size(51, 20);
-            this.terrain_penSize.TabIndex = 2;
-            this.terrain_penSize.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            // 
-            // terrain_shape_btn
-            // 
-            this.terrain_shape_btn.Location = new System.Drawing.Point(117, 6);
-            this.terrain_shape_btn.Name = "terrain_shape_btn";
-            this.terrain_shape_btn.Size = new System.Drawing.Size(98, 23);
-            this.terrain_shape_btn.TabIndex = 1;
-            this.terrain_shape_btn.Text = "Shape (Circle)";
-            this.terrain_shape_btn.UseVisualStyleBackColor = true;
-            this.terrain_shape_btn.Click += new System.EventHandler(this.terrain_shape_btn_Click);
-            // 
-            // pen_btn
-            // 
-            this.pen_btn.Location = new System.Drawing.Point(6, 6);
-            this.pen_btn.Name = "pen_btn";
-            this.pen_btn.Size = new System.Drawing.Size(105, 23);
-            this.pen_btn.TabIndex = 1;
-            this.pen_btn.Text = "Pen Tool (Off)";
-            this.pen_btn.UseVisualStyleBackColor = true;
-            this.pen_btn.Click += new System.EventHandler(this.pen_btn_Click);
-            // 
-            // colour_btn
-            // 
-            this.colour_btn.Location = new System.Drawing.Point(6, 35);
-            this.colour_btn.Name = "colour_btn";
-            this.colour_btn.Size = new System.Drawing.Size(105, 23);
-            this.colour_btn.TabIndex = 0;
-            this.colour_btn.Text = "Pick Colour";
-            this.colour_btn.UseVisualStyleBackColor = true;
-            this.colour_btn.Click += new System.EventHandler(this.colour_btn_Click);
-            // 
             // objects_tab
             // 
             this.objects_tab.Controls.Add(this.obj_splitter);
@@ -395,7 +410,7 @@
             this.objects_tab.Name = "objects_tab";
             this.objects_tab.Size = new System.Drawing.Size(215, 174);
             this.objects_tab.TabIndex = 1;
-            this.objects_tab.Text = "Objects";
+            this.objects_tab.Text = "Scenary";
             this.objects_tab.UseVisualStyleBackColor = true;
             // 
             // obj_splitter
@@ -410,69 +425,16 @@
             // 
             // obj_splitter.Panel1
             // 
-            this.obj_splitter.Panel1.Controls.Add(this.obj_flipY);
-            this.obj_splitter.Panel1.Controls.Add(this.obj_flipX);
-            this.obj_splitter.Panel1.Controls.Add(this.obj_scale);
             this.obj_splitter.Panel1.Controls.Add(this.obj_rot);
-            this.obj_splitter.Panel1.Controls.Add(this.label3);
             this.obj_splitter.Panel1.Controls.Add(this.label2);
             // 
             // obj_splitter.Panel2
             // 
-            this.obj_splitter.Panel2.Controls.Add(this.obj_cats);
+            this.obj_splitter.Panel2.Controls.Add(this.obj_scenary_objs);
+            this.obj_splitter.Panel2.Controls.Add(this.obj_scenary_cache_CB);
             this.obj_splitter.Size = new System.Drawing.Size(215, 174);
             this.obj_splitter.SplitterDistance = 61;
             this.obj_splitter.TabIndex = 0;
-            // 
-            // obj_flipY
-            // 
-            this.obj_flipY.AutoSize = true;
-            this.obj_flipY.Location = new System.Drawing.Point(128, 23);
-            this.obj_flipY.Name = "obj_flipY";
-            this.obj_flipY.Size = new System.Drawing.Size(49, 17);
-            this.obj_flipY.TabIndex = 4;
-            this.obj_flipY.Text = "FlipY";
-            this.obj_flipY.UseVisualStyleBackColor = true;
-            this.obj_flipY.Click += new System.EventHandler(this.obj_settings_ValueChanged);
-            // 
-            // obj_flipX
-            // 
-            this.obj_flipX.AutoSize = true;
-            this.obj_flipX.Location = new System.Drawing.Point(128, 3);
-            this.obj_flipX.Name = "obj_flipX";
-            this.obj_flipX.Size = new System.Drawing.Size(49, 17);
-            this.obj_flipX.TabIndex = 4;
-            this.obj_flipX.Text = "FlipX";
-            this.obj_flipX.UseVisualStyleBackColor = true;
-            this.obj_flipX.Click += new System.EventHandler(this.obj_settings_ValueChanged);
-            // 
-            // obj_scale
-            // 
-            this.obj_scale.Increment = new decimal(new int[] {
-            25,
-            0,
-            0,
-            131072});
-            this.obj_scale.Location = new System.Drawing.Point(51, 24);
-            this.obj_scale.Maximum = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            this.obj_scale.Minimum = new decimal(new int[] {
-            25,
-            0,
-            0,
-            131072});
-            this.obj_scale.Name = "obj_scale";
-            this.obj_scale.Size = new System.Drawing.Size(45, 20);
-            this.obj_scale.TabIndex = 2;
-            this.obj_scale.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.obj_scale.ValueChanged += new System.EventHandler(this.obj_settings_ValueChanged);
             // 
             // obj_rot
             // 
@@ -492,15 +454,6 @@
             this.obj_rot.TabIndex = 2;
             this.obj_rot.ValueChanged += new System.EventHandler(this.obj_settings_ValueChanged);
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(0, 27);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(34, 13);
-            this.label3.TabIndex = 1;
-            this.label3.Text = "Scale";
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -510,46 +463,23 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "Rotation";
             // 
-            // obj_cats
+            // obj_scenary_objs
             // 
-            this.obj_cats.Controls.Add(this.obj_collection_buildings);
-            this.obj_cats.Controls.Add(this.obj_collection_roads);
-            this.obj_cats.Controls.Add(this.obj_collection_environment);
-            this.obj_cats.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.obj_cats.Location = new System.Drawing.Point(0, 0);
-            this.obj_cats.Margin = new System.Windows.Forms.Padding(0);
-            this.obj_cats.Name = "obj_cats";
-            this.obj_cats.SelectedIndex = 0;
-            this.obj_cats.Size = new System.Drawing.Size(215, 109);
-            this.obj_cats.TabIndex = 0;
+            this.obj_scenary_objs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.obj_scenary_objs.Location = new System.Drawing.Point(0, 21);
+            this.obj_scenary_objs.Name = "obj_scenary_objs";
+            this.obj_scenary_objs.Size = new System.Drawing.Size(215, 88);
+            this.obj_scenary_objs.TabIndex = 1;
             // 
-            // obj_collection_buildings
+            // obj_scenary_cache_CB
             // 
-            this.obj_collection_buildings.Location = new System.Drawing.Point(4, 22);
-            this.obj_collection_buildings.Margin = new System.Windows.Forms.Padding(0);
-            this.obj_collection_buildings.Name = "obj_collection_buildings";
-            this.obj_collection_buildings.Size = new System.Drawing.Size(207, 83);
-            this.obj_collection_buildings.TabIndex = 0;
-            this.obj_collection_buildings.Text = "Buildings";
-            this.obj_collection_buildings.UseVisualStyleBackColor = true;
-            // 
-            // obj_collection_roads
-            // 
-            this.obj_collection_roads.Location = new System.Drawing.Point(4, 22);
-            this.obj_collection_roads.Name = "obj_collection_roads";
-            this.obj_collection_roads.Size = new System.Drawing.Size(207, 83);
-            this.obj_collection_roads.TabIndex = 1;
-            this.obj_collection_roads.Text = "Roads";
-            this.obj_collection_roads.UseVisualStyleBackColor = true;
-            // 
-            // obj_collection_environment
-            // 
-            this.obj_collection_environment.Location = new System.Drawing.Point(4, 22);
-            this.obj_collection_environment.Name = "obj_collection_environment";
-            this.obj_collection_environment.Size = new System.Drawing.Size(207, 83);
-            this.obj_collection_environment.TabIndex = 2;
-            this.obj_collection_environment.Text = "Environment";
-            this.obj_collection_environment.UseVisualStyleBackColor = true;
+            this.obj_scenary_cache_CB.Dock = System.Windows.Forms.DockStyle.Top;
+            this.obj_scenary_cache_CB.FormattingEnabled = true;
+            this.obj_scenary_cache_CB.Location = new System.Drawing.Point(0, 0);
+            this.obj_scenary_cache_CB.Name = "obj_scenary_cache_CB";
+            this.obj_scenary_cache_CB.Size = new System.Drawing.Size(215, 21);
+            this.obj_scenary_cache_CB.TabIndex = 0;
+            this.obj_scenary_cache_CB.SelectedIndexChanged += new System.EventHandler(this.obj_scenary_cache_CB_SelectionChangeCommitted);
             // 
             // physics_tab
             // 
@@ -567,7 +497,7 @@
             // 
             this.phys_add_triangle.Location = new System.Drawing.Point(4, 64);
             this.phys_add_triangle.Name = "phys_add_triangle";
-            this.phys_add_triangle.Size = new System.Drawing.Size(216, 23);
+            this.phys_add_triangle.Size = new System.Drawing.Size(207, 23);
             this.phys_add_triangle.TabIndex = 2;
             this.phys_add_triangle.Text = "Draw Physics Triangle";
             this.phys_add_triangle.UseVisualStyleBackColor = true;
@@ -577,7 +507,7 @@
             // 
             this.phys_add_ellipse.Location = new System.Drawing.Point(4, 34);
             this.phys_add_ellipse.Name = "phys_add_ellipse";
-            this.phys_add_ellipse.Size = new System.Drawing.Size(216, 23);
+            this.phys_add_ellipse.Size = new System.Drawing.Size(207, 23);
             this.phys_add_ellipse.TabIndex = 1;
             this.phys_add_ellipse.Text = "Draw Physics Circle";
             this.phys_add_ellipse.UseVisualStyleBackColor = true;
@@ -587,7 +517,7 @@
             // 
             this.phys_add_rect.Location = new System.Drawing.Point(4, 4);
             this.phys_add_rect.Name = "phys_add_rect";
-            this.phys_add_rect.Size = new System.Drawing.Size(216, 23);
+            this.phys_add_rect.Size = new System.Drawing.Size(207, 23);
             this.phys_add_rect.TabIndex = 0;
             this.phys_add_rect.Text = "Draw Physics Rectangle";
             this.phys_add_rect.UseVisualStyleBackColor = true;
@@ -611,14 +541,18 @@
             this.places_tab.Text = "Places";
             this.places_tab.UseVisualStyleBackColor = true;
             // 
-            // settings_lbl
+            // story_tab
             // 
-            this.settings_lbl.AutoSize = true;
-            this.settings_lbl.Location = new System.Drawing.Point(7, 7);
-            this.settings_lbl.Name = "settings_lbl";
-            this.settings_lbl.Size = new System.Drawing.Size(74, 13);
-            this.settings_lbl.TabIndex = 3;
-            this.settings_lbl.Text = "Layer Controls";
+            this.story_tab.Location = new System.Drawing.Point(4, 22);
+            this.story_tab.Name = "story_tab";
+            this.story_tab.Size = new System.Drawing.Size(223, 200);
+            this.story_tab.TabIndex = 3;
+            this.story_tab.Text = "Story";
+            this.story_tab.UseVisualStyleBackColor = true;
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
             // 
             // MainWindow
             // 
@@ -643,20 +577,18 @@
             this.first_level_tabControl.ResumeLayout(false);
             this.settings_tab.ResumeLayout(false);
             this.settings_tab.PerformLayout();
+            this.tab_terrain_main.ResumeLayout(false);
+            this.tab_terrain_main.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.terrain_penSize)).EndInit();
             this.palette_tab.ResumeLayout(false);
             this.tool_tabs.ResumeLayout(false);
-            this.terrain_tab.ResumeLayout(false);
-            this.terrain_tab.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.terrain_penSize)).EndInit();
             this.objects_tab.ResumeLayout(false);
             this.obj_splitter.Panel1.ResumeLayout(false);
             this.obj_splitter.Panel1.PerformLayout();
             this.obj_splitter.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.obj_splitter)).EndInit();
             this.obj_splitter.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.obj_scale)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.obj_rot)).EndInit();
-            this.obj_cats.ResumeLayout(false);
             this.physics_tab.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -667,8 +599,8 @@
         private System.Windows.Forms.SplitContainer main_splitter;
         private System.Windows.Forms.Panel mapViewPanel_c;
         private System.Windows.Forms.SplitContainer toolpanel_splitter;
-        internal System.Windows.Forms.CheckBox layer_ceiling;
-        internal System.Windows.Forms.CheckBox layer_objects;
+        internal System.Windows.Forms.CheckBox layer_physics;
+        internal System.Windows.Forms.CheckBox layer_objects_0;
         internal System.Windows.Forms.CheckBox layer_floor;
         private System.Windows.Forms.ColorDialog colorDialog1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
@@ -682,32 +614,29 @@
         private System.Windows.Forms.Label settings_lbl;
         private System.Windows.Forms.TabPage palette_tab;
         private System.Windows.Forms.TabControl tool_tabs;
-        private System.Windows.Forms.TabPage terrain_tab;
-        private System.Windows.Forms.Button flush_textureCache;
-        private System.Windows.Forms.Button texture_btn;
-        private System.Windows.Forms.Label label1;
-        internal System.Windows.Forms.NumericUpDown terrain_penSize;
-        private System.Windows.Forms.Button terrain_shape_btn;
-        private System.Windows.Forms.Button pen_btn;
-        private System.Windows.Forms.Button colour_btn;
         private System.Windows.Forms.TabPage objects_tab;
         private System.Windows.Forms.SplitContainer obj_splitter;
-        private System.Windows.Forms.CheckBox obj_flipY;
-        private System.Windows.Forms.CheckBox obj_flipX;
-        private System.Windows.Forms.NumericUpDown obj_scale;
-        private System.Windows.Forms.NumericUpDown obj_rot;
-        private System.Windows.Forms.Label label3;
+        internal System.Windows.Forms.NumericUpDown obj_rot;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TabControl obj_cats;
-        private System.Windows.Forms.TabPage obj_collection_buildings;
-        private System.Windows.Forms.TabPage obj_collection_roads;
-        private System.Windows.Forms.TabPage obj_collection_environment;
         private System.Windows.Forms.TabPage physics_tab;
         private System.Windows.Forms.Button phys_add_triangle;
         private System.Windows.Forms.Button phys_add_ellipse;
         private System.Windows.Forms.Button phys_add_rect;
         private System.Windows.Forms.TabPage nodes_tab;
         private System.Windows.Forms.TabPage places_tab;
+        private System.Windows.Forms.TabPage tab_terrain_main;
+        private System.Windows.Forms.Button texture_btn;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button terrain_shape_btn;
+        private System.Windows.Forms.Button pen_btn;
+        private System.Windows.Forms.Button colour_btn;
+        private System.Windows.Forms.TabPage story_tab;
+        private System.Windows.Forms.Button flush_textureCache;
+        internal System.Windows.Forms.TrackBar terrain_penSize;
+        private System.Windows.Forms.ComboBox obj_scenary_cache_CB;
+        private System.Windows.Forms.Panel obj_scenary_objs;
+        internal System.Windows.Forms.CheckBox layer_objects_1;
+        internal System.Windows.Forms.CheckBox layer_nodes;
     }
 }
 

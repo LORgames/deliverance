@@ -9,21 +9,13 @@ using CityTools.Components;
 
 namespace CityTools {
     public class MapCache {
-        public const string MAP_CACHE = ".\\mapcache\\";
-
-        public const string MAP_BASE_PREFIX = "base_";
-        public const string MAP_CEIL_PREFIX = "ceil_";
-        public const string MAP_OBJECTS_PREFIX = "objects_";
+        public const string MAP_CACHE = ".\\terrain\\";
 
         public const string MAP_SEPERATOR = "_";
         public const string MAP_FILETYPE = ".png";
         public const string MAP_EMPTY = ".\\blank.png";
 
-        public static long[, ,] Filetimes;
-
         public static void VerifyCacheFiles() {
-            Filetimes = new long[MainWindow.TILE_TX, MainWindow.TILE_TY, Enum.GetValues(typeof(PaintLayers)).Length];
-            
             if (!Directory.Exists(MAP_CACHE)) Directory.CreateDirectory(MAP_CACHE);
             if (!Directory.Exists(ObjectCacheControl.OBJECT_CACHE_FOLDER)) Directory.CreateDirectory(ObjectCacheControl.OBJECT_CACHE_FOLDER);
 
@@ -36,13 +28,8 @@ namespace CityTools {
             //Do a file check to make sure they all exist
             for (int i = 0; i < MainWindow.TILE_TX; i++) {
                 for (int j = 0; j < MainWindow.TILE_TY; j++) {
-                    foreach (var pl in Enum.GetValues(typeof(PaintLayers))) {
-                        if (!File.Exists(GetTileFilename(i, j, (PaintLayers)pl))) {
-                            File.Copy(MAP_EMPTY, GetTileFilename(i, j, (PaintLayers)pl));
-                            File.SetLastWriteTimeUtc(GetTileFilename(i, j, (PaintLayers)pl), DateTime.MinValue.AddYears(1969));
-                        }
-
-                        Filetimes[i, j, (int)pl] = File.GetLastWriteTimeUtc(GetTileFilename(i, j, (PaintLayers)pl)).ToFileTime();
+                    if (!File.Exists(GetTileFilename(i, j))) {
+                        File.Copy(MAP_EMPTY, GetTileFilename(i, j));
                     }
                 }
             }
@@ -50,14 +37,8 @@ namespace CityTools {
             return;
         }
 
-        public static void FetchUpdate(int i, int j, PaintLayers l) {
-            if (l == PaintLayers.Ground) {
-                MainWindow.instance.base_images[i, j] = Image.FromFile(GetTileFilename(i, j, l));
-            } else if (l == PaintLayers.Objects) {
-                MainWindow.instance.object_images[i, j] = Image.FromFile(GetTileFilename(i, j, l));
-            } else if (l == PaintLayers.Ceiling) {
-                MainWindow.instance.top_images[i, j] = Image.FromFile(GetTileFilename(i, j, l));
-            }
+        public static void FetchUpdate(int i, int j) {
+            MainWindow.instance.terrain_images[i, j] = Image.FromFile(GetTileFilename(i, j));
         }
 
         public static void Fetchmap(int mX, int mY, int wX, int wY, ref Rectangle cachedMapArea, int tries = 0) {
@@ -70,24 +51,8 @@ namespace CityTools {
             for (int x = cachedMapArea.Left; x < cachedMapArea.Right; x++) {
                 for (int y = cachedMapArea.Top; y < cachedMapArea.Bottom; y++) {
                     try {
-                        if (MainWindow.instance.base_images[x, y] != null) {
-                            MainWindow.instance.base_images[x, y].Dispose();
-                        }
-                    } catch {
-                        totalErrors++;
-                    }
-
-                    try {
-                        if (MainWindow.instance.top_images[x, y] != null) {
-                            MainWindow.instance.top_images[x, y].Dispose();
-                        }
-                    } catch {
-                        totalErrors++;
-                    }
-
-                    try {
-                        if (MainWindow.instance.object_images[x, y] != null) {
-                            MainWindow.instance.object_images[x, y].Dispose();
+                        if (MainWindow.instance.terrain_images[x, y] != null) {
+                            MainWindow.instance.terrain_images[x, y].Dispose();
                         }
                     } catch {
                         totalErrors++;
@@ -101,13 +66,7 @@ namespace CityTools {
                 for (int i = mX; i <= wX; i++) {
                     for (int j = mY; j <= wY; j++) {
                         if (MainWindow.instance.layer_floor.Checked)
-                            MainWindow.instance.base_images[i, j] = Image.FromFile(MapCache.GetTileFilename(i, j, PaintLayers.Ground));
-
-                        if (MainWindow.instance.layer_ceiling.Checked)
-                            MainWindow.instance.top_images[i, j] = Image.FromFile(MapCache.GetTileFilename(i, j, PaintLayers.Ceiling));
-
-                        if (MainWindow.instance.layer_objects.Checked)
-                            MainWindow.instance.object_images[i, j] = Image.FromFile(MapCache.GetTileFilename(i, j, PaintLayers.Objects));
+                            MainWindow.instance.terrain_images[i, j] = Image.FromFile(MapCache.GetTileFilename(i, j));
                     }
                 }
             } catch {
@@ -129,29 +88,17 @@ namespace CityTools {
                     if (!MainWindow.instance.needsToBeSaved[i, j]) continue;
 
                     gfx.Clear(Color.Transparent);
-
-                    if (MainWindow.instance.activeLayer == PaintLayers.Ground) {
-                        gfx.DrawImage(MainWindow.instance.base_images[i, j], Point.Empty);
-                    } else if (MainWindow.instance.activeLayer == PaintLayers.Objects) {
-                        gfx.DrawImage(MainWindow.instance.object_images[i, j], Point.Empty);
-                    }
-
+                    gfx.DrawImage(MainWindow.instance.terrain_images[i, j], Point.Empty);
                     gfx.Flush();
 
-                    MainWindow.instance.base_images[i, j].Dispose();
-                    MainWindow.instance.object_images[i, j].Dispose();
+                    if(MainWindow.instance.terrain_images[i,j] != null)
+                        MainWindow.instance.terrain_images[i, j].Dispose();
 
                     int fails = 0;
 
                     while (true) {
                         try {
-                            /*using (MemoryStream stream = new MemoryStream()) {
-                                using (FileStream file = new FileStream(MapCache.GetTileFilename(i, j, MainWindow.instance.activeLayer), FileMode.Create, FileAccess.Write)) {
-                                    bmp.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
-                                    stream.WriteTo(file);
-                                }
-                            }*/
-                            bmp.Save(MapCache.GetTileFilename(i, j, MainWindow.instance.activeLayer));
+                            bmp.Save(MapCache.GetTileFilename(i, j));
                             break;
                         } catch (System.Runtime.InteropServices.ExternalException ex) {
                             //Lame
@@ -163,8 +110,7 @@ namespace CityTools {
                                 gfx = Graphics.FromImage(bmp);
                             } else if (fails == 2) {
                                 //Try dispose again
-                                MainWindow.instance.base_images[i, j].Dispose();
-                                MainWindow.instance.object_images[i, j].Dispose();
+                                MainWindow.instance.terrain_images[i, j].Dispose();
                             } else if (fails == 3) {
                                 //Maybe something is stuck in GC
                                 GC.Collect();
@@ -178,23 +124,13 @@ namespace CityTools {
                         }
                     }
 
-                    MainWindow.instance.base_images[i, j] = Image.FromFile(MapCache.GetTileFilename(i, j, PaintLayers.Ground));
-                    MainWindow.instance.object_images[i, j] = Image.FromFile(MapCache.GetTileFilename(i, j, PaintLayers.Objects));
+                    MainWindow.instance.terrain_images[i, j] = Image.FromFile(MapCache.GetTileFilename(i, j));
                 }
             }
         }
 
-        public static string GetTileFilename(int i, int j, PaintLayers layer) {
-            if (layer == PaintLayers.Ground)
-                return MAP_CACHE + MAP_BASE_PREFIX + i + MAP_SEPERATOR + j + MAP_FILETYPE;
-            
-            if (layer == PaintLayers.Ceiling)
-                return MAP_CACHE + MAP_CEIL_PREFIX + i + MAP_SEPERATOR + j + MAP_FILETYPE;
-            
-            if (layer == PaintLayers.Objects)
-                return MAP_CACHE + MAP_OBJECTS_PREFIX + i + MAP_SEPERATOR + j + MAP_FILETYPE;
-            
-            return "";
+        public static string GetTileFilename(int i, int j) {
+            return MAP_CACHE + i + MAP_SEPERATOR + j + MAP_FILETYPE;
         }
     }
 }

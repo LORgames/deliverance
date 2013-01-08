@@ -22,7 +22,10 @@ namespace CityTools.Components {
             Activate();
         }
 
-        public void Activate() {
+        public void Activate(string folder_b = "") {
+            if (folder_b != "")
+                this.folder = folder_b;
+
             if (!Directory.Exists(OBJECT_CACHE_FOLDER + folder))
                 Directory.CreateDirectory(OBJECT_CACHE_FOLDER + folder);
 

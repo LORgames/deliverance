@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Box2CS">
+      <HintPath>.\Box2CS.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Box2D\BodyTags.cs" />
     <Compile Include="Components\CachedObject.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -68,7 +72,19 @@
     <Compile Include="LBuffer.cs" />
     <Compile Include="MapCache.cs" />
     <Compile Include="BinaryIO.cs" />
-    <Compile Include="Object\ObjectDrawer.cs" />
+    <Compile Include="ObjectCreatorTool.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ObjectCreatorTool.Designer.cs">
+      <DependentUpon>ObjectCreatorTool.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ObjectSystem\ObjectDrawer.cs" />
+    <Compile Include="Box2D\B2System.cs" />
+    <Compile Include="ObjectSystem\BaseObject.cs" />
+    <Compile Include="ObjectSystem\ObjectSourceCache.cs" />
+    <Compile Include="ObjectSystem\ObjectCache.cs" />
+    <Compile Include="ObjectSystem\ScenicDrawer.cs" />
+    <Compile Include="ObjectSystem\ScenicObject.cs" />
     <Compile Include="Physics\PhysicsCache.cs" />
     <Compile Include="Physics\PhysicsChunk.cs" />
     <Compile Include="Physics\PhysicsDrawer.cs" />
@@ -86,6 +102,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ObjectCreatorTool.resx">
+      <DependentUpon>ObjectCreatorTool.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

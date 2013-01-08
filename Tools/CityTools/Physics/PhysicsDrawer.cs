@@ -80,7 +80,7 @@ namespace CityTools.Physics {
                 p0 = Point.Empty;
                 p1 = Point.Empty;
                 downBefore = false;
-            } 
+            }
         }
 
         internal static void RedrawBuffer(float offsetX, float offsetY, float offsetZ) {

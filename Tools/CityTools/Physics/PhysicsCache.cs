@@ -9,7 +9,6 @@ namespace CityTools.Physics {
 
         public const string PHYSICS_CACHE_FILE = "mapcache/physics.db";
 
-        public static PhysicsChunk[,] chunks;
         public static List<PhysicsShape> shapes = new List<PhysicsShape>();
 
         private static int currentID = 0;
