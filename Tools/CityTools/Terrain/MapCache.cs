@@ -21,11 +21,17 @@ namespace CityTools.Terrain {
 
         public static Dictionary<byte, string> tileTable = new Dictionary<byte, string>();
 
-        public static int[,] tiles;
+        public static byte[,] tiles;
 
         public static void VerifyCacheFiles() {
             // Create the map thing
-            tiles = new int[TILE_TOTAL_X, TILE_TOTAL_Y];
+            tiles = new byte[TILE_TOTAL_X, TILE_TOTAL_Y];
+
+            for (int i = 0; i < TILE_TOTAL_X; i++) {
+                for (int j = 0; j < TILE_TOTAL_Y; j++) {
+                    tiles[i, j] = 1;
+                }
+            }
 
             foreach (string file in Directory.GetFiles(TILE_DIRECTORY, "*.png", SearchOption.AllDirectories)) {
                 byte tileIndex = TerrainHelper.StripTileIDFromPath(file);
@@ -66,11 +72,9 @@ namespace CityTools.Terrain {
             mapFile.AddInt(TILE_TOTAL_X);
             mapFile.AddInt(TILE_TOTAL_Y);
 
-            Random r = new Random();
-
             for (int i = 0; i < TILE_TOTAL_X; i++) {
                 for (int j = 0; j < TILE_TOTAL_Y; j++) {
-                    mapFile.AddByte((byte)r.Next(13));
+                    mapFile.AddByte(tiles[i, j]);
                 }
             }
 

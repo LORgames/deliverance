@@ -11,13 +11,15 @@ namespace CityTools.ObjectSystem {
 
         public static List<ScenicObject> drawList;
 
-        public static void DrawScenicObjects(LBuffer buffer, RectangleF drawArea, float ZoomFactor, bool drawBoundingBoxes) {
+        public static void DrawScenicObjects(LBuffer buffer, bool drawBoundingBoxes) {
             drawList = new List<ScenicObject>();
 
-            Box2D.B2System.world.QueryAABB(new Box2CS.World.QueryCallbackDelegate(ScenicDrawer.QCBD), new AABB(new Box2CS.Vec2(drawArea.Left, drawArea.Top), new Vec2(drawArea.Right/ZoomFactor, drawArea.Bottom/ZoomFactor)));
+            RectangleF drawArea = Camera.ViewArea;
+
+            Box2D.B2System.world.QueryAABB(new Box2CS.World.QueryCallbackDelegate(ScenicDrawer.QCBD), new AABB(new Box2CS.Vec2(drawArea.Left, drawArea.Top), new Vec2(drawArea.Right, drawArea.Bottom)));
 
             foreach (ScenicObject obj in drawList) {
-                obj.Draw(buffer, drawArea, ZoomFactor, drawBoundingBoxes);
+                obj.Draw(buffer, drawBoundingBoxes);
             }
         }
 

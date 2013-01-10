@@ -18,7 +18,7 @@ namespace CityTools.ObjectSystem {
         public List<BaseObject> children = null;
 
         //Draw function
-        public virtual void Draw(LBuffer buffer, RectangleF drawArea, float ZoomFactor, bool drawBoundingBoxes) {
+        public virtual void Draw(LBuffer buffer, bool drawBoundingBoxes) {
             throw new NotImplementedException();
         }
 

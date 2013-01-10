@@ -49,7 +49,6 @@ namespace CityTools {
         public LBuffer mapBuffer_object;
 
         //Terrain painting things
-        public bool terrainRedrawRequired = true;
         public Brush terrainPaintBrush = new SolidBrush(Color.White);
 
         //Object painting things
@@ -97,7 +96,7 @@ namespace CityTools {
             input_buffer = new LBuffer();
             Physics.PhysicsDrawer.physicsBuffer = new LBuffer();
 
-            terrainRedrawRequired = true;
+            TerrainHelper.DrawTerrain(floor_buffer);
             mapViewPanel.Invalidate();
         }
 
@@ -119,11 +118,13 @@ namespace CityTools {
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
-            if(Camera.ProcessKeys(keyData)) {
+            if (Camera.ProcessKeys(keyData)) {
+                Camera.FixViewArea(drawArea);
+
+                TerrainHelper.DrawTerrain(floor_buffer);
+
                 mapViewPanel.Invalidate();
                 minimap.Invalidate();
-                terrainRedrawRequired = true;
-                Camera.FixViewArea(drawArea);
             } else if (keyData == Keys.Escape) {
                 input_buffer.gfx.Clear(Color.Transparent);
                 mapViewPanel.Invalidate();
@@ -144,7 +145,6 @@ namespace CityTools {
                 ObjectHelper.ProcessCmdKey(ref msg, keyData);
 
                 // Get the window to redraw
-                terrainRedrawRequired = true;
                 mapViewPanel.Invalidate();
             }
 
@@ -178,28 +178,31 @@ namespace CityTools {
             mapViewPanel.Focus();
             
             if (paintMode == PaintMode.Terrain) {
-                TerrainHelper.MouseMoveOrDown(e, input_buffer);
-                mapViewPanel.Invalidate();
+                if (TerrainHelper.MouseMoveOrDown(e, input_buffer)) {
+                    TerrainHelper.DrawTerrain(floor_buffer);
+                }
             } else if(paintMode == PaintMode.Objects) {
-                terrainRedrawRequired = ObjectSystem.ObjectDrawer.UpdateMouse(e, input_buffer);
+                if(ObjectSystem.ObjectDrawer.UpdateMouse(e, input_buffer)) {
+                    ScenicDrawer.DrawScenicObjects(objects0_buffer, obj_scenic_bounding_CB.Checked);
+                }
                 mapViewPanel.Invalidate();
             } else if (paintMode == PaintMode.Physics) {
-                if (Physics.PhysicsDrawer.UpdateMouse(e, input_buffer)) {
-                    mapViewPanel.Invalidate();
-                }
+                Physics.PhysicsDrawer.UpdateMouse(e, input_buffer);
             } else if (paintMode == PaintMode.ObjectSelector) {
-                if (ObjectHelper.UpdateMouse(e, input_buffer)) {
-                    mapViewPanel.Invalidate();
-                }
+                mapViewPanel.Invalidate();
             }
+
+            mapViewPanel.Invalidate();
         }
 
         private void drawPanel_ME_down(object sender, MouseEventArgs e) {
             if (paintMode == PaintMode.Terrain) {
-                TerrainHelper.MouseMoveOrDown(e, input_buffer);
+                if (TerrainHelper.MouseMoveOrDown(e, input_buffer)) {
+                    TerrainHelper.DrawTerrain(floor_buffer);
+                }
                 mapViewPanel.Invalidate();
             } else if (paintMode == PaintMode.Objects) {
-                terrainRedrawRequired = ObjectSystem.ObjectDrawer.MouseDown(e, input_buffer);
+                ObjectSystem.ObjectDrawer.MouseDown(e, input_buffer);
                 mapViewPanel.Invalidate();
             } else if (paintMode == PaintMode.Physics) {
                 Physics.PhysicsDrawer.MouseDown(e, input_buffer);
@@ -209,23 +212,19 @@ namespace CityTools {
         }
 
         private void RedrawTerrain() {
-            if (terrainRedrawRequired) {
-                floor_buffer.gfx.Clear(Color.Transparent);
-                objects0_buffer.gfx.Clear(Color.Transparent);
-                objects1_buffer.gfx.Clear(Color.Transparent);
-                physics_buffer.gfx.Clear(Color.Transparent);
-                nodes_buffer.gfx.Clear(Color.Transparent);
+            floor_buffer.gfx.Clear(Color.Transparent);
+            objects0_buffer.gfx.Clear(Color.Transparent);
+            objects1_buffer.gfx.Clear(Color.Transparent);
+            physics_buffer.gfx.Clear(Color.Transparent);
+            nodes_buffer.gfx.Clear(Color.Transparent);
 
-                if (layer_objects_0.Checked) {
-                    ScenicDrawer.DrawScenicObjects(objects0_buffer, new RectangleF(drawArea.Left + Camera.Offset.X, drawArea.Top + Camera.Offset.Y, drawArea.Width, drawArea.Height), Camera.ZoomLevel, obj_scenic_bounding_CB.Checked);
-                }
-                
-                if (layer_floor.Checked) {
-                    //TODO: Implement this again
-                }
+            if (layer_objects_0.Checked) {
+                ScenicDrawer.DrawScenicObjects(objects0_buffer, obj_scenic_bounding_CB.Checked);
             }
-
-            terrainRedrawRequired = false;
+                
+            if (layer_floor.Checked) {
+                TerrainHelper.DrawTerrain(floor_buffer);
+            }
         }
 
         private void mapViewPanel_Resize(object sender, EventArgs e) {
@@ -236,6 +235,11 @@ namespace CityTools {
 
         private void minimap_Paint(object sender, PaintEventArgs e) {
             if (REQUIRES_CLOSE) { this.Close(); return; }
+
+            float scaleX = (float)minimap.Width / MAP_SIZE_X;
+            float scaleY = (float)minimap.Height / MAP_SIZE_Y;
+
+            e.Graphics.DrawRectangle(new Pen(Color.Red), Camera.Offset.X * scaleX, Camera.Offset.Y * scaleY, Camera.ViewArea.Width * scaleX, Camera.ViewArea.Height * scaleY);
         }
 
         private void minimap_MouseClick(object sender, MouseEventArgs e) {
@@ -248,7 +252,8 @@ namespace CityTools {
 
             Camera.FixViewArea(drawArea);
 
-            terrainRedrawRequired = true;
+            TerrainHelper.DrawTerrain(floor_buffer);
+            ScenicDrawer.DrawScenicObjects(objects0_buffer, obj_scenic_bounding_CB.Checked);
 
             mapViewPanel.Invalidate();
             minimap.Invalidate();

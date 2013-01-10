@@ -46,14 +46,14 @@ namespace CityTools.ObjectSystem {
             baseBody.CreateFixture(fDef);
         }
 
-        public override void Draw(LBuffer buffer, RectangleF drawArea, float ZoomFactor, bool drawBoundingBoxes) {
+        public override void Draw(LBuffer buffer, bool drawBoundingBoxes) {
             Image im = ImageCache.RequestImage(source, angle);
 
-            float p0x = ((baseBody.Position.X - drawArea.Left) - (im.Width / 2)) * ZoomFactor;
-            float p0y = ((baseBody.Position.Y - drawArea.Top) - (im.Height / 2)) * ZoomFactor;
+            float p0x = ((baseBody.Position.X - Camera.ViewArea.Left) - (im.Width / 2)) * Camera.ZoomLevel;
+            float p0y = ((baseBody.Position.Y - Camera.ViewArea.Top) - (im.Height / 2)) * Camera.ZoomLevel;
 
-            float p1x = im.Width * ZoomFactor;
-            float p1y = im.Height * ZoomFactor;
+            float p1x = im.Width * Camera.ZoomLevel;
+            float p1y = im.Height * Camera.ZoomLevel;
 
             buffer.gfx.DrawImage(im, p0x, p0y, p1x, p1y);
 
@@ -62,8 +62,8 @@ namespace CityTools.ObjectSystem {
                 points.CopyTo(realignedPoints, 0);
 
                 for (int i = 0; i < realignedPoints.Length; i++) {
-                    realignedPoints[i].X = (points[i].X - drawArea.Left) * ZoomFactor;
-                    realignedPoints[i].Y = (points[i].Y - drawArea.Top) * ZoomFactor;
+                    realignedPoints[i].X = (points[i].X - Camera.ViewArea.Left) * Camera.ZoomLevel;
+                    realignedPoints[i].Y = (points[i].Y - Camera.ViewArea.Top) * Camera.ZoomLevel;
                 }
 
                 buffer.gfx.FillPolygon(new SolidBrush(Color.FromArgb(64, Color.Yellow)), realignedPoints);
