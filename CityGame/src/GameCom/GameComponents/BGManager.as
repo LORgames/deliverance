@@ -11,68 +11,66 @@ package GameCom.GameComponents
 	 */
 	
 	public class BGManager {
-		// in image files
-		// ground = base
-		// roof = ceil
-		
-		// bgType will be "base" or "ceil"
-		private var bgType:String;
 		private var layer:Sprite;
 		
 		// tile size in pixels
-		private const TILESIZEX:int = 1024;
-		private const TILESIZEY:int = 1024;
+		private const TILESIZEX:int = 146;
+		private const TILESIZEY:int = 146;
 		
 		// max number of tiles
-		private const MAXTILEX:int = 16;
-		private const MAXTILEY:int = 16;
+		private var maxTilesX:int;
+		private var maxTilesY:int;
 		
-		// the currently loaded bits
-		private var chunks:Array = new Array();
+		// number of visible tiles
+		private var numTilesX:int;
+		private var numTilesY:int;
 		
-		//Loading things
-		private var ldr:Loader = new Loader();
-		private var reqLoad:Array = new Array();
-		private var currentlyLoading:Array = null;
+		// map
+		private var mapdata:Array = new Array();
 		
-		public function BGManager(bgType:String, worldSpr:Sprite) {
-			this.bgType = bgType;
+		// tiles currently loaded
+		private var tiles:Array = new Array();
+		private var toLoad:Array = new Array();
+		
+		public function BGManager(worldSpr:Sprite) {
 			this.layer = worldSpr;
 			
-			reqLoad.push(new Array(0, 0));
-			reqLoad.push(new Array(1, 0));
-			reqLoad.push(new Array(0, 1));
-			reqLoad.push(new Array(1, 1));
+			var mapfile:ByteArray = ThemeManager.Get("mapcache/maptest.map");
 			
-			var ldr:Loader = new Loader();
+			maxTilesX = mapfile.readInt();
+			maxTilesY = mapfile.readInt();
 			
-			LoadNext();
-			
-			worldSpr.addChild(ldr);
-		}
-		
-		private function LoadNext():void {
-			if (currentlyLoading == null && reqLoad.length > 0) {
-				currentlyLoading = (reqLoad.pop() as Array);
-				
-				var loadedBytes:ByteArray = ThemeManager.Get("mapcache/" + bgType + "_" + currentlyLoading[0] + "_" + currentlyLoading[1] + ".png2");
-				ldr.loadBytes(loadedBytes);
-				ldr.contentLoaderInfo.addEventListener(Event.COMPLETE, completedLoad);
-			}
-		}
-		
-		private function completedLoad(e:Event):void {
-			if (currentlyLoading != null) {
-				chunks[currentlyLoading[0] + "_" + currentlyLoading[1]] = e.target.loader.content;
-				(chunks[currentlyLoading[0] + "_" + currentlyLoading[1]] as DisplayObject).x = TILESIZEX * currentlyLoading[0];
-				(chunks[currentlyLoading[0] + "_" + currentlyLoading[1]] as DisplayObject).y = TILESIZEY * currentlyLoading[1];
-				
-				layer.addChild(chunks[currentlyLoading[0] + "_" + currentlyLoading[1]]);
-				
-				currentlyLoading = null;
+			for (var i:int = 0; i < maxTilesX; i++) {
+				mapdata.push(new Array());
+				tiles.push(new Array());
+				for (var j:int = 0; j < maxTilesY; j++) {
+					mapdata[i][j] = mapfile.readByte();
+				}
 			}
 			
-			LoadNext();
+			numTilesX = layer.stage.stageWidth / TILESIZEX;
+			numTilesY = layer.stage.stageHeight / TILESIZEY;
+			
+			// populate with currently visible tiles
+			var tileX:int = 0;
+			var tileY:int = 0;
+			for (i = 0; i <= numTilesX; i++) {
+				tileX = (layer.x / TILESIZEX) + i;
+				for (j = 0; j <= numTilesY; j++) {
+					tileY = (layer.y / TILESIZEY) + j;
+					tiles[tileX][tileY] = new Bitmap(ThemeManager.Get("Tiles/" + mapdata[tileX][tileY] + ".png"));
+					layer.addChild(tiles[i][j]);
+					tiles[tileX][tileY].x = tileX * TILESIZEX;
+					tiles[tileX][tileY].y = tileY * TILESIZEY;
+				}
+			}
+			
+			// TODO: need to add new tiles as they come into range, and clean up old tiles
+			// TODO: handle tile coordinates properly (negative coordinates)
+		}
+		
+		public function Update():void {
+
 		}
 	}
 

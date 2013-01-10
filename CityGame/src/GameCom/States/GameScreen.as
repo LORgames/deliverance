@@ -49,7 +49,7 @@ package GameCom.States {
 		private var roofLayer:Sprite = new Sprite();
 		
 		private var objManager:ObjManager;
-		private var groundManager:BGManager;
+		private var bgManager:BGManager;
 		private var roofManager:BGManager;
 		
 		// The scrolling/scalling container
@@ -92,7 +92,7 @@ package GameCom.States {
 			StaticBoxCreator.CreateBoxes(world);
 			
 			//TODO: bgManager (ground) is added to groundLayer
-			groundManager = new BGManager("base", groundLayer);
+			bgManager = new BGManager(groundLayer);
 			
 			// player is added to objectLayer
 			player = new PlayerTruck(new b2Vec2(10, 10), world, objectLayer);
@@ -100,14 +100,14 @@ package GameCom.States {
 			// objManager is added to objectLayer
 			objManager = new ObjManager(player, world, worldSpr);
 			
-			//TODO: bgManager (roof) is added to groundLayer
-			//roofManager = new BGManager("ceil", roofLayer);
+			//TODO: objManager should handle roof
 		}
 		
 		private function Update(e:Event):void {
 			if (simulating) {
 				//Update the objects
 				waterLayer.Update();
+				bgManager.Update();
 				player.Update();
 				objManager.Update();
 				
@@ -115,7 +115,10 @@ package GameCom.States {
 				world.ClearForces();
 				
 				worldSpr.x = -player.x + stage.stageWidth/2;
-				worldSpr.y = -player.y + stage.stageHeight/2;
+				worldSpr.y = -player.y + stage.stageHeight / 2;
+				
+				groundLayer.x = worldSpr.x;
+				groundLayer.y = worldSpr.y;
 				
 				//TODO: Make objects register for updates rather than checking EVERY object for updates...
 				
