@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using Box2CS;
+using CityTools.Core;
 
 namespace CityTools.ObjectSystem {
     public class ScenicObject : BaseObject {

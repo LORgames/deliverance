@@ -28,35 +28,25 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.main_splitter = new System.Windows.Forms.SplitContainer();
             this.mapViewPanel_c = new System.Windows.Forms.Panel();
             this.mapViewPanel = new System.Windows.Forms.PictureBox();
             this.toolpanel_splitter = new System.Windows.Forms.SplitContainer();
             this.minimap = new System.Windows.Forms.PictureBox();
-            this.minimap_context = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.minimapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.redrawAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.first_level_tabControl = new System.Windows.Forms.TabControl();
             this.settings_tab = new System.Windows.Forms.TabPage();
             this.layer_objects_1 = new System.Windows.Forms.CheckBox();
             this.layer_nodes = new System.Windows.Forms.CheckBox();
-            this.flush_textureCache = new System.Windows.Forms.Button();
             this.settings_lbl = new System.Windows.Forms.Label();
             this.layer_floor = new System.Windows.Forms.CheckBox();
             this.layer_physics = new System.Windows.Forms.CheckBox();
             this.layer_objects_0 = new System.Windows.Forms.CheckBox();
-            this.tab_terrain_main = new System.Windows.Forms.TabPage();
-            this.terrain_penSize = new System.Windows.Forms.TrackBar();
-            this.texture_btn = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.terrain_shape_btn = new System.Windows.Forms.Button();
-            this.pen_btn = new System.Windows.Forms.Button();
-            this.colour_btn = new System.Windows.Forms.Button();
+            this.terrain_tab = new System.Windows.Forms.TabPage();
             this.palette_tab = new System.Windows.Forms.TabPage();
             this.tool_tabs = new System.Windows.Forms.TabControl();
             this.objects_tab = new System.Windows.Forms.TabPage();
             this.obj_splitter = new System.Windows.Forms.SplitContainer();
+            this.obj_select_btn = new System.Windows.Forms.Button();
             this.obj_scenic_bounding_CB = new System.Windows.Forms.CheckBox();
             this.obj_rot = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
@@ -71,10 +61,8 @@
             this.story_tab = new System.Windows.Forms.TabPage();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.obj_select_btn = new System.Windows.Forms.Button();
-            this.terrainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.crushToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.fullsizeOutputToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.terrain_tilesPan = new System.Windows.Forms.Panel();
+            this.terrain_tilesCB = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.main_splitter)).BeginInit();
             this.main_splitter.Panel1.SuspendLayout();
             this.main_splitter.Panel2.SuspendLayout();
@@ -86,11 +74,9 @@
             this.toolpanel_splitter.Panel2.SuspendLayout();
             this.toolpanel_splitter.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.minimap)).BeginInit();
-            this.minimap_context.SuspendLayout();
             this.first_level_tabControl.SuspendLayout();
             this.settings_tab.SuspendLayout();
-            this.tab_terrain_main.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.terrain_penSize)).BeginInit();
+            this.terrain_tab.SuspendLayout();
             this.palette_tab.SuspendLayout();
             this.tool_tabs.SuspendLayout();
             this.objects_tab.SuspendLayout();
@@ -166,7 +152,6 @@
             // 
             // minimap
             // 
-            this.minimap.ContextMenuStrip = this.minimap_context;
             this.minimap.Location = new System.Drawing.Point(0, 0);
             this.minimap.Name = "minimap";
             this.minimap.Size = new System.Drawing.Size(231, 231);
@@ -175,33 +160,10 @@
             this.minimap.Paint += new System.Windows.Forms.PaintEventHandler(this.minimap_Paint);
             this.minimap.MouseClick += new System.Windows.Forms.MouseEventHandler(this.minimap_MouseClick);
             // 
-            // minimap_context
-            // 
-            this.minimap_context.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.minimapToolStripMenuItem,
-            this.redrawAllToolStripMenuItem,
-            this.terrainToolStripMenuItem});
-            this.minimap_context.Name = "minimap_context";
-            this.minimap_context.Size = new System.Drawing.Size(157, 92);
-            // 
-            // minimapToolStripMenuItem
-            // 
-            this.minimapToolStripMenuItem.Name = "minimapToolStripMenuItem";
-            this.minimapToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
-            this.minimapToolStripMenuItem.Text = "Redraw Current";
-            this.minimapToolStripMenuItem.Click += new System.EventHandler(this.minimapToolStripMenuItem_Click);
-            // 
-            // redrawAllToolStripMenuItem
-            // 
-            this.redrawAllToolStripMenuItem.Name = "redrawAllToolStripMenuItem";
-            this.redrawAllToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
-            this.redrawAllToolStripMenuItem.Text = "Redraw All";
-            this.redrawAllToolStripMenuItem.Click += new System.EventHandler(this.minimapToolStripMenuItem_Click);
-            // 
             // first_level_tabControl
             // 
             this.first_level_tabControl.Controls.Add(this.settings_tab);
-            this.first_level_tabControl.Controls.Add(this.tab_terrain_main);
+            this.first_level_tabControl.Controls.Add(this.terrain_tab);
             this.first_level_tabControl.Controls.Add(this.palette_tab);
             this.first_level_tabControl.Controls.Add(this.story_tab);
             this.first_level_tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -215,7 +177,6 @@
             // 
             this.settings_tab.Controls.Add(this.layer_objects_1);
             this.settings_tab.Controls.Add(this.layer_nodes);
-            this.settings_tab.Controls.Add(this.flush_textureCache);
             this.settings_tab.Controls.Add(this.settings_lbl);
             this.settings_tab.Controls.Add(this.layer_floor);
             this.settings_tab.Controls.Add(this.layer_physics);
@@ -251,16 +212,6 @@
             this.layer_nodes.Text = "Nodes";
             this.layer_nodes.UseVisualStyleBackColor = true;
             this.layer_nodes.CheckedChanged += new System.EventHandler(this.layerSettingsChanged);
-            // 
-            // flush_textureCache
-            // 
-            this.flush_textureCache.Location = new System.Drawing.Point(112, 7);
-            this.flush_textureCache.Name = "flush_textureCache";
-            this.flush_textureCache.Size = new System.Drawing.Size(105, 23);
-            this.flush_textureCache.TabIndex = 13;
-            this.flush_textureCache.Text = "Flush";
-            this.flush_textureCache.UseVisualStyleBackColor = true;
-            this.flush_textureCache.Click += new System.EventHandler(this.flush_textureCache_Click);
             // 
             // settings_lbl
             // 
@@ -308,80 +259,16 @@
             this.layer_objects_0.UseVisualStyleBackColor = true;
             this.layer_objects_0.CheckedChanged += new System.EventHandler(this.layerSettingsChanged);
             // 
-            // tab_terrain_main
+            // terrain_tab
             // 
-            this.tab_terrain_main.Controls.Add(this.terrain_penSize);
-            this.tab_terrain_main.Controls.Add(this.texture_btn);
-            this.tab_terrain_main.Controls.Add(this.label1);
-            this.tab_terrain_main.Controls.Add(this.terrain_shape_btn);
-            this.tab_terrain_main.Controls.Add(this.pen_btn);
-            this.tab_terrain_main.Controls.Add(this.colour_btn);
-            this.tab_terrain_main.Location = new System.Drawing.Point(4, 22);
-            this.tab_terrain_main.Name = "tab_terrain_main";
-            this.tab_terrain_main.Size = new System.Drawing.Size(223, 200);
-            this.tab_terrain_main.TabIndex = 2;
-            this.tab_terrain_main.Text = "Terrain";
-            this.tab_terrain_main.UseVisualStyleBackColor = true;
-            // 
-            // terrain_penSize
-            // 
-            this.terrain_penSize.LargeChange = 25;
-            this.terrain_penSize.Location = new System.Drawing.Point(61, 66);
-            this.terrain_penSize.Maximum = 1000;
-            this.terrain_penSize.Minimum = 1;
-            this.terrain_penSize.Name = "terrain_penSize";
-            this.terrain_penSize.Size = new System.Drawing.Size(154, 45);
-            this.terrain_penSize.TabIndex = 12;
-            this.terrain_penSize.Value = 100;
-            // 
-            // texture_btn
-            // 
-            this.texture_btn.Location = new System.Drawing.Point(117, 33);
-            this.texture_btn.Name = "texture_btn";
-            this.texture_btn.Size = new System.Drawing.Size(98, 23);
-            this.texture_btn.TabIndex = 11;
-            this.texture_btn.Text = "Pick Texture";
-            this.texture_btn.UseVisualStyleBackColor = true;
-            this.texture_btn.Click += new System.EventHandler(this.terrain_texture_btn_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 75);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(49, 13);
-            this.label1.TabIndex = 10;
-            this.label1.Text = "Pen Size";
-            // 
-            // terrain_shape_btn
-            // 
-            this.terrain_shape_btn.Location = new System.Drawing.Point(117, 4);
-            this.terrain_shape_btn.Name = "terrain_shape_btn";
-            this.terrain_shape_btn.Size = new System.Drawing.Size(98, 23);
-            this.terrain_shape_btn.TabIndex = 7;
-            this.terrain_shape_btn.Text = "Shape (Circle)";
-            this.terrain_shape_btn.UseVisualStyleBackColor = true;
-            this.terrain_shape_btn.Click += new System.EventHandler(this.terrain_shape_btn_Click);
-            // 
-            // pen_btn
-            // 
-            this.pen_btn.Location = new System.Drawing.Point(6, 4);
-            this.pen_btn.Name = "pen_btn";
-            this.pen_btn.Size = new System.Drawing.Size(105, 23);
-            this.pen_btn.TabIndex = 8;
-            this.pen_btn.Text = "Pen Tool (Off)";
-            this.pen_btn.UseVisualStyleBackColor = true;
-            this.pen_btn.Click += new System.EventHandler(this.terrain_pen_Click);
-            // 
-            // colour_btn
-            // 
-            this.colour_btn.Location = new System.Drawing.Point(6, 33);
-            this.colour_btn.Name = "colour_btn";
-            this.colour_btn.Size = new System.Drawing.Size(105, 23);
-            this.colour_btn.TabIndex = 6;
-            this.colour_btn.Text = "Pick Colour";
-            this.colour_btn.UseVisualStyleBackColor = true;
-            this.colour_btn.Click += new System.EventHandler(this.terrain_colour_btn_Click);
+            this.terrain_tab.Controls.Add(this.terrain_tilesPan);
+            this.terrain_tab.Controls.Add(this.terrain_tilesCB);
+            this.terrain_tab.Location = new System.Drawing.Point(4, 22);
+            this.terrain_tab.Name = "terrain_tab";
+            this.terrain_tab.Size = new System.Drawing.Size(223, 200);
+            this.terrain_tab.TabIndex = 2;
+            this.terrain_tab.Text = "Terrain";
+            this.terrain_tab.UseVisualStyleBackColor = true;
             // 
             // palette_tab
             // 
@@ -443,6 +330,16 @@
             this.obj_splitter.Size = new System.Drawing.Size(215, 174);
             this.obj_splitter.SplitterDistance = 61;
             this.obj_splitter.TabIndex = 0;
+            // 
+            // obj_select_btn
+            // 
+            this.obj_select_btn.Location = new System.Drawing.Point(136, 35);
+            this.obj_select_btn.Name = "obj_select_btn";
+            this.obj_select_btn.Size = new System.Drawing.Size(75, 23);
+            this.obj_select_btn.TabIndex = 4;
+            this.obj_select_btn.Text = "Selectorerer";
+            this.obj_select_btn.UseVisualStyleBackColor = true;
+            this.obj_select_btn.Click += new System.EventHandler(this.obj_select_btn_Click);
             // 
             // obj_scenic_bounding_CB
             // 
@@ -572,38 +469,23 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // obj_select_btn
+            // terrain_tilesPan
             // 
-            this.obj_select_btn.Location = new System.Drawing.Point(136, 35);
-            this.obj_select_btn.Name = "obj_select_btn";
-            this.obj_select_btn.Size = new System.Drawing.Size(75, 23);
-            this.obj_select_btn.TabIndex = 4;
-            this.obj_select_btn.Text = "Selectorerer";
-            this.obj_select_btn.UseVisualStyleBackColor = true;
-            this.obj_select_btn.Click += new System.EventHandler(this.obj_select_btn_Click);
+            this.terrain_tilesPan.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.terrain_tilesPan.Location = new System.Drawing.Point(0, 21);
+            this.terrain_tilesPan.Name = "terrain_tilesPan";
+            this.terrain_tilesPan.Size = new System.Drawing.Size(223, 179);
+            this.terrain_tilesPan.TabIndex = 3;
             // 
-            // terrainToolStripMenuItem
+            // terrain_tilesCB
             // 
-            this.terrainToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.crushToolStripMenuItem,
-            this.fullsizeOutputToolStripMenuItem});
-            this.terrainToolStripMenuItem.Name = "terrainToolStripMenuItem";
-            this.terrainToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
-            this.terrainToolStripMenuItem.Text = "Terrain";
-            // 
-            // crushToolStripMenuItem
-            // 
-            this.crushToolStripMenuItem.Name = "crushToolStripMenuItem";
-            this.crushToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
-            this.crushToolStripMenuItem.Text = "Crush";
-            this.crushToolStripMenuItem.Click += new System.EventHandler(this.minimapToolStripMenuItem_Click);
-            // 
-            // fullsizeOutputToolStripMenuItem
-            // 
-            this.fullsizeOutputToolStripMenuItem.Name = "fullsizeOutputToolStripMenuItem";
-            this.fullsizeOutputToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
-            this.fullsizeOutputToolStripMenuItem.Text = "Fullsize Output";
-            this.fullsizeOutputToolStripMenuItem.Click += new System.EventHandler(this.minimapToolStripMenuItem_Click);
+            this.terrain_tilesCB.Dock = System.Windows.Forms.DockStyle.Top;
+            this.terrain_tilesCB.FormattingEnabled = true;
+            this.terrain_tilesCB.Location = new System.Drawing.Point(0, 0);
+            this.terrain_tilesCB.Name = "terrain_tilesCB";
+            this.terrain_tilesCB.Size = new System.Drawing.Size(223, 21);
+            this.terrain_tilesCB.TabIndex = 2;
+            this.terrain_tilesCB.SelectedIndexChanged += new System.EventHandler(this.terrain_tilesCB_SelectedIndexChanged);
             // 
             // MainWindow
             // 
@@ -626,13 +508,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.toolpanel_splitter)).EndInit();
             this.toolpanel_splitter.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.minimap)).EndInit();
-            this.minimap_context.ResumeLayout(false);
             this.first_level_tabControl.ResumeLayout(false);
             this.settings_tab.ResumeLayout(false);
             this.settings_tab.PerformLayout();
-            this.tab_terrain_main.ResumeLayout(false);
-            this.tab_terrain_main.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.terrain_penSize)).EndInit();
+            this.terrain_tab.ResumeLayout(false);
             this.palette_tab.ResumeLayout(false);
             this.tool_tabs.ResumeLayout(false);
             this.objects_tab.ResumeLayout(false);
@@ -659,9 +538,6 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.PictureBox mapViewPanel;
         private System.Windows.Forms.PictureBox minimap;
-        private System.Windows.Forms.ContextMenuStrip minimap_context;
-        private System.Windows.Forms.ToolStripMenuItem minimapToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem redrawAllToolStripMenuItem;
         private System.Windows.Forms.TabControl first_level_tabControl;
         private System.Windows.Forms.TabPage settings_tab;
         private System.Windows.Forms.Label settings_lbl;
@@ -677,24 +553,16 @@
         private System.Windows.Forms.Button phys_add_rect;
         private System.Windows.Forms.TabPage nodes_tab;
         private System.Windows.Forms.TabPage places_tab;
-        private System.Windows.Forms.TabPage tab_terrain_main;
-        private System.Windows.Forms.Button texture_btn;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button terrain_shape_btn;
-        private System.Windows.Forms.Button pen_btn;
-        private System.Windows.Forms.Button colour_btn;
+        private System.Windows.Forms.TabPage terrain_tab;
         private System.Windows.Forms.TabPage story_tab;
-        private System.Windows.Forms.Button flush_textureCache;
-        internal System.Windows.Forms.TrackBar terrain_penSize;
         private System.Windows.Forms.ComboBox obj_scenary_cache_CB;
         private System.Windows.Forms.Panel obj_scenary_objs;
         internal System.Windows.Forms.CheckBox layer_objects_1;
         internal System.Windows.Forms.CheckBox layer_nodes;
         private System.Windows.Forms.CheckBox obj_scenic_bounding_CB;
         private System.Windows.Forms.Button obj_select_btn;
-        private System.Windows.Forms.ToolStripMenuItem terrainToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem crushToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem fullsizeOutputToolStripMenuItem;
+        private System.Windows.Forms.Panel terrain_tilesPan;
+        private System.Windows.Forms.ComboBox terrain_tilesCB;
     }
 }
 

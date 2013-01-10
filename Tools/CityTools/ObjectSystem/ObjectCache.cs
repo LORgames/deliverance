@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using CityTools.Core;
 
 namespace CityTools.ObjectSystem {
     public class ObjectCache {
 
-        public const string SCENIC_DATABASE = "mapcache/scenic/";
+        public const string SCENIC_DATABASE = Program.CACHE+"/scenic/";
         public const string SCENIC_USERFILE = ".bin";
 
         public static List<ScenicObject> s_objects = new List<ScenicObject>();

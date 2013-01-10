@@ -5,6 +5,7 @@ using System.Text;
 using Box2CS;
 using CityTools.Box2D;
 using System.Drawing;
+using CityTools.Core;
 
 namespace CityTools.ObjectSystem {
     public class BaseObject {

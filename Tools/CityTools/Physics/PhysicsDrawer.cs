@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
+using CityTools.Core;
 
 namespace CityTools.Physics {
     public class PhysicsDrawer {

@@ -62,16 +62,17 @@
     <Compile Include="Components\ObjectCacheControl.Designer.cs">
       <DependentUpon>ObjectCacheControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="DrawingHelper.cs" />
+    <Compile Include="Core\Camera.cs" />
+    <Compile Include="Core\DrawingHelper.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="LBuffer.cs" />
+    <Compile Include="Core\LBuffer.cs" />
     <Compile Include="Terrain\MapCache.cs" />
-    <Compile Include="BinaryIO.cs" />
+    <Compile Include="Core\BinaryIO.cs" />
     <Compile Include="ObjectCreatorTool.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -81,7 +82,7 @@
     <Compile Include="ObjectSystem\ObjectDrawer.cs" />
     <Compile Include="Box2D\B2System.cs" />
     <Compile Include="ObjectSystem\BaseObject.cs" />
-    <Compile Include="ImageCache.cs" />
+    <Compile Include="Core\ImageCache.cs" />
     <Compile Include="ObjectSystem\ObjectCache.cs" />
     <Compile Include="ObjectSystem\ObjectHelper.cs" />
     <Compile Include="ObjectSystem\ScenicDrawer.cs" />
@@ -94,8 +95,7 @@
     <Compile Include="Places\PlaceCache.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Terrain\TerrainCrusher.cs" />
-    <Compile Include="Terrain\TerrainDrawer.cs" />
+    <Compile Include="Terrain\TerrainHelper.cs" />
     <EmbeddedResource Include="Components\CachedObject.resx">
       <DependentUpon>CachedObject.cs</DependentUpon>
     </EmbeddedResource>

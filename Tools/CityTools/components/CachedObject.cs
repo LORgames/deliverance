@@ -24,7 +24,6 @@ namespace CityTools.Components {
 
         private void pictureBox1_MouseClick(object sender, MouseEventArgs e) {
             MainWindow.instance.DrawWithObject(img_addr);
-            CityTools.ObjectSystem.ObjectDrawer.image_name = img_addr;
         }
     }
 }

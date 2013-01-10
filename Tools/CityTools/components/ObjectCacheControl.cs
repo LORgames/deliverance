@@ -11,25 +11,38 @@ using System.IO;
 namespace CityTools.Components {
     public partial class ObjectCacheControl : UserControl {
         public const string OBJECT_CACHE_FOLDER = ".\\objcache\\";
+
+        public bool isCacheFolder = true;
         public string folder;
 
-        public ObjectCacheControl(string cacheFolder) {
+        public ObjectCacheControl(string cacheFolder, bool addObjectCache = true) {
             InitializeComponent();
 
             this.Dock = DockStyle.Fill;
-            this.folder = cacheFolder;
+            this.isCacheFolder = addObjectCache;
+
+            if (addObjectCache) {
+                this.folder = OBJECT_CACHE_FOLDER + cacheFolder;
+            } else {
+                this.folder = cacheFolder;
+            }
 
             Activate();
         }
 
         public void Activate(string folder_b = "") {
-            if (folder_b != "")
-                this.folder = folder_b;
+            if (folder_b != "") {
+                if (this.isCacheFolder) {
+                    this.folder = OBJECT_CACHE_FOLDER + folder_b;
+                } else {
+                    this.folder = folder_b;
+                }
+            }
 
-            if (!Directory.Exists(OBJECT_CACHE_FOLDER + folder))
-                Directory.CreateDirectory(OBJECT_CACHE_FOLDER + folder);
+            if (!Directory.Exists(folder))
+                Directory.CreateDirectory(folder);
 
-            string[] files = Directory.GetFiles(OBJECT_CACHE_FOLDER + folder, "*.png");
+            string[] files = Directory.GetFiles(folder, "*.png");
 
             if (files.Length != flowLayoutPanel1.Controls.Count) {
                 Deactivate();

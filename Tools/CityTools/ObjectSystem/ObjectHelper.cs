@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
 using Box2CS;
+using CityTools.Core;
 
 namespace CityTools.ObjectSystem {
     public class ObjectHelper {
@@ -22,11 +23,11 @@ namespace CityTools.ObjectSystem {
             p1 = e.Location;
         }
 
-        public static void MouseUp(MouseEventArgs e, Rectangle viewArea, float zoomLevel) {
+        public static void MouseUp(MouseEventArgs e) {
             selectedObjects.Clear();
 
-            PointF p0a = new PointF(Math.Min(p0.X, p1.X) + viewArea.Left, Math.Min(p0.Y, p1.Y) + viewArea.Top);
-            PointF p1a = new PointF(Math.Max(p0.X, p1.X) + viewArea.Left, Math.Max(p0.Y, p1.Y) + viewArea.Top);
+            PointF p0a = new PointF(Math.Min(p0.X, p1.X) + Camera.ViewArea.Left, Math.Min(p0.Y, p1.Y) + Camera.ViewArea.Top);
+            PointF p1a = new PointF(Math.Max(p0.X, p1.X) + Camera.ViewArea.Left, Math.Max(p0.Y, p1.Y) + Camera.ViewArea.Top);
 
             AABB aabb = new AABB(new Vec2(p0a.X, p0a.Y), new Vec2(p1a.X, p1a.Y));
 

@@ -10,6 +10,7 @@ using System.IO;
 using CityTools.Components;
 using CityTools.ObjectSystem;
 using CityTools.Terrain;
+using CityTools.Core;
 
 namespace CityTools {
     public enum PaintMode {
@@ -20,42 +21,20 @@ namespace CityTools {
         ObjectSelector
     }
 
-    public enum PaintShape {
-        Circle,
-        Square
-    }
-
     public partial class MainWindow : Form {
-        public const int TILE_SX = 512; //The width of a single image block
-        public const int TILE_SY = 512; //The height of a single image block
-
-        public const int TILE_TX = 128; //How many image blocks across
-        public const int TILE_TY = 128; //How many image blocks down
-
         public const string MAP_MINI_GROUND_CACHE = "minimap_ground.png";
         public const string MAP_MINI_OBJECT_CACHE = "minimap_object.png";
 
         public Color BACKGROUND_COLOR = Color.CornflowerBlue;
 
-        public float offsetX = 0.0f;
-        public float offsetY = 0.0f;
-        public float offsetZ = 1.0f;
+        public const int MAP_SIZE_X = 18688;
+        public const int MAP_SIZE_Y = 18688;
 
         public static MainWindow instance;
         public bool REQUIRES_CLOSE = false;
 
-        //Our cache
-        public Boolean[,] needsToBeSaved;
-        public Image[,] terrain_images;
-
         //Our drawing settings
         public Rectangle drawArea = new Rectangle();
-        public Rectangle viewArea = new Rectangle();
-
-        public Rectangle cachedMapArea = new Rectangle();
-
-        public Point mousePos = Point.Empty;
-        public Point snapPoint = Point.Empty;
         public PaintMode paintMode = PaintMode.Off;
 
         //Our drawing buffers
@@ -72,7 +51,6 @@ namespace CityTools {
         //Terrain painting things
         public bool terrainRedrawRequired = true;
         public Brush terrainPaintBrush = new SolidBrush(Color.White);
-        public PaintShape paintShape = PaintShape.Circle;
 
         //Object painting things
         public Bitmap obj_paint_image = null;
@@ -99,13 +77,10 @@ namespace CityTools {
 
             obj_scenary_cache_CB.DataSource = dark;
 
-            needsToBeSaved = new Boolean[TILE_TX, TILE_TY];
-            terrain_images = new Image[TILE_TX, TILE_TY];
-
-            MapCache.Fetchmap(0, 0, 1, 1, ref cachedMapArea);
+            TerrainHelper.InitializeTerrainSystem(terrain_tilesCB, terrain_tilesPan);
 
             drawArea = mapViewPanel.DisplayRectangle;
-            FixViewArea();
+            Camera.FixViewArea(drawArea);
             CreateBuffers();
 
             Terrain.MapCache.SaveMap();
@@ -144,41 +119,13 @@ namespace CityTools {
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
-            if (keyData == Keys.W || keyData == Keys.A || keyData == Keys.S || keyData == Keys.D || keyData == Keys.Q || keyData == Keys.E) {
-                if (keyData == Keys.W) {
-                    offsetY -= 0.25f / offsetZ;
-                } else if (keyData == Keys.A) {
-                    offsetX -= 0.25f / offsetZ;
-                } else if (keyData == Keys.S) {
-                    offsetY += 0.25f / offsetZ;
-                } else if (keyData == Keys.D) {
-                    offsetX += 0.25f / offsetZ;
-                } else if (keyData == Keys.Q) {
-                    offsetZ *= 0.98f;
-                } else if (keyData == Keys.E) {
-                    offsetZ *= 1.02f;
-                }
-
-                if (offsetX < 0.0f) offsetX = 0.0f;
-                if (offsetX > TILE_TX) offsetX = TILE_TX;
-
-                if (offsetY < 0.0f) offsetY = 0.0f;
-                if (offsetY > TILE_TY) offsetY = TILE_TY;
-
-                if (offsetZ < 0.01f) offsetZ = 0.01f;
-                if (offsetZ > 1.0f) offsetZ = 1.0f;
-
-                FixViewArea();
-
+            if(Camera.ProcessKeys(keyData)) {
                 mapViewPanel.Invalidate();
                 minimap.Invalidate();
-
                 terrainRedrawRequired = true;
-
-                return true;
+                Camera.FixViewArea(drawArea);
             } else if (keyData == Keys.Escape) {
-                paintMode = PaintMode.Off;
-                pen_btn.Text = "Pen Tool (Off)";
+                input_buffer.gfx.Clear(Color.Transparent);
                 mapViewPanel.Invalidate();
             } else if (keyData == Keys.R) {
                 if (obj_rot.Value < 315) {
@@ -204,27 +151,9 @@ namespace CityTools {
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
-        private void FixViewArea() {
-            viewArea = new Rectangle((int)(offsetX * TILE_SX), (int)(offsetY * TILE_SY), (int)(drawArea.Width / offsetZ), (int)(drawArea.Height / offsetZ));
-        }
-
         private void layerSettingsChanged(object sender, EventArgs e) {
             mapViewPanel.Invalidate();
             minimap.Invalidate();
-        }
-
-        private void terrain_colour_btn_Click(object sender, EventArgs e) {
-            if (colorDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                terrainPaintBrush = new SolidBrush(colorDialog1.Color);
-            }
-        }
-
-        private void terrain_texture_btn_Click(object sender, EventArgs e) {
-            openFileDialog1.Filter = "Images|*.jpg;*.png;*.bmp";
-
-            if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                terrainPaintBrush = new TextureBrush(new Bitmap(openFileDialog1.FileName));
-            }
         }
 
         private void drawPanel_ME_up(object sender, MouseEventArgs e) {
@@ -235,11 +164,11 @@ namespace CityTools {
             } else if (paintMode == PaintMode.ObjectSelector) {
                 input_buffer.gfx.Clear(Color.Transparent);
                 mapViewPanel.Invalidate();
-                ObjectHelper.MouseUp(e, viewArea, offsetZ);
+                ObjectHelper.MouseUp(e);
             } else if (paintMode == PaintMode.Objects) {
                 mapViewPanel.Invalidate();
             } else if (paintMode == PaintMode.Terrain) {
-                outputCurrentCachedMapToFile();
+                MapCache.SaveMap();
             }
 
             was_mouse_down = false;
@@ -247,12 +176,10 @@ namespace CityTools {
 
         private void drawPanel_ME_move(object sender, MouseEventArgs e) {
             mapViewPanel.Focus();
-            mousePos = e.Location;
-
+            
             if (paintMode == PaintMode.Terrain) {
-                if (terrainRedrawRequired = Terrain.TerrainDrawer.UpdateMouse(e, input_buffer)) {
-                    mapViewPanel.Invalidate();
-                }
+                TerrainHelper.MouseMoveOrDown(e, input_buffer);
+                mapViewPanel.Invalidate();
             } else if(paintMode == PaintMode.Objects) {
                 terrainRedrawRequired = ObjectSystem.ObjectDrawer.UpdateMouse(e, input_buffer);
                 mapViewPanel.Invalidate();
@@ -269,9 +196,8 @@ namespace CityTools {
 
         private void drawPanel_ME_down(object sender, MouseEventArgs e) {
             if (paintMode == PaintMode.Terrain) {
-                if (terrainRedrawRequired = Terrain.TerrainDrawer.UpdateMouse(e, input_buffer)) {
-                    mapViewPanel.Invalidate();
-                }
+                TerrainHelper.MouseMoveOrDown(e, input_buffer);
+                mapViewPanel.Invalidate();
             } else if (paintMode == PaintMode.Objects) {
                 terrainRedrawRequired = ObjectSystem.ObjectDrawer.MouseDown(e, input_buffer);
                 mapViewPanel.Invalidate();
@@ -280,11 +206,6 @@ namespace CityTools {
             } else if (paintMode == PaintMode.ObjectSelector) {
                 ObjectHelper.MouseDown(e);
             }
-        }
-
-        private void outputCurrentCachedMapToFile() {
-            MapCache.outputCurrentCachedMapToFile(cachedMapArea);
-            PartiallyRedrawMinimap(cachedMapArea);
         }
 
         private void RedrawTerrain() {
@@ -296,43 +217,11 @@ namespace CityTools {
                 nodes_buffer.gfx.Clear(Color.Transparent);
 
                 if (layer_objects_0.Checked) {
-                    ScenicDrawer.DrawScenicObjects(objects0_buffer, new RectangleF(drawArea.Left + offsetX * TILE_SX, drawArea.Top + offsetY * TILE_SY, drawArea.Width, drawArea.Height), offsetZ, obj_scenic_bounding_CB.Checked);
+                    ScenicDrawer.DrawScenicObjects(objects0_buffer, new RectangleF(drawArea.Left + Camera.Offset.X, drawArea.Top + Camera.Offset.Y, drawArea.Width, drawArea.Height), Camera.ZoomLevel, obj_scenic_bounding_CB.Checked);
                 }
                 
                 if (layer_floor.Checked) {
-                    int oTileX, oTileY, wTileX, hTileY;
-
-                    float scaledTileSizeX = TILE_SX * offsetZ;
-                    float scaledTileSizeY = TILE_SY * offsetZ;
-
-                    oTileX = (int)Math.Floor((drawArea.Left / scaledTileSizeX) + offsetX);
-                    oTileY = (int)Math.Floor((drawArea.Top / scaledTileSizeY) + offsetY);
-                    wTileX = (int)Math.Floor((drawArea.Right / scaledTileSizeX) + offsetX);
-                    hTileY = (int)Math.Floor((drawArea.Bottom / scaledTileSizeY) + offsetY);
-
-                    if (oTileX < 0) oTileX = 0;
-                    if (oTileY < 0) oTileY = 0;
-                    if (wTileX > TILE_TX) wTileX = TILE_TX;
-                    if (hTileY > TILE_TY) hTileY = TILE_TY;
-
-                    MapCache.Fetchmap(oTileX, oTileY, wTileX, hTileY, ref cachedMapArea);
-
-                    float tileXPos = 0.0f;
-                    float tileYPos = 0.0f;
-
-                    for (int i = oTileX; i <= wTileX; i++) {
-                        tileXPos = drawArea.Left + ((i - offsetX) * scaledTileSizeX);
-
-                        for (int j = oTileY; j <= hTileY; j++) {
-                            tileYPos = drawArea.Top + ((j - offsetY) * scaledTileSizeY);
-
-                            try {
-                                floor_buffer.gfx.DrawImage(terrain_images[i, j], tileXPos, tileYPos, scaledTileSizeX, scaledTileSizeY);
-                            } catch {
-
-                            }
-                        }
-                    }
+                    //TODO: Implement this again
                 }
             }
 
@@ -340,115 +229,24 @@ namespace CityTools {
         }
 
         private void mapViewPanel_Resize(object sender, EventArgs e) {
-            FixViewArea();
+            Camera.FixViewArea(drawArea);
             CreateBuffers();
-            minimap.Invalidate();
-        }
-
-        private void terrain_pen_Click(object sender, EventArgs e) {
-            if (paintMode == PaintMode.Terrain) {
-                paintMode = PaintMode.Off;
-                pen_btn.Text = "Pen Tool (Off)";
-            } else {
-                paintMode = PaintMode.Terrain;
-                pen_btn.Text = "Pen Tool (On)";
-            }
-        }
-
-        private void flush_textureCache_Click(object sender, EventArgs e) {
-            cachedMapArea = Rectangle.Empty;
-            terrainRedrawRequired = true;
-            mapViewPanel.Invalidate();
-        }
-
-        private void DrawInitialFullMap() {
-            float scaleX = minimap.Width / (float)(TILE_SX * TILE_TX);
-            float scaleY = minimap.Height / (float)(TILE_SY * TILE_TY);
-
-            mapBuffer_ground = new LBuffer(new Rectangle(Point.Empty, minimap.Size));
-            mapBuffer_object = new LBuffer(new Rectangle(Point.Empty, minimap.Size));
-
-            if (File.Exists(MAP_MINI_GROUND_CACHE) && File.Exists(MAP_MINI_OBJECT_CACHE)) {
-                Image im = Image.FromFile(MAP_MINI_GROUND_CACHE);
-                mapBuffer_ground.gfx.DrawImage(im, Point.Empty);
-                im.Dispose();
-
-                im = Image.FromFile(MAP_MINI_OBJECT_CACHE);
-                mapBuffer_object.gfx.DrawImage(im, Point.Empty);
-                im.Dispose();
-            } else {
-                mapBuffer_ground.gfx.Clear(Color.Transparent);
-                mapBuffer_object.gfx.Clear(Color.Transparent);
-
-                Image currentMapChunk = null;
-
-                for (int i = 0; i < TILE_TX; i++) {
-                    for (int j = 0; j < TILE_TY; j++) {
-                        currentMapChunk = Image.FromFile(MapCache.GetTileFilename(i, j));
-                        mapBuffer_ground.gfx.DrawImage(currentMapChunk, new Rectangle((int)(i * TILE_SX * scaleX), (int)(j * TILE_SY * scaleY), (int)(TILE_SX * scaleX), (int)(TILE_SY * scaleY)));
-                        currentMapChunk.Dispose();
-
-                        //TODO: Minimap for objects
-                    }
-                }
-
-                mapBuffer_ground.bmp.Save(MAP_MINI_GROUND_CACHE);
-                mapBuffer_object.bmp.Save(MAP_MINI_OBJECT_CACHE);
-            }
-        }
-
-        private void PartiallyRedrawMinimap(Rectangle redrawArea) {
-            float scaleX = minimap.Width / (float)(TILE_SX * TILE_TX);
-            float scaleY = minimap.Height / (float)(TILE_SY * TILE_TY);
-
-            Image currentMapChunk = null;
-
-            for (int i = redrawArea.Left; i <= redrawArea.Right; i++) {
-                for (int j = redrawArea.Top; j <= redrawArea.Bottom; j++) {
-                    currentMapChunk = Image.FromFile(MapCache.GetTileFilename(i, j));
-                    mapBuffer_ground.gfx.DrawImage(currentMapChunk, new Rectangle((int)(i * TILE_SX * scaleX), (int)(j * TILE_SY * scaleY), (int)(TILE_SX * scaleX), (int)(TILE_SY * scaleY)));
-                    currentMapChunk.Dispose();
-
-                    //TODO: Objects drawn to mini map
-                }
-            }
-
-            try {
-                mapBuffer_ground.bmp.Save(MAP_MINI_GROUND_CACHE);
-                mapBuffer_object.bmp.Save(MAP_MINI_OBJECT_CACHE);
-            } catch {
-                MessageBox.Show("Minimap failed to save.");
-            }
-
             minimap.Invalidate();
         }
 
         private void minimap_Paint(object sender, PaintEventArgs e) {
             if (REQUIRES_CLOSE) { this.Close(); return; }
-
-            float scaleX = minimap.Width / (float)(TILE_SX * TILE_TX);
-            float scaleY = minimap.Height / (float)(TILE_SY * TILE_TY);
-
-            if (mapBuffer_ground == null || mapBuffer_object == null) DrawInitialFullMap();
-
-            e.Graphics.Clear(BACKGROUND_COLOR);
-
-            if (layer_floor.Checked) e.Graphics.DrawImage(mapBuffer_ground.bmp, Point.Empty);
-            if (layer_objects_0.Checked) e.Graphics.DrawImage(mapBuffer_object.bmp, Point.Empty);
-
-            //Draw the current view area.
-            e.Graphics.DrawRectangle(new Pen(new SolidBrush(Color.Red)), (int)(viewArea.Left * scaleX), (int)(viewArea.Top * scaleY), (int)(viewArea.Width * scaleX), (int)(viewArea.Height * scaleY));
         }
 
         private void minimap_MouseClick(object sender, MouseEventArgs e) {
             //Need to pan there :)
-            offsetX = (e.Location.X / (float)minimap.Width) * TILE_TX;
-            offsetY = (e.Location.Y / (float)minimap.Height) * TILE_TY;
+            Camera.Offset.X = (e.Location.X / (float)minimap.Width) * MAP_SIZE_X;
+            Camera.Offset.Y = (e.Location.Y / (float)minimap.Height) * MAP_SIZE_Y;
 
-            offsetX = ((int)Math.Round(offsetX * 4)) / 4.0f;
-            offsetY = ((int)Math.Round(offsetY * 4)) / 4.0f;
+            Camera.Offset.X = ((int)Math.Round(Camera.Offset.X * 4)) / 4.0f;
+            Camera.Offset.Y = ((int)Math.Round(Camera.Offset.Y * 4)) / 4.0f;
 
-            FixViewArea();
+            Camera.FixViewArea(drawArea);
 
             terrainRedrawRequired = true;
 
@@ -457,45 +255,27 @@ namespace CityTools {
         }
 
         public void DrawWithObject(String objectName) {
-            paintMode = PaintMode.Objects;
-            obj_paint_original = objectName;
-            obj_paint_image = (Bitmap)ImageCache.RequestImage(objectName, (int)obj_rot.Value);
-        }
-
-        private void terrain_shape_btn_Click(object sender, EventArgs e) {
-            if (paintShape == PaintShape.Circle) {
-                paintShape = PaintShape.Square;
-                terrain_shape_btn.Text = "Shape (Square)";
-            } else {
-                paintShape = PaintShape.Circle;
-                terrain_shape_btn.Text = "Shape (Circle)";
+            if (first_level_tabControl.SelectedTab == terrain_tab) {
+                paintMode = PaintMode.Terrain;
+                TerrainHelper.SetCurrentTile(TerrainHelper.StripTileIDFromPath(objectName));
+            } else if (first_level_tabControl.SelectedTab == palette_tab) {
+                CityTools.ObjectSystem.ObjectDrawer.image_name = objectName;
+                paintMode = PaintMode.Objects;
+                obj_paint_original = objectName;
+                obj_paint_image = (Bitmap)ImageCache.RequestImage(objectName, (int)obj_rot.Value);
             }
         }
 
         private void obj_settings_ValueChanged(object sender, EventArgs e) {
             if (obj_paint_original != null) {
                 obj_paint_image = (Bitmap)ImageCache.RequestImage(obj_paint_original, (int)obj_rot.Value);
-                drawPanel_ME_move(null, new MouseEventArgs(System.Windows.Forms.MouseButtons.None, 0, mousePos.X, mousePos.Y, 0));
-            }
-        }
-
-        private void minimapToolStripMenuItem_Click(object sender, EventArgs e) {
-            if (sender.ToString() == "Redraw Current") {
-                PartiallyRedrawMinimap(cachedMapArea);
-            } else if (sender.ToString() == "Redraw All") {
-                //TODO: Implement this
-            } else if (sender.ToString() == "Crush") {
-                Terrain.TerrainCrusher.CrushAll();
+                drawPanel_ME_move(null, new MouseEventArgs(System.Windows.Forms.MouseButtons.None, 0, 0, 0, 0));
             }
         }
 
         private void phys_add_shape(object sender, EventArgs e) {
             paintMode = PaintMode.Physics;
             Physics.PhysicsDrawer.SetShape(((Button)sender).Name);
-        }
-
-        private void obj_scenary_cache_CB_SelectionChangeCommitted(object sender, EventArgs e) {
-            (obj_scenary_objs.Controls[0] as ObjectCacheControl).Activate(obj_scenary_cache_CB.SelectedValue.ToString());
         }
 
         private void obj_select_btn_Click(object sender, EventArgs e) {
@@ -505,6 +285,14 @@ namespace CityTools {
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e) {
             ObjectCache.SaveCache();
+        }
+
+        private void terrain_tilesCB_SelectedIndexChanged(object sender, EventArgs e) {
+            (terrain_tilesPan.Controls[0] as ObjectCacheControl).Activate(terrain_tilesCB.SelectedValue.ToString());
+        }
+
+        private void obj_scenary_cache_CB_SelectionChangeCommitted(object sender, EventArgs e) {
+            (obj_scenary_objs.Controls[0] as ObjectCacheControl).Activate(obj_scenary_cache_CB.SelectedValue.ToString());
         }
     }
 }
