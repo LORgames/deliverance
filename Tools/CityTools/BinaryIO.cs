@@ -25,12 +25,6 @@ namespace CityTools {
 
         internal void Encode(string filename) {
             if (out_data != null) {
-                //length = out_data.Count;
-
-                //out_data.InsertRange(0, BitConverter.GetBytes(IPAddress.HostToNetworkOrder(length)));
-                //length += 4;
-                //outBytes = out_data.ToArray();
-
                 File.WriteAllBytes(filename, out_data.ToArray());
             } else {
                 throw new Exception("MISSING OUTDATA!");
@@ -48,6 +42,19 @@ namespace CityTools {
 
         public int GetInt() {
             return GetInt(seemlessReadIndex);
+        }
+
+        public void AddByte(byte number) {
+            out_data.Add(number);
+        }
+
+        public byte GetByte(int index) {
+            seemlessReadIndex++;
+            return in_data[index];
+        }
+
+        public byte GetByte() {
+            return GetByte(seemlessReadIndex);
         }
 
         public void AddLong(long number) {

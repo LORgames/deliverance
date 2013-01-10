@@ -9,19 +9,15 @@ using System.Windows.Forms;
 using System.IO;
 using CityTools.Components;
 using CityTools.ObjectSystem;
+using CityTools.Terrain;
 
 namespace CityTools {
     public enum PaintMode {
         Off,
         Terrain,
         Objects,
-        Physics
-    }
-
-    public enum PaintLayers {
-        Ground,
-        Objects,
-        Ceiling
+        Physics,
+        ObjectSelector
     }
 
     public enum PaintShape {
@@ -30,11 +26,11 @@ namespace CityTools {
     }
 
     public partial class MainWindow : Form {
-        public const int TILE_SX = 1024; //The width of a single image block
-        public const int TILE_SY = 1024; //The height of a single image block
+        public const int TILE_SX = 512; //The width of a single image block
+        public const int TILE_SY = 512; //The height of a single image block
 
-        public const int TILE_TX = 16; //How many image blocks across
-        public const int TILE_TY = 16; //How many image blocks down
+        public const int TILE_TX = 128; //How many image blocks across
+        public const int TILE_TY = 128; //How many image blocks down
 
         public const string MAP_MINI_GROUND_CACHE = "minimap_ground.png";
         public const string MAP_MINI_OBJECT_CACHE = "minimap_object.png";
@@ -61,7 +57,6 @@ namespace CityTools {
         public Point mousePos = Point.Empty;
         public Point snapPoint = Point.Empty;
         public PaintMode paintMode = PaintMode.Off;
-        public PaintLayers activeLayer = PaintLayers.Ground;
 
         //Our drawing buffers
         public LBuffer floor_buffer;
@@ -81,7 +76,7 @@ namespace CityTools {
 
         //Object painting things
         public Bitmap obj_paint_image = null;
-        public Image obj_paint_original = null;
+        public String obj_paint_original = "";
         public bool was_mouse_down = false;
 
         public MainWindow() {
@@ -90,6 +85,8 @@ namespace CityTools {
             InitializeComponent();
 
             Box2D.B2System.Initialize();
+            MapCache.VerifyCacheFiles();
+            ObjectCache.InitializeCache();
 
             obj_scenary_objs.Controls.Add(new ObjectCacheControl("Buildings"));
 
@@ -105,13 +102,13 @@ namespace CityTools {
             needsToBeSaved = new Boolean[TILE_TX, TILE_TY];
             terrain_images = new Image[TILE_TX, TILE_TY];
 
-            MapCache.VerifyCacheFiles();
-
             MapCache.Fetchmap(0, 0, 1, 1, ref cachedMapArea);
 
             drawArea = mapViewPanel.DisplayRectangle;
             FixViewArea();
             CreateBuffers();
+
+            Terrain.MapCache.SaveMap();
         }
 
         private void CreateBuffers() {
@@ -142,8 +139,6 @@ namespace CityTools {
             if (layer_objects_1.Checked) e.Graphics.DrawImage(objects1_buffer.bmp, Point.Empty);
             if (layer_physics.Checked) e.Graphics.DrawImage(physics_buffer.bmp, Point.Empty);
             if (layer_nodes.Checked) e.Graphics.DrawImage(nodes_buffer.bmp, Point.Empty);
-
-            //e.Graphics.DrawImage(Physics.PhysicsDrawer.physicsBuffer.bmp, Point.Empty);
 
             if (paintMode != PaintMode.Off) e.Graphics.DrawImage(input_buffer.bmp, Point.Empty);
         }
@@ -185,13 +180,13 @@ namespace CityTools {
                 paintMode = PaintMode.Off;
                 pen_btn.Text = "Pen Tool (Off)";
                 mapViewPanel.Invalidate();
-            } else if (keyData == Keys.Left) {
+            } else if (keyData == Keys.R) {
                 if (obj_rot.Value < 315) {
                     obj_rot.Value += 45;
                 } else {
                     obj_rot.Value = 0;
                 }
-            } else if (keyData == Keys.Right) {
+            } else if (keyData == Keys.F) {
                 if (obj_rot.Value > 0) {
                     obj_rot.Value -= 45;
                 } else {
@@ -230,7 +225,13 @@ namespace CityTools {
                 Physics.PhysicsDrawer.ReleaseMouse(e);
                 input_buffer.gfx.Clear(Color.Transparent);
                 mapViewPanel.Invalidate();
-            } else if (paintMode != PaintMode.Off) {
+            } else if (paintMode == PaintMode.ObjectSelector) {
+                input_buffer.gfx.Clear(Color.Transparent);
+                mapViewPanel.Invalidate();
+                ObjectHelper.MouseUp(e, viewArea, offsetZ);
+            } else if (paintMode == PaintMode.Objects) {
+                mapViewPanel.Invalidate();
+            } else if (paintMode == PaintMode.Terrain) {
                 outputCurrentCachedMapToFile();
             }
 
@@ -252,6 +253,25 @@ namespace CityTools {
                 if (Physics.PhysicsDrawer.UpdateMouse(e, input_buffer)) {
                     mapViewPanel.Invalidate();
                 }
+            } else if (paintMode == PaintMode.ObjectSelector) {
+                if (ObjectHelper.UpdateMouse(e, input_buffer)) {
+                    mapViewPanel.Invalidate();
+                }
+            }
+        }
+
+        private void drawPanel_ME_down(object sender, MouseEventArgs e) {
+            if (paintMode == PaintMode.Terrain) {
+                if (terrainRedrawRequired = Terrain.TerrainDrawer.UpdateMouse(e, input_buffer)) {
+                    mapViewPanel.Invalidate();
+                }
+            } else if (paintMode == PaintMode.Objects) {
+                terrainRedrawRequired = ObjectSystem.ObjectDrawer.MouseDown(e, input_buffer);
+                mapViewPanel.Invalidate();
+            } else if (paintMode == PaintMode.Physics) {
+                Physics.PhysicsDrawer.MouseDown(e, input_buffer);
+            } else if (paintMode == PaintMode.ObjectSelector) {
+                ObjectHelper.MouseDown(e);
             }
         }
 
@@ -269,7 +289,7 @@ namespace CityTools {
                 nodes_buffer.gfx.Clear(Color.Transparent);
 
                 if (layer_objects_0.Checked) {
-                    ScenicDrawer.DrawScenicObjects(objects0_buffer, new RectangleF(drawArea.Left + offsetX * TILE_SX, drawArea.Top + offsetY * TILE_SY, drawArea.Width, drawArea.Height));
+                    ScenicDrawer.DrawScenicObjects(objects0_buffer, new RectangleF(drawArea.Left + offsetX * TILE_SX, drawArea.Top + offsetY * TILE_SY, drawArea.Width, drawArea.Height), offsetZ, obj_scenic_bounding_CB.Checked);
                 }
                 
                 if (layer_floor.Checked) {
@@ -325,7 +345,6 @@ namespace CityTools {
             } else {
                 paintMode = PaintMode.Terrain;
                 pen_btn.Text = "Pen Tool (On)";
-                activeLayer = PaintLayers.Ground;
             }
         }
 
@@ -430,12 +449,10 @@ namespace CityTools {
             minimap.Invalidate();
         }
 
-        public void DrawWithObject(Image objectName) {
+        public void DrawWithObject(String objectName) {
             paintMode = PaintMode.Objects;
-            activeLayer = PaintLayers.Objects;
             obj_paint_original = objectName;
-
-            DrawingHelper.FixObjectPaintingTransformation((float)obj_rot.Value, obj_paint_original, out obj_paint_image);
+            obj_paint_image = (Bitmap)ImageCache.RequestImage(objectName, (int)obj_rot.Value);
         }
 
         private void terrain_shape_btn_Click(object sender, EventArgs e) {
@@ -450,7 +467,7 @@ namespace CityTools {
 
         private void obj_settings_ValueChanged(object sender, EventArgs e) {
             if (obj_paint_original != null) {
-                DrawingHelper.FixObjectPaintingTransformation((float)obj_rot.Value, obj_paint_original, out obj_paint_image);
+                obj_paint_image = (Bitmap)ImageCache.RequestImage(obj_paint_original, (int)obj_rot.Value);
                 drawPanel_ME_move(null, new MouseEventArgs(System.Windows.Forms.MouseButtons.None, 0, mousePos.X, mousePos.Y, 0));
             }
         }
@@ -459,7 +476,9 @@ namespace CityTools {
             if (sender.ToString() == "Redraw Current") {
                 PartiallyRedrawMinimap(cachedMapArea);
             } else if (sender.ToString() == "Redraw All") {
-                MessageBox.Show("Redraw All");
+                //TODO: Implement this
+            } else if (sender.ToString() == "Crush") {
+                Terrain.TerrainCrusher.CrushAll();
             }
         }
 
@@ -470,6 +489,15 @@ namespace CityTools {
 
         private void obj_scenary_cache_CB_SelectionChangeCommitted(object sender, EventArgs e) {
             (obj_scenary_objs.Controls[0] as ObjectCacheControl).Activate(obj_scenary_cache_CB.SelectedValue.ToString());
+        }
+
+        private void obj_select_btn_Click(object sender, EventArgs e) {
+            paintMode = PaintMode.ObjectSelector;
+            mapViewPanel.Cursor = Cursors.Cross;
+        }
+
+        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e) {
+            ObjectCache.SaveCache();
         }
     }
 }

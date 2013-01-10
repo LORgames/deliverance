@@ -8,7 +8,6 @@ using System.Drawing;
 namespace CityTools.ObjectSystem {
     class ObjectDrawer {
         private static Point mousePos = Point.Empty;
-
         public static string image_name = "";
 
         internal static bool UpdateMouse(MouseEventArgs e, LBuffer inputBuffer) {
@@ -21,17 +20,22 @@ namespace CityTools.ObjectSystem {
             inputBuffer.gfx.Clear(Color.Transparent);
             inputBuffer.gfx.DrawImage(MainWindow.instance.obj_paint_image, eD);
 
-            if (e.Button == System.Windows.Forms.MouseButtons.Left && !MainWindow.instance.was_mouse_down) {
-                MainWindow.instance.was_mouse_down = true;
-
-                RectangleF eA = new RectangleF(effectedArea.Left + MainWindow.instance.offsetX * MainWindow.TILE_SX, effectedArea.Top + MainWindow.instance.offsetY * MainWindow.TILE_SY, effectedArea.Width, effectedArea.Height);
-
-                ObjectCache.AddShape(new ScenicObject(image_name, new PointF(eA.Left, eA.Top), (float)MainWindow.instance.obj_rot.Value));
-
-                return true;
-            }
-
             return false;
+        }
+
+        internal static bool MouseDown(MouseEventArgs e, LBuffer input_buffer) {
+            mousePos = e.Location;
+
+            PointF p0 = new PointF(mousePos.X / MainWindow.instance.offsetZ + MainWindow.instance.viewArea.Left, mousePos.Y / MainWindow.instance.offsetZ + MainWindow.instance.viewArea.Top);
+
+            PointF p1 = PointF.Empty;
+            p1.X = MainWindow.instance.obj_paint_image.Width * MainWindow.instance.offsetZ;
+            p1.Y = MainWindow.instance.obj_paint_image.Height * MainWindow.instance.offsetZ;
+
+            RectangleF eA = new RectangleF(p0.X, p0.Y, p1.X, p1.Y);
+            ObjectCache.AddShape(new ScenicObject(image_name, new PointF(eA.Left, eA.Top), (int)MainWindow.instance.obj_rot.Value));
+
+            return true;
         }
     }
 }

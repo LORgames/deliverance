@@ -57,6 +57,7 @@
             this.tool_tabs = new System.Windows.Forms.TabControl();
             this.objects_tab = new System.Windows.Forms.TabPage();
             this.obj_splitter = new System.Windows.Forms.SplitContainer();
+            this.obj_scenic_bounding_CB = new System.Windows.Forms.CheckBox();
             this.obj_rot = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
             this.obj_scenary_objs = new System.Windows.Forms.Panel();
@@ -70,6 +71,10 @@
             this.story_tab = new System.Windows.Forms.TabPage();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.obj_select_btn = new System.Windows.Forms.Button();
+            this.terrainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.crushToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fullsizeOutputToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.main_splitter)).BeginInit();
             this.main_splitter.Panel1.SuspendLayout();
             this.main_splitter.Panel2.SuspendLayout();
@@ -134,7 +139,7 @@
             this.mapViewPanel.TabIndex = 0;
             this.mapViewPanel.TabStop = false;
             this.mapViewPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.mapViewPanel_Paint);
-            this.mapViewPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.drawPanel_ME_move);
+            this.mapViewPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.drawPanel_ME_down);
             this.mapViewPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.drawPanel_ME_move);
             this.mapViewPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.drawPanel_ME_up);
             this.mapViewPanel.Resize += new System.EventHandler(this.mapViewPanel_Resize);
@@ -174,9 +179,10 @@
             // 
             this.minimap_context.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.minimapToolStripMenuItem,
-            this.redrawAllToolStripMenuItem});
+            this.redrawAllToolStripMenuItem,
+            this.terrainToolStripMenuItem});
             this.minimap_context.Name = "minimap_context";
-            this.minimap_context.Size = new System.Drawing.Size(157, 48);
+            this.minimap_context.Size = new System.Drawing.Size(157, 92);
             // 
             // minimapToolStripMenuItem
             // 
@@ -425,6 +431,8 @@
             // 
             // obj_splitter.Panel1
             // 
+            this.obj_splitter.Panel1.Controls.Add(this.obj_select_btn);
+            this.obj_splitter.Panel1.Controls.Add(this.obj_scenic_bounding_CB);
             this.obj_splitter.Panel1.Controls.Add(this.obj_rot);
             this.obj_splitter.Panel1.Controls.Add(this.label2);
             // 
@@ -435,6 +443,16 @@
             this.obj_splitter.Size = new System.Drawing.Size(215, 174);
             this.obj_splitter.SplitterDistance = 61;
             this.obj_splitter.TabIndex = 0;
+            // 
+            // obj_scenic_bounding_CB
+            // 
+            this.obj_scenic_bounding_CB.AutoSize = true;
+            this.obj_scenic_bounding_CB.Location = new System.Drawing.Point(110, 4);
+            this.obj_scenic_bounding_CB.Name = "obj_scenic_bounding_CB";
+            this.obj_scenic_bounding_CB.Size = new System.Drawing.Size(101, 17);
+            this.obj_scenic_bounding_CB.TabIndex = 3;
+            this.obj_scenic_bounding_CB.Text = "Show Bounding";
+            this.obj_scenic_bounding_CB.UseVisualStyleBackColor = true;
             // 
             // obj_rot
             // 
@@ -554,6 +572,39 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // obj_select_btn
+            // 
+            this.obj_select_btn.Location = new System.Drawing.Point(136, 35);
+            this.obj_select_btn.Name = "obj_select_btn";
+            this.obj_select_btn.Size = new System.Drawing.Size(75, 23);
+            this.obj_select_btn.TabIndex = 4;
+            this.obj_select_btn.Text = "Selectorerer";
+            this.obj_select_btn.UseVisualStyleBackColor = true;
+            this.obj_select_btn.Click += new System.EventHandler(this.obj_select_btn_Click);
+            // 
+            // terrainToolStripMenuItem
+            // 
+            this.terrainToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.crushToolStripMenuItem,
+            this.fullsizeOutputToolStripMenuItem});
+            this.terrainToolStripMenuItem.Name = "terrainToolStripMenuItem";
+            this.terrainToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.terrainToolStripMenuItem.Text = "Terrain";
+            // 
+            // crushToolStripMenuItem
+            // 
+            this.crushToolStripMenuItem.Name = "crushToolStripMenuItem";
+            this.crushToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.crushToolStripMenuItem.Text = "Crush";
+            this.crushToolStripMenuItem.Click += new System.EventHandler(this.minimapToolStripMenuItem_Click);
+            // 
+            // fullsizeOutputToolStripMenuItem
+            // 
+            this.fullsizeOutputToolStripMenuItem.Name = "fullsizeOutputToolStripMenuItem";
+            this.fullsizeOutputToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.fullsizeOutputToolStripMenuItem.Text = "Fullsize Output";
+            this.fullsizeOutputToolStripMenuItem.Click += new System.EventHandler(this.minimapToolStripMenuItem_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -562,6 +613,8 @@
             this.Controls.Add(this.main_splitter);
             this.Name = "MainWindow";
             this.Text = "City Builder";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWindow_FormClosing);
             this.main_splitter.Panel1.ResumeLayout(false);
             this.main_splitter.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.main_splitter)).EndInit();
@@ -637,6 +690,11 @@
         private System.Windows.Forms.Panel obj_scenary_objs;
         internal System.Windows.Forms.CheckBox layer_objects_1;
         internal System.Windows.Forms.CheckBox layer_nodes;
+        private System.Windows.Forms.CheckBox obj_scenic_bounding_CB;
+        private System.Windows.Forms.Button obj_select_btn;
+        private System.Windows.Forms.ToolStripMenuItem terrainToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem crushToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fullsizeOutputToolStripMenuItem;
     }
 }
 

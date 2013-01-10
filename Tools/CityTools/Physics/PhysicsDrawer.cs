@@ -12,7 +12,6 @@ namespace CityTools.Physics {
 
         public static LBuffer physicsBuffer;
 
-        private static bool downBefore = false;
         private static PointF p0 = Point.Empty;
         private static PointF p1 = Point.Empty;
         private static PointF p2 = Point.Empty;
@@ -46,10 +45,7 @@ namespace CityTools.Physics {
         //return true if input layer needs a redraw :)
         internal static bool UpdateMouse(MouseEventArgs e, LBuffer inputBuffer) {
             if (drawingShape != PhysicsShapes.Triangle) {
-                if (e.Button == MouseButtons.Left && !downBefore) {
-                    p0 = e.Location;
-                    downBefore = true;
-                } else if (p0 != Point.Empty) {
+                if (p0 != Point.Empty) {
                     inputBuffer.gfx.Clear(Color.Transparent);
 
                     p1 = e.Location;
@@ -69,18 +65,19 @@ namespace CityTools.Physics {
             return false;
         }
 
-        internal static void ReleaseMouse(MouseEventArgs e) {
-            if (downBefore) {
-                if (drawingShape == PhysicsShapes.Rectangle) {
-                    PhysicsCache.AddShape(new PhysicsRectangle(new RectangleF(Math.Min(p0.X, p1.X), Math.Min(p0.Y, p1.Y), Math.Abs(p1.X - p0.X), Math.Abs(p1.Y - p0.Y))));
-                } else if(drawingShape == PhysicsShapes.Circle) {
-                    PhysicsCache.AddShape(new PhysicsCircle(new RectangleF(Math.Min(p0.X, p1.X), Math.Min(p0.Y, p1.Y), Math.Abs(p1.X - p0.X), Math.Abs(p1.X - p0.X))));
-                }
+        internal static void MouseDown(MouseEventArgs e, LBuffer input_buffer) {
+            p0 = e.Location;
+        }
 
-                p0 = Point.Empty;
-                p1 = Point.Empty;
-                downBefore = false;
+        internal static void ReleaseMouse(MouseEventArgs e) {
+            if (drawingShape == PhysicsShapes.Rectangle) {
+                PhysicsCache.AddShape(new PhysicsRectangle(new RectangleF(Math.Min(p0.X, p1.X), Math.Min(p0.Y, p1.Y), Math.Abs(p1.X - p0.X), Math.Abs(p1.Y - p0.Y))));
+            } else if(drawingShape == PhysicsShapes.Circle) {
+                PhysicsCache.AddShape(new PhysicsCircle(new RectangleF(Math.Min(p0.X, p1.X), Math.Min(p0.Y, p1.Y), Math.Abs(p1.X - p0.X), Math.Abs(p1.X - p0.X))));
             }
+
+            p0 = Point.Empty;
+            p1 = Point.Empty;
         }
 
         internal static void RedrawBuffer(float offsetX, float offsetY, float offsetZ) {

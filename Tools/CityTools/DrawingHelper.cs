@@ -6,7 +6,7 @@ using System.Drawing;
 
 namespace CityTools {
     public class DrawingHelper {
-        public static void FixObjectPaintingTransformation(float rotationAngle, Image original, out Bitmap copy) {
+        public static void FixObjectPaintingTransformation(int rotationAngle, Image original, out Bitmap copy) {
             if (rotationAngle > 180)
                 rotationAngle -= 360;
 
