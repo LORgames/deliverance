@@ -20,5 +20,15 @@ namespace CityTools.ObjectSystem {
         public virtual void Draw(LBuffer buffer, RectangleF drawArea, float ZoomFactor, bool drawBoundingBoxes) {
             throw new NotImplementedException();
         }
+
+        // Move function
+        public virtual void Move(float x, float y) {
+            throw new NotImplementedException();
+        }
+
+        // Delete function
+        public virtual void Delete() {
+            throw new NotImplementedException();
+        }
     }
 }

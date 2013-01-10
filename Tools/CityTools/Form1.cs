@@ -192,6 +192,13 @@ namespace CityTools {
                 } else {
                     obj_rot.Value = 315;
                 }
+            } else if (paintMode == PaintMode.ObjectSelector) {
+                // Pass the data onto the helper
+                ObjectHelper.ProcessCmdKey(ref msg, keyData);
+
+                // Get the window to redraw
+                terrainRedrawRequired = true;
+                mapViewPanel.Invalidate();
             }
 
             return base.ProcessCmdKey(ref msg, keyData);

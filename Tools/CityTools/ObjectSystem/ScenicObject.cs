@@ -69,5 +69,37 @@ namespace CityTools.ObjectSystem {
                 buffer.gfx.DrawPolygon(new Pen(Color.Yellow), realignedPoints);
             }
         }
+
+        public override void Move(float x, float y) {
+            // Move each point
+            for (int i = 0; i < points.Length; i++) {
+                points[i].X += x;
+                points[i].Y += y;
+            }
+
+            // Move the physics object for future selections
+            baseBody.Position = new Vec2(baseBody.Position.X + x, baseBody.Position.Y + y);
+        }
+
+        public override void Delete() {
+            // Remove from ObjectCache
+            for (int i = 0; i < ObjectCache.s_objects.Count; i++) {
+                if (ObjectCache.s_objects[i] == this) {
+                    ObjectCache.s_objects.RemoveAt(i);
+                    i--;
+                }
+            }
+
+            // Remove from ScenicDrawer
+            for (int i = 0; i < ScenicDrawer.drawList.Count; i++) {
+                if (ScenicDrawer.drawList[i] == this) {
+                    ScenicDrawer.drawList.RemoveAt(i);
+                    i--;
+                }
+            }
+
+            // Remove from world
+            Box2D.B2System.world.DestroyBody(baseBody);
+        }
     }
 }
