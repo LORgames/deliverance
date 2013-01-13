@@ -56,7 +56,7 @@ package GameCom.GameComponents {
 			this.getChildAt(0).x = -this.getChildAt(0).width / 2;
 			this.getChildAt(0).y = -this.getChildAt(0).height / 2 - 20;
 			
-			this.getChildAt(0).transform.colorTransform = new ColorTransform(1, 0.5, 0.1);
+			this.getChildAt(0).transform.colorTransform = new ColorTransform(1, 1, 1);
 			
 			//////////////////////////
 			// TRUCK BODY
@@ -181,14 +181,6 @@ package GameCom.GameComponents {
 			
 			var i:Number = targetBody.GetPosition().x * Global.PHYSICS_SCALE - this.x;
 			var j:Number = targetBody.GetPosition().y * Global.PHYSICS_SCALE - this.y;
-			
-			this.graphics.lineStyle(1, 0x0, 0.5);
-			this.graphics.moveTo(i, j);
-			this.graphics.lineTo(i + sidewaysAxis.x * Global.PHYSICS_SCALE, j + sidewaysAxis.y * Global.PHYSICS_SCALE);
-			
-			this.graphics.lineStyle(1, 0xFF0000, 0.5);
-			this.graphics.moveTo(i, j);
-			this.graphics.lineTo(i + velocity.x * Global.PHYSICS_SCALE, j + velocity.y * Global.PHYSICS_SCALE);
 		}
 		
 		public function Update():void {

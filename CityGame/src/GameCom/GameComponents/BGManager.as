@@ -54,6 +54,7 @@ package GameCom.GameComponents
 			// populate with currently visible tiles
 			var tileX:int = 0;
 			var tileY:int = 0;
+			
 			for (i = 0; i <= numTilesX; i++) {
 				tileX = (layer.x / TILESIZEX) + i;
 				for (j = 0; j <= numTilesY; j++) {

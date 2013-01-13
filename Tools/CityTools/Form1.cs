@@ -228,8 +228,14 @@ namespace CityTools {
         }
 
         private void mapViewPanel_Resize(object sender, EventArgs e) {
+            drawArea = mapViewPanel.DisplayRectangle;
             Camera.FixViewArea(drawArea);
             CreateBuffers();
+
+            Terrain.TerrainHelper.DrawTerrain(floor_buffer);
+            ScenicDrawer.DrawScenicObjects(objects0_buffer, obj_scenic_bounding_CB.Checked);
+            mapViewPanel.Invalidate();
+
             minimap.Invalidate();
         }
 

@@ -117,8 +117,8 @@ package GameCom.States {
 				worldSpr.x = -player.x + stage.stageWidth/2;
 				worldSpr.y = -player.y + stage.stageHeight / 2;
 				
-				groundLayer.x = worldSpr.x;
-				groundLayer.y = worldSpr.y;
+				//groundLayer.x = worldSpr.x;
+				//groundLayer.y = worldSpr.y;
 				
 				//TODO: Make objects register for updates rather than checking EVERY object for updates...
 				

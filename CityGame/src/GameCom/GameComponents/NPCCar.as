@@ -152,14 +152,6 @@ package GameCom.GameComponents
 			
 			var i:Number = targetBody.GetPosition().x * Global.PHYSICS_SCALE - this.x;
 			var j:Number = targetBody.GetPosition().y * Global.PHYSICS_SCALE - this.y;
-			
-			this.graphics.lineStyle(1, 0x0, 0.5);
-			this.graphics.moveTo(i, j);
-			this.graphics.lineTo(i + sidewaysAxis.x * Global.PHYSICS_SCALE, j + sidewaysAxis.y * Global.PHYSICS_SCALE);
-			
-			this.graphics.lineStyle(1, 0xFF0000, 0.5);
-			this.graphics.moveTo(i, j);
-			this.graphics.lineTo(i + velocity.x * Global.PHYSICS_SCALE, j + velocity.y * Global.PHYSICS_SCALE);
 		}
 		
 		public function Update():void {
