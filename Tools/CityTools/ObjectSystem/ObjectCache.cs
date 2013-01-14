@@ -27,7 +27,8 @@ namespace CityTools.ObjectSystem {
 
             // Load object types from file
             if (File.Exists(SCENIC_TYPEFILE)) {
-                BinaryIO f = new BinaryIO(File.ReadAllBytes(SCENIC_USERFILE));
+                BinaryIO f = new BinaryIO(File.ReadAllBytes(SCENIC_TYPEFILE));
+
                 int totalShapes = f.GetInt();
                 _highestTypeIndex = f.GetInt();
 
