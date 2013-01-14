@@ -141,8 +141,8 @@ namespace CityTools.ObjectSystem {
             int listIndex = -1;
 
             // Find selected objects index
-            for (int i = 0; i < ObjectCache.s_objects.Count; i++) {
-                if (currentIndex == ObjectCache.s_objects[i].index) {
+            for (int i = 0; i < ObjectCache.s_objectStore.Count; i++) {
+                if (currentIndex == ObjectCache.s_objectStore[i].index) {
                     listIndex = i;
                 }
             }
@@ -152,69 +152,69 @@ namespace CityTools.ObjectSystem {
 
         internal static void SendBack() {
             // Sort draw list by index
-            ObjectCache.s_objects.Sort();
+            ObjectCache.s_objectStore.Sort();
 
             int listIndex = FindObjectIndex();
 
             if (listIndex != 0) {
                 // Swap values
-                int temp = ObjectCache.s_objects[listIndex].index;
-                ObjectCache.s_objects[listIndex].index = ObjectCache.s_objects[listIndex - 1].index;
-                ObjectCache.s_objects[listIndex - 1].index = temp;
+                int temp = ObjectCache.s_objectStore[listIndex].index;
+                ObjectCache.s_objectStore[listIndex].index = ObjectCache.s_objectStore[listIndex - 1].index;
+                ObjectCache.s_objectStore[listIndex - 1].index = temp;
 
                 // Resort draw list by index
-                ObjectCache.s_objects.Sort();
+                ObjectCache.s_objectStore.Sort();
             }
         }
 
         internal static void BringForward() {
             // Sort draw list by index
-            ObjectCache.s_objects.Sort();
+            ObjectCache.s_objectStore.Sort();
 
             int listIndex = FindObjectIndex();
 
-            if (listIndex != ObjectCache.s_objects.Count - 1) {
+            if (listIndex != ObjectCache.s_objectStore.Count - 1) {
                 // Swap values
-                int temp = ObjectCache.s_objects[listIndex].index;
-                ObjectCache.s_objects[listIndex].index = ObjectCache.s_objects[listIndex + 1].index;
-                ObjectCache.s_objects[listIndex + 1].index = temp;
+                int temp = ObjectCache.s_objectStore[listIndex].index;
+                ObjectCache.s_objectStore[listIndex].index = ObjectCache.s_objectStore[listIndex + 1].index;
+                ObjectCache.s_objectStore[listIndex + 1].index = temp;
 
                 // Resort draw list by index
-                ObjectCache.s_objects.Sort();
+                ObjectCache.s_objectStore.Sort();
             }
         }
 
         internal static void SendToBack() {
             // Sort draw list by index
-            ObjectCache.s_objects.Sort();
+            ObjectCache.s_objectStore.Sort();
 
             int listIndex = FindObjectIndex();
 
             // Swap values until we reach the bottom
             for (int i = listIndex; i > 0; i--) {
-                int temp = ObjectCache.s_objects[i].index;
-                ObjectCache.s_objects[i].index = ObjectCache.s_objects[i - 1].index;
-                ObjectCache.s_objects[i - 1].index = temp;
+                int temp = ObjectCache.s_objectStore[i].index;
+                ObjectCache.s_objectStore[i].index = ObjectCache.s_objectStore[i - 1].index;
+                ObjectCache.s_objectStore[i - 1].index = temp;
 
                 // Resort draw list by index
-                ObjectCache.s_objects.Sort();
+                ObjectCache.s_objectStore.Sort();
             }
         }
 
         internal static void BringToFront() {
             // Sort draw list by index
-            ObjectCache.s_objects.Sort();
+            ObjectCache.s_objectStore.Sort();
 
             int listIndex = FindObjectIndex();
 
             // Swap values until we reach the top
-            for (int i = listIndex; i < ObjectCache.s_objects.Count - 1; i++) {
-                int temp = ObjectCache.s_objects[i].index;
-                ObjectCache.s_objects[i].index = ObjectCache.s_objects[i + 1].index;
-                ObjectCache.s_objects[i + 1].index = temp;
+            for (int i = listIndex; i < ObjectCache.s_objectStore.Count - 1; i++) {
+                int temp = ObjectCache.s_objectStore[i].index;
+                ObjectCache.s_objectStore[i].index = ObjectCache.s_objectStore[i + 1].index;
+                ObjectCache.s_objectStore[i + 1].index = temp;
 
                 // Resort draw list by index
-                ObjectCache.s_objects.Sort();
+                ObjectCache.s_objectStore.Sort();
             }
         }
     }

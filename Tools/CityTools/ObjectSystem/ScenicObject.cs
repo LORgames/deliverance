@@ -8,16 +8,19 @@ using CityTools.Core;
 
 namespace CityTools.ObjectSystem {
     public class ScenicObject : BaseObject {
-        public string source = "";
+        private string source = ""; //Just caching it really, prevents a lookup later
+        public int object_index = 0;
         public int angle = 0;
 
         public ScenicObject selected = null;
 
         public PointF[] points;
 
-        public ScenicObject(string source, PointF initialLocation, int angle) : base() {
+        public ScenicObject(int obj_index, PointF initialLocation, int angle) : base() {
             this.angle = angle;
-            this.source = source;
+
+            this.object_index = obj_index;
+            this.source = ObjectCache.s_objectTypes[obj_index].ImageName;
 
             Image im_o = ImageCache.RequestImage(source);
             Image im_a = ImageCache.RequestImage(source, angle);
@@ -84,9 +87,9 @@ namespace CityTools.ObjectSystem {
 
         public override void Delete() {
             // Remove from ObjectCache
-            for (int i = 0; i < ObjectCache.s_objects.Count; i++) {
-                if (ObjectCache.s_objects[i] == this) {
-                    ObjectCache.s_objects.RemoveAt(i);
+            for (int i = 0; i < ObjectCache.s_objectStore.Count; i++) {
+                if (ObjectCache.s_objectStore[i] == this) {
+                    ObjectCache.s_objectStore.RemoveAt(i);
                     i--;
                 }
             }

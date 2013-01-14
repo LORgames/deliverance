@@ -36,5 +36,13 @@ namespace CityTools.Core {
 
             return img_store[cacheName];
         }
+
+        internal static bool HasCached(string filename) {
+            return img_store.ContainsKey(filename + "_0");
+        }
+
+        internal static void ForceCache(string filename) {
+            img_store.Add(filename + "_0", Image.FromFile(filename)); //(well that was easy)
+        }
     }
 }

@@ -311,7 +311,7 @@ namespace CityTools {
                 paintMode = PaintMode.Terrain;
                 TerrainHelper.SetCurrentTile(TerrainHelper.StripTileIDFromPath(objectName));
             } else if (first_level_tabControl.SelectedTab == palette_tab) {
-                CityTools.ObjectSystem.ObjectDrawer.image_name = objectName;
+                CityTools.ObjectSystem.ObjectDrawer.object_index = ObjectCache.s_StringToInt[objectName];//objectName;
                 paintMode = PaintMode.Objects;
                 obj_paint_original = objectName;
                 obj_paint_image = (Bitmap)ImageCache.RequestImage(objectName, (int)obj_rot.Value);
@@ -336,6 +336,7 @@ namespace CityTools {
         }
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e) {
+            ObjectCache.SaveTypes();
             ObjectCache.SaveCache();
         }
 

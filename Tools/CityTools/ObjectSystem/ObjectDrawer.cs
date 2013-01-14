@@ -9,7 +9,8 @@ using CityTools.Core;
 namespace CityTools.ObjectSystem {
     class ObjectDrawer {
         private static Point mousePos = Point.Empty;
-        public static string image_name = "";
+
+        public static int object_index = 0;
 
         internal static bool UpdateMouse(MouseEventArgs e, LBuffer inputBuffer) {
             mousePos = e.Location;
@@ -36,7 +37,7 @@ namespace CityTools.ObjectSystem {
             p1.Y = MainWindow.instance.obj_paint_image.Height * Camera.ZoomLevel;
 
             RectangleF eA = new RectangleF(p0.X, p0.Y, p1.X, p1.Y);
-            ObjectCache.AddShape(new ScenicObject(image_name, new PointF(eA.Left, eA.Top), (int)MainWindow.instance.obj_rot.Value));
+            ObjectCache.AddShape(new ScenicObject(object_index, new PointF(eA.Left, eA.Top), (int)MainWindow.instance.obj_rot.Value));
 
             return true;
         }
