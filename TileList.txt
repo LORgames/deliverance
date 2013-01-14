@@ -1,0 +1,256 @@
+﻿00 - Fully transparent
+01 - Nature: Basic Grass
+02 - Road: 4 way intersection
+03 - Road: TR Corner
+04 - Road: TL Corner
+05 - Road: BR Corner
+06 - Road: BL Corner
+07 - Road: Horizontal Straight
+08 - Road: Vertical Straight
+09 - Road: T-Section !T
+0A - Road: T-Section !R
+0B - Road: T-Section !B
+0C - Road: T-Section !L
+0D - Ocean: Basic Sand
+0E - Nature: Grass with flowers
+0F - Nature: Lush Grass
+10 - Nature: Dry Grass
+11 - Nature: Dirt
+12 - Nature: Mud
+13 - Ocean: Sand Transparent Straight L
+14 - Ocean: Sand Transparent Straight T
+15 - Ocean: Sand Transparent Straight R
+16 - Ocean: Sand Transparent Straight B
+17 - Ocean: Sand Transparent Interior Corner TL
+18 - Ocean: Sand Transparent Interior Corner TR
+19 - Ocean: Sand Transparent Interior Corner BL
+1A - Ocean: Sand Transparent Interior Corner BR
+1B - Ocean: Sand Transparent Exterior Corner TL
+1C - Ocean: Sand Transparent Exterior Corner TR
+1D - Ocean: Sand Transparent Exterior Corner BL
+1E - Ocean: Sand Transparent Exterior Corner BR
+1F - Cliffs: Grass->Water: Straight L
+20 - Cliffs: Grass->Water: Straight T
+21 - Cliffs: Grass->Water: Straight R
+22 - Cliffs: Grass->Water: Straight B
+23 - Cliffs: Grass->Water: Interior Corner TL Land
+24 - Cliffs: Grass->Water: Interior Corner TR Land
+25 - Cliffs: Grass->Water: Interior Corner BL Land
+26 - Cliffs: Grass->Water: Interior Corner BR Land
+27 - Cliffs: Grass->Water: Exterior Corner TL Water
+28 - Cliffs: Grass->Water: Exterior Corner TR Water
+29 - Cliffs: Grass->Water: Exterior Corner BL Water
+2A - Cliffs: Grass->Water: Exterior Corner BR Water
+2B - 
+2C - 
+2D - 
+2E - 
+2F - 
+30 - 
+31 - 
+32 - 
+33 - 
+34 - 
+35 - 
+36 - 
+37 - 
+38 - 
+39 - 
+3A - 
+3B - 
+3C - 
+3D - 
+3E - 
+3F - 
+40 - 
+41 - 
+42 - 
+43 - 
+44 - 
+45 - 
+46 - 
+47 - 
+48 - 
+49 - 
+4A - 
+4B - 
+4C - 
+4D - 
+4E - 
+4F - 
+50 - 
+51 - 
+52 - 
+53 - 
+54 - 
+55 - 
+56 - 
+57 - 
+58 - 
+59 - 
+5A - 
+5B - 
+5C - 
+5D - 
+5E - 
+5F - 
+60 - 
+61 - 
+62 - 
+63 - 
+64 - 
+65 - 
+66 - 
+67 - 
+68 - 
+69 - 
+6A - 
+6B - 
+6C - 
+6D - 
+6E - 
+6F - 
+70 - 
+71 - 
+72 - 
+73 - 
+74 - 
+75 - 
+76 - 
+77 - 
+78 - 
+79 - 
+7A - 
+7B - 
+7C - 
+7D - 
+7E - 
+7F - 
+80 - 
+81 - 
+82 - 
+83 - 
+84 - 
+85 - 
+86 - 
+87 - 
+88 - 
+89 - 
+8A - 
+8B - 
+8C - 
+8D - 
+8E - 
+8F - 
+90 - 
+91 - 
+92 - 
+93 - 
+94 - 
+95 - 
+96 - 
+97 - 
+98 - 
+99 - 
+9A - 
+9B - 
+9C - 
+9D - 
+9E - 
+9F - 
+A0 - 
+A1 - 
+A2 - 
+A3 - 
+A4 - 
+A5 - 
+A6 - 
+A7 - 
+A8 - 
+A9 - 
+AA - 
+AB - 
+AC - 
+AD - 
+AE - 
+AF - 
+B0 - 
+B1 - 
+B2 - 
+B3 - 
+B4 - 
+B5 - 
+B6 - 
+B7 - 
+B8 - 
+B9 - 
+BA - 
+BB - 
+BC - 
+BD - 
+BE - 
+BF - 
+C0 - 
+C1 - 
+C2 - 
+C3 - 
+C4 - 
+C5 - 
+C6 - 
+C7 - 
+C8 - 
+C9 - 
+CA - 
+CB - 
+CC - 
+CD - 
+CE - 
+CF - 
+D0 - 
+D1 - 
+D2 - 
+D3 - 
+D4 - 
+D5 - 
+D6 - 
+D7 - 
+D8 - 
+D9 - 
+DA - 
+DB - 
+DC - 
+DD - 
+DE - 
+DF - 
+E0 - 
+E1 - 
+E2 - 
+E3 - 
+E4 - 
+E5 - 
+E6 - 
+E7 - 
+E8 - 
+E9 - 
+EA - 
+EB - 
+EC - 
+ED - 
+EE - 
+EF - 
+F0 - 
+F1 - 
+F2 - 
+F3 - 
+F4 - 
+F5 - 
+F6 - 
+F7 - 
+F8 - 
+F9 - 
+FA - 
+FB - 
+FC - 
+FD - 
+FE - 
+FF - 
