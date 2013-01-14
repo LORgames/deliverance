@@ -9,7 +9,7 @@ namespace CityTools.ObjectSystem {
     public class ObjectCache {
 
         public const string SCENIC_DATABASE = Program.CACHE+"/scenic/";
-        public const string SCENIC_USERFILE = ".bin";
+        public const string SCENIC_USERFILE = "scenic.bin";
 
         public static List<ScenicObject> s_objects = new List<ScenicObject>();
 
@@ -52,7 +52,7 @@ namespace CityTools.ObjectSystem {
                 f.AddInt(ps.angle);
             }
 
-            f.Encode(SCENIC_DATABASE + Environment.UserName + SCENIC_USERFILE);
+            f.Encode(SCENIC_DATABASE + SCENIC_USERFILE);
         }
     }
 }
