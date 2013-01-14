@@ -75,6 +75,7 @@
     <Compile Include="Nodes\NodeCache.cs" />
     <Compile Include="Nodes\NodeDrawer.cs" />
     <Compile Include="Nodes\NodeHelper.cs" />
+    <Compile Include="ObjectSystem\ScenicType.cs" />
     <Compile Include="Terrain\MapCache.cs" />
     <Compile Include="Core\BinaryIO.cs" />
     <Compile Include="ObjectCreatorTool.cs">

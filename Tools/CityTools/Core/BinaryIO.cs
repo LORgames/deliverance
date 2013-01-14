@@ -44,6 +44,19 @@ namespace CityTools.Core {
             return GetInt(seemlessReadIndex);
         }
 
+        public void AddShort(short number) {
+            out_data.AddRange(BitConverter.GetBytes(IPAddress.HostToNetworkOrder(number)));
+        }
+
+        public short GetShort(int index) {
+            seemlessReadIndex += 2;
+            return IPAddress.NetworkToHostOrder(BitConverter.ToInt16(in_data, index));
+        }
+
+        public short GetShort() {
+            return GetShort(seemlessReadIndex);
+        }
+
         public void AddByte(byte number) {
             out_data.Add(number);
         }

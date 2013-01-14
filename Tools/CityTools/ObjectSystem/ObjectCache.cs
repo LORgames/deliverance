@@ -8,9 +8,11 @@ using CityTools.Core;
 namespace CityTools.ObjectSystem {
     public class ObjectCache {
 
-        public const string SCENIC_DATABASE = Program.CACHE+"/scenic/";
-        public const string SCENIC_USERFILE = "scenic.bin";
+        public const string SCENIC_DATABASE = Program.CACHE;
+        public const string SCENIC_TYPEFILE = SCENIC_DATABASE + "scenic_types.bin";
+        public const string SCENIC_USERFILE = SCENIC_DATABASE + "scenic_store.bin";
 
+        public static Dictionary<short, ScenicType> s_objectTypes = new Dictionary<short, ScenicType>();
         public static List<ScenicObject> s_objects = new List<ScenicObject>();
 
         public static void InitializeCache() {
@@ -18,21 +20,32 @@ namespace CityTools.ObjectSystem {
                 Directory.CreateDirectory(SCENIC_DATABASE);
             }
 
-            string[] files = Directory.GetFiles(SCENIC_DATABASE);
+            if (File.Exists(SCENIC_TYPEFILE)) {
+                BinaryIO f = new BinaryIO(File.ReadAllBytes(SCENIC_USERFILE));
+                int totalShapes = f.GetInt();
 
-            foreach (string file in files) {
-                if (File.Exists(file)) {
-                    BinaryIO f = new BinaryIO(File.ReadAllBytes(file));
-                    int totalShapes = f.GetInt();
+                for (int i = 0; i < totalShapes; i++) {
+                    short type_id = f.GetShort();
+                    string source = f.GetString();
+                    float locationX = f.GetFloat();
+                    float locationY = f.GetFloat();
+                    int rotation = f.GetInt();
 
-                    for (int i = 0; i < totalShapes; i++) {
-                        string source = f.GetString();
-                        float locationX = f.GetFloat();
-                        float locationY = f.GetFloat();
-                        int rotation = f.GetInt();
+                    s_objects.Add(new ScenicObject(source, new System.Drawing.PointF(locationX, locationY), rotation));
+                }
+            }
 
-                        s_objects.Add(new ScenicObject(source, new System.Drawing.PointF(locationX, locationY), rotation));
-                    }
+            if (File.Exists(SCENIC_USERFILE)) {
+                BinaryIO f = new BinaryIO(File.ReadAllBytes(SCENIC_USERFILE));
+                int totalShapes = f.GetInt();
+
+                for (int i = 0; i < totalShapes; i++) {
+                    string source = f.GetString();
+                    float locationX = f.GetFloat();
+                    float locationY = f.GetFloat();
+                    int rotation = f.GetInt();
+
+                    s_objects.Add(new ScenicObject(source, new System.Drawing.PointF(locationX, locationY), rotation));
                 }
             }
         }
@@ -52,7 +65,7 @@ namespace CityTools.ObjectSystem {
                 f.AddInt(ps.angle);
             }
 
-            f.Encode(SCENIC_DATABASE + SCENIC_USERFILE);
+            f.Encode(SCENIC_USERFILE);
         }
     }
 }
