@@ -91,11 +91,11 @@ package GameCom.States {
 			
 			StaticBoxCreator.CreateBoxes(world);
 			
-			//TODO: bgManager (ground) is added to groundLayer
-			bgManager = new BGManager(groundLayer);
-			
 			// player is added to objectLayer
 			player = new PlayerTruck(new b2Vec2(10, 10), world, objectLayer);
+			
+			//TODO: bgManager (ground) is added to groundLayer
+			bgManager = new BGManager(groundLayer, player);
 			
 			// objManager is added to objectLayer
 			objManager = new ObjManager(player, world, worldSpr);
@@ -110,6 +110,8 @@ package GameCom.States {
 				bgManager.Update();
 				player.Update();
 				objManager.Update();
+				
+				//trace("player: (" + player.x + ", " + player.y + ")");
 				
 				world.Step(Global.TIME_STEP, Global.VELOCITY_ITERATIONS, Global.POSITION_ITERATIONS);
 				world.ClearForces();
