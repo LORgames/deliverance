@@ -27,8 +27,8 @@ namespace CityTools.Nodes {
             p0 = e.Location;
             p1 = e.Location;
 
-            PointF p0a = new PointF(Math.Min(p0.X, p1.X) + Camera.ViewArea.Left, Math.Min(p0.Y, p1.Y) + Camera.ViewArea.Top);
-            PointF p1a = new PointF(Math.Max(p0.X, p1.X) + Camera.ViewArea.Left, Math.Max(p0.Y, p1.Y) + Camera.ViewArea.Top);
+            PointF p0a = new PointF(Math.Min(p0.X, p1.X) / Camera.ZoomLevel + Camera.ViewArea.Left, Math.Min(p0.Y, p1.Y) / Camera.ZoomLevel + Camera.ViewArea.Top);
+            PointF p1a = new PointF(Math.Max(p0.X, p1.X) / Camera.ZoomLevel + Camera.ViewArea.Left, Math.Max(p0.Y, p1.Y) / Camera.ZoomLevel + Camera.ViewArea.Top);
 
             AABB aabb = new AABB(new Vec2(p0a.X, p0a.Y), new Vec2(p1a.X, p1a.Y));
 
@@ -63,8 +63,8 @@ namespace CityTools.Nodes {
             p0 = e.Location;
             p1 = e.Location;
 
-            PointF p0a = new PointF(Math.Min(p0.X, p1.X) + Camera.ViewArea.Left, Math.Min(p0.Y, p1.Y) + Camera.ViewArea.Top);
-            PointF p1a = new PointF(Math.Max(p0.X, p1.X) + Camera.ViewArea.Left, Math.Max(p0.Y, p1.Y) + Camera.ViewArea.Top);
+            PointF p0a = new PointF(Math.Min(p0.X, p1.X) / Camera.ZoomLevel + Camera.ViewArea.Left, Math.Min(p0.Y, p1.Y) / Camera.ZoomLevel + Camera.ViewArea.Top);
+            PointF p1a = new PointF(Math.Max(p0.X, p1.X) / Camera.ZoomLevel + Camera.ViewArea.Left, Math.Max(p0.Y, p1.Y) / Camera.ZoomLevel + Camera.ViewArea.Top);
 
             AABB aabb = new AABB(new Vec2(p0a.X, p0a.Y), new Vec2(p1a.X, p1a.Y));
 

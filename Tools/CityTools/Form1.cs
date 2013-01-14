@@ -243,9 +243,9 @@ namespace CityTools {
                 ScenicDrawer.DrawScenicObjects(objects0_buffer, obj_scenic_bounding_CB.Checked);
             }
 
-                if (layer_nodes.Checked) {
-                    NodeDrawer.DrawNodes(nodes_buffer);
-                }
+            if (layer_nodes.Checked) {
+                NodeDrawer.DrawNodes(nodes_buffer);
+            }
                 
             if (layer_floor.Checked) {
                 TerrainHelper.DrawTerrain(floor_buffer);

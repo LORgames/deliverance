@@ -27,7 +27,7 @@ namespace CityTools.Nodes {
             this.y = y;
 
             BodyDef bDef = new BodyDef(BodyType.Static, new Vec2(x, y), 0);
-            CircleShape shape = new CircleShape(new Vec2(x, y), RADIUS);
+            CircleShape shape = new CircleShape(Vec2.Empty, RADIUS);
 
             //^^
             //Original the center position above was: new Vec2(im_o.Width / 2, im_o.Height / 2)
@@ -40,11 +40,11 @@ namespace CityTools.Nodes {
         }
 
         public void Draw(LBuffer buffer) {
-            float realignedX = (x - Camera.ViewArea.Left);
-            float realignedY = (y - Camera.ViewArea.Top);
+            float realignedX = (x - RADIUS) * Camera.ZoomLevel - Camera.ViewArea.Left;
+            float realignedY = (y - RADIUS) * Camera.ZoomLevel - Camera.ViewArea.Top;
 
-            buffer.gfx.FillEllipse(new SolidBrush(Color.FromArgb(64, Color.Yellow)), realignedX, realignedY, RADIUS * 2.0f, RADIUS * 2.0f);
-            buffer.gfx.DrawEllipse(new Pen(Color.Yellow), realignedX, realignedY, RADIUS * 2.0f, RADIUS * 2.0f);
+            buffer.gfx.FillEllipse(new SolidBrush(Color.FromArgb(64, Color.Yellow)), realignedX, realignedY, RADIUS * 2.0f * Camera.ZoomLevel, RADIUS * 2.0f * Camera.ZoomLevel);
+            buffer.gfx.DrawEllipse(new Pen(Color.Yellow), realignedX, realignedY, RADIUS * 2.0f * Camera.ZoomLevel, RADIUS * 2.0f * Camera.ZoomLevel);
         }
 
         public int CompareTo(Node other) {

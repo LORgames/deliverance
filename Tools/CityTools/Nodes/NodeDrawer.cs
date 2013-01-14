@@ -29,12 +29,12 @@ namespace CityTools.Nodes {
             // Draw nodes
             drawList = new List<Node>();
 
-
             RectangleF drawArea = Camera.ViewArea;
 
             Box2D.B2System.world.QueryAABB(new Box2CS.World.QueryCallbackDelegate(NodeDrawer.QCBD), new AABB(new Box2CS.Vec2(drawArea.Left, drawArea.Top), new Vec2(drawArea.Right, drawArea.Bottom)));
 
             drawList.Sort();
+
             foreach (Node node in drawList) {
                 node.Draw(buffer);
             }
@@ -52,8 +52,8 @@ namespace CityTools.Nodes {
 
                     for (int k = 0; k < NodeCache.nodes.Count; k++) {
                         if (NodeCache.nodes[k].index == NodeCache.nodeLinks[i][j]) {
-                            x = NodeCache.nodes[k].x;
-                            y = NodeCache.nodes[k].y;
+                            x = NodeCache.nodes[k].x * Camera.ZoomLevel - Camera.ViewArea.Left;
+                            y = NodeCache.nodes[k].y * Camera.ZoomLevel - Camera.ViewArea.Top;
                         }
                     }
 
