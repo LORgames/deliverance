@@ -21,7 +21,8 @@ namespace CityTools {
         Physics,
         ObjectSelector,
         Nodes,
-        NodeLinks
+        NodeLinks,
+        NodeSelector
     }
 
     public partial class MainWindow : Form {
@@ -150,6 +151,11 @@ namespace CityTools {
 
                 // Get the window to redraw
                 mapViewPanel.Invalidate();
+            } else if (paintMode == PaintMode.NodeSelector) {
+                NodeHelper.ProcessCmdKey(ref msg, keyData);
+
+                // Get the window to redraw
+                mapViewPanel.Invalidate();
             }
 
             return base.ProcessCmdKey(ref msg, keyData);
@@ -179,6 +185,10 @@ namespace CityTools {
                 input_buffer.gfx.Clear(Color.Transparent);
                 mapViewPanel.Invalidate();
                 NodeHelper.MouseUp(e);
+            } else if (paintMode == PaintMode.NodeSelector) {
+                input_buffer.gfx.Clear(Color.Transparent);
+                mapViewPanel.Invalidate();
+                NodeHelper.MouseUp_Selector(e);
             }
 
             was_mouse_down = false;
@@ -200,12 +210,16 @@ namespace CityTools {
                 Physics.PhysicsDrawer.UpdateMouse(e, input_buffer);
             } else if (paintMode == PaintMode.ObjectSelector) {
                 mapViewPanel.Invalidate();
+                ObjectHelper.UpdateMouse(e, input_buffer);
             } else if (paintMode == PaintMode.Nodes) {
                 mapViewPanel.Invalidate();
             } else if (paintMode == PaintMode.NodeLinks) {
                 if (NodeHelper.UpdateMouse(e, input_buffer)) {
                     mapViewPanel.Invalidate();
                 }
+            } else if (paintMode == PaintMode.NodeSelector) {
+                mapViewPanel.Invalidate();
+                NodeHelper.UpdateMouse_Selector(e, input_buffer);
             }
 
             mapViewPanel.Invalidate();
@@ -229,6 +243,8 @@ namespace CityTools {
                 mapViewPanel.Invalidate();
             } else if (paintMode == PaintMode.NodeLinks) {
                 NodeHelper.MouseDown(e);
+            } else if (paintMode == PaintMode.NodeSelector) {
+                NodeHelper.MouseDown_Selector(e);
             }
         }
 
@@ -365,6 +381,10 @@ namespace CityTools {
 
         private void node_add_node_link_Click(object sender, EventArgs e) {
             paintMode = PaintMode.NodeLinks;
+        }
+
+        private void node_select_btn_Click(object sender, EventArgs e) {
+            paintMode = PaintMode.NodeSelector;
         }
     }
 }

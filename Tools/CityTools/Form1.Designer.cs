@@ -60,6 +60,8 @@
             this.phys_add_ellipse = new System.Windows.Forms.Button();
             this.phys_add_rect = new System.Windows.Forms.Button();
             this.nodes_tab = new System.Windows.Forms.TabPage();
+            this.node_add_node_link = new System.Windows.Forms.Button();
+            this.node_add_node = new System.Windows.Forms.Button();
             this.places_tab = new System.Windows.Forms.TabPage();
             this.story_tab = new System.Windows.Forms.TabPage();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
@@ -69,8 +71,7 @@
             this.tsmBringForward = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmSendToBack = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmBringToFront = new System.Windows.Forms.ToolStripMenuItem();
-            this.node_add_node = new System.Windows.Forms.Button();
-            this.node_add_node_link = new System.Windows.Forms.Button();
+            this.node_select_btn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.main_splitter)).BeginInit();
             this.main_splitter.Panel1.SuspendLayout();
             this.main_splitter.Panel2.SuspendLayout();
@@ -215,6 +216,8 @@
             // layer_nodes
             // 
             this.layer_nodes.AutoSize = true;
+            this.layer_nodes.Checked = true;
+            this.layer_nodes.CheckState = System.Windows.Forms.CheckState.Checked;
             this.layer_nodes.Location = new System.Drawing.Point(6, 115);
             this.layer_nodes.Name = "layer_nodes";
             this.layer_nodes.Size = new System.Drawing.Size(57, 17);
@@ -248,6 +251,8 @@
             // layer_physics
             // 
             this.layer_physics.AutoSize = true;
+            this.layer_physics.Checked = true;
+            this.layer_physics.CheckState = System.Windows.Forms.CheckState.Checked;
             this.layer_physics.Location = new System.Drawing.Point(6, 92);
             this.layer_physics.Name = "layer_physics";
             this.layer_physics.Size = new System.Drawing.Size(62, 17);
@@ -468,6 +473,7 @@
             // 
             // nodes_tab
             // 
+            this.nodes_tab.Controls.Add(this.node_select_btn);
             this.nodes_tab.Controls.Add(this.node_add_node_link);
             this.nodes_tab.Controls.Add(this.node_add_node);
             this.nodes_tab.Location = new System.Drawing.Point(4, 22);
@@ -476,6 +482,26 @@
             this.nodes_tab.TabIndex = 3;
             this.nodes_tab.Text = "Nodes";
             this.nodes_tab.UseVisualStyleBackColor = true;
+            // 
+            // node_add_node_link
+            // 
+            this.node_add_node_link.Location = new System.Drawing.Point(61, 32);
+            this.node_add_node_link.Name = "node_add_node_link";
+            this.node_add_node_link.Size = new System.Drawing.Size(93, 23);
+            this.node_add_node_link.TabIndex = 1;
+            this.node_add_node_link.Text = "Add Node Link";
+            this.node_add_node_link.UseVisualStyleBackColor = true;
+            this.node_add_node_link.Click += new System.EventHandler(this.node_add_node_link_Click);
+            // 
+            // node_add_node
+            // 
+            this.node_add_node.Location = new System.Drawing.Point(70, 3);
+            this.node_add_node.Name = "node_add_node";
+            this.node_add_node.Size = new System.Drawing.Size(75, 23);
+            this.node_add_node.TabIndex = 0;
+            this.node_add_node.Text = "Add Node";
+            this.node_add_node.UseVisualStyleBackColor = true;
+            this.node_add_node.Click += new System.EventHandler(this.node_add_node_Click);
             // 
             // places_tab
             // 
@@ -537,25 +563,15 @@
             this.tsmBringToFront.Text = "Bring to Front";
             this.tsmBringToFront.Click += new System.EventHandler(this.tsmBringToFront_Click);
             // 
-            // node_add_node
+            // node_select_btn
             // 
-            this.node_add_node.Location = new System.Drawing.Point(70, 3);
-            this.node_add_node.Name = "node_add_node";
-            this.node_add_node.Size = new System.Drawing.Size(75, 23);
-            this.node_add_node.TabIndex = 0;
-            this.node_add_node.Text = "Add Node";
-            this.node_add_node.UseVisualStyleBackColor = true;
-            this.node_add_node.Click += new System.EventHandler(this.node_add_node_Click);
-            // 
-            // node_add_node_link
-            // 
-            this.node_add_node_link.Location = new System.Drawing.Point(61, 32);
-            this.node_add_node_link.Name = "node_add_node_link";
-            this.node_add_node_link.Size = new System.Drawing.Size(93, 23);
-            this.node_add_node_link.TabIndex = 1;
-            this.node_add_node_link.Text = "Add Node Link";
-            this.node_add_node_link.UseVisualStyleBackColor = true;
-            this.node_add_node_link.Click += new System.EventHandler(this.node_add_node_link_Click);
+            this.node_select_btn.Location = new System.Drawing.Point(70, 61);
+            this.node_select_btn.Name = "node_select_btn";
+            this.node_select_btn.Size = new System.Drawing.Size(75, 23);
+            this.node_select_btn.TabIndex = 2;
+            this.node_select_btn.Text = "Selectorerer";
+            this.node_select_btn.UseVisualStyleBackColor = true;
+            this.node_select_btn.Click += new System.EventHandler(this.node_select_btn_Click);
             // 
             // MainWindow
             // 
@@ -642,6 +658,7 @@
         internal System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.Button node_add_node;
         private System.Windows.Forms.Button node_add_node_link;
+        private System.Windows.Forms.Button node_select_btn;
     }
 }
 

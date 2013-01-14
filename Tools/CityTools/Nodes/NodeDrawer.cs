@@ -47,15 +47,8 @@ namespace CityTools.Nodes {
                 // for each node in a node link list
                 for (int j = 0; j < NodeCache.nodeLinks[i].Count; j++) {
                     // Find the x and y values of the node
-                    float x = 0;
-                    float y = 0;
-
-                    for (int k = 0; k < NodeCache.nodes.Count; k++) {
-                        if (NodeCache.nodes[k].index == NodeCache.nodeLinks[i][j]) {
-                            x = NodeCache.nodes[k].x * Camera.ZoomLevel - Camera.ViewArea.Left;
-                            y = NodeCache.nodes[k].y * Camera.ZoomLevel - Camera.ViewArea.Top;
-                        }
-                    }
+                    float x = NodeCache.nodes[NodeCache.nodeLinks[i][j]].x * Camera.ZoomLevel - Camera.ViewArea.Left;
+                    float y = NodeCache.nodes[NodeCache.nodeLinks[i][j]].y * Camera.ZoomLevel - Camera.ViewArea.Top;
 
                     points.Add(new PointF(x, y));
                 }

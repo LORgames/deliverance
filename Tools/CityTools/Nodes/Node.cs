@@ -12,8 +12,8 @@ namespace CityTools.Nodes {
         public Body baseBody;
 
         // For indexing
-        internal static int CURRENT_INDEX = 0;
-        public int index = 0;
+        internal static short CURRENT_INDEX = 0;
+        public short index = 0;
 
         internal float x;
         internal float y;
@@ -45,6 +45,14 @@ namespace CityTools.Nodes {
 
             buffer.gfx.FillEllipse(new SolidBrush(Color.FromArgb(64, Color.Yellow)), realignedX, realignedY, RADIUS * 2.0f * Camera.ZoomLevel, RADIUS * 2.0f * Camera.ZoomLevel);
             buffer.gfx.DrawEllipse(new Pen(Color.Yellow), realignedX, realignedY, RADIUS * 2.0f * Camera.ZoomLevel, RADIUS * 2.0f * Camera.ZoomLevel);
+        }
+
+        public void Delete() {
+            // Remove from NodeCache
+            NodeCache.nodes.Remove(index);
+
+            // Remove from world
+            Box2D.B2System.world.DestroyBody(baseBody);
         }
 
         public int CompareTo(Node other) {
