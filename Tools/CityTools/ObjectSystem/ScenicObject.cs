@@ -15,7 +15,7 @@ namespace CityTools.ObjectSystem {
 
         public PointF[] points;
 
-        public ScenicObject(string source, PointF initialLocation, int angle) {
+        public ScenicObject(string source, PointF initialLocation, int angle) : base() {
             this.angle = angle;
             this.source = source;
 

@@ -8,7 +8,7 @@ using System.Drawing;
 using CityTools.Core;
 
 namespace CityTools.ObjectSystem {
-    public class BaseObject {
+    public class BaseObject : IComparable<BaseObject> {
         //Circular references
         public Body baseBody;
         public BodyTags tag;
@@ -16,6 +16,15 @@ namespace CityTools.ObjectSystem {
         //There might not be either of these things
         public BaseObject parent = null;
         public List<BaseObject> children = null;
+
+        // For indexing
+        internal static int CURRENT_INDEX = 0;
+        public int index = 0;
+
+        // Constructor for indexing and sorting
+        public BaseObject() {
+            index = CURRENT_INDEX++;
+        }
 
         //Draw function
         public virtual void Draw(LBuffer buffer, bool drawBoundingBoxes) {
@@ -30,6 +39,10 @@ namespace CityTools.ObjectSystem {
         // Delete function
         public virtual void Delete() {
             throw new NotImplementedException();
+        }
+
+        public int CompareTo(BaseObject other) {
+            return index.CompareTo(other.index);
         }
     }
 }

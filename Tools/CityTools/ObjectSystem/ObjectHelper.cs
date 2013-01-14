@@ -33,6 +33,33 @@ namespace CityTools.ObjectSystem {
 
             Box2D.B2System.world.QueryAABB(new Box2CS.World.QueryCallbackDelegate(ObjectHelper.QCBD), aabb);
 
+            // If p0 and p1 are the same or the event was triggered by right clicking, only select the top object
+            if (p0 == p1 || e.Button == MouseButtons.Right) {
+                int highestIndex = -1; // Highest index 
+
+                // Locate the highest index
+                for (int i = 0; i < selectedObjects.Count; i++) {
+
+                    // If current objects index is higher, store it as the highest index
+                    if (selectedObjects[i].index > highestIndex) {
+                        highestIndex = selectedObjects[i].index;
+                    }
+                }
+
+                // Remove all other objects
+                for (int i = 0; i < selectedObjects.Count; i++) {
+                    if (selectedObjects[i].index != highestIndex) {
+                        selectedObjects.RemoveAt(i);
+                        i--;
+                    }
+                }
+            }
+
+            // If right clicked, show context menu
+            if (e.Button == MouseButtons.Right && selectedObjects.Count != 0) {
+                MainWindow.instance.contextMenuStrip1.Show((int)p0.X, (int)p0.Y);
+            }
+
             p0 = Point.Empty;
             p1 = Point.Empty;
         }
@@ -107,6 +134,88 @@ namespace CityTools.ObjectSystem {
 
 
             return true;
+        }
+
+        private static int FindObjectIndex() {
+            int currentIndex = selectedObjects[0].index;
+            int listIndex = -1;
+
+            // Find selected objects index
+            for (int i = 0; i < ObjectCache.s_objects.Count; i++) {
+                if (currentIndex == ObjectCache.s_objects[i].index) {
+                    listIndex = i;
+                }
+            }
+
+            return listIndex;
+        }
+
+        internal static void SendBack() {
+            // Sort draw list by index
+            ObjectCache.s_objects.Sort();
+
+            int listIndex = FindObjectIndex();
+
+            if (listIndex != 0) {
+                // Swap values
+                int temp = ObjectCache.s_objects[listIndex].index;
+                ObjectCache.s_objects[listIndex].index = ObjectCache.s_objects[listIndex - 1].index;
+                ObjectCache.s_objects[listIndex - 1].index = temp;
+
+                // Resort draw list by index
+                ObjectCache.s_objects.Sort();
+            }
+        }
+
+        internal static void BringForward() {
+            // Sort draw list by index
+            ObjectCache.s_objects.Sort();
+
+            int listIndex = FindObjectIndex();
+
+            if (listIndex != ObjectCache.s_objects.Count - 1) {
+                // Swap values
+                int temp = ObjectCache.s_objects[listIndex].index;
+                ObjectCache.s_objects[listIndex].index = ObjectCache.s_objects[listIndex + 1].index;
+                ObjectCache.s_objects[listIndex + 1].index = temp;
+
+                // Resort draw list by index
+                ObjectCache.s_objects.Sort();
+            }
+        }
+
+        internal static void SendToBack() {
+            // Sort draw list by index
+            ObjectCache.s_objects.Sort();
+
+            int listIndex = FindObjectIndex();
+
+            // Swap values until we reach the bottom
+            for (int i = listIndex; i > 0; i--) {
+                int temp = ObjectCache.s_objects[i].index;
+                ObjectCache.s_objects[i].index = ObjectCache.s_objects[i - 1].index;
+                ObjectCache.s_objects[i - 1].index = temp;
+
+                // Resort draw list by index
+                ObjectCache.s_objects.Sort();
+            }
+        }
+
+        internal static void BringToFront() {
+            // Sort draw list by index
+            ObjectCache.s_objects.Sort();
+
+            int listIndex = FindObjectIndex();
+
+            // Swap values until we reach the top
+            for (int i = listIndex; i < ObjectCache.s_objects.Count - 1; i++) {
+                int temp = ObjectCache.s_objects[i].index;
+                ObjectCache.s_objects[i].index = ObjectCache.s_objects[i + 1].index;
+                ObjectCache.s_objects[i + 1].index = temp;
+
+                // Resort draw list by index
+                ObjectCache.s_objects.Sort();
+            }
         }
     }
 }

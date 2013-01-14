@@ -71,6 +71,10 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\LBuffer.cs" />
+    <Compile Include="Nodes\Node.cs" />
+    <Compile Include="Nodes\NodeCache.cs" />
+    <Compile Include="Nodes\NodeDrawer.cs" />
+    <Compile Include="Nodes\NodeHelper.cs" />
     <Compile Include="Terrain\MapCache.cs" />
     <Compile Include="Core\BinaryIO.cs" />
     <Compile Include="ObjectCreatorTool.cs">

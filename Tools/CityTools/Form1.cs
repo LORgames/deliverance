@@ -11,6 +11,7 @@ using CityTools.Components;
 using CityTools.ObjectSystem;
 using CityTools.Terrain;
 using CityTools.Core;
+using CityTools.Nodes;
 
 namespace CityTools {
     public enum PaintMode {
@@ -18,7 +19,9 @@ namespace CityTools {
         Terrain,
         Objects,
         Physics,
-        ObjectSelector
+        ObjectSelector,
+        Nodes,
+        NodeLinks
     }
 
     public partial class MainWindow : Form {
@@ -64,6 +67,7 @@ namespace CityTools {
             Box2D.B2System.Initialize();
             MapCache.VerifyCacheFiles();
             ObjectCache.InitializeCache();
+            //Nodes.NodeCache.InitializeCache();
 
             obj_scenary_objs.Controls.Add(new ObjectCacheControl("Buildings"));
 
@@ -169,6 +173,12 @@ namespace CityTools {
                 mapViewPanel.Invalidate();
             } else if (paintMode == PaintMode.Terrain) {
                 MapCache.SaveMap();
+            } else if (paintMode == PaintMode.Nodes) {
+                mapViewPanel.Invalidate();
+            } else if (paintMode == PaintMode.NodeLinks) {
+                input_buffer.gfx.Clear(Color.Transparent);
+                mapViewPanel.Invalidate();
+                NodeHelper.MouseUp(e);
             }
 
             was_mouse_down = false;
@@ -190,6 +200,12 @@ namespace CityTools {
                 Physics.PhysicsDrawer.UpdateMouse(e, input_buffer);
             } else if (paintMode == PaintMode.ObjectSelector) {
                 mapViewPanel.Invalidate();
+            } else if (paintMode == PaintMode.Nodes) {
+                mapViewPanel.Invalidate();
+            } else if (paintMode == PaintMode.NodeLinks) {
+                if (NodeHelper.UpdateMouse(e, input_buffer)) {
+                    mapViewPanel.Invalidate();
+                }
             }
 
             mapViewPanel.Invalidate();
@@ -208,6 +224,11 @@ namespace CityTools {
                 Physics.PhysicsDrawer.MouseDown(e, input_buffer);
             } else if (paintMode == PaintMode.ObjectSelector) {
                 ObjectHelper.MouseDown(e);
+            } else if (paintMode == PaintMode.Nodes) {
+                Nodes.NodeDrawer.MouseDown(e, input_buffer);
+                mapViewPanel.Invalidate();
+            } else if (paintMode == PaintMode.NodeLinks) {
+                NodeHelper.MouseDown(e);
             }
         }
 
@@ -221,6 +242,10 @@ namespace CityTools {
             if (layer_objects_0.Checked) {
                 ScenicDrawer.DrawScenicObjects(objects0_buffer, obj_scenic_bounding_CB.Checked);
             }
+
+                if (layer_nodes.Checked) {
+                    NodeDrawer.DrawNodes(nodes_buffer);
+                }
                 
             if (layer_floor.Checked) {
                 TerrainHelper.DrawTerrain(floor_buffer);
@@ -304,6 +329,42 @@ namespace CityTools {
 
         private void obj_scenary_cache_CB_SelectionChangeCommitted(object sender, EventArgs e) {
             (obj_scenary_objs.Controls[0] as ObjectCacheControl).Activate(obj_scenary_cache_CB.SelectedValue.ToString());
+        }
+
+        private void tsmSendBack_Click(object sender, EventArgs e) {
+            ObjectHelper.SendBack();
+
+            // Get the window to redraw
+            mapViewPanel.Invalidate();
+        }
+
+        private void tsmBringForward_Click(object sender, EventArgs e) {
+            ObjectHelper.BringForward();
+
+            // Get the window to redraw
+            mapViewPanel.Invalidate();
+        }
+
+        private void tsmSendToBack_Click(object sender, EventArgs e) {
+            ObjectHelper.SendToBack();
+
+            // Get the window to redraw
+            mapViewPanel.Invalidate();
+        }
+
+        private void tsmBringToFront_Click(object sender, EventArgs e) {
+            ObjectHelper.BringToFront();
+
+            // Get the window to redraw
+            mapViewPanel.Invalidate();
+        }
+
+        private void node_add_node_Click(object sender, EventArgs e) {
+            paintMode = PaintMode.Nodes;
+        }
+
+        private void node_add_node_link_Click(object sender, EventArgs e) {
+            paintMode = PaintMode.NodeLinks;
         }
     }
 }

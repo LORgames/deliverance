@@ -18,6 +18,7 @@ namespace CityTools.ObjectSystem {
 
             Box2D.B2System.world.QueryAABB(new Box2CS.World.QueryCallbackDelegate(ScenicDrawer.QCBD), new AABB(new Box2CS.Vec2(drawArea.Left, drawArea.Top), new Vec2(drawArea.Right, drawArea.Bottom)));
 
+            drawList.Sort();
             foreach (ScenicObject obj in drawList) {
                 obj.Draw(buffer, drawBoundingBoxes);
             }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.main_splitter = new System.Windows.Forms.SplitContainer();
             this.mapViewPanel_c = new System.Windows.Forms.Panel();
             this.mapViewPanel = new System.Windows.Forms.PictureBox();
@@ -42,6 +43,8 @@
             this.layer_physics = new System.Windows.Forms.CheckBox();
             this.layer_objects_0 = new System.Windows.Forms.CheckBox();
             this.terrain_tab = new System.Windows.Forms.TabPage();
+            this.terrain_tilesPan = new System.Windows.Forms.Panel();
+            this.terrain_tilesCB = new System.Windows.Forms.ComboBox();
             this.palette_tab = new System.Windows.Forms.TabPage();
             this.tool_tabs = new System.Windows.Forms.TabControl();
             this.objects_tab = new System.Windows.Forms.TabPage();
@@ -61,8 +64,13 @@
             this.story_tab = new System.Windows.Forms.TabPage();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.terrain_tilesPan = new System.Windows.Forms.Panel();
-            this.terrain_tilesCB = new System.Windows.Forms.ComboBox();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tsmSendBack = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmBringForward = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmSendToBack = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmBringToFront = new System.Windows.Forms.ToolStripMenuItem();
+            this.node_add_node = new System.Windows.Forms.Button();
+            this.node_add_node_link = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.main_splitter)).BeginInit();
             this.main_splitter.Panel1.SuspendLayout();
             this.main_splitter.Panel2.SuspendLayout();
@@ -86,6 +94,8 @@
             this.obj_splitter.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.obj_rot)).BeginInit();
             this.physics_tab.SuspendLayout();
+            this.nodes_tab.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // main_splitter
@@ -270,6 +280,24 @@
             this.terrain_tab.Text = "Terrain";
             this.terrain_tab.UseVisualStyleBackColor = true;
             // 
+            // terrain_tilesPan
+            // 
+            this.terrain_tilesPan.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.terrain_tilesPan.Location = new System.Drawing.Point(0, 21);
+            this.terrain_tilesPan.Name = "terrain_tilesPan";
+            this.terrain_tilesPan.Size = new System.Drawing.Size(223, 179);
+            this.terrain_tilesPan.TabIndex = 3;
+            // 
+            // terrain_tilesCB
+            // 
+            this.terrain_tilesCB.Dock = System.Windows.Forms.DockStyle.Top;
+            this.terrain_tilesCB.FormattingEnabled = true;
+            this.terrain_tilesCB.Location = new System.Drawing.Point(0, 0);
+            this.terrain_tilesCB.Name = "terrain_tilesCB";
+            this.terrain_tilesCB.Size = new System.Drawing.Size(223, 21);
+            this.terrain_tilesCB.TabIndex = 2;
+            this.terrain_tilesCB.SelectedIndexChanged += new System.EventHandler(this.terrain_tilesCB_SelectedIndexChanged);
+            // 
             // palette_tab
             // 
             this.palette_tab.Controls.Add(this.tool_tabs);
@@ -440,6 +468,8 @@
             // 
             // nodes_tab
             // 
+            this.nodes_tab.Controls.Add(this.node_add_node_link);
+            this.nodes_tab.Controls.Add(this.node_add_node);
             this.nodes_tab.Location = new System.Drawing.Point(4, 22);
             this.nodes_tab.Name = "nodes_tab";
             this.nodes_tab.Size = new System.Drawing.Size(215, 174);
@@ -469,23 +499,63 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // terrain_tilesPan
+            // contextMenuStrip1
             // 
-            this.terrain_tilesPan.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.terrain_tilesPan.Location = new System.Drawing.Point(0, 21);
-            this.terrain_tilesPan.Name = "terrain_tilesPan";
-            this.terrain_tilesPan.Size = new System.Drawing.Size(223, 179);
-            this.terrain_tilesPan.TabIndex = 3;
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmSendBack,
+            this.tsmBringForward,
+            this.tsmSendToBack,
+            this.tsmBringToFront});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 114);
             // 
-            // terrain_tilesCB
+            // tsmSendBack
             // 
-            this.terrain_tilesCB.Dock = System.Windows.Forms.DockStyle.Top;
-            this.terrain_tilesCB.FormattingEnabled = true;
-            this.terrain_tilesCB.Location = new System.Drawing.Point(0, 0);
-            this.terrain_tilesCB.Name = "terrain_tilesCB";
-            this.terrain_tilesCB.Size = new System.Drawing.Size(223, 21);
-            this.terrain_tilesCB.TabIndex = 2;
-            this.terrain_tilesCB.SelectedIndexChanged += new System.EventHandler(this.terrain_tilesCB_SelectedIndexChanged);
+            this.tsmSendBack.Name = "tsmSendBack";
+            this.tsmSendBack.Size = new System.Drawing.Size(152, 22);
+            this.tsmSendBack.Text = "Send Back";
+            this.tsmSendBack.Click += new System.EventHandler(this.tsmSendBack_Click);
+            // 
+            // tsmBringForward
+            // 
+            this.tsmBringForward.Name = "tsmBringForward";
+            this.tsmBringForward.Size = new System.Drawing.Size(152, 22);
+            this.tsmBringForward.Text = "Bring Forward";
+            this.tsmBringForward.Click += new System.EventHandler(this.tsmBringForward_Click);
+            // 
+            // tsmSendToBack
+            // 
+            this.tsmSendToBack.Name = "tsmSendToBack";
+            this.tsmSendToBack.Size = new System.Drawing.Size(152, 22);
+            this.tsmSendToBack.Text = "Send to Back";
+            this.tsmSendToBack.Click += new System.EventHandler(this.tsmSendToBack_Click);
+            // 
+            // tsmBringToFront
+            // 
+            this.tsmBringToFront.Name = "tsmBringToFront";
+            this.tsmBringToFront.Size = new System.Drawing.Size(152, 22);
+            this.tsmBringToFront.Text = "Bring to Front";
+            this.tsmBringToFront.Click += new System.EventHandler(this.tsmBringToFront_Click);
+            // 
+            // node_add_node
+            // 
+            this.node_add_node.Location = new System.Drawing.Point(70, 3);
+            this.node_add_node.Name = "node_add_node";
+            this.node_add_node.Size = new System.Drawing.Size(75, 23);
+            this.node_add_node.TabIndex = 0;
+            this.node_add_node.Text = "Add Node";
+            this.node_add_node.UseVisualStyleBackColor = true;
+            this.node_add_node.Click += new System.EventHandler(this.node_add_node_Click);
+            // 
+            // node_add_node_link
+            // 
+            this.node_add_node_link.Location = new System.Drawing.Point(61, 32);
+            this.node_add_node_link.Name = "node_add_node_link";
+            this.node_add_node_link.Size = new System.Drawing.Size(93, 23);
+            this.node_add_node_link.TabIndex = 1;
+            this.node_add_node_link.Text = "Add Node Link";
+            this.node_add_node_link.UseVisualStyleBackColor = true;
+            this.node_add_node_link.Click += new System.EventHandler(this.node_add_node_link_Click);
             // 
             // MainWindow
             // 
@@ -522,6 +592,8 @@
             this.obj_splitter.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.obj_rot)).EndInit();
             this.physics_tab.ResumeLayout(false);
+            this.nodes_tab.ResumeLayout(false);
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -563,6 +635,13 @@
         private System.Windows.Forms.Button obj_select_btn;
         private System.Windows.Forms.Panel terrain_tilesPan;
         private System.Windows.Forms.ComboBox terrain_tilesCB;
+        private System.Windows.Forms.ToolStripMenuItem tsmSendBack;
+        private System.Windows.Forms.ToolStripMenuItem tsmBringForward;
+        private System.Windows.Forms.ToolStripMenuItem tsmSendToBack;
+        private System.Windows.Forms.ToolStripMenuItem tsmBringToFront;
+        internal System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.Button node_add_node;
+        private System.Windows.Forms.Button node_add_node_link;
     }
 }
 
