@@ -98,8 +98,8 @@
 61 - 
 62 - 
 63 - Nature: Dead Grass
-64 - 
-65 - 
+64 - Docks: Jetty Horizontal
+65 - Docks: Jetty Vertical
 66 - 
 67 - 
 68 - 
