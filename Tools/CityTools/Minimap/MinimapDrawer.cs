@@ -19,7 +19,7 @@ namespace CityTools.Minimap {
 
                 for (int i = 0; i < MapCache.TILE_TOTAL_X; i++) {
                     for (int j = 0; j < MapCache.TILE_TOTAL_Y; j++) {
-                        RectangleF rf = new RectangleF(scaleX * i * MapCache.TILE_SIZE_X, scaleY * j * MapCache.TILE_SIZE_Y, scaleX * MapCache.TILE_SIZE_X, scaleY * MapCache.TILE_SIZE_Y);
+                        Rectangle rf = new Rectangle((int)Math.Round(scaleX * i * MapCache.TILE_SIZE_X), (int)Math.Round(scaleY * j * MapCache.TILE_SIZE_Y), (int)Math.Round(scaleX * MapCache.TILE_SIZE_X), (int)Math.Round(scaleY * MapCache.TILE_SIZE_Y));
                         byte tileID = MapCache.tiles[i, j];
 
                         buffer.gfx.DrawImage(ImageCache.RequestImage(MapCache.tileTable[tileID]), rf);
@@ -32,7 +32,7 @@ namespace CityTools.Minimap {
             float scaleX = (float)MainWindow.instance.minimap.DisplayRectangle.Width / (MapCache.TILE_SIZE_X * MapCache.TILE_TOTAL_X);
             float scaleY = (float)MainWindow.instance.minimap.DisplayRectangle.Height / (MapCache.TILE_SIZE_Y * MapCache.TILE_TOTAL_Y);
 
-            RectangleF rf = new RectangleF(scaleX * i * MapCache.TILE_SIZE_X, scaleY * j * MapCache.TILE_SIZE_Y, scaleX * MapCache.TILE_SIZE_X, scaleY * MapCache.TILE_SIZE_Y);
+            Rectangle rf = new Rectangle((int)Math.Round(scaleX * i * MapCache.TILE_SIZE_X), (int)Math.Round(scaleY * j * MapCache.TILE_SIZE_Y), (int)Math.Round(scaleX * MapCache.TILE_SIZE_X), (int)Math.Round(scaleY * MapCache.TILE_SIZE_Y));
             byte tileID = MapCache.tiles[i, j];
 
             MainWindow.instance.mapBuffer_ground.gfx.DrawImage(ImageCache.RequestImage(MapCache.tileTable[tileID]), rf);

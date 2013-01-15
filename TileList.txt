@@ -41,11 +41,11 @@
 28 - Cliffs: Grass->Water: Exterior Corner TR Water
 29 - Cliffs: Grass->Water: Exterior Corner BL Water
 2A - Cliffs: Grass->Water: Exterior Corner BR Water
-2B - 
-2C - 
-2D - 
-2E - 
-2F - 
+2B - Cliffs: Grass->Water: Point B
+2C - Cliffs: Grass->Water: Point R
+2D - Cliffs: Grass->Water: Point T
+2E - Cliffs: Grass->Water: Point L
+2F - Cliffs: Grass->Water: Encapsulated Cliff
 30 - 
 31 - 
 32 - 
@@ -97,7 +97,7 @@
 60 - 
 61 - 
 62 - 
-63 - 
+63 - Nature: Dead Grass
 64 - 
 65 - 
 66 - 

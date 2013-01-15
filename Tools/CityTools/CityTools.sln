@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CityToolsClient", "CityToolsClient.csproj", "{6FB6115F-C115-4779-82B4-5FDDE7CEDE0B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolToGameExporter", "..\ToolToGameExporter\ToolToGameExporter.csproj", "{45509774-3534-4FDB-8783-1A1DFB5BD058}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,16 @@ Global
 		{6FB6115F-C115-4779-82B4-5FDDE7CEDE0B}.Release|Mixed Platforms.Build.0 = Release|x86
 		{6FB6115F-C115-4779-82B4-5FDDE7CEDE0B}.Release|x86.ActiveCfg = Release|x86
 		{6FB6115F-C115-4779-82B4-5FDDE7CEDE0B}.Release|x86.Build.0 = Release|x86
+		{45509774-3534-4FDB-8783-1A1DFB5BD058}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{45509774-3534-4FDB-8783-1A1DFB5BD058}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{45509774-3534-4FDB-8783-1A1DFB5BD058}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{45509774-3534-4FDB-8783-1A1DFB5BD058}.Debug|x86.ActiveCfg = Debug|x86
+		{45509774-3534-4FDB-8783-1A1DFB5BD058}.Debug|x86.Build.0 = Debug|x86
+		{45509774-3534-4FDB-8783-1A1DFB5BD058}.Release|Any CPU.ActiveCfg = Release|x86
+		{45509774-3534-4FDB-8783-1A1DFB5BD058}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{45509774-3534-4FDB-8783-1A1DFB5BD058}.Release|Mixed Platforms.Build.0 = Release|x86
+		{45509774-3534-4FDB-8783-1A1DFB5BD058}.Release|x86.ActiveCfg = Release|x86
+		{45509774-3534-4FDB-8783-1A1DFB5BD058}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

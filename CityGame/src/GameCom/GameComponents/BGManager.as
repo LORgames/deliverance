@@ -161,7 +161,7 @@ package GameCom.GameComponents
 				for (i = 0; i < numTilesX; i++) {
 					for (j = 0; j < numTilesY; j++) {
 						tileX += i;
-						if (tileX >=0 && tileX <= maxTilesX && tileY >= 0 && tileY <= maxTilesY) {
+						if (tileX >=0 && tileX < maxTilesX && tileY >= 0 && tileY < maxTilesY) {
 							bmp = new Bitmap(ThemeManager.Get("Tiles/" + mapdata[tileX][tileY] + ".png"));
 							bmp.name = "tile-" + tileX + "-" + tileY;
 							bmp.x = tileX * TILESIZEX;
@@ -185,7 +185,7 @@ package GameCom.GameComponents
 				for (i = 0; i < numTilesX; i++) {
 					for (j = 0; j < numTilesY; j++) {
 						tileX += i;
-						if (tileX >=0 && tileX <= maxTilesX && tileY >= 0 && tileY <= maxTilesY) {
+						if (tileX >=0 && tileX < maxTilesX && tileY >= 0 && tileY < maxTilesY) {
 							bmp = new Bitmap(ThemeManager.Get("Tiles/" + mapdata[tileX][tileY] + ".png"));
 							bmp.name = "tile-" + tileX + "-" + tileY;
 							bmp.x = tileX * TILESIZEX;

@@ -92,7 +92,7 @@ package GameCom.States {
 			StaticBoxCreator.CreateBoxes(world);
 			
 			// player is added to objectLayer
-			player = new PlayerTruck(new b2Vec2(10, 10), world, objectLayer);
+			player = new PlayerTruck(new b2Vec2(12762/Global.PHYSICS_SCALE, 14547/Global.PHYSICS_SCALE), world, objectLayer);
 			
 			//TODO: bgManager (ground) is added to groundLayer
 			bgManager = new BGManager(groundLayer, player);

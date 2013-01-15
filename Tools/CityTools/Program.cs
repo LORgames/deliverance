@@ -20,7 +20,7 @@ namespace CityTools {
                 Application.Run(new MainWindow());
 #if (!DEBUG)
             } catch (Exception ex) {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message + "\n\n" + ex.StackTrace);
             }
 #endif
         }

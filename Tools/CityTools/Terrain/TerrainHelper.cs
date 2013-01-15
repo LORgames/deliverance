@@ -66,6 +66,8 @@ namespace CityTools.Terrain {
         }
 
         public static void DrawTerrain(LBuffer buffer) {
+            if (MapCache.tiles == null) return;
+
             int LeftEdge = (int)(Camera.Offset.X / MapCache.TILE_SIZE_X);
             int TopEdge = (int)(Camera.Offset.Y / MapCache.TILE_SIZE_Y);
 
@@ -77,7 +79,7 @@ namespace CityTools.Terrain {
                     byte f = MapCache.tiles[i, j];
 
                     if(f != 0){
-                        buffer.gfx.DrawImage(ImageCache.RequestImage(MapCache.tileTable[f]), new RectangleF((i * MapCache.TILE_SIZE_X - Camera.Offset.X) * Camera.ZoomLevel, (j * MapCache.TILE_SIZE_Y - Camera.Offset.Y) * Camera.ZoomLevel, MapCache.TILE_SIZE_X * Camera.ZoomLevel, MapCache.TILE_SIZE_Y * Camera.ZoomLevel));
+                        buffer.gfx.DrawImage(ImageCache.RequestImage(MapCache.tileTable[f]), new Rectangle((int)Math.Floor((i * MapCache.TILE_SIZE_X - Camera.Offset.X) * Camera.ZoomLevel), (int)Math.Floor((j * MapCache.TILE_SIZE_Y - Camera.Offset.Y) * Camera.ZoomLevel), (int)Math.Ceiling(MapCache.TILE_SIZE_X * Camera.ZoomLevel), (int)Math.Ceiling(MapCache.TILE_SIZE_Y * Camera.ZoomLevel)));
                     }
                 }
             }

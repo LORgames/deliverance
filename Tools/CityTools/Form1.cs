@@ -60,6 +60,8 @@ namespace CityTools {
         public String obj_paint_original = "";
         public bool was_mouse_down = false;
 
+        public bool initialized = false;
+
         public MainWindow() {
             instance = this;
 
@@ -67,10 +69,11 @@ namespace CityTools {
 
             Box2D.B2System.Initialize();
             MapCache.VerifyCacheFiles();
+
             ScenicObjectCache.InitializeCache();
             //Nodes.NodeCache.InitializeCache();
 
-            obj_scenary_objs.Controls.Add(new ObjectCacheControl("Buildings"));
+            obj_scenary_objs.Controls.Add(new ObjectCacheControl("Road"));
 
             List<String> dark = new List<string>();
             dark.InsertRange(0, Directory.GetDirectories("objcache"));
@@ -85,10 +88,14 @@ namespace CityTools {
 
             drawArea = mapViewPanel.DisplayRectangle;
             Camera.FixViewArea(drawArea);
+
+            initialized = true;
             CreateBuffers();
         }
 
         private void CreateBuffers() {
+            if (!initialized) return;
+
             drawArea = mapViewPanel.DisplayRectangle;
 
             floor_buffer = new LBuffer();
@@ -104,6 +111,7 @@ namespace CityTools {
         }
 
         private void mapViewPanel_Paint(object sender, PaintEventArgs e) {
+            if (!initialized) return;
             if (REQUIRES_CLOSE) { this.Close(); return; }
 
             drawArea = e.ClipRectangle;
@@ -244,6 +252,8 @@ namespace CityTools {
         }
 
         private void RedrawTerrain() {
+            if (!initialized) return;
+
             floor_buffer.gfx.Clear(Color.Transparent);
             objects0_buffer.gfx.Clear(Color.Transparent);
             objects1_buffer.gfx.Clear(Color.Transparent);
@@ -264,6 +274,8 @@ namespace CityTools {
         }
 
         private void mapViewPanel_Resize(object sender, EventArgs e) {
+            if (!initialized) return;
+
             drawArea = mapViewPanel.DisplayRectangle;
             Camera.FixViewArea(drawArea);
             CreateBuffers();
@@ -277,6 +289,8 @@ namespace CityTools {
 
         private bool DRAWN = false;
         private void minimap_Paint(object sender, PaintEventArgs e) {
+            if (!initialized) return;
+
             if (REQUIRES_CLOSE) { this.Close(); return; }
 
             float scaleX = (float)minimap.Width / MAP_SIZE_X;

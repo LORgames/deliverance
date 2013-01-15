@@ -101,7 +101,6 @@
             // 
             this.main_splitter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.main_splitter.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-            this.main_splitter.IsSplitterFixed = true;
             this.main_splitter.Location = new System.Drawing.Point(0, 0);
             this.main_splitter.Name = "main_splitter";
             // 
@@ -143,7 +142,6 @@
             // 
             this.toolpanel_splitter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolpanel_splitter.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-            this.toolpanel_splitter.IsSplitterFixed = true;
             this.toolpanel_splitter.Location = new System.Drawing.Point(0, 0);
             this.toolpanel_splitter.Name = "toolpanel_splitter";
             this.toolpanel_splitter.Orientation = System.Windows.Forms.Orientation.Horizontal;
