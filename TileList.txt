@@ -12,7 +12,7 @@
 0B - Road: T-Section !B
 0C - Road: T-Section !L
 0D - Ocean: Basic Sand
-0E - Nature: Grass with flowers
+0E - Nature: Grass with flowers (NOT DONE)
 0F - Nature: Lush Grass
 10 - Nature: Dry Grass
 11 - Nature: Dirt
@@ -46,7 +46,7 @@
 2D - Cliffs: Grass->Water: Point T
 2E - Cliffs: Grass->Water: Point L
 2F - Cliffs: Grass->Water: Encapsulated Cliff
-30 - 
+30 - City: Concrete (NOT DONE)
 31 - 
 32 - 
 33 - 
