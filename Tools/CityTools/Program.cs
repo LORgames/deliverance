@@ -12,9 +12,17 @@ namespace CityTools {
         /// </summary>
         [STAThread]
         static void Main() {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainWindow());
+#if (!DEBUG)
+            try {
+#endif
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new MainWindow());
+#if (!DEBUG)
+            } catch (Exception ex) {
+                MessageBox.Show(ex.Message);
+            }
+#endif
         }
     }
 }
