@@ -60,18 +60,16 @@
             this.phys_add_ellipse = new System.Windows.Forms.Button();
             this.phys_add_rect = new System.Windows.Forms.Button();
             this.nodes_tab = new System.Windows.Forms.TabPage();
+            this.node_select_btn = new System.Windows.Forms.Button();
             this.node_add_node_link = new System.Windows.Forms.Button();
             this.node_add_node = new System.Windows.Forms.Button();
             this.places_tab = new System.Windows.Forms.TabPage();
             this.story_tab = new System.Windows.Forms.TabPage();
-            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmSendBack = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmBringForward = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmSendToBack = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmBringToFront = new System.Windows.Forms.ToolStripMenuItem();
-            this.node_select_btn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.main_splitter)).BeginInit();
             this.main_splitter.Panel1.SuspendLayout();
             this.main_splitter.Panel2.SuspendLayout();
@@ -483,6 +481,16 @@
             this.nodes_tab.Text = "Nodes";
             this.nodes_tab.UseVisualStyleBackColor = true;
             // 
+            // node_select_btn
+            // 
+            this.node_select_btn.Location = new System.Drawing.Point(70, 61);
+            this.node_select_btn.Name = "node_select_btn";
+            this.node_select_btn.Size = new System.Drawing.Size(75, 23);
+            this.node_select_btn.TabIndex = 2;
+            this.node_select_btn.Text = "Selectorerer";
+            this.node_select_btn.UseVisualStyleBackColor = true;
+            this.node_select_btn.Click += new System.EventHandler(this.node_select_btn_Click);
+            // 
             // node_add_node_link
             // 
             this.node_add_node_link.Location = new System.Drawing.Point(61, 32);
@@ -521,10 +529,6 @@
             this.story_tab.Text = "Story";
             this.story_tab.UseVisualStyleBackColor = true;
             // 
-            // openFileDialog1
-            // 
-            this.openFileDialog1.FileName = "openFileDialog1";
-            // 
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -533,45 +537,35 @@
             this.tsmSendToBack,
             this.tsmBringToFront});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 114);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(149, 92);
             // 
             // tsmSendBack
             // 
             this.tsmSendBack.Name = "tsmSendBack";
-            this.tsmSendBack.Size = new System.Drawing.Size(152, 22);
+            this.tsmSendBack.Size = new System.Drawing.Size(148, 22);
             this.tsmSendBack.Text = "Send Back";
             this.tsmSendBack.Click += new System.EventHandler(this.tsmSendBack_Click);
             // 
             // tsmBringForward
             // 
             this.tsmBringForward.Name = "tsmBringForward";
-            this.tsmBringForward.Size = new System.Drawing.Size(152, 22);
+            this.tsmBringForward.Size = new System.Drawing.Size(148, 22);
             this.tsmBringForward.Text = "Bring Forward";
             this.tsmBringForward.Click += new System.EventHandler(this.tsmBringForward_Click);
             // 
             // tsmSendToBack
             // 
             this.tsmSendToBack.Name = "tsmSendToBack";
-            this.tsmSendToBack.Size = new System.Drawing.Size(152, 22);
+            this.tsmSendToBack.Size = new System.Drawing.Size(148, 22);
             this.tsmSendToBack.Text = "Send to Back";
             this.tsmSendToBack.Click += new System.EventHandler(this.tsmSendToBack_Click);
             // 
             // tsmBringToFront
             // 
             this.tsmBringToFront.Name = "tsmBringToFront";
-            this.tsmBringToFront.Size = new System.Drawing.Size(152, 22);
+            this.tsmBringToFront.Size = new System.Drawing.Size(148, 22);
             this.tsmBringToFront.Text = "Bring to Front";
             this.tsmBringToFront.Click += new System.EventHandler(this.tsmBringToFront_Click);
-            // 
-            // node_select_btn
-            // 
-            this.node_select_btn.Location = new System.Drawing.Point(70, 61);
-            this.node_select_btn.Name = "node_select_btn";
-            this.node_select_btn.Size = new System.Drawing.Size(75, 23);
-            this.node_select_btn.TabIndex = 2;
-            this.node_select_btn.Text = "Selectorerer";
-            this.node_select_btn.UseVisualStyleBackColor = true;
-            this.node_select_btn.Click += new System.EventHandler(this.node_select_btn_Click);
             // 
             // MainWindow
             // 
@@ -622,10 +616,8 @@
         internal System.Windows.Forms.CheckBox layer_physics;
         internal System.Windows.Forms.CheckBox layer_objects_0;
         internal System.Windows.Forms.CheckBox layer_floor;
-        private System.Windows.Forms.ColorDialog colorDialog1;
-        private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.PictureBox mapViewPanel;
-        private System.Windows.Forms.PictureBox minimap;
+        internal System.Windows.Forms.PictureBox minimap;
         private System.Windows.Forms.TabControl first_level_tabControl;
         private System.Windows.Forms.TabPage settings_tab;
         private System.Windows.Forms.Label settings_lbl;

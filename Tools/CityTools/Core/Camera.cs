@@ -13,10 +13,10 @@ namespace CityTools.Core {
 
         public static void FixViewArea(Rectangle drawArea) {
             if (Offset.X < 0.0f) Offset.X = 0.0f;
-            if (Offset.X > MainWindow.MAP_SIZE_X) Offset.X = MainWindow.MAP_SIZE_X - drawArea.Width / ZoomLevel;
+            if (Offset.X > MainWindow.MAP_SIZE_X - drawArea.Width / ZoomLevel) Offset.X = MainWindow.MAP_SIZE_X - drawArea.Width / ZoomLevel;
 
             if (Offset.Y < 0.0f) Offset.Y = 0.0f;
-            if (Offset.Y > MainWindow.MAP_SIZE_Y) Offset.Y = MainWindow.MAP_SIZE_Y - drawArea.Height / ZoomLevel;
+            if (Offset.Y > MainWindow.MAP_SIZE_Y - drawArea.Height / ZoomLevel) Offset.Y = MainWindow.MAP_SIZE_Y - drawArea.Height / ZoomLevel;
 
             ViewArea = new RectangleF(Offset, new Size((int)(drawArea.Width / ZoomLevel), (int)(drawArea.Height / ZoomLevel)));
         }

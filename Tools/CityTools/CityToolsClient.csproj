@@ -71,6 +71,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\LBuffer.cs" />
+    <Compile Include="Minimap\MinimapDrawer.cs" />
     <Compile Include="Nodes\Node.cs" />
     <Compile Include="Nodes\NodeCache.cs" />
     <Compile Include="Nodes\NodeDrawer.cs" />
@@ -84,12 +85,12 @@
     <Compile Include="ObjectCreatorTool.Designer.cs">
       <DependentUpon>ObjectCreatorTool.cs</DependentUpon>
     </Compile>
-    <Compile Include="ObjectSystem\ObjectDrawer.cs" />
+    <Compile Include="ObjectSystem\ScenicPlacementHelper.cs" />
     <Compile Include="Box2D\B2System.cs" />
     <Compile Include="ObjectSystem\BaseObject.cs" />
     <Compile Include="Core\ImageCache.cs" />
-    <Compile Include="ObjectSystem\ObjectCache.cs" />
-    <Compile Include="ObjectSystem\ObjectHelper.cs" />
+    <Compile Include="ObjectSystem\ScenicObjectCache.cs" />
+    <Compile Include="ObjectSystem\SceneicHelper.cs" />
     <Compile Include="ObjectSystem\ScenicDrawer.cs" />
     <Compile Include="ObjectSystem\ScenicObject.cs" />
     <Compile Include="Physics\PhysicsCache.cs" />

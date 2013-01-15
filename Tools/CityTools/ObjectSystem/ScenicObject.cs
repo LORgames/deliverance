@@ -20,7 +20,7 @@ namespace CityTools.ObjectSystem {
             this.angle = angle;
 
             this.object_index = obj_index;
-            this.source = ObjectCache.s_objectTypes[obj_index].ImageName;
+            this.source = ScenicObjectCache.s_objectTypes[obj_index].ImageName;
 
             Image im_o = ImageCache.RequestImage(source);
             Image im_a = ImageCache.RequestImage(source, angle);
@@ -87,9 +87,9 @@ namespace CityTools.ObjectSystem {
 
         public override void Delete() {
             // Remove from ObjectCache
-            for (int i = 0; i < ObjectCache.s_objectStore.Count; i++) {
-                if (ObjectCache.s_objectStore[i] == this) {
-                    ObjectCache.s_objectStore.RemoveAt(i);
+            for (int i = 0; i < ScenicObjectCache.s_objectStore.Count; i++) {
+                if (ScenicObjectCache.s_objectStore[i] == this) {
+                    ScenicObjectCache.s_objectStore.RemoveAt(i);
                     i--;
                 }
             }

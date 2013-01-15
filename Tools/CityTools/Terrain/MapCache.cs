@@ -27,12 +27,6 @@ namespace CityTools.Terrain {
             // Create the map thing
             tiles = new byte[TILE_TOTAL_X, TILE_TOTAL_Y];
 
-            for (int i = 0; i < TILE_TOTAL_X; i++) {
-                for (int j = 0; j < TILE_TOTAL_Y; j++) {
-                    tiles[i, j] = 1;
-                }
-            }
-
             foreach (string file in Directory.GetFiles(TILE_DIRECTORY, "*.png", SearchOption.AllDirectories)) {
                 byte tileIndex = TerrainHelper.StripTileIDFromPath(file);
 
@@ -46,6 +40,12 @@ namespace CityTools.Terrain {
             // Load the map from database
             if (File.Exists(MAP_FILENAME)) {
                 LoadMapFromFile();
+            } else {
+                for (int i = 0; i < TILE_TOTAL_X; i++) {
+                    for (int j = 0; j < TILE_TOTAL_Y; j++) {
+                        tiles[i, j] = 1;
+                    }
+                }
             }
 
             return;
@@ -54,8 +54,8 @@ namespace CityTools.Terrain {
         private static void LoadMapFromFile() {
             BinaryIO mapFile = new BinaryIO(File.ReadAllBytes(MAP_FILENAME));
 
-            int lmSizeX = mapFile.GetInt(TILE_TOTAL_X);
-            int lmSizeY = mapFile.GetInt(TILE_TOTAL_Y);
+            int lmSizeX = mapFile.GetInt();
+            int lmSizeY = mapFile.GetInt();
 
             for (int i = 0; i < Math.Min(TILE_TOTAL_X, lmSizeX); i++) {
                 for (int j = 0; j < Math.Min(TILE_TOTAL_Y, lmSizeY); j++) {

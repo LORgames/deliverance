@@ -14,6 +14,8 @@ namespace CityTools.Terrain {
         private static byte currentTile = 0;
         private static Image currentTileIm = null;
 
+        private static int drawSize = 1;
+
         public static void InitializeTerrainSystem(ComboBox cb, Panel objPanel) {
             List<String> dark = new List<string>();
             dark.InsertRange(0, Directory.GetDirectories(MapCache.TILE_DIRECTORY));
@@ -37,8 +39,27 @@ namespace CityTools.Terrain {
             input_buffer.gfx.DrawImage(currentTileIm, new RectangleF((tilePos.X * MapCache.TILE_SIZE_X - Camera.Offset.X) * Camera.ZoomLevel, (tilePos.Y * MapCache.TILE_SIZE_Y - Camera.Offset.Y) * Camera.ZoomLevel, MapCache.TILE_SIZE_X * Camera.ZoomLevel, MapCache.TILE_SIZE_Y * Camera.ZoomLevel));
 
             if (e.Button == MouseButtons.Left) {
-                MapCache.tiles[tilePos.X, tilePos.Y] = currentTile;
-                return true;
+                bool updated = false;
+                for (int i = 0; i < drawSize; i++) {
+                    for (int j = 0; j < drawSize; j++) {
+                        try {
+                            byte ct = MapCache.tiles[tilePos.X + i, tilePos.Y + j];
+
+                            if (ct != currentTile) {
+                                MapCache.tiles[tilePos.X + i, tilePos.Y + j] = currentTile;
+                                Minimap.MinimapDrawer.UpdateTile(tilePos.X + i, tilePos.Y + j);
+                                updated = true;
+                            }
+                        } catch { }
+                    }
+                }
+
+                if (updated) {
+                    return true;
+                }
+            } else if (e.Button == MouseButtons.Middle) {
+                byte ct = MapCache.tiles[tilePos.X, tilePos.Y];
+                SetCurrentTile(ct);
             }
 
             return false;
@@ -66,7 +87,6 @@ namespace CityTools.Terrain {
             currentTile = newTile;
             currentTileIm = ImageCache.RequestImage(MapCache.tileTable[newTile]);
         }
-
 
         internal static byte StripTileIDFromPath(string pathName) {
             int i1 = pathName.LastIndexOf('\\');
