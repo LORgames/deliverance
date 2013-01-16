@@ -50,7 +50,11 @@ namespace CityTools.Nodes {
         }
 
         public static void AddNodeLink(Node from, Node to) {
-            nodes[from.index].children.Add(to.index);
+            if (from.index != to.index) {
+                if (!nodes[from.index].children.Contains(to.index)) {
+                    nodes[from.index].children.Add(to.index);
+                }
+            }
         }
 
         public static void SaveCache() {

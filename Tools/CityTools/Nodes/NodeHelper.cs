@@ -77,7 +77,7 @@ namespace CityTools.Nodes {
                     selectedNodes.Sort();
 
                     // Grab highest node index and create the link
-                    NodeCache.nodes[lastNodeIndex].children.Add(selectedNodes[selectedNodes.Count - 1].index);
+                    NodeCache.AddNodeLink(NodeCache.nodes[lastNodeIndex], selectedNodes[selectedNodes.Count - 1]);
 
                     // Update last node index
                     lastNodeIndex = selectedNodes[selectedNodes.Count - 1].index;
