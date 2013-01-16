@@ -11,21 +11,16 @@ package GameCom.GameComponents
         public var baseBody:b2Body;
 		public var index:int = 0;
 		
+		private static var CURRENT_INDEX:int = 0;
+		
 		public function BaseObject() {
-			
+			index = CURRENT_INDEX++;
 		}
 
         //Draw function
         public function Draw(buffer:Graphics):void {
             throw new String("Not implemented!");
         }
-
-        public function CompareTo(other:BaseObject):int {
-            if (index < other.index) return 1;
-			if (index > other.index) return -1;
-			return 0;
-        }
-		
 	}
 
 }

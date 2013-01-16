@@ -14,6 +14,8 @@ package GameCom.States {
 	import flash.geom.Matrix;
 	import flash.geom.Rectangle;
 	import flash.ui.Keyboard;
+	import flash.utils.getTimer;
+	import flash.utils.Timer;
 	import GameCom.Managers.ObjManager;
 	import GameCom.GameComponents.PlayerTruck;
 	import GameCom.GameComponents.Water;
@@ -56,6 +58,8 @@ package GameCom.States {
 		
 		private var player:PlayerTruck;
 		
+		private var previousFrameTime:Number = 0;
+		
 		public function GameScreen() {
 			//Just make sure we're ready to do this...
 			if (this.stage) Init();
@@ -81,6 +85,8 @@ package GameCom.States {
 			stage.addEventListener(Event.RESIZE, Redraw, false, 0, true);
 			Redraw();
 			
+			previousFrameTime = getTimer();
+			
 			this.addChild(worldSpr);
 			
 			worldSpr.addChild(waterLayer);
@@ -93,7 +99,7 @@ package GameCom.States {
 			// player is added to objectLayer
 			player = new PlayerTruck(new b2Vec2(12762/Global.PHYSICS_SCALE, 14547/Global.PHYSICS_SCALE), world, object0Layer);
 			
-			//TODO: bgManager (ground) is added to groundLayer
+			// bgManager (ground) is added to groundLayer
 			bgManager = new BGManager(groundLayer, player);
 			
 			// objManager is added to objectLayer
@@ -103,15 +109,18 @@ package GameCom.States {
 			scenic0 = new ScenicManager(object0Layer, player, world);
 			scenic1 = new ScenicManager(object1Layer, player, world);
 			
-			//TODO: objManager should handle roof
 		}
 		
 		private function Update(e:Event):void {
 			if (simulating) {
+				
+				var dt:Number = (getTimer() - previousFrameTime) / 1000;
+				previousFrameTime = getTimer();
+				
 				//Update the objects
 				waterLayer.Update();
 				bgManager.Update();
-				player.Update();
+				player.Update(dt);
 				objManager.Update();
 				
 				scenic0.DrawScenicObjects();

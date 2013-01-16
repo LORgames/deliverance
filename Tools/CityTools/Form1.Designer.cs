@@ -50,7 +50,6 @@
             this.objects_tab = new System.Windows.Forms.TabPage();
             this.obj_splitter = new System.Windows.Forms.SplitContainer();
             this.obj_select_btn = new System.Windows.Forms.Button();
-            this.obj_scenic_bounding_CB = new System.Windows.Forms.CheckBox();
             this.obj_rot = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
             this.obj_scenary_objs = new System.Windows.Forms.Panel();
@@ -348,7 +347,6 @@
             // obj_splitter.Panel1
             // 
             this.obj_splitter.Panel1.Controls.Add(this.obj_select_btn);
-            this.obj_splitter.Panel1.Controls.Add(this.obj_scenic_bounding_CB);
             this.obj_splitter.Panel1.Controls.Add(this.obj_rot);
             this.obj_splitter.Panel1.Controls.Add(this.label2);
             // 
@@ -357,28 +355,18 @@
             this.obj_splitter.Panel2.Controls.Add(this.obj_scenary_objs);
             this.obj_splitter.Panel2.Controls.Add(this.obj_scenary_cache_CB);
             this.obj_splitter.Size = new System.Drawing.Size(215, 174);
-            this.obj_splitter.SplitterDistance = 61;
+            this.obj_splitter.SplitterDistance = 30;
             this.obj_splitter.TabIndex = 0;
             // 
             // obj_select_btn
             // 
-            this.obj_select_btn.Location = new System.Drawing.Point(136, 35);
+            this.obj_select_btn.Location = new System.Drawing.Point(136, 4);
             this.obj_select_btn.Name = "obj_select_btn";
             this.obj_select_btn.Size = new System.Drawing.Size(75, 23);
             this.obj_select_btn.TabIndex = 4;
             this.obj_select_btn.Text = "Selectorerer";
             this.obj_select_btn.UseVisualStyleBackColor = true;
             this.obj_select_btn.Click += new System.EventHandler(this.obj_select_btn_Click);
-            // 
-            // obj_scenic_bounding_CB
-            // 
-            this.obj_scenic_bounding_CB.AutoSize = true;
-            this.obj_scenic_bounding_CB.Location = new System.Drawing.Point(110, 4);
-            this.obj_scenic_bounding_CB.Name = "obj_scenic_bounding_CB";
-            this.obj_scenic_bounding_CB.Size = new System.Drawing.Size(101, 17);
-            this.obj_scenic_bounding_CB.TabIndex = 3;
-            this.obj_scenic_bounding_CB.Text = "Show Bounding";
-            this.obj_scenic_bounding_CB.UseVisualStyleBackColor = true;
             // 
             // obj_rot
             // 
@@ -387,7 +375,7 @@
             0,
             0,
             0});
-            this.obj_rot.Location = new System.Drawing.Point(51, 2);
+            this.obj_rot.Location = new System.Drawing.Point(53, 4);
             this.obj_rot.Maximum = new decimal(new int[] {
             315,
             0,
@@ -401,7 +389,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(0, 4);
+            this.label2.Location = new System.Drawing.Point(3, 8);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(47, 13);
             this.label2.TabIndex = 0;
@@ -412,7 +400,7 @@
             this.obj_scenary_objs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.obj_scenary_objs.Location = new System.Drawing.Point(0, 21);
             this.obj_scenary_objs.Name = "obj_scenary_objs";
-            this.obj_scenary_objs.Size = new System.Drawing.Size(215, 88);
+            this.obj_scenary_objs.Size = new System.Drawing.Size(215, 119);
             this.obj_scenary_objs.TabIndex = 1;
             // 
             // obj_scenary_cache_CB
@@ -637,7 +625,6 @@
         private System.Windows.Forms.Panel obj_scenary_objs;
         internal System.Windows.Forms.CheckBox layer_objects_1;
         internal System.Windows.Forms.CheckBox layer_nodes;
-        private System.Windows.Forms.CheckBox obj_scenic_bounding_CB;
         private System.Windows.Forms.Button obj_select_btn;
         private System.Windows.Forms.Panel terrain_tilesPan;
         private System.Windows.Forms.ComboBox terrain_tilesCB;

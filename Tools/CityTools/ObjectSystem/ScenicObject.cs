@@ -12,7 +12,7 @@ namespace CityTools.ObjectSystem {
         public int object_index = 0;
         public int angle = 0;
 
-        public ScenicObject selected = null;
+        public bool selected = false;
 
         public PointF[] points;
 
@@ -49,7 +49,7 @@ namespace CityTools.ObjectSystem {
             baseBody.CreateFixture(fDef);
         }
 
-        public override void Draw(LBuffer buffer, bool drawBoundingBoxes) {
+        public override void Draw(LBuffer buffer) {
             Image im = ImageCache.RequestImage(source, angle);
 
             float p0x = ((baseBody.Position.X - Camera.ViewArea.Left) - (im.Width / 2)) * Camera.ZoomLevel;
@@ -60,7 +60,7 @@ namespace CityTools.ObjectSystem {
 
             buffer.gfx.DrawImage(im, p0x, p0y, p1x, p1y);
 
-            if (drawBoundingBoxes) {
+            if (selected) {
                 PointF[] realignedPoints = new PointF[points.Length];
                 points.CopyTo(realignedPoints, 0);
 

@@ -21,7 +21,7 @@ package GameCom.GameComponents {
 		
 		private const SIDEWAYS_FRICTION_FORCE:Number = 1000;
 		private const HORSEPOWER_MAX:Number = 50;
-		private const HORSEPOWER_INC:Number = 5;
+		private const HORSEPOWER_INC:Number = 10;
 		
 		private const NOSFACTOR:Number = 0;
 		
@@ -183,14 +183,14 @@ package GameCom.GameComponents {
 			var j:Number = targetBody.GetPosition().y * Global.PHYSICS_SCALE - this.y;
 		}
 		
-		public function Update():void {
+		public function Update(dt:Number):void {
 			if (Keys.isKeyDown(Keyboard.UP)) {
 				if(engineSpeed > -HORSEPOWER_MAX) {
-					engineSpeed -= HORSEPOWER_INC;
+					engineSpeed -= HORSEPOWER_INC*dt;
 				}
 			} else if (Keys.isKeyDown(Keyboard.DOWN)) {
 				if(engineSpeed < HORSEPOWER_MAX) {
-					engineSpeed += HORSEPOWER_INC;
+					engineSpeed += HORSEPOWER_INC*dt;
 				}
 			} else {
 				engineSpeed = 0;

@@ -18,6 +18,9 @@ namespace CityTools.Core {
             if (Offset.Y < 0.0f) Offset.Y = 0.0f;
             if (Offset.Y > MainWindow.MAP_SIZE_Y - drawArea.Height / ZoomLevel) Offset.Y = MainWindow.MAP_SIZE_Y - drawArea.Height / ZoomLevel;
 
+            Offset.X = (float)Math.Round(Offset.X);
+            Offset.Y = (float)Math.Round(Offset.Y);
+
             ViewArea = new RectangleF(Offset, new Size((int)(drawArea.Width / ZoomLevel), (int)(drawArea.Height / ZoomLevel)));
         }
 

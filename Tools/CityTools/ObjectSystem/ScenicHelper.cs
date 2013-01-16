@@ -9,8 +9,7 @@ using CityTools.Core;
 
 namespace CityTools.ObjectSystem {
     public class ScenicHelper {
-
-        private static List<BaseObject> selectedObjects = new List<BaseObject>();
+        private static List<ScenicObject> selectedObjects = new List<ScenicObject>();
 
         private static PointF p0 = Point.Empty;
         private static PointF p1 = Point.Empty;
@@ -24,6 +23,10 @@ namespace CityTools.ObjectSystem {
         }
 
         public static void MouseUp(MouseEventArgs e) {
+            foreach (ScenicObject s in selectedObjects) {
+                s.selected = false;
+            }
+
             selectedObjects.Clear();
 
             PointF p0a = new PointF(Math.Min(p0.X, p1.X) / Camera.ZoomLevel + Camera.ViewArea.Left, Math.Min(p0.Y, p1.Y) / Camera.ZoomLevel + Camera.ViewArea.Top);
@@ -49,6 +52,7 @@ namespace CityTools.ObjectSystem {
                 // Remove all other objects
                 for (int i = 0; i < selectedObjects.Count; i++) {
                     if (selectedObjects[i].index != highestIndex) {
+                        selectedObjects[i].selected = false;
                         selectedObjects.RemoveAt(i);
                         i--;
                     }
@@ -67,6 +71,7 @@ namespace CityTools.ObjectSystem {
         public static bool QCBD(Fixture fix) {
             if (fix.UserData is ScenicObject) {
                 selectedObjects.Add(fix.UserData as ScenicObject);
+                (fix.UserData as ScenicObject).selected = true;
             }
 
             return true;

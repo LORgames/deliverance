@@ -11,7 +11,7 @@ namespace CityTools.ObjectSystem {
 
         public static List<ScenicObject> drawList;
 
-        public static void DrawScenicObjects(LBuffer buffer, bool drawBoundingBoxes) {
+        public static void DrawScenicObjects(LBuffer buffer) {
             drawList = new List<ScenicObject>();
 
             RectangleF drawArea = Camera.ViewArea;
@@ -20,7 +20,7 @@ namespace CityTools.ObjectSystem {
 
             drawList.Sort();
             foreach (ScenicObject obj in drawList) {
-                obj.Draw(buffer, drawBoundingBoxes);
+                obj.Draw(buffer);
             }
         }
 

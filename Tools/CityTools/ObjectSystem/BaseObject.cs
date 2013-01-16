@@ -27,7 +27,7 @@ namespace CityTools.ObjectSystem {
         }
 
         //Draw function
-        public virtual void Draw(LBuffer buffer, bool drawBoundingBoxes) {
+        public virtual void Draw(LBuffer buffer) {
             throw new NotImplementedException();
         }
 

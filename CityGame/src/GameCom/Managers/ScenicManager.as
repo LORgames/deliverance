@@ -58,7 +58,7 @@ package GameCom.Managers {
 			
             this.world.QueryAABB(QCBD, area);
 			
-            //drawList.Sort();
+			drawList.sortOn("index");
 			
 			layer.graphics.clear();
 			
