@@ -35,8 +35,9 @@ namespace CityTools.ObjectSystem {
                 for (int i = 0; i < totalShapes; i++) {
                     int type_id = f.GetInt();
                     string source = f.GetString();
+                    byte layer = f.GetByte();
 
-                    s_objectTypes.Add(type_id, new ScenicType(type_id, source));
+                    s_objectTypes.Add(type_id, new ScenicType(type_id, source, 0));
                     s_StringToInt.Add(source, type_id);
                 }
             }
@@ -45,7 +46,7 @@ namespace CityTools.ObjectSystem {
             foreach (string filename in Directory.GetFiles(Components.ObjectCacheControl.OBJECT_CACHE_FOLDER, "*.png", SearchOption.AllDirectories)) {
                 if (!ImageCache.HasCached(filename)) {
                     _highestTypeIndex++;
-                    s_objectTypes.Add(_highestTypeIndex, new ScenicType(_highestTypeIndex, filename));
+                    s_objectTypes.Add(_highestTypeIndex, new ScenicType(_highestTypeIndex, filename, 0));
                     s_StringToInt.Add(filename, _highestTypeIndex);
                 }
             }
@@ -78,6 +79,7 @@ namespace CityTools.ObjectSystem {
             foreach (KeyValuePair<int, ScenicType> kvp in s_objectTypes) {
                 f.AddInt(kvp.Key);
                 f.AddString(kvp.Value.ImageName);
+                f.AddByte(0);
             }
 
             f.Encode(SCENIC_TYPEFILE);

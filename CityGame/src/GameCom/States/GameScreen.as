@@ -34,7 +34,7 @@ package GameCom.States {
 		
 		// World stuff
 		public var world:b2World;
-		private var renderWorld:Boolean = true;
+		private var renderWorld:Boolean = false;
 		
 		// Playing the world
 		private var simulating:Boolean = true;

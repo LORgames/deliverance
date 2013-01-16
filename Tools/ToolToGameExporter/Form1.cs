@@ -39,22 +39,32 @@ namespace ToolToGameExporter {
                 MessageBox.Show("Cannot find the object layer!"); return;
             }
 
+            if (!File.Exists(GetNodeStore())) {
+                MessageBox.Show("Cannot find the node information!"); return;
+            }
+
             ZipFile zip = new ZipFile(GetGameLibZip());
 
+            //TILE CONVERSTION
             try { zip.RemoveEntry("0.map"); } catch { }
             zip.AddEntry("0.map", File.ReadAllBytes(GetToolMap()));
 
+            //OBJECT CONVERSION
             try { zip.RemoveEntry("1.map"); } catch { }
             zip.AddEntry("1.map", File.ReadAllBytes(GetScenicStore()));
 
             try { zip.RemoveEntry("1.cache"); } catch { }
-            //zip.AddEntry("1.cache", OptimizeAndAddObjectLayer(zip));
-
             OptimizeAndAddObjectLayer(zip);
 
+            //NODE CONVERSION
+            try { zip.RemoveEntry("2.map"); } catch { }
+            ConvertNodeFormat(zip);
+
+            //SAVE IT OUT
             while (true) {
                 try {
                     zip.Save();
+                    MessageBox.Show("Saved successfully!");
                     break;
                 } catch {
                     MessageBox.Show("Please close the zip and then click OK");
@@ -100,6 +110,79 @@ namespace ToolToGameExporter {
             }
         }
 
+        private void ConvertNodeFormat(ZipFile zp) {
+            Dictionary<int, ToolNode> t_nodes = new Dictionary<int, ToolNode>();
+            List<GameNode> g_nodes = new List<GameNode>();
+
+            //Load All Nodes
+            BinaryIO b = new BinaryIO(File.ReadAllBytes(GetNodeStore()));
+
+            int totalNodes = b.GetInt();
+
+            for (int i = 0; i < totalNodes; i++) {
+                ToolNode n = new ToolNode();
+
+                n.nodeId = b.GetInt();
+                n.type = (byte)b.GetInt();
+                n.xPos = b.GetFloat();
+                n.yPos = b.GetFloat();
+
+                n.children = new List<int>();
+
+                int totalChildren = b.GetByte();
+
+                for (int j = 0; j < totalChildren; j++) {
+                    n.children.Add(b.GetInt());
+                }
+            }
+
+            //Calculate game id's
+            List<int> nodeIds = t_nodes.Keys.ToList();
+            nodeIds.Sort();
+
+            int nextGameID = 0;
+
+            for(int i = 0; i < nodeIds.Count; i++) {
+                ToolNode t = t_nodes[nodeIds[i]];
+                t.gameID = nextGameID;
+                t_nodes[nodeIds[i]] = t;
+
+                GameNode g = new GameNode();
+                g.xPos = t.xPos;
+                g.yPos = t.yPos;
+                g.children = new List<int>();
+
+                g_nodes.Add(g);
+
+                nextGameID++;
+            }
+
+            //Update children in game nodes
+            foreach (KeyValuePair<int, ToolNode> kvp in t_nodes) {
+                foreach (int child in kvp.Value.children) {
+                    g_nodes[kvp.Value.gameID].children.Add(t_nodes[child].gameID);
+                }
+            }
+
+            //Output them to a new file
+            BinaryIO o = new BinaryIO();
+            o.AddInt(g_nodes.Count);
+
+            for(int i = 0; i < g_nodes.Count; i++) {
+                o.AddFloat(g_nodes[i].xPos);
+                o.AddFloat(g_nodes[i].yPos);
+                o.AddByte((byte)g_nodes[i].children.Count);
+                for(int j = 0; j < g_nodes[i].children.Count; j++) {
+                    o.AddInt(g_nodes[i].children[j]);
+                }
+            }
+
+            zp.AddEntry("2.map", o.EncodedBytes());
+
+            b.Dispose();
+            o.Dispose();
+        }
+
         //Game files
         private string GetGameLibZip() { return game_loc_TB.Text + "//lib//_embeds//default.zip"; }
 
@@ -111,5 +194,21 @@ namespace ToolToGameExporter {
         private string GetToolMap() { return GetToolCacheLoc() + "map.db"; }
         private string GetScenicStore() { return GetToolCacheLoc() + "scenic_store.bin"; }
         private string GetScenicTypes() { return GetToolCacheLoc() + "scenic_types.bin"; }
+        private string GetNodeStore() { return GetToolCacheLoc() + "node_data.bin"; }
+    }
+
+    public struct ToolNode {
+        public int nodeId;
+        public byte type;
+        public float xPos;
+        public float yPos;
+        public List<int> children;
+        public int gameID;
+    }
+
+    public struct GameNode {
+        public float xPos;
+        public float yPos;
+        public List<int> children;
     }
 }

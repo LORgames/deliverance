@@ -40,6 +40,7 @@
             this.tool_loc_TB.ReadOnly = true;
             this.tool_loc_TB.Size = new System.Drawing.Size(179, 20);
             this.tool_loc_TB.TabIndex = 0;
+            this.tool_loc_TB.Text = "./";
             // 
             // label1
             // 
@@ -66,6 +67,7 @@
             this.game_loc_TB.ReadOnly = true;
             this.game_loc_TB.Size = new System.Drawing.Size(179, 20);
             this.game_loc_TB.TabIndex = 2;
+            this.game_loc_TB.Text = "../CityGame/";
             // 
             // game_btn
             // 
