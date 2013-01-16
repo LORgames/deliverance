@@ -153,7 +153,7 @@ namespace CityTools {
                 }
             } else if (paintMode == PaintMode.ObjectSelector) {
                 // Pass the data onto the helper
-                SceneicHelper.ProcessCmdKey(ref msg, keyData);
+                ScenicHelper.ProcessCmdKey(ref msg, keyData);
 
                 // Get the window to redraw
                 mapViewPanel.Invalidate();
@@ -180,7 +180,7 @@ namespace CityTools {
             } else if (paintMode == PaintMode.ObjectSelector) {
                 input_buffer.gfx.Clear(Color.Transparent);
                 mapViewPanel.Invalidate();
-                SceneicHelper.MouseUp(e);
+                ScenicHelper.MouseUp(e);
             } else if (paintMode == PaintMode.Objects) {
                 mapViewPanel.Invalidate();
             } else if (paintMode == PaintMode.Terrain) {
@@ -214,7 +214,7 @@ namespace CityTools {
             } else if (paintMode == PaintMode.Physics) {
                 Physics.PhysicsDrawer.UpdateMouse(e, input_buffer);
             } else if (paintMode == PaintMode.ObjectSelector) {
-                SceneicHelper.UpdateMouse(e, input_buffer);
+                ScenicHelper.UpdateMouse(e, input_buffer);
             } else if (paintMode == PaintMode.Nodes) {
             } else if (paintMode == PaintMode.NodeLinks) {
                 if (NodeHelper.UpdateMouse(e, input_buffer)) {
@@ -240,7 +240,7 @@ namespace CityTools {
             } else if (paintMode == PaintMode.Physics) {
                 Physics.PhysicsDrawer.MouseDown(e, input_buffer);
             } else if (paintMode == PaintMode.ObjectSelector) {
-                SceneicHelper.MouseDown(e);
+                ScenicHelper.MouseDown(e);
             } else if (paintMode == PaintMode.Nodes) {
                 Nodes.NodeDrawer.MouseDown(e, input_buffer);
                 mapViewPanel.Invalidate();
@@ -373,28 +373,28 @@ namespace CityTools {
         }
 
         private void tsmSendBack_Click(object sender, EventArgs e) {
-            SceneicHelper.SendBack();
+            ScenicHelper.SendBack();
 
             // Get the window to redraw
             mapViewPanel.Invalidate();
         }
 
         private void tsmBringForward_Click(object sender, EventArgs e) {
-            SceneicHelper.BringForward();
+            ScenicHelper.BringForward();
 
             // Get the window to redraw
             mapViewPanel.Invalidate();
         }
 
         private void tsmSendToBack_Click(object sender, EventArgs e) {
-            SceneicHelper.SendToBack();
+            ScenicHelper.SendToBack();
 
             // Get the window to redraw
             mapViewPanel.Invalidate();
         }
 
         private void tsmBringToFront_Click(object sender, EventArgs e) {
-            SceneicHelper.BringToFront();
+            ScenicHelper.BringToFront();
 
             // Get the window to redraw
             mapViewPanel.Invalidate();

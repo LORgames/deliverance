@@ -14,12 +14,13 @@ package GameCom.States {
 	import flash.geom.Matrix;
 	import flash.geom.Rectangle;
 	import flash.ui.Keyboard;
-	import GameCom.GameComponents.ObjManager;
+	import GameCom.Managers.ObjManager;
 	import GameCom.GameComponents.PlayerTruck;
 	import GameCom.GameComponents.Water;
 	import LORgames.Engine.Keys;
 	import GameCom.Helpers.StaticBoxCreator;
-	import GameCom.GameComponents.BGManager;
+	import GameCom.Managers.BGManager;
+	import GameCom.Managers.ScenicManager;
 	/**
 	 * ...
 	 * @author P. Fox
@@ -31,7 +32,7 @@ package GameCom.States {
 		
 		// World stuff
 		public var world:b2World;
-		private var renderWorld:Boolean = true;
+		private var renderWorld:Boolean = false;
 		
 		// Playing the world
 		private var simulating:Boolean = true;
@@ -45,15 +46,13 @@ package GameCom.States {
 		
 		private var waterLayer:Water = new Water();
 		private var groundLayer:Sprite = new Sprite();
-		private var objectLayer:Sprite = new Sprite();
-		private var roofLayer:Sprite = new Sprite();
+		private var object0Layer:Sprite = new Sprite();
+		private var object1Layer:Sprite = new Sprite();
 		
 		private var objManager:ObjManager;
 		private var bgManager:BGManager;
-		private var roofManager:BGManager;
-		
-		// The scrolling/scalling container
-		private var myContainer:Sprite = new Sprite();
+		private var scenic0:ScenicManager;
+		private var scenic1:ScenicManager;
 		
 		private var player:PlayerTruck;
 		
@@ -71,11 +70,11 @@ package GameCom.States {
 			
 			// set debug draw
 			var dbgDraw:b2DebugDraw = new b2DebugDraw();
-			dbgDraw.SetSprite(objectLayer);
+			dbgDraw.SetSprite(object1Layer);
 			dbgDraw.SetDrawScale(Global.PHYSICS_SCALE);
 			dbgDraw.SetFillAlpha(0.3);
 			dbgDraw.SetLineThickness(1.0);
-			dbgDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit | b2DebugDraw.e_centerOfMassBit);
+			dbgDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
 			world.SetDebugDraw(dbgDraw);
 			
 			this.addEventListener(Event.ENTER_FRAME, Update);
@@ -86,19 +85,23 @@ package GameCom.States {
 			
 			worldSpr.addChild(waterLayer);
 			worldSpr.addChild(groundLayer);
-			worldSpr.addChild(objectLayer);
-			worldSpr.addChild(roofLayer);
+			worldSpr.addChild(object0Layer);
+			worldSpr.addChild(object1Layer);
 			
 			StaticBoxCreator.CreateBoxes(world);
 			
 			// player is added to objectLayer
-			player = new PlayerTruck(new b2Vec2(12762/Global.PHYSICS_SCALE, 14547/Global.PHYSICS_SCALE), world, objectLayer);
+			player = new PlayerTruck(new b2Vec2(12762/Global.PHYSICS_SCALE, 14547/Global.PHYSICS_SCALE), world, object0Layer);
 			
 			//TODO: bgManager (ground) is added to groundLayer
 			bgManager = new BGManager(groundLayer, player);
 			
 			// objManager is added to objectLayer
 			objManager = new ObjManager(player, world, worldSpr);
+			
+			// scenic managers for the 2 object layers
+			scenic0 = new ScenicManager(object0Layer, player, world);
+			scenic1 = new ScenicManager(object1Layer, player, world);
 			
 			//TODO: objManager should handle roof
 		}
@@ -111,55 +114,17 @@ package GameCom.States {
 				player.Update();
 				objManager.Update();
 				
-				//trace("player: (" + player.x + ", " + player.y + ")");
+				scenic0.DrawScenicObjects();
 				
 				world.Step(Global.TIME_STEP, Global.VELOCITY_ITERATIONS, Global.POSITION_ITERATIONS);
 				world.ClearForces();
 				
-				worldSpr.x = -player.x + stage.stageWidth/2;
-				worldSpr.y = -player.y + stage.stageHeight / 2;
-				
-				//groundLayer.x = worldSpr.x;
-				//groundLayer.y = worldSpr.y;
-				
-				//TODO: Make objects register for updates rather than checking EVERY object for updates...
-				
-				//TODO: Decide if this legacy code is actually needed in this game
-				/*var b2:b2Body = world.GetBodyList();
-				
-				while(b2 != null) {
-					
-					if (b2.GetUserData() is UpdateComponent) {
-						(b2.GetUserData() as UpdateComponent).Update();
-					}
-					
-					b2 = b2.GetNext();
-				}*/
-			}
-			
-			//TODO: These should be given to the truck to control :)
-			if (Keys.isKeyDown(Keyboard.LEFT)) {
-				myContainer.x += SCROLL_DISTANCE;
-				Redraw();
-			}
-			
-			if (Keys.isKeyDown(Keyboard.RIGHT)) {
-				myContainer.x -= SCROLL_DISTANCE;
-				Redraw();
-			} 
-			
-			if (Keys.isKeyDown(Keyboard.UP)) {
-				myContainer.y += SCROLL_DISTANCE;
-				Redraw();
-			}
-			
-			if (Keys.isKeyDown(Keyboard.DOWN)) {
-				myContainer.y -= SCROLL_DISTANCE;
-				Redraw();
+				worldSpr.x = Math.floor(-player.x + stage.stageWidth/2);
+				worldSpr.y = Math.floor( -player.y + stage.stageHeight / 2);
 			}
 			
 			if(renderWorld) {
-				//world.DrawDebugData();
+				world.DrawDebugData();
 			}
 		}
 		

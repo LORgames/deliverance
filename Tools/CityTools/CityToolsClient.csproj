@@ -90,7 +90,7 @@
     <Compile Include="ObjectSystem\BaseObject.cs" />
     <Compile Include="Core\ImageCache.cs" />
     <Compile Include="ObjectSystem\ScenicObjectCache.cs" />
-    <Compile Include="ObjectSystem\SceneicHelper.cs" />
+    <Compile Include="ObjectSystem\ScenicHelper.cs" />
     <Compile Include="ObjectSystem\ScenicDrawer.cs" />
     <Compile Include="ObjectSystem\ScenicObject.cs" />
     <Compile Include="Physics\PhysicsCache.cs" />

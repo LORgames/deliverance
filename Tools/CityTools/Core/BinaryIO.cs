@@ -14,7 +14,7 @@ namespace CityTools.Core {
         private Byte[] in_data;
         private int seemlessReadIndex = 0;
 
-        internal BinaryIO(Byte[] received) {
+        public BinaryIO(Byte[] received) {
             in_data = received;
             seemlessReadIndex = 0;
         }
@@ -29,6 +29,10 @@ namespace CityTools.Core {
             } else {
                 throw new Exception("MISSING OUTDATA!");
             }
+        }
+
+        public byte[] EncodedBytes() {
+            return out_data.ToArray();
         }
 
         public void AddInt(int number) {

@@ -28,9 +28,7 @@ namespace CityTools.ObjectSystem {
             if (fix.UserData is ScenicObject) {
                 drawList.Add(fix.UserData as ScenicObject);
             }
-
             return true;
         }
-
     }
 }
