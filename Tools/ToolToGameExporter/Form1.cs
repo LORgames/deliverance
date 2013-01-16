@@ -122,8 +122,8 @@ namespace ToolToGameExporter {
             for (int i = 0; i < totalNodes; i++) {
                 ToolNode n = new ToolNode();
 
-                n.nodeId = b.GetInt();
                 n.type = (byte)b.GetInt();
+                n.nodeId = b.GetInt();
                 n.xPos = b.GetFloat();
                 n.yPos = b.GetFloat();
 
@@ -131,9 +131,14 @@ namespace ToolToGameExporter {
 
                 int totalChildren = b.GetByte();
 
+                System.Diagnostics.Debug.WriteLine(n.nodeId + " (" + totalChildren + ")");
+
                 for (int j = 0; j < totalChildren; j++) {
                     n.children.Add(b.GetInt());
+                    System.Diagnostics.Debug.WriteLine("\t" + n.nodeId + " => " + n.children[n.children.Count - 1]);
                 }
+
+                t_nodes.Add(n.nodeId, n);
             }
 
             //Calculate game id's
