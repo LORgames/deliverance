@@ -37,12 +37,8 @@ package GameCom.Managers {
 			 
 			for (var i:int = 0; i < totalShapes; i++) {
 				var sourceID:int = objectFile.readInt();
-				
-				objectFile.endian = Endian.LITTLE_ENDIAN;
 				var locationX:Number = objectFile.readFloat();
 				var locationY:Number = objectFile.readFloat();
-				
-				objectFile.endian = Endian.BIG_ENDIAN;
 				var rotation:int = objectFile.readInt();
 				
 				Objects.push(new ScenicObject(sourceID, locationX, locationY, rotation, world));

@@ -88,12 +88,26 @@ namespace CityTools.Core {
         }
 
         public void AddFloat(float number) {
-            out_data.AddRange(BitConverter.GetBytes(number));
+            byte[] floatBytes = BitConverter.GetBytes(number);
+
+            if (BitConverter.IsLittleEndian) {
+                Array.Reverse(floatBytes);
+            }
+
+            out_data.AddRange(floatBytes);
         }
 
         public float GetFloat(int index) {
             seemlessReadIndex += 4;
-            return BitConverter.ToSingle(in_data, index);
+
+            byte[] floatBytes = new byte[4];
+            Array.Copy(in_data, index, floatBytes, 0, 4);
+
+            if (BitConverter.IsLittleEndian) {
+                Array.Reverse(floatBytes);
+            }
+
+            return BitConverter.ToSingle(floatBytes, 0);
         }
 
         public float GetFloat() {
