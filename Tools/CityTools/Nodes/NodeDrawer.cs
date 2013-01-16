@@ -20,7 +20,7 @@ namespace CityTools.Nodes {
 
             PointF p0 = new PointF(mousePos.X / Camera.ZoomLevel + viewArea.Left, mousePos.Y / Camera.ZoomLevel + viewArea.Top);
 
-            NodeCache.AddNode(new Node(p0.X, p0.Y));
+            NodeCache.AddNode(new Node(p0.X, p0.Y, MainWindow.instance.cmbNodeStyle.SelectedIndex));
 
             return true;
         }
@@ -38,31 +38,11 @@ namespace CityTools.Nodes {
             foreach (Node node in drawList) {
                 node.Draw(buffer);
             }
-
-            // Draw node links
-            // For each node link list
-            for (int i = 0; i < NodeCache.nodeLinks.Count; i++) {
-                List<PointF> points = new List<PointF>();
-
-                // for each node in a node link list
-                for (int j = 0; j < NodeCache.nodeLinks[i].Count; j++) {
-                    // Find the x and y values of the node
-                    float x = NodeCache.nodes[NodeCache.nodeLinks[i][j]].x * Camera.ZoomLevel - Camera.ViewArea.Left;
-                    float y = NodeCache.nodes[NodeCache.nodeLinks[i][j]].y * Camera.ZoomLevel - Camera.ViewArea.Top;
-
-                    points.Add(new PointF(x, y));
-                }
-
-                // Draw a line for each node link
-                for (int j = 0; j < points.Count -1; j++) {
-                    buffer.gfx.DrawLine(new Pen(Color.Yellow), points[j], points[j + 1]);
-                }
-            }
         }
 
         public static bool QCBD(Fixture fix) {
             if (fix.UserData is Node) {
-                drawList.Add(fix.UserData as Node);
+                    drawList.Add(fix.UserData as Node);
             }
 
             return true;

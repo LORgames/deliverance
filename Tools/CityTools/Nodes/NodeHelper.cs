@@ -11,14 +11,13 @@ namespace CityTools.Nodes {
     class NodeHelper {
         private static List<Node> selectedNodes = new List<Node>();
 
-        private static List<short> nodeLinks = new List<short>();
+        private static int lastNodeIndex = -1;
 
         private static PointF p0 = Point.Empty;
         private static PointF p1 = Point.Empty;
 
         public static void MouseDown(MouseEventArgs e) {
             // Clear out the node links and selected nodes
-            nodeLinks = new List<short>(); // Create a new list, NodeCache references the previous one after MouseUp
             selectedNodes.Clear();
 
             p0 = e.Location;
@@ -35,20 +34,22 @@ namespace CityTools.Nodes {
                 // sort nodes by index
                 selectedNodes.Sort();
 
-                // Grab highest node index and store in nodeLinks list
-                nodeLinks.Add(selectedNodes[selectedNodes.Count - 1].index);
+                // Grab highest node index and set the last node index
+                lastNodeIndex = selectedNodes[selectedNodes.Count - 1].index;
             }
 
         }
 
         public static void MouseUp(MouseEventArgs e) {
-            // This should save off the node links
-            NodeCache.AddNodeLink(nodeLinks);
+            // Kill the lastNodeIndex to stop UpdateMouse from creating links
+            lastNodeIndex = -1;
         }
 
         public static bool QCBD(Fixture fix) {
             if (fix.UserData is Node) {
-                selectedNodes.Add(fix.UserData as Node);
+                if ((fix.UserData as Node).type == MainWindow.instance.cmbNodeStyle.SelectedIndex) {
+                    selectedNodes.Add(fix.UserData as Node);
+                }
             }
 
             return true;
@@ -71,12 +72,15 @@ namespace CityTools.Nodes {
 
                 Box2D.B2System.world.QueryAABB(new Box2CS.World.QueryCallbackDelegate(NodeHelper.QCBD), aabb);
 
-                if (selectedNodes.Count != 0) {
+                if (selectedNodes.Count != 0 && lastNodeIndex != -1) {
                     // sort nodes by index
                     selectedNodes.Sort();
 
-                    // Grab highest node index and store in nodeLinks list
-                    nodeLinks.Add(selectedNodes[selectedNodes.Count - 1].index);
+                    // Grab highest node index and create the link
+                    NodeCache.nodes[lastNodeIndex].children.Add(selectedNodes[selectedNodes.Count - 1].index);
+
+                    // Update last node index
+                    lastNodeIndex = selectedNodes[selectedNodes.Count - 1].index;
 
                     return true;
                 }

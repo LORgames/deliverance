@@ -71,7 +71,7 @@ namespace CityTools {
             MapCache.VerifyCacheFiles();
 
             ScenicObjectCache.InitializeCache();
-            //Nodes.NodeCache.InitializeCache();
+            NodeCache.InitializeCache();
 
             obj_scenary_objs.Controls.Add(new ObjectCacheControl("Road"));
 
@@ -88,6 +88,8 @@ namespace CityTools {
 
             drawArea = mapViewPanel.DisplayRectangle;
             Camera.FixViewArea(drawArea);
+
+            cmbNodeStyle.SelectedIndex = 0;
 
             initialized = true;
             CreateBuffers();
@@ -352,6 +354,8 @@ namespace CityTools {
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e) {
             ScenicObjectCache.SaveTypes();
             ScenicObjectCache.SaveCache();
+
+            NodeCache.SaveCache();
 
             try {
                 mapBuffer_ground.bmp.Save("minimap.jpg");

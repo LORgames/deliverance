@@ -59,6 +59,7 @@
             this.phys_add_ellipse = new System.Windows.Forms.Button();
             this.phys_add_rect = new System.Windows.Forms.Button();
             this.nodes_tab = new System.Windows.Forms.TabPage();
+            this.cmbNodeStyle = new System.Windows.Forms.ComboBox();
             this.node_select_btn = new System.Windows.Forms.Button();
             this.node_add_node_link = new System.Windows.Forms.Button();
             this.node_add_node = new System.Windows.Forms.Button();
@@ -457,6 +458,7 @@
             // 
             // nodes_tab
             // 
+            this.nodes_tab.Controls.Add(this.cmbNodeStyle);
             this.nodes_tab.Controls.Add(this.node_select_btn);
             this.nodes_tab.Controls.Add(this.node_add_node_link);
             this.nodes_tab.Controls.Add(this.node_add_node);
@@ -467,9 +469,21 @@
             this.nodes_tab.Text = "Nodes";
             this.nodes_tab.UseVisualStyleBackColor = true;
             // 
+            // cmbNodeStyle
+            // 
+            this.cmbNodeStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbNodeStyle.FormattingEnabled = true;
+            this.cmbNodeStyle.Items.AddRange(new object[] {
+            "Left",
+            "Right"});
+            this.cmbNodeStyle.Location = new System.Drawing.Point(47, 3);
+            this.cmbNodeStyle.Name = "cmbNodeStyle";
+            this.cmbNodeStyle.Size = new System.Drawing.Size(121, 21);
+            this.cmbNodeStyle.TabIndex = 3;
+            // 
             // node_select_btn
             // 
-            this.node_select_btn.Location = new System.Drawing.Point(70, 61);
+            this.node_select_btn.Location = new System.Drawing.Point(70, 88);
             this.node_select_btn.Name = "node_select_btn";
             this.node_select_btn.Size = new System.Drawing.Size(75, 23);
             this.node_select_btn.TabIndex = 2;
@@ -479,7 +493,7 @@
             // 
             // node_add_node_link
             // 
-            this.node_add_node_link.Location = new System.Drawing.Point(61, 32);
+            this.node_add_node_link.Location = new System.Drawing.Point(61, 59);
             this.node_add_node_link.Name = "node_add_node_link";
             this.node_add_node_link.Size = new System.Drawing.Size(93, 23);
             this.node_add_node_link.TabIndex = 1;
@@ -489,7 +503,7 @@
             // 
             // node_add_node
             // 
-            this.node_add_node.Location = new System.Drawing.Point(70, 3);
+            this.node_add_node.Location = new System.Drawing.Point(70, 30);
             this.node_add_node.Name = "node_add_node";
             this.node_add_node.Size = new System.Drawing.Size(75, 23);
             this.node_add_node.TabIndex = 0;
@@ -636,6 +650,7 @@
         private System.Windows.Forms.Button node_add_node;
         private System.Windows.Forms.Button node_add_node_link;
         private System.Windows.Forms.Button node_select_btn;
+        internal System.Windows.Forms.ComboBox cmbNodeStyle;
     }
 }
 

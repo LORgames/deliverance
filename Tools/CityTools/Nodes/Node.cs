@@ -8,23 +8,32 @@ using System.Drawing;
 
 namespace CityTools.Nodes {
     class Node : IComparable<Node> {
+        // PENS
+        private static Pen[] drawPens = { new Pen(Color.Yellow), new Pen(Color.Red) };
+        private static SolidBrush[] drawBrushes = { new SolidBrush(Color.FromArgb(64, Color.Yellow)), new SolidBrush(Color.FromArgb(64, Color.Red)) };
+
         //Circular references
         public Body baseBody;
 
         // For indexing
-        internal static short CURRENT_INDEX = 0;
-        public short index = 0;
+        internal static int CURRENT_INDEX = 0;
+        public int index = 0;
+
+        internal int type;
 
         internal float x;
         internal float y;
 
         internal const float RADIUS = 4.0f;
 
-        public Node(float x, float y) {
+        internal List<int> children = new List<int>();
+
+        public Node(float x, float y, int type) {
             index = CURRENT_INDEX++;
 
             this.x = x;
             this.y = y;
+            this.type = type;
 
             BodyDef bDef = new BodyDef(BodyType.Static, new Vec2(x, y), 0);
             CircleShape shape = new CircleShape(Vec2.Empty, RADIUS);
@@ -43,8 +52,20 @@ namespace CityTools.Nodes {
             float realignedX = (x - RADIUS) * Camera.ZoomLevel - Camera.ViewArea.Left;
             float realignedY = (y - RADIUS) * Camera.ZoomLevel - Camera.ViewArea.Top;
 
-            buffer.gfx.FillEllipse(new SolidBrush(Color.FromArgb(64, Color.Yellow)), realignedX, realignedY, RADIUS * 2.0f * Camera.ZoomLevel, RADIUS * 2.0f * Camera.ZoomLevel);
-            buffer.gfx.DrawEllipse(new Pen(Color.Yellow), realignedX, realignedY, RADIUS * 2.0f * Camera.ZoomLevel, RADIUS * 2.0f * Camera.ZoomLevel);
+            buffer.gfx.FillEllipse(drawBrushes[type], realignedX, realignedY, RADIUS * 2.0f * Camera.ZoomLevel, RADIUS * 2.0f * Camera.ZoomLevel);
+            buffer.gfx.DrawEllipse(drawPens[type], realignedX, realignedY, RADIUS * 2.0f * Camera.ZoomLevel, RADIUS * 2.0f * Camera.ZoomLevel);
+
+            // Draw links to other nodes, this could probably be done by the node...
+            for (int i = 0; i < children.Count; i++) {
+                PointF from = new PointF();
+                from.X = x * Camera.ZoomLevel - Camera.ViewArea.Left;
+                from.Y = y * Camera.ZoomLevel - Camera.ViewArea.Top;
+                PointF to = new PointF();
+                to.X = NodeCache.nodes[children[i]].x * Camera.ZoomLevel - Camera.ViewArea.Left;
+                to.Y = NodeCache.nodes[children[i]].y * Camera.ZoomLevel - Camera.ViewArea.Top;
+
+                buffer.gfx.DrawLine(drawPens[type], from, to);
+            }
         }
 
         public void Delete() {

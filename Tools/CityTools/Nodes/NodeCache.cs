@@ -8,11 +8,10 @@ using CityTools.Core;
 namespace CityTools.Nodes {
     class NodeCache {
 
-        public const string NODE_DATABASE = Program.CACHE + "/node/";
+        public const string NODE_DATABASE = Program.CACHE;
         public const string NODE_DATAFILE = NODE_DATABASE + "node_data.bin";
 
-        public static Dictionary<short, Node> nodes = new Dictionary<short, Node>();
-        public static List<List<short>> nodeLinks = new List<List<short>>();
+        public static Dictionary<int, Node> nodes = new Dictionary<int,Node>();
 
         public static void InitializeCache() {
             if (!Directory.Exists(NODE_DATABASE)) {
@@ -26,29 +25,21 @@ namespace CityTools.Nodes {
                 int totalNodes = f.GetInt();
 
                 for (int i = 0; i < totalNodes; i++) {
-                    short index = f.GetShort();
+                    int type = f.GetInt();
+                    int index = f.GetInt();
                     float locationX = f.GetFloat();
                     float locationY = f.GetFloat();
 
-                    nodes.Add(index, new Node(locationX, locationY));
+                    nodes.Add(index, new Node(locationX, locationY, type));
                     nodes[index].index = index;
-                    Node.CURRENT_INDEX = (short)(index + 1); // Apparently short + short = int...
-                }
 
-                // Add Node Links
-                // Total link lists
-                int totalLinks = f.GetInt();
-                for (int i = 0; i < totalLinks; i++) {
+                    int numChildren = f.GetByte();
+                    for (int j = 0; j < numChildren; j++) {
+                        nodes[index].children.Add(f.GetInt());
+                    }
 
-                    // Create a list for the node indices
-                    nodeLinks.Add(new List<short>());
-
-                    // Total linked nodes in the list
-                    int totalNodeLinks = f.GetInt();
-                    for (int j = 0; j < totalNodeLinks; j++) {
-
-                        // Add that motherfucker to the list.
-                        nodeLinks[nodeLinks.Count - 1].Add(f.GetShort());
+                    if (index >= Node.CURRENT_INDEX) {
+                        Node.CURRENT_INDEX = index + 1;
                     }
                 }
             }
@@ -58,8 +49,8 @@ namespace CityTools.Nodes {
             nodes.Add(node.index, node);
         }
 
-        public static void AddNodeLink(List<short> nodeLink) {
-            nodeLinks.Add(nodeLink);
+        public static void AddNodeLink(Node from, Node to) {
+            nodes[from.index].children.Add(to.index);
         }
 
         public static void SaveCache() {
@@ -69,33 +60,14 @@ namespace CityTools.Nodes {
             f.AddInt(nodes.Count);
 
             // Store each nodes index and position
-            foreach (KeyValuePair<short, Node> pair in nodes) {
-                f.AddShort(pair.Value.index);
+            foreach (KeyValuePair<int, Node> pair in nodes) {
+                f.AddInt(pair.Value.type);
+                f.AddInt(pair.Value.index);
                 f.AddFloat(pair.Value.baseBody.Position.X);
                 f.AddFloat(pair.Value.baseBody.Position.Y);
-            }
-
-            // Store number of node link lists
-            f.AddInt(nodeLinks.Count);
-            for (int i = 0; i < nodeLinks.Count; i++) {
-                
-                // Check if link is valid
-                bool storeLink = true;
-                for (int j = 0; j < nodeLinks[i].Count; j++) {
-                    if (!nodes.ContainsKey(nodeLinks[i][j])) {
-                        storeLink = false;
-                    }
-                }
-
-                // Store link if it's valid
-                if (storeLink) {
-                    // Store number of indices in the node link list
-                    f.AddInt(nodeLinks[i].Count);
-                    for (int j = 0; j < nodeLinks[i].Count; j++) {
-
-                        // Store indices
-                        f.AddShort(nodeLinks[i][j]);
-                    }
+                f.AddByte((byte)pair.Value.children.Count);
+                for (int i = 0; i < pair.Value.children.Count; i++) {
+                    f.AddInt(pair.Value.children[i]);
                 }
             }
 
