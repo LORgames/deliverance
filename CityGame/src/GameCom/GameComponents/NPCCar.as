@@ -1,6 +1,7 @@
 package GameCom.GameComponents 
 {
 	import flash.geom.ColorTransform;
+	import GameCom.Managers.NodeManager;
 	import GameCom.States.GameScreen;
 	import LORgames.Engine.Keys;
 	import flash.ui.Keyboard;
@@ -44,8 +45,14 @@ package GameCom.GameComponents
 		private var leftJoint:b2RevoluteJoint;
 		private var rightJoint:b2RevoluteJoint;
 		
-		public function NPCCar(spawnPosition:b2Vec2, world:b2World) {
+		// AI
+		private var nodeManager:NodeManager;
+		private var targetNode:int = 0;
+		
+		public function NPCCar(spawnPosition:b2Vec2, world:b2World, nodeManager:NodeManager) {
 			this.world = world;
+			
+			this.nodeManager = nodeManager;
 			
 			var CarA:Class = ThemeManager.GetClassFromSWF("TruckBits/Basic Car.swf", "LORgames.BasicCar");
 			this.addChild(new CarA());
@@ -176,6 +183,23 @@ package GameCom.GameComponents
 				steeringAngle = 0;
 			}
 			*/
+			
+			if (targetNode != -1) {
+				// if within reach of targetNode then choose next node
+				if (nodeManager.TouchNode(targetNode, x, y)) {
+					targetNode = nodeManager.NextNode(targetNode);
+				}
+				// always accelerate toward targetNode
+				if(engineSpeed > -HORSEPOWER_MAX) {
+					engineSpeed -= HORSEPOWER_INC;
+				}
+				// TODO: steering code
+				// find angle to targetNode and steer towards
+				//trace(body.GetAngle())
+			} else {
+				engineSpeed = 0;
+				steeringAngle = 0;
+			}
 			
 			this.graphics.clear();
 			

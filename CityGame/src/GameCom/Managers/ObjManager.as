@@ -21,20 +21,24 @@ package GameCom.Managers
 		private var worldSpr:Sprite;
 		private var stage:DisplayObject;
 		
-		private var maxCars:int = 5;
+		private var maxCars:int = 1;
 		private var carSpawnChance:Number = 0.05;
 		private var cars:Array = new Array();
+		
+		private var nodeManager:NodeManager;
 		
 		public function ObjManager(player:PlayerTruck, world:b2World, worldSpr:Sprite) {
 			this.player = player;
 			this.world = world;
 			this.worldSpr = worldSpr;
 			this.stage = stage;
+			
+			nodeManager = new NodeManager();
 		}
 		
 		public function Update():void {
 			if ((cars.length < maxCars) && (Math.random() < carSpawnChance)) {
-				cars.push(new NPCCar(new b2Vec2((player.x + (Math.random() - 0.5) * 400) / Global.PHYSICS_SCALE, (player.y + (Math.random() - 0.5) * 400) / Global.PHYSICS_SCALE), world));
+				cars.push(new NPCCar(new b2Vec2((player.x + (Math.random() - 0.5) * 400) / Global.PHYSICS_SCALE, (player.y + (Math.random() - 0.5) * 400) / Global.PHYSICS_SCALE), world, nodeManager));
 				worldSpr.addChild(cars[cars.length - 1]);
 			}
 			
