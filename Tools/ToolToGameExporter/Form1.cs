@@ -13,6 +13,8 @@ using CityTools.Physics;
 
 namespace ToolToGameExporter {
     public partial class Form1 : Form {
+        public const float PHYSICS_SCALE = 10.0f;
+
         public Form1() {
             InitializeComponent();
         }
@@ -86,6 +88,8 @@ namespace ToolToGameExporter {
             o.AddInt(totalShapes);
             o.AddInt(totalPhysicsShapes);
 
+            Dictionary<int, string> typeID_to_filename = new Dictionary<int, string>();
+
             for (int i = 0; i < totalShapes; i++) {
                 int type_id = f.GetInt();
                 string source = f.GetString();
@@ -93,23 +97,30 @@ namespace ToolToGameExporter {
 
                 zp.AddEntry("obj/" + type_id + ".png", File.ReadAllBytes(tool_loc_TB.Text + source));
 
+                typeID_to_filename.Add(type_id, source);
+
                 o.AddInt(type_id); //Type ID
                 o.AddByte(layer);
             }
 
             for (int i = 0; i < totalPhysicsShapes; i++) {
-                o.AddInt(f.GetInt());
+                int typeID = f.GetInt();
+
+                o.AddInt(typeID);
 
                 int totalPhysics = f.GetInt();
                 o.AddInt(totalPhysics);
+
+                Image im = Image.FromFile(tool_loc_TB.Text + typeID_to_filename[typeID]);
 
                 for (int j = 0; j < totalPhysics; j++) {
                     byte shapeType = f.GetByte();
 
                     o.AddByte(shapeType);
 
-                    o.AddFloat(f.GetFloat());
-                    o.AddFloat(f.GetFloat());
+                    //This needs to be converted to the center rather than the extents.
+                    float xPos = f.GetFloat(); //xPos
+                    float yPos = f.GetFloat(); //yPos
 
                     float wDim = f.GetFloat();
                     float hDim = wDim;
@@ -118,9 +129,16 @@ namespace ToolToGameExporter {
                         hDim = f.GetFloat();
                     }
 
-                    o.AddFloat(wDim);
-                    o.AddFloat(hDim);
+                    xPos += (wDim - im.Width) / 2;
+                    yPos += (hDim - im.Height) / 2;
+
+                    o.AddFloat(xPos / PHYSICS_SCALE);
+                    o.AddFloat(yPos / PHYSICS_SCALE);
+                    o.AddFloat(wDim / PHYSICS_SCALE);
+                    o.AddFloat(hDim / PHYSICS_SCALE);
                 }
+
+                im.Dispose();
             }
 
             f.Dispose();

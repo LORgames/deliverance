@@ -34,7 +34,7 @@ package GameCom.States {
 		
 		// World stuff
 		public var world:b2World;
-		private var renderWorld:Boolean = false;
+		private var physicsDebugRender:Boolean = true;
 		
 		// Playing the world
 		private var simulating:Boolean = true;
@@ -131,7 +131,7 @@ package GameCom.States {
 				worldSpr.y = Math.floor( -player.y + stage.stageHeight / 2);
 			}
 			
-			if(renderWorld) {
+			if(physicsDebugRender) {
 				world.DrawDebugData();
 			}
 		}

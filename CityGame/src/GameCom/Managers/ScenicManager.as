@@ -7,7 +7,8 @@ package GameCom.Managers {
 	import flash.utils.Endian;
 	import GameCom.GameComponents.PlayerTruck;
 	import GameCom.GameComponents.ScenicObject
-	import GameCom.Helpers.ScenicObjectType;
+	import GameCom.SystemComponents.PhysicsShape;
+	import GameCom.SystemComponents.ScenicObjectType;
 	/**
 	 * ...
 	 * @author Paul
@@ -60,6 +61,8 @@ package GameCom.Managers {
                 typeID = objectTypes.readInt();
 				var totalPhysics:int = objectTypes.readInt();
 				
+				(Types[typeID] as ScenicObjectType).Physics = new PhysicsShape();
+				
                 for (j = 0; j < totalPhysics; j++) {
                     var shapeType:int = objectTypes.readByte();
 					
@@ -69,9 +72,9 @@ package GameCom.Managers {
 					var hDim:Number = objectTypes.readFloat();
 					
 					if (shapeType == 0) { //Rectangle
-						trace("Loaded rectangle: x:" + xPos + ", y:" + yPos + ", w:" + wDim + ", h:" + hDim); 
+						(Types[typeID] as ScenicObjectType).Physics.AddRectangle(xPos, yPos, wDim, hDim);
 					} else if (shapeType == 1) { //Circle
-						trace("Loaded rectangle: x:" + xPos + ", y:" + yPos + ", r:" + wDim);
+						(Types[typeID] as ScenicObjectType).Physics.AddCircle(xPos, yPos, wDim);
 					}
                 }
             }
@@ -84,7 +87,7 @@ package GameCom.Managers {
 				var locationY:Number = objectFile.readFloat();
 				var rotation:int = objectFile.readInt();
 				
-				Objects.push(new ScenicObject(sourceID, locationX, locationY, rotation, world));
+				Objects.push(new ScenicObject(sourceID, locationX, locationY, rotation, world, (Types[sourceID] as ScenicObjectType)));
 			}
 		}
 		
