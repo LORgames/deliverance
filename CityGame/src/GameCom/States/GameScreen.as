@@ -106,8 +106,7 @@ package GameCom.States {
 			objManager = new ObjManager(player, world, worldSpr);
 			
 			// scenic managers for the 2 object layers
-			scenic0 = new ScenicManager(object0Layer, player, world);
-			scenic1 = new ScenicManager(object1Layer, player, world);
+			scenic0 = new ScenicManager(object0Layer, object1Layer, player, world);
 			
 		}
 		

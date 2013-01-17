@@ -49,8 +49,7 @@ namespace CityTools {
         public LBuffer nodes_buffer;
         public LBuffer input_buffer;
 
-        public LBuffer mapBuffer_ground;
-        public LBuffer mapBuffer_object;
+        public LBuffer minimapBuffer;
 
         //Terrain painting things
         public Brush terrainPaintBrush = new SolidBrush(Color.White);
@@ -299,12 +298,12 @@ namespace CityTools {
             float scaleY = (float)minimap.Height / MAP_SIZE_Y;
 
             if (!DRAWN) {
-                mapBuffer_ground = new LBuffer(minimap.DisplayRectangle);
-                Minimap.MinimapDrawer.RedrawAllTerrain(mapBuffer_ground, minimap.DisplayRectangle);
+                minimapBuffer = new LBuffer(minimap.DisplayRectangle);
+                Minimap.MinimapDrawer.RedrawAllTerrain(minimapBuffer, minimap.DisplayRectangle);
                 DRAWN = true;
             }
 
-            e.Graphics.DrawImage(mapBuffer_ground.bmp, Point.Empty);
+            e.Graphics.DrawImage(minimapBuffer.bmp, Point.Empty);
             e.Graphics.DrawRectangle(new Pen(Color.Red), Camera.Offset.X * scaleX, Camera.Offset.Y * scaleY, Camera.ViewArea.Width * scaleX, Camera.ViewArea.Height * scaleY);
         }
 
@@ -358,7 +357,7 @@ namespace CityTools {
             NodeCache.SaveCache();
 
             try {
-                mapBuffer_ground.bmp.Save("minimap.jpg");
+                minimapBuffer.bmp.Save("minimap.jpg");
             } catch {
                 try {
                     File.Delete("minimap.jpg");

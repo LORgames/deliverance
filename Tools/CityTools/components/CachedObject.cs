@@ -9,12 +9,14 @@ using System.Windows.Forms;
 
 namespace CityTools.Components {
     public partial class CachedObject : UserControl {
-        private string img_addr = "";
+        internal string img_addr = "";
 
-        public CachedObject(string image) {
+        public CachedObject(string image, string labelT = "") {
             InitializeComponent();
 
             img_addr = image;
+            label.Text = labelT;
+
             pictureBox1.Load(image);
         }
 

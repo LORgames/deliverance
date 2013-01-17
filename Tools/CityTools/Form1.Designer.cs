@@ -636,7 +636,7 @@
         private System.Windows.Forms.TabPage terrain_tab;
         private System.Windows.Forms.TabPage story_tab;
         private System.Windows.Forms.ComboBox obj_scenary_cache_CB;
-        private System.Windows.Forms.Panel obj_scenary_objs;
+        internal System.Windows.Forms.Panel obj_scenary_objs;
         internal System.Windows.Forms.CheckBox layer_objects_1;
         internal System.Windows.Forms.CheckBox layer_nodes;
         private System.Windows.Forms.Button obj_select_btn;

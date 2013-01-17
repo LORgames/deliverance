@@ -57,14 +57,16 @@ namespace CityTools.Nodes {
 
             // Draw links to other nodes, this could probably be done by the node...
             for (int i = 0; i < children.Count; i++) {
-                PointF from = new PointF();
-                from.X = x * Camera.ZoomLevel - Camera.ViewArea.Left;
-                from.Y = y * Camera.ZoomLevel - Camera.ViewArea.Top;
-                PointF to = new PointF();
-                to.X = NodeCache.nodes[children[i]].x * Camera.ZoomLevel - Camera.ViewArea.Left;
-                to.Y = NodeCache.nodes[children[i]].y * Camera.ZoomLevel - Camera.ViewArea.Top;
+                try {
+                    PointF from = new PointF();
+                    from.X = x * Camera.ZoomLevel - Camera.ViewArea.Left;
+                    from.Y = y * Camera.ZoomLevel - Camera.ViewArea.Top;
+                    PointF to = new PointF();
+                    to.X = NodeCache.nodes[children[i]].x * Camera.ZoomLevel - Camera.ViewArea.Left;
+                    to.Y = NodeCache.nodes[children[i]].y * Camera.ZoomLevel - Camera.ViewArea.Top;
 
-                buffer.gfx.DrawLine(drawPens[type], from, to);
+                    buffer.gfx.DrawLine(drawPens[type], from, to);
+                } catch { }
             }
         }
 

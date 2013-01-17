@@ -7,35 +7,78 @@ package GameCom.Managers {
 	import flash.utils.Endian;
 	import GameCom.GameComponents.PlayerTruck;
 	import GameCom.GameComponents.ScenicObject
+	import GameCom.Helpers.ScenicObjectType;
 	/**
 	 * ...
 	 * @author Paul
 	 */
 	public class ScenicManager {
-		
-		private var LoadedTypes:Array = new Array();
+		private var Types:Array = new Array();
 		private var Objects:Array = new Array();
 		
 		private var drawList:Array = new Array();
 		
-		private var layer:Sprite;
+		private var layer0:Sprite;
+		private var layer1:Sprite;
+		
 		private var player:Sprite;
 		private var world:b2World;
 		
-		public function ScenicManager(worldSpr:Sprite, player:Sprite, world:b2World) {
-			this.layer = worldSpr;
+		public function ScenicManager(layer0:Sprite, layer1:Sprite, player:Sprite, world:b2World) {
+			this.layer0 = layer0;
+			this.layer1 = layer1;
+			
 			this.player = player;
 			this.world = world;
 			
 			var objectTypes:ByteArray = ThemeManager.Get("1.cache"); //Will be needed for physics
-			//TODO: When Physics is implemented, needs to be loaded in here
-			
 			var objectFile:ByteArray = ThemeManager.Get("1.map");
 			
+			objectTypes.position = 0;
 			objectFile.position = 0;
+			
+			var i:int;
+			var j:int;
+			var typeID:int;
+			
+			//TODO: When Physics is implemented, needs to be loaded in here
+			
+			objectTypes.endian = Endian.BIG_ENDIAN;
+			
+            var totalTypes:int = objectTypes.readInt();
+			var totalPhysicsShapes:int = objectTypes.readInt();
+			
+            for (i = 0; i < totalTypes; i++) {
+                typeID = objectTypes.readInt();
+				var layer:int = objectTypes.readByte();
+				
+				Types[typeID] = new ScenicObjectType();
+				(Types[typeID] as ScenicObjectType).Layer = layer;
+            }
+
+            for (i = 0; i < totalPhysicsShapes; i++) {
+                typeID = objectTypes.readInt();
+				var totalPhysics:int = objectTypes.readInt();
+				
+                for (j = 0; j < totalPhysics; j++) {
+                    var shapeType:int = objectTypes.readByte();
+					
+					var xPos:Number = objectTypes.readFloat();
+					var yPos:Number = objectTypes.readFloat();
+					var wDim:Number = objectTypes.readFloat();
+					var hDim:Number = objectTypes.readFloat();
+					
+					if (shapeType == 0) { //Rectangle
+						trace("Loaded rectangle: x:" + xPos + ", y:" + yPos + ", w:" + wDim + ", h:" + hDim); 
+					} else if (shapeType == 1) { //Circle
+						trace("Loaded rectangle: x:" + xPos + ", y:" + yPos + ", r:" + wDim);
+					}
+                }
+            }
+			
 			var totalShapes:int = objectFile.readInt();
 			 
-			for (var i:int = 0; i < totalShapes; i++) {
+			for (i = 0; i < totalShapes; i++) {
 				var sourceID:int = objectFile.readInt();
 				var locationX:Number = objectFile.readFloat();
 				var locationY:Number = objectFile.readFloat();
@@ -49,17 +92,22 @@ package GameCom.Managers {
             drawList = new Array();
 			
 			var area:b2AABB = new b2AABB();
-			area.lowerBound.Set((player.x - this.layer.stage.stageWidth / 2)/Global.PHYSICS_SCALE, (player.y - this.layer.stage.stageHeight / 2)/Global.PHYSICS_SCALE);
-			area.upperBound.Set((player.x + this.layer.stage.stageWidth / 2)/Global.PHYSICS_SCALE, (player.y + this.layer.stage.stageHeight / 2)/Global.PHYSICS_SCALE);
+			area.lowerBound.Set((player.x - this.layer0.stage.stageWidth / 2)/Global.PHYSICS_SCALE, (player.y - this.layer0.stage.stageHeight / 2)/Global.PHYSICS_SCALE);
+			area.upperBound.Set((player.x + this.layer0.stage.stageWidth / 2)/Global.PHYSICS_SCALE, (player.y + this.layer0.stage.stageHeight / 2)/Global.PHYSICS_SCALE);
 			
             this.world.QueryAABB(QCBD, area);
 			
 			drawList.sortOn("index");
 			
-			layer.graphics.clear();
+			layer0.graphics.clear();
+			layer1.graphics.clear();
 			
 			for (var i:int = 0; i < drawList.length; i++) {
-                (drawList[i] as ScenicObject).Draw(layer.graphics);
+				if((Types[(drawList[i] as ScenicObject).typeID] as ScenicObjectType).Layer == 0) {
+					(drawList[i] as ScenicObject).Draw(layer0.graphics);
+				} else {
+					(drawList[i] as ScenicObject).Draw(layer1.graphics);
+				}
             }
         }
 

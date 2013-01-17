@@ -39,11 +39,14 @@ package GameCom.Managers
 		}
 		
 		public function TouchNode(node:int, carX:Number, carY:Number):Boolean {
-			if (Math.sqrt((carX-(nodeArray[node] as Node).x)*(carX-(nodeArray[node] as Node).x) - (carY-(nodeArray[node] as Node).y)*(carY-(nodeArray[node] as Node).y)) < 20.0) {
+			//TODO: Fix this.
+			/*if (Math.sqrt((carX-(nodeArray[node] as Node).x)*(carX-(nodeArray[node] as Node).x) - (carY-(nodeArray[node] as Node).y)*(carY-(nodeArray[node] as Node).y)) < 20.0) {
 				return true;
 			} else {
 				return false;
-			}
+			}*/
+			
+			return false;
 		}
 	}
 }

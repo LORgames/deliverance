@@ -5,6 +5,8 @@ using System.Text;
 using System.IO;
 using CityTools.Core;
 using System.Windows.Forms;
+using CityTools.Physics;
+using System.Drawing;
 
 namespace CityTools.ObjectSystem {
     public class ScenicObjectCache {
@@ -31,14 +33,44 @@ namespace CityTools.ObjectSystem {
 
                 int totalShapes = f.GetInt();
                 _highestTypeIndex = f.GetInt();
+                int totalShapesWithPhysics = f.GetInt();
 
+                //This is where we load the BASIC information
                 for (int i = 0; i < totalShapes; i++) {
                     int type_id = f.GetInt();
                     string source = f.GetString();
                     byte layer = f.GetByte();
 
-                    s_objectTypes.Add(type_id, new ScenicType(type_id, source, 0));
+                    s_objectTypes.Add(type_id, new ScenicType(type_id, source, layer));
                     s_StringToInt.Add(source, type_id);
+                }
+
+                //Now we load the PHYSICS information (yes quite expensive looping twice but much more backwards compatible
+                for (int i = 0; i < totalShapesWithPhysics; i++) {
+                    int type_id = f.GetInt();
+                    int totalPhysics = f.GetInt();
+
+                    for (int j = 0; j < totalPhysics; j++) {
+                        int shapeType = f.GetByte();
+
+                        float xPos = f.GetFloat();
+                        float yPos = f.GetFloat();
+
+                        switch ((PhysicsShapes)shapeType) {
+                            case PhysicsShapes.Circle:
+                                float r = f.GetFloat();
+                                s_objectTypes[type_id].Physics.Add(new PhysicsCircle(new RectangleF(xPos, yPos, r, 0)));
+                                break;
+                            case PhysicsShapes.Rectangle:
+                                float w = f.GetFloat();
+                                float h = f.GetFloat();
+                                s_objectTypes[type_id].Physics.Add(new PhysicsRectangle(new RectangleF(xPos, yPos, w, h)));
+                                break;
+                            default:
+                                MessageBox.Show("Unknown shape found in file. Suspected corruption. Formatting C:");
+                                break;
+                        }
+                    }
                 }
             }
 
@@ -72,14 +104,50 @@ namespace CityTools.ObjectSystem {
         }
 
         public static void SaveTypes() {
+            //Count physics objects first...
+            List<int> objectsWithPhysics = new List<int>();
+
+            foreach (KeyValuePair<int, ScenicType> kvp in s_objectTypes) {
+                if (kvp.Value.Physics.Count > 0) {
+                    objectsWithPhysics.Add(kvp.Key);
+                }
+            }
+
             BinaryIO f = new BinaryIO();
             f.AddInt(s_objectTypes.Count);
             f.AddInt(_highestTypeIndex);
+            f.AddInt(objectsWithPhysics.Count); //total shapes with physics
 
             foreach (KeyValuePair<int, ScenicType> kvp in s_objectTypes) {
                 f.AddInt(kvp.Key);
                 f.AddString(kvp.Value.ImageName);
-                f.AddByte(0);
+                f.AddByte(kvp.Value.layer);
+            }
+
+            //Now we load the PHYSICS information (yes quite expensive looping twice but much more backwards compatible
+            foreach (int index in objectsWithPhysics) {
+                f.AddInt(index);
+                f.AddInt(s_objectTypes[index].Physics.Count);
+
+                foreach (PhysicsShape ps in s_objectTypes[index].Physics) {
+                    f.AddByte((byte)ps.myShape);
+
+                    f.AddFloat(ps.aabb.Left);
+                    f.AddFloat(ps.aabb.Top);
+
+                    switch (ps.myShape) {
+                        case PhysicsShapes.Circle:
+                            f.AddFloat(ps.aabb.Width);
+                            break;
+                        case PhysicsShapes.Rectangle:
+                            f.AddFloat(ps.aabb.Width);
+                            f.AddFloat(ps.aabb.Height);
+                            break;
+                        default:
+                            MessageBox.Show("Unknown shape found in file. Suspected corruption. Formatting C:");
+                            break;
+                    }
+                }
             }
 
             f.Encode(SCENIC_TYPEFILE);

@@ -35,7 +35,7 @@ namespace CityTools.Minimap {
             Rectangle rf = new Rectangle((int)Math.Round(scaleX * i * MapCache.TILE_SIZE_X), (int)Math.Round(scaleY * j * MapCache.TILE_SIZE_Y), (int)Math.Round(scaleX * MapCache.TILE_SIZE_X), (int)Math.Round(scaleY * MapCache.TILE_SIZE_Y));
             byte tileID = MapCache.tiles[i, j];
 
-            MainWindow.instance.mapBuffer_ground.gfx.DrawImage(ImageCache.RequestImage(MapCache.tileTable[tileID]), rf);
+            MainWindow.instance.minimapBuffer.gfx.DrawImage(ImageCache.RequestImage(MapCache.tileTable[tileID]), rf);
             MainWindow.instance.minimap.Invalidate();
         }
     }

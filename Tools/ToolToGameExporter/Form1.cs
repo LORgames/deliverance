@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Ionic.Zip;
 using System.IO;
 using CityTools.Core;
+using CityTools.Physics;
 
 namespace ToolToGameExporter {
     public partial class Form1 : Form {
@@ -80,16 +81,46 @@ namespace ToolToGameExporter {
 
             int totalShapes = f.GetInt();
             f.GetInt(); //Just need to clear this value :)
+            int totalPhysicsShapes = f.GetInt();
 
             o.AddInt(totalShapes);
+            o.AddInt(totalPhysicsShapes);
 
             for (int i = 0; i < totalShapes; i++) {
                 int type_id = f.GetInt();
                 string source = f.GetString();
+                byte layer = f.GetByte();
 
                 zp.AddEntry("obj/" + type_id + ".png", File.ReadAllBytes(tool_loc_TB.Text + source));
 
                 o.AddInt(type_id); //Type ID
+                o.AddByte(layer);
+            }
+
+            for (int i = 0; i < totalPhysicsShapes; i++) {
+                o.AddInt(f.GetInt());
+
+                int totalPhysics = f.GetInt();
+                o.AddInt(totalPhysics);
+
+                for (int j = 0; j < totalPhysics; j++) {
+                    byte shapeType = f.GetByte();
+
+                    o.AddByte(shapeType);
+
+                    o.AddFloat(f.GetFloat());
+                    o.AddFloat(f.GetFloat());
+
+                    float wDim = f.GetFloat();
+                    float hDim = wDim;
+
+                    if((PhysicsShapes)shapeType == PhysicsShapes.Rectangle) {
+                        hDim = f.GetFloat();
+                    }
+
+                    o.AddFloat(wDim);
+                    o.AddFloat(hDim);
+                }
             }
 
             f.Dispose();
