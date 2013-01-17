@@ -34,7 +34,7 @@ package GameCom.States {
 		
 		// World stuff
 		public var world:b2World;
-		private var physicsDebugRender:Boolean = true;
+		private var physicsDebugRender:Boolean = false;
 		
 		// Playing the world
 		private var simulating:Boolean = true;
@@ -53,8 +53,7 @@ package GameCom.States {
 		
 		private var objManager:ObjManager;
 		private var bgManager:BGManager;
-		private var scenic0:ScenicManager;
-		private var scenic1:ScenicManager;
+		private var scenicManager:ScenicManager;
 		
 		private var player:PlayerTruck;
 		
@@ -106,7 +105,7 @@ package GameCom.States {
 			objManager = new ObjManager(player, world, worldSpr);
 			
 			// scenic managers for the 2 object layers
-			scenic0 = new ScenicManager(object0Layer, object1Layer, player, world);
+			scenicManager = new ScenicManager(object0Layer, object1Layer, player, world);
 			
 		}
 		
@@ -122,7 +121,7 @@ package GameCom.States {
 				player.Update(dt);
 				objManager.Update();
 				
-				scenic0.DrawScenicObjects();
+				scenicManager.DrawScenicObjects();
 				
 				world.Step(Global.TIME_STEP, Global.VELOCITY_ITERATIONS, Global.POSITION_ITERATIONS);
 				world.ClearForces();

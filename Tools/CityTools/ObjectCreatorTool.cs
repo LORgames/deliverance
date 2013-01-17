@@ -81,6 +81,11 @@ namespace CityTools {
             if (e.Button == MouseButtons.Left && pm == PaintMode.Physics) {
                 p1 = e.Location;
 
+                p0.X = Math.Max(p0.X, 0);
+                p0.Y = Math.Max(p0.Y, 0);
+                p1.X = Math.Max(p1.X, 0);
+                p1.Y = Math.Max(p1.Y, 0);
+
                 if (ps == PhysicsShapes.Rectangle) {
                     ScenicObjectCache.s_objectTypes[objectID].Physics.Add(new PhysicsRectangle(new RectangleF(Math.Min(p0.X, p1.X), Math.Min(p0.Y, p1.Y), Math.Abs(p1.X - p0.X), Math.Abs(p1.Y - p0.Y))));
                 } else if (ps == PhysicsShapes.Circle) {

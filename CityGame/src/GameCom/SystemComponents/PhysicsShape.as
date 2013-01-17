@@ -47,7 +47,7 @@ package GameCom.SystemComponents {
 			
 			//Create the shape
 			var bodyShape:b2PolygonShape = new b2PolygonShape();
-			bodyShape.SetAsOrientedBox(w / 2, h / 2, new b2Vec2(x, y));
+			bodyShape.SetAsOrientedBox(w, h, new b2Vec2(x, y));
 			
 			//Create the fixture
 			var bodyFixtureDef:b2FixtureDef = new b2FixtureDef();

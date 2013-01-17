@@ -131,6 +131,8 @@ namespace ToolToGameExporter {
 
                     xPos += (wDim - im.Width) / 2;
                     yPos += (hDim - im.Height) / 2;
+                    wDim /= 2; // Game uses radial w and h
+                    hDim /= 2;
 
                     o.AddFloat(xPos / PHYSICS_SCALE);
                     o.AddFloat(yPos / PHYSICS_SCALE);
