@@ -19,6 +19,7 @@ package GameCom.States {
 	import GameCom.Managers.ObjManager;
 	import GameCom.GameComponents.PlayerTruck;
 	import GameCom.GameComponents.Water;
+	import GameCom.Managers.PlacesManager;
 	import LORgames.Engine.Keys;
 	import GameCom.Helpers.StaticBoxCreator;
 	import GameCom.Managers.BGManager;
@@ -49,11 +50,13 @@ package GameCom.States {
 		private var waterLayer:Water = new Water();
 		private var groundLayer:Sprite = new Sprite();
 		private var object0Layer:Sprite = new Sprite();
+		private var placesLayer:Sprite = new Sprite();
 		private var object1Layer:Sprite = new Sprite();
 		
 		private var objManager:ObjManager;
 		private var bgManager:BGManager;
 		private var scenicManager:ScenicManager;
+		private var placesManager:PlacesManager;
 		
 		private var player:PlayerTruck;
 		
@@ -91,22 +94,25 @@ package GameCom.States {
 			worldSpr.addChild(waterLayer);
 			worldSpr.addChild(groundLayer);
 			worldSpr.addChild(object0Layer);
+			worldSpr.addChild(placesLayer);
 			worldSpr.addChild(object1Layer);
 			
 			StaticBoxCreator.CreateBoxes(world);
 			
 			// player is added to objectLayer
-			player = new PlayerTruck(new b2Vec2(12762/Global.PHYSICS_SCALE, 14547/Global.PHYSICS_SCALE), world, object0Layer);
+			player = new PlayerTruck(new b2Vec2(12762/Global.PHYSICS_SCALE, 14547/Global.PHYSICS_SCALE), world, placesLayer);
 			
 			// bgManager (ground) is added to groundLayer
 			bgManager = new BGManager(groundLayer, player);
 			
 			// objManager is added to objectLayer
-			objManager = new ObjManager(player, world, worldSpr);
+			objManager = new ObjManager(player, world, placesLayer);
 			
 			// scenic managers for the 2 object layers
 			scenicManager = new ScenicManager(object0Layer, object1Layer, player, world);
 			
+			// places manager gets its layer
+			placesManager = new PlacesManager(placesLayer, player, world);
 		}
 		
 		private function Update(e:Event):void {
@@ -122,6 +128,7 @@ package GameCom.States {
 				objManager.Update();
 				
 				scenicManager.DrawScenicObjects();
+				placesManager.DrawObjects();
 				
 				world.Step(Global.TIME_STEP, Global.VELOCITY_ITERATIONS, Global.POSITION_ITERATIONS);
 				world.ClearForces();

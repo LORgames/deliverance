@@ -1,8 +1,10 @@
 package GameCom.GameComponents {
+	import Box2D.Dynamics.Contacts.b2ContactEdge;
 	import flash.geom.ColorTransform;
 	import GameCom.States.GameScreen;
 	import LORgames.Engine.Keys;
 	import flash.ui.Keyboard;
+	import GameCom.Managers.TriggerManager;
 	
 	import Box2D.Collision.*;
 	import Box2D.Common.Math.*;
@@ -237,6 +239,20 @@ package GameCom.GameComponents {
 			this.x = int(body.GetPosition().x * Global.PHYSICS_SCALE);
 			this.y = int(body.GetPosition().y * Global.PHYSICS_SCALE);
 			this.rotation = body.GetAngle() / Math.PI * 180;
+			
+			var contacts:b2ContactEdge = body.GetContactList();
+			
+			while (contacts != null) {
+				if (contacts.other.GetUserData() is PlaceObject) {
+					var place:PlaceObject = contacts.other.GetUserData() as PlaceObject;
+					
+					if(place.isActive) {
+						TriggerManager.ReportTrigger("place_" + (contacts.other.GetUserData() as PlaceObject).TriggerValue);
+					}
+				}
+				
+				contacts = contacts.next;
+			}
 		}
 	}
 }

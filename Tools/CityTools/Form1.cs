@@ -417,7 +417,7 @@ namespace CityTools {
             // Get the window to redraw
             mapViewPanel.Invalidate();
         }
-
+        
         private void tsmSendToBack_Click(object sender, EventArgs e) {
             if (paintMode == PaintMode.ObjectSelector) {
                 ScenicHelper.SendToBack();

@@ -42,10 +42,6 @@ package GameCom.Managers {
 			var j:int;
 			var typeID:int;
 			
-			//TODO: When Physics is implemented, needs to be loaded in here
-			
-			objectTypes.endian = Endian.BIG_ENDIAN;
-			
             var totalTypes:int = objectTypes.readInt();
 			var totalPhysicsShapes:int = objectTypes.readInt();
 			

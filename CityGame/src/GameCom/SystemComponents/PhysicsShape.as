@@ -16,7 +16,7 @@ package GameCom.SystemComponents {
 		private var FixtureList:Array = new Array();
 		
 		public function PhysicsShape() {
-			trace("Created Physics Shape...");
+			//Not sure if anything needs to be done here.
 		}
 		
 		public function GenerateBody(body:b2Body):void {
@@ -27,8 +27,6 @@ package GameCom.SystemComponents {
 		}
 		
 		public function AddCircle(x:Number, y:Number, r:Number):void {
-			trace("\tLoaded circle: x:" + x + ", y:" + y + ", r:" + r);
-			
 			var circle:b2CircleShape = new b2CircleShape(r);
 			
 			//Create the shape
@@ -43,8 +41,6 @@ package GameCom.SystemComponents {
 		}
 		
 		public function AddRectangle(x:Number, y:Number, w:Number, h:Number):void {
-			trace("\tLoaded rectangle: x:" + x + ", y:" + y + ", w:" + w + ", h:" + h); 
-			
 			//Create the shape
 			var bodyShape:b2PolygonShape = new b2PolygonShape();
 			bodyShape.SetAsOrientedBox(w, h, new b2Vec2(x, y));

@@ -5,9 +5,8 @@ package  {
 	 * @version 1
 	 */
 	public class Global {
-		
 		//The name of the game
-		public static const GAME_NAME:String = "Ultimate Lorry Attack Extreme";
+		public static const GAME_NAME:String = "Deliverence";
 		
 		//The UI scaling factor (pretty damned important now that its needed everywhere... sigh)
 		public static var UI_SCALE:Number = 1.0;
@@ -22,9 +21,6 @@ package  {
 		//Number of iterations for things
 		public static const VELOCITY_ITERATIONS:int = 20;
 		public static const POSITION_ITERATIONS:int = 20;
-		
-		//Server name and directory
-		public static const SERVER_ADDR:String = "http://localhost/bridge/";
 	}
 
 }

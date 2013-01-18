@@ -63,6 +63,13 @@ namespace ToolToGameExporter {
             try { zip.RemoveEntry("2.map"); } catch { }
             ConvertNodeFormat(zip);
 
+            //PLACES CONVERSION
+            try { zip.RemoveEntry("3.map"); } catch { }
+            zip.AddEntry("3.map", File.ReadAllBytes(GetPlacesStore()));
+
+            try { zip.RemoveEntry("3.cache"); } catch { }
+            OptimizeAndAddPlaces(zip);
+
             //SAVE IT OUT
             while (true) {
                 try {
@@ -161,6 +168,50 @@ namespace ToolToGameExporter {
             }
         }
 
+        private byte[] OptimizeAndAddPlaces(ZipFile zp) {
+            ClearOutOldPlaces(zp);
+
+            BinaryIO f = new BinaryIO(File.ReadAllBytes(GetPlacesTypes()));
+            BinaryIO o = new BinaryIO();
+
+            int totalShapes = f.GetInt();
+            f.GetInt(); //Just need to clear this value :)
+
+            o.AddInt(totalShapes);
+
+            for (int i = 0; i < totalShapes; i++) {
+                int type_id = f.GetInt();
+                string source = f.GetString();
+
+                zp.AddEntry("Places/" + type_id + ".png", File.ReadAllBytes(tool_loc_TB.Text + source));
+
+                int startLoc = source.LastIndexOf('\\');
+                int endLoc = source.LastIndexOf('.');
+
+                string triggerName = source.Substring(startLoc+1, endLoc-startLoc-1);
+
+                o.AddInt(type_id); //Type ID
+                o.AddString(triggerName); //Trigger name
+            }
+
+            f.Dispose();
+
+            zp.AddEntry("3.cache", o.EncodedBytes());
+
+            return null;
+        }
+
+        private void ClearOutOldPlaces(ZipFile zp) {
+            string[] files = new string[zp.EntryFileNames.Count];
+            zp.EntryFileNames.CopyTo(files, 0);
+
+            foreach (string entry in files) {
+                if (entry.Length > 8 && entry.Substring(0, 7) == "Places/") {
+                    zp.RemoveEntry(entry);
+                }
+            }
+        }
+
         private void ConvertNodeFormat(ZipFile zp) {
             Dictionary<int, ToolNode> t_nodes = new Dictionary<int, ToolNode>();
             List<GameNode> g_nodes = new List<GameNode>();
@@ -251,6 +302,8 @@ namespace ToolToGameExporter {
         private string GetScenicStore() { return GetToolCacheLoc() + "scenic_store.bin"; }
         private string GetScenicTypes() { return GetToolCacheLoc() + "scenic_types.bin"; }
         private string GetNodeStore() { return GetToolCacheLoc() + "node_data.bin"; }
+        private string GetPlacesStore() { return GetToolCacheLoc() + "places_store.bin"; }
+        private string GetPlacesTypes() { return GetToolCacheLoc() + "places_types.bin"; }
     }
 
     public struct ToolNode {
