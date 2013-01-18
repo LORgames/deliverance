@@ -24,14 +24,14 @@ namespace CityTools.Core {
             int iW, iH;
 
             if (a_rotationAngle <= 90) {
-                iW = (int)(dH * dSin + dW * dCos);
-                iH = (int)(dW * dSin + dH * dCos);
+                iW = (int)Math.Round(dH * dSin + dW * dCos);
+                iH = (int)Math.Round(dW * dSin + dH * dCos);
             } else if(rotationAngle == 180) {
                 iW = (int)original.Width;
                 iH = (int)original.Height;
             } else {
-                iW = (int)(dW * dSin + dH * dCos);
-                iH = (int)(dH * dSin + dW * dCos);
+                iW = (int)Math.Round(dW * dSin + dH * dCos);
+                iH = (int)Math.Round(dH * dSin + dW * dCos);
             }
 
             int iX = (iW - original.Width) / 2;

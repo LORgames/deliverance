@@ -29,7 +29,6 @@ package GameCom {
 			while (contentLayer.numChildren > 0) { contentLayer.removeChildAt(0); }
 			contentLayer.addChild(xx);
 		}
-		
 	}
 
 }

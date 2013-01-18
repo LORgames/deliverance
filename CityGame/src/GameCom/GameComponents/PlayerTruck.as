@@ -234,8 +234,8 @@ package GameCom.GameComponents {
 			mspeed = steeringAngle - rightJoint.GetJointAngle();
 			rightJoint.SetMotorSpeed(mspeed * STEER_SPEED);
 			
-			this.x = body.GetPosition().x * Global.PHYSICS_SCALE;
-			this.y = body.GetPosition().y * Global.PHYSICS_SCALE;
+			this.x = int(body.GetPosition().x * Global.PHYSICS_SCALE);
+			this.y = int(body.GetPosition().y * Global.PHYSICS_SCALE);
 			this.rotation = body.GetAngle() / Math.PI * 180;
 		}
 	}

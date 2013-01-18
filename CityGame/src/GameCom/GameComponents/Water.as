@@ -17,7 +17,7 @@ package GameCom.GameComponents  {
 		
 		private var drawnLayer:Sprite = new Sprite();
 		
-		public const ANIMATION_SCALE:Number = 0.0025;
+		public const ANIMATION_SCALE:Number = 0.025;
 		private var animationTick:Number = 0;
 		
 		private var bitmapData_1:BitmapData;
@@ -27,8 +27,8 @@ package GameCom.GameComponents  {
 		
 		private var speeds:Array = [];
 		
-		private var baseX:Number = 16;
-		private var baseY:Number = 16;
+		private var baseX:Number = 32;
+		private var baseY:Number = 32;
 		private var numOctaves:uint = 4;
 		private var randomSeed:int = 1257;
 		private var stitch:Boolean = true;
@@ -44,20 +44,20 @@ package GameCom.GameComponents  {
 			
 			this.addChild(drawnLayer);
 			
-			speeds[0] = new Point( 200, -120);
-			speeds[1] = new Point(-280, -10);
-			speeds[2] = new Point( 200, -240);
-			speeds[3] = new Point(-20,  -290); 
+			speeds[0] = new Point( 08,  12);
+			speeds[1] = new Point( 28, -10);
+			speeds[2] = new Point(-16, -24);
+			speeds[3] = new Point(-14,  29); 
 			
 			bitmapData_1.perlinNoise(baseX, baseY, 1, randomSeed + 0, true, fractalNoise, channelOptions, grayScale);
 			bitmapData_2.perlinNoise(baseX, baseY, 1, randomSeed + 1, true, fractalNoise, channelOptions, grayScale);
 			bitmapData_3.perlinNoise(baseX, baseY, 1, randomSeed + 2, true, fractalNoise, channelOptions, grayScale);
 			bitmapData_4.perlinNoise(baseX, baseY, 1, randomSeed + 3, true, fractalNoise, channelOptions, grayScale);
 			
-			bitmapData_1.colorTransform(new Rectangle(0, 0, SIZE_X, SIZE_Y), new ColorTransform(1, 1, 1, 0.25));
-			bitmapData_2.colorTransform(new Rectangle(0, 0, SIZE_X, SIZE_Y), new ColorTransform(1, 1, 1, 0.187));
-			bitmapData_3.colorTransform(new Rectangle(0, 0, SIZE_X, SIZE_Y), new ColorTransform(1, 1, 1, 0.125));
-			bitmapData_4.colorTransform(new Rectangle(0, 0, SIZE_X, SIZE_Y), new ColorTransform(1, 1, 1, 0.062));
+			bitmapData_1.colorTransform(new Rectangle(0, 0, SIZE_X, SIZE_Y), new ColorTransform(1, 1, 1, 0.10));
+			bitmapData_2.colorTransform(new Rectangle(0, 0, SIZE_X, SIZE_Y), new ColorTransform(1, 1, 1, 0.10));
+			bitmapData_3.colorTransform(new Rectangle(0, 0, SIZE_X, SIZE_Y), new ColorTransform(1, 1, 1, 0.10));
+			bitmapData_4.colorTransform(new Rectangle(0, 0, SIZE_X, SIZE_Y), new ColorTransform(1, 1, 1, 0.10));
 		}
 		
 		public function Update():void {

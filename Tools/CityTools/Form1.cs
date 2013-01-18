@@ -12,14 +12,17 @@ using CityTools.ObjectSystem;
 using CityTools.Terrain;
 using CityTools.Core;
 using CityTools.Nodes;
+using CityTools.Places;
 
 namespace CityTools {
     public enum PaintMode {
         Off,
         Terrain,
         Objects,
+        Places,
         Physics,
         ObjectSelector,
+        PlacesSelector,
         Nodes,
         NodeLinks,
         NodeSelector
@@ -44,6 +47,7 @@ namespace CityTools {
         //Our drawing buffers
         public LBuffer floor_buffer;
         public LBuffer objects0_buffer;
+        public LBuffer places_buffer;
         public LBuffer objects1_buffer;
         public LBuffer physics_buffer;
         public LBuffer nodes_buffer;
@@ -59,6 +63,7 @@ namespace CityTools {
         public String obj_paint_original = "";
         public bool was_mouse_down = false;
 
+        private bool minimap_initialized = false;
         public bool initialized = false;
 
         public MainWindow() {
@@ -70,9 +75,11 @@ namespace CityTools {
             MapCache.VerifyCacheFiles();
 
             ScenicObjectCache.InitializeCache();
+            PlacesObjectCache.InitializeCache();
             NodeCache.InitializeCache();
 
             obj_scenary_objs.Controls.Add(new ObjectCacheControl("Road"));
+            places_tab.Controls.Add(new ObjectCacheControl(PlacesObjectCache.PLACES_FOLDER, false));
 
             List<String> dark = new List<string>();
             dark.InsertRange(0, Directory.GetDirectories("objcache"));
@@ -101,6 +108,7 @@ namespace CityTools {
 
             floor_buffer = new LBuffer();
             objects0_buffer = new LBuffer();
+            places_buffer = new LBuffer();
             objects1_buffer = new LBuffer();
             physics_buffer = new LBuffer();
             nodes_buffer = new LBuffer();
@@ -122,6 +130,7 @@ namespace CityTools {
 
             if (layer_floor.Checked) e.Graphics.DrawImage(floor_buffer.bmp, Point.Empty);
             if (layer_objects_0.Checked) e.Graphics.DrawImage(objects0_buffer.bmp, Point.Empty);
+            if (layer_places.Checked) e.Graphics.DrawImage(places_buffer.bmp, Point.Empty);
             if (layer_objects_1.Checked) e.Graphics.DrawImage(objects1_buffer.bmp, Point.Empty);
             if (layer_physics.Checked) e.Graphics.DrawImage(physics_buffer.bmp, Point.Empty);
             if (layer_nodes.Checked) e.Graphics.DrawImage(nodes_buffer.bmp, Point.Empty);
@@ -139,29 +148,20 @@ namespace CityTools {
                 minimap.Invalidate();
             } else if (keyData == Keys.Escape) {
                 input_buffer.gfx.Clear(Color.Transparent);
+                paintMode = PaintMode.Off;
                 mapViewPanel.Invalidate();
             } else if (keyData == Keys.R) {
-                if (obj_rot.Value < 315) {
-                    obj_rot.Value += 45;
-                } else {
-                    obj_rot.Value = 0;
-                }
+                if (obj_rot.Value < 315) { obj_rot.Value += 45; } else { obj_rot.Value = 0; }
             } else if (keyData == Keys.F) {
-                if (obj_rot.Value > 0) {
-                    obj_rot.Value -= 45;
-                } else {
-                    obj_rot.Value = 315;
-                }
+                if (obj_rot.Value > 0) { obj_rot.Value -= 45; } else { obj_rot.Value = 315; }
             } else if (paintMode == PaintMode.ObjectSelector) {
-                // Pass the data onto the helper
                 ScenicHelper.ProcessCmdKey(ref msg, keyData);
-
-                // Get the window to redraw
+                mapViewPanel.Invalidate();
+            } else if (paintMode == PaintMode.PlacesSelector) {
+                PlacesHelper.ProcessCmdKey(ref msg, keyData);
                 mapViewPanel.Invalidate();
             } else if (paintMode == PaintMode.NodeSelector) {
                 NodeHelper.ProcessCmdKey(ref msg, keyData);
-
-                // Get the window to redraw
                 mapViewPanel.Invalidate();
             }
 
@@ -182,7 +182,11 @@ namespace CityTools {
                 input_buffer.gfx.Clear(Color.Transparent);
                 mapViewPanel.Invalidate();
                 ScenicHelper.MouseUp(e);
-            } else if (paintMode == PaintMode.Objects) {
+            } else if (paintMode == PaintMode.PlacesSelector) {
+                input_buffer.gfx.Clear(Color.Transparent);
+                mapViewPanel.Invalidate();
+                PlacesHelper.MouseUp(e);
+            } else if (paintMode == PaintMode.Objects || paintMode == PaintMode.Places) {
                 mapViewPanel.Invalidate();
             } else if (paintMode == PaintMode.Terrain) {
                 MapCache.SaveMap();
@@ -190,12 +194,12 @@ namespace CityTools {
                 mapViewPanel.Invalidate();
             } else if (paintMode == PaintMode.NodeLinks) {
                 input_buffer.gfx.Clear(Color.Transparent);
-                mapViewPanel.Invalidate();
                 NodeHelper.MouseUp(e);
+                mapViewPanel.Invalidate();
             } else if (paintMode == PaintMode.NodeSelector) {
                 input_buffer.gfx.Clear(Color.Transparent);
-                mapViewPanel.Invalidate();
                 NodeHelper.MouseUp_Selector(e);
+                mapViewPanel.Invalidate();
             }
 
             was_mouse_down = false;
@@ -209,13 +213,15 @@ namespace CityTools {
                     TerrainHelper.DrawTerrain(floor_buffer);
                 }
             } else if(paintMode == PaintMode.Objects) {
-                if(ObjectSystem.ScenicPlacementHelper.UpdateMouse(e, input_buffer)) {
-                    ScenicDrawer.DrawScenicObjects(objects0_buffer, objects1_buffer);
-                }
+                ScenicPlacementHelper.UpdateMouse(e, input_buffer);
+            } else if (paintMode == PaintMode.Places) {
+                PlacesPlacementHelper.UpdateMouse(e, input_buffer);
             } else if (paintMode == PaintMode.Physics) {
                 Physics.PhysicsDrawer.UpdateMouse(e, input_buffer);
             } else if (paintMode == PaintMode.ObjectSelector) {
                 ScenicHelper.UpdateMouse(e, input_buffer);
+            } else if (paintMode == PaintMode.PlacesSelector) {
+                PlacesHelper.UpdateMouse(e, input_buffer);
             } else if (paintMode == PaintMode.Nodes) {
             } else if (paintMode == PaintMode.NodeLinks) {
                 if (NodeHelper.UpdateMouse(e, input_buffer)) {
@@ -236,12 +242,17 @@ namespace CityTools {
                 }
                 mapViewPanel.Invalidate();
             } else if (paintMode == PaintMode.Objects) {
-                ObjectSystem.ScenicPlacementHelper.MouseDown(e, input_buffer);
+                ScenicPlacementHelper.MouseDown(e, input_buffer);
+                mapViewPanel.Invalidate();
+            } else if (paintMode == PaintMode.Places) {
+                PlacesPlacementHelper.MouseDown(e, input_buffer);
                 mapViewPanel.Invalidate();
             } else if (paintMode == PaintMode.Physics) {
                 Physics.PhysicsDrawer.MouseDown(e, input_buffer);
             } else if (paintMode == PaintMode.ObjectSelector) {
                 ScenicHelper.MouseDown(e);
+            } else if (paintMode == PaintMode.PlacesSelector) {
+                PlacesHelper.MouseDown(e);
             } else if (paintMode == PaintMode.Nodes) {
                 Nodes.NodeDrawer.MouseDown(e, input_buffer);
                 mapViewPanel.Invalidate();
@@ -257,12 +268,13 @@ namespace CityTools {
 
             floor_buffer.gfx.Clear(Color.Transparent);
             objects0_buffer.gfx.Clear(Color.Transparent);
+            places_buffer.gfx.Clear(Color.Transparent);
             objects1_buffer.gfx.Clear(Color.Transparent);
             physics_buffer.gfx.Clear(Color.Transparent);
             nodes_buffer.gfx.Clear(Color.Transparent);
 
-            if (layer_objects_0.Checked) {
-                ScenicDrawer.DrawScenicObjects(objects0_buffer, objects1_buffer);
+            if (layer_objects_0.Checked || layer_objects_1.Checked || layer_physics.Checked) {
+                BaseObjectDrawer.DrawObjects(objects0_buffer, objects1_buffer, places_buffer);
             }
 
             if (layer_nodes.Checked) {
@@ -282,13 +294,12 @@ namespace CityTools {
             CreateBuffers();
 
             Terrain.TerrainHelper.DrawTerrain(floor_buffer);
-            ScenicDrawer.DrawScenicObjects(objects0_buffer, objects1_buffer);
-            mapViewPanel.Invalidate();
+            BaseObjectDrawer.DrawObjects(objects0_buffer, objects1_buffer, places_buffer);
 
+            mapViewPanel.Invalidate();
             minimap.Invalidate();
         }
 
-        private bool DRAWN = false;
         private void minimap_Paint(object sender, PaintEventArgs e) {
             if (!initialized) return;
 
@@ -297,10 +308,10 @@ namespace CityTools {
             float scaleX = (float)minimap.Width / MAP_SIZE_X;
             float scaleY = (float)minimap.Height / MAP_SIZE_Y;
 
-            if (!DRAWN) {
+            if (!minimap_initialized) {
                 minimapBuffer = new LBuffer(minimap.DisplayRectangle);
                 Minimap.MinimapDrawer.RedrawAllTerrain(minimapBuffer, minimap.DisplayRectangle);
-                DRAWN = true;
+                minimap_initialized = true;
             }
 
             e.Graphics.DrawImage(minimapBuffer.bmp, Point.Empty);
@@ -315,7 +326,7 @@ namespace CityTools {
             Camera.FixViewArea(drawArea);
 
             TerrainHelper.DrawTerrain(floor_buffer);
-            ScenicDrawer.DrawScenicObjects(objects0_buffer, objects1_buffer);
+            BaseObjectDrawer.DrawObjects(objects0_buffer, objects1_buffer, places_buffer);
 
             mapViewPanel.Invalidate();
             minimap.Invalidate();
@@ -326,10 +337,16 @@ namespace CityTools {
                 paintMode = PaintMode.Terrain;
                 TerrainHelper.SetCurrentTile(TerrainHelper.StripTileIDFromPath(objectName));
             } else if (first_level_tabControl.SelectedTab == palette_tab) {
-                CityTools.ObjectSystem.ScenicPlacementHelper.object_index = ScenicObjectCache.s_StringToInt[objectName];//objectName;
-                paintMode = PaintMode.Objects;
                 obj_paint_original = objectName;
                 obj_paint_image = (Bitmap)ImageCache.RequestImage(objectName, (int)obj_rot.Value);
+
+                if (tool_tabs.SelectedTab == objects_tab) {
+                    ScenicPlacementHelper.object_index = ScenicObjectCache.s_StringToInt[objectName];//objectName;
+                    paintMode = PaintMode.Objects;
+                } else if (tool_tabs.SelectedTab == places_tab) {
+                    PlacesPlacementHelper.object_index = PlacesObjectCache.s_StringToInt[objectName];//objectName;
+                    paintMode = PaintMode.Places;
+                }
             }
         }
 
@@ -347,12 +364,18 @@ namespace CityTools {
 
         private void obj_select_btn_Click(object sender, EventArgs e) {
             paintMode = PaintMode.ObjectSelector;
-            mapViewPanel.Cursor = Cursors.Cross;
+        }
+
+        private void places_select_btn_Click(object sender, EventArgs e) {
+            paintMode = PaintMode.PlacesSelector;
         }
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e) {
             ScenicObjectCache.SaveTypes();
             ScenicObjectCache.SaveCache();
+
+            PlacesObjectCache.SaveTypes();
+            PlacesObjectCache.SaveCache();
 
             NodeCache.SaveCache();
 
@@ -361,9 +384,7 @@ namespace CityTools {
             } catch {
                 try {
                     File.Delete("minimap.jpg");
-                } catch {
-                    //MessageBox.Show("There was a critical exception handled and magic wasn't able to fix it either. Now you can be the hero of the story and slay the beast.\n\nPlease delete minimap.png");
-                }
+                } catch { } //Minimap is now out of date :(
             }
         }
 
@@ -376,28 +397,44 @@ namespace CityTools {
         }
 
         private void tsmSendBack_Click(object sender, EventArgs e) {
-            ScenicHelper.SendBack();
+            if (paintMode == PaintMode.ObjectSelector) {
+                ScenicHelper.SendBack();
+            } else if (paintMode == PaintMode.PlacesSelector) {
+                PlacesHelper.SendBack();
+            }
 
             // Get the window to redraw
             mapViewPanel.Invalidate();
         }
 
         private void tsmBringForward_Click(object sender, EventArgs e) {
-            ScenicHelper.BringForward();
+            if (paintMode == PaintMode.ObjectSelector) {
+                ScenicHelper.BringForward();
+            } else if (paintMode == PaintMode.PlacesSelector) {
+                PlacesHelper.BringForward();
+            }
 
             // Get the window to redraw
             mapViewPanel.Invalidate();
         }
 
         private void tsmSendToBack_Click(object sender, EventArgs e) {
-            ScenicHelper.SendToBack();
+            if (paintMode == PaintMode.ObjectSelector) {
+                ScenicHelper.SendToBack();
+            } else if (paintMode == PaintMode.PlacesSelector) {
+                PlacesHelper.SendToBack();
+            }
 
             // Get the window to redraw
             mapViewPanel.Invalidate();
         }
 
         private void tsmBringToFront_Click(object sender, EventArgs e) {
-            ScenicHelper.BringToFront();
+            if (paintMode == PaintMode.ObjectSelector) {
+                ScenicHelper.BringToFront();
+            } else if (paintMode == PaintMode.PlacesSelector) {
+                PlacesHelper.BringToFront();
+            }
 
             // Get the window to redraw
             mapViewPanel.Invalidate();

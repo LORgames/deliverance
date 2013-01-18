@@ -95,9 +95,9 @@ namespace CityTools.ObjectSystem {
             }
 
             // Remove from ScenicDrawer
-            for (int i = 0; i < ScenicDrawer.drawList.Count; i++) {
-                if (ScenicDrawer.drawList[i] == this) {
-                    ScenicDrawer.drawList.RemoveAt(i);
+            for (int i = 0; i < BaseObjectDrawer.drawList.Count; i++) {
+                if (BaseObjectDrawer.drawList[i] == this) {
+                    BaseObjectDrawer.drawList.RemoveAt(i);
                     i--;
                 }
             }

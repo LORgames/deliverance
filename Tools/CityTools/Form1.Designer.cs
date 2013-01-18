@@ -36,6 +36,7 @@
             this.minimap = new System.Windows.Forms.PictureBox();
             this.first_level_tabControl = new System.Windows.Forms.TabControl();
             this.settings_tab = new System.Windows.Forms.TabPage();
+            this.layer_places = new System.Windows.Forms.CheckBox();
             this.layer_objects_1 = new System.Windows.Forms.CheckBox();
             this.layer_nodes = new System.Windows.Forms.CheckBox();
             this.settings_lbl = new System.Windows.Forms.Label();
@@ -70,6 +71,7 @@
             this.tsmBringForward = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmSendToBack = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmBringToFront = new System.Windows.Forms.ToolStripMenuItem();
+            this.places_selector_btn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.main_splitter)).BeginInit();
             this.main_splitter.Panel1.SuspendLayout();
             this.main_splitter.Panel2.SuspendLayout();
@@ -94,6 +96,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.obj_rot)).BeginInit();
             this.physics_tab.SuspendLayout();
             this.nodes_tab.SuspendLayout();
+            this.places_tab.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -182,6 +185,7 @@
             // 
             // settings_tab
             // 
+            this.settings_tab.Controls.Add(this.layer_places);
             this.settings_tab.Controls.Add(this.layer_objects_1);
             this.settings_tab.Controls.Add(this.layer_nodes);
             this.settings_tab.Controls.Add(this.settings_lbl);
@@ -196,12 +200,25 @@
             this.settings_tab.Text = "Settings";
             this.settings_tab.UseVisualStyleBackColor = true;
             // 
+            // layer_places
+            // 
+            this.layer_places.AutoSize = true;
+            this.layer_places.Checked = true;
+            this.layer_places.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.layer_places.Location = new System.Drawing.Point(6, 69);
+            this.layer_places.Name = "layer_places";
+            this.layer_places.Size = new System.Drawing.Size(58, 17);
+            this.layer_places.TabIndex = 16;
+            this.layer_places.Text = "Places";
+            this.layer_places.UseVisualStyleBackColor = true;
+            this.layer_places.CheckedChanged += new System.EventHandler(this.layerSettingsChanged);
+            // 
             // layer_objects_1
             // 
             this.layer_objects_1.AutoSize = true;
             this.layer_objects_1.Checked = true;
             this.layer_objects_1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.layer_objects_1.Location = new System.Drawing.Point(6, 69);
+            this.layer_objects_1.Location = new System.Drawing.Point(6, 92);
             this.layer_objects_1.Name = "layer_objects_1";
             this.layer_objects_1.Size = new System.Drawing.Size(94, 17);
             this.layer_objects_1.TabIndex = 15;
@@ -214,7 +231,7 @@
             this.layer_nodes.AutoSize = true;
             this.layer_nodes.Checked = true;
             this.layer_nodes.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.layer_nodes.Location = new System.Drawing.Point(6, 115);
+            this.layer_nodes.Location = new System.Drawing.Point(6, 138);
             this.layer_nodes.Name = "layer_nodes";
             this.layer_nodes.Size = new System.Drawing.Size(57, 17);
             this.layer_nodes.TabIndex = 14;
@@ -249,7 +266,7 @@
             this.layer_physics.AutoSize = true;
             this.layer_physics.Checked = true;
             this.layer_physics.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.layer_physics.Location = new System.Drawing.Point(6, 92);
+            this.layer_physics.Location = new System.Drawing.Point(6, 115);
             this.layer_physics.Name = "layer_physics";
             this.layer_physics.Size = new System.Drawing.Size(62, 17);
             this.layer_physics.TabIndex = 2;
@@ -513,6 +530,7 @@
             // 
             // places_tab
             // 
+            this.places_tab.Controls.Add(this.places_selector_btn);
             this.places_tab.Location = new System.Drawing.Point(4, 22);
             this.places_tab.Name = "places_tab";
             this.places_tab.Size = new System.Drawing.Size(215, 174);
@@ -567,6 +585,17 @@
             this.tsmBringToFront.Text = "Bring to Front";
             this.tsmBringToFront.Click += new System.EventHandler(this.tsmBringToFront_Click);
             // 
+            // places_selector_btn
+            // 
+            this.places_selector_btn.Dock = System.Windows.Forms.DockStyle.Top;
+            this.places_selector_btn.Location = new System.Drawing.Point(0, 0);
+            this.places_selector_btn.Name = "places_selector_btn";
+            this.places_selector_btn.Size = new System.Drawing.Size(215, 23);
+            this.places_selector_btn.TabIndex = 0;
+            this.places_selector_btn.Text = "Places Selector";
+            this.places_selector_btn.UseVisualStyleBackColor = true;
+            this.places_selector_btn.Click += new System.EventHandler(this.places_select_btn_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -603,6 +632,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.obj_rot)).EndInit();
             this.physics_tab.ResumeLayout(false);
             this.nodes_tab.ResumeLayout(false);
+            this.places_tab.ResumeLayout(false);
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -651,6 +681,8 @@
         private System.Windows.Forms.Button node_add_node_link;
         private System.Windows.Forms.Button node_select_btn;
         internal System.Windows.Forms.ComboBox cmbNodeStyle;
+        internal System.Windows.Forms.CheckBox layer_places;
+        private System.Windows.Forms.Button places_selector_btn;
     }
 }
 
