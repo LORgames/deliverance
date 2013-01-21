@@ -6,7 +6,7 @@ package  {
 	 */
 	public class Global {
 		//The name of the game
-		public static const GAME_NAME:String = "Deliverence";
+		public static const GAME_NAME:String = "Deliverance";
 		
 		//The UI scaling factor (pretty damned important now that its needed everywhere... sigh)
 		public static var UI_SCALE:Number = 1.0;

@@ -250,7 +250,7 @@ F8 -
 F9 - 
 FA - 
 FB - 
-FC - Vertical Plowed
-FD - Horizontal Plowed
-FE - Vertical Strawberries
-FF - Horizontal Strawberries
+FC - Farmland: Vertical Plowed
+FD - Farmland: Horizontal Plowed
+FE - Farmland: Vertical Strawberries
+FF - Farmland: Horizontal Strawberries

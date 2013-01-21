@@ -23,7 +23,7 @@ package GameCom.GameComponents {
 		
 		private const SIDEWAYS_FRICTION_FORCE:Number = 1000;
 		private const HORSEPOWER_MAX:Number = 50;
-		private const HORSEPOWER_INC:Number = 10;
+		private const HORSEPOWER_INC:Number = 25;
 		
 		private const NOSFACTOR:Number = 0;
 		

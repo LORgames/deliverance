@@ -16,6 +16,7 @@ package GameCom.States {
 	import flash.ui.Keyboard;
 	import flash.utils.getTimer;
 	import flash.utils.Timer;
+	import GameCom.Managers.GUIManager;
 	import GameCom.Managers.ObjManager;
 	import GameCom.GameComponents.PlayerTruck;
 	import GameCom.GameComponents.Water;
@@ -57,6 +58,8 @@ package GameCom.States {
 		private var bgManager:BGManager;
 		private var scenicManager:ScenicManager;
 		private var placesManager:PlacesManager;
+		
+		private var gui:GUIManager;
 		
 		private var player:PlayerTruck;
 		
@@ -113,13 +116,18 @@ package GameCom.States {
 			
 			// places manager gets its layer
 			placesManager = new PlacesManager(placesLayer, player, world);
+			
+			gui = new GUIManager(player);
+			this.addChild(gui);
 		}
 		
 		private function Update(e:Event):void {
 			if (simulating) {
-				
 				var dt:Number = (getTimer() - previousFrameTime) / 1000;
 				previousFrameTime = getTimer();
+				
+				world.Step(Global.TIME_STEP, Global.VELOCITY_ITERATIONS, Global.POSITION_ITERATIONS);
+				world.ClearForces();
 				
 				//Update the objects
 				waterLayer.Update();
@@ -127,11 +135,10 @@ package GameCom.States {
 				player.Update(dt);
 				objManager.Update();
 				
+				gui.Update();
+				
 				scenicManager.DrawScenicObjects();
 				placesManager.DrawObjects();
-				
-				world.Step(Global.TIME_STEP, Global.VELOCITY_ITERATIONS, Global.POSITION_ITERATIONS);
-				world.ClearForces();
 				
 				worldSpr.x = Math.floor(-player.x + stage.stageWidth/2);
 				worldSpr.y = Math.floor( -player.y + stage.stageHeight / 2);
