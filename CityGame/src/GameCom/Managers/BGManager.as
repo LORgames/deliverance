@@ -61,7 +61,10 @@ package GameCom.Managers
 			for (var i:int = 0; i < maxTilesX; i++) {
 				mapdata.push(new Array());
 				for (var j:int = 0; j < maxTilesY; j++) {
-					mapdata[i][j] = mapfile.readByte();
+					mapdata[i][j] = (mapfile.readByte() as uint);
+					if (mapdata[i][j] < 0 || mapdata[i][j] > 255) {
+						throw new TypeError("Not an unsigned byte");
+					}
 				}
 			}
 			
@@ -80,7 +83,7 @@ package GameCom.Managers
 			
             for (var i:int = LeftEdge; i < RightEdge; i++) {
                 for (var j:int = TopEdge; j < BottomEdge; j++) {
-                    var f:int = mapdata[i][j];
+                    var f:uint = mapdata[i][j];
 					
                     if (f != 0) {
 						layer.graphics.beginBitmapFill(ThemeManager.Get("Tiles/" + f + ".png"));

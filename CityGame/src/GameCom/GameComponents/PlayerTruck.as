@@ -27,12 +27,12 @@ package GameCom.GameComponents {
 		
 		private const NOSFACTOR:Number = 0;
 		
-		private const leftRearWheelPosition:b2Vec2 = new b2Vec2(-1.3, 3.0);
-		private const rightRearWheelPosition:b2Vec2 = new b2Vec2(1.3, 3.0);
-		private const leftMidWheelPosition:b2Vec2 = new b2Vec2( -1.3, 1.5);
-		private const rightMidWheelPosition:b2Vec2 = new b2Vec2( 1.3, 1.5);
-		private const leftFrontWheelPosition:b2Vec2 =new b2Vec2(-1.3,-3.0);
-		private const rightFrontWheelPosition:b2Vec2= new b2Vec2(1.3,-3.0);
+		private const leftRearWheelPosition:b2Vec2 = new b2Vec2(-1.2, 3.0);
+		private const rightRearWheelPosition:b2Vec2 = new b2Vec2(1.2, 3.0);
+		private const leftMidWheelPosition:b2Vec2 = new b2Vec2( -1.2, 1.5);
+		private const rightMidWheelPosition:b2Vec2 = new b2Vec2( 1.2, 1.5);
+		private const leftFrontWheelPosition:b2Vec2 =new b2Vec2(-1.2,-3.0);
+		private const rightFrontWheelPosition:b2Vec2= new b2Vec2(1.2,-3.0);
 		
 		private var engineSpeed:Number = 0;
 		private var steeringAngle:Number = 0;
@@ -56,9 +56,19 @@ package GameCom.GameComponents {
 			this.getChildAt(0).scaleY = 0.25;
 			
 			this.getChildAt(0).x = -this.getChildAt(0).width / 2;
-			this.getChildAt(0).y = -this.getChildAt(0).height / 2 - 20;
+			this.getChildAt(0).y = -this.getChildAt(0).height / 2 - 15;
 			
 			this.getChildAt(0).transform.colorTransform = new ColorTransform(1, 1, 1);
+			
+			//Load the trailer
+			this.addChild(ThemeManager.Get("TruckBits/trailer.swf"));
+			this.getChildAt(1).scaleX = 0.35;
+			this.getChildAt(1).scaleY = 0.3;
+			
+			this.getChildAt(1).x = -this.getChildAt(1).width / 2;
+			this.getChildAt(1).y = -this.getChildAt(1).height / 2 + 15;
+			
+			this.getChildAt(1).transform.colorTransform = new ColorTransform(1, 1, 1);
 			
 			//////////////////////////
 			// TRUCK BODY

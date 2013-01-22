@@ -16,12 +16,12 @@ package GameCom.Managers
 		public function GUIManager(player:Sprite) {
 			this.player = player;
 			
-			Overlay = SpriteHelper.CreateCenteredBitmapData(ThemeManager.Get("GUI/TopUI.png"));
+			Overlay = SpriteHelper.CreateCenteredBitmapData(ThemeManager.Get("GUI/Overlay.png"));
 			this.addChild(Overlay);
 			Overlay.x = 100;
 			Overlay.y = 40;
 			
-			GPSArrow = SpriteHelper.CreateCenteredBitmapData(ThemeManager.Get("GUI/Arrow.png"));
+			GPSArrow = SpriteHelper.CreateCenteredBitmapData(ThemeManager.Get("GUI/Directora.png"));
 			this.addChild(GPSArrow);
 		}
 		
