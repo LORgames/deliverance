@@ -16,6 +16,16 @@ package GameCom.GameComponents
 		public function BaseObject() {
 			index = CURRENT_INDEX++;
 		}
+		
+		public static function Compare(a:BaseObject, b:BaseObject) : int {
+			if (a.index < b.index) {
+				return -1;
+			} else if (a.index > b.index) {
+				return 1;
+			} else {
+				return 0;
+			}
+		}
 
         //Draw function
         public function Draw(buffer:Graphics):void {

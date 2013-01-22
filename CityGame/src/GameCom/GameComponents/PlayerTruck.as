@@ -1,6 +1,7 @@
 package GameCom.GameComponents {
 	import Box2D.Dynamics.Contacts.b2ContactEdge;
 	import flash.geom.ColorTransform;
+	import GameCom.Managers.GUIManager;
 	import GameCom.States.GameScreen;
 	import LORgames.Engine.Keys;
 	import flash.ui.Keyboard;
@@ -25,7 +26,7 @@ package GameCom.GameComponents {
 		private const HORSEPOWER_MAX:Number = 50;
 		private const HORSEPOWER_INC:Number = 25;
 		
-		private const NOSFACTOR:Number = 0;
+		private const NOSFACTOR:Number = 1.5;
 		
 		private const leftRearWheelPosition:b2Vec2 = new b2Vec2(-1.2, 3.0);
 		private const rightRearWheelPosition:b2Vec2 = new b2Vec2(1.2, 3.0);
@@ -48,6 +49,10 @@ package GameCom.GameComponents {
 		private var leftJoint:b2RevoluteJoint;
 		private var rightJoint:b2RevoluteJoint;
 		
+		public var HealthPercent:Number = 1;
+		private var healthMax:int = 50;
+		private var healthCurrent:int = 50;
+		
 		public function PlayerTruck(spawnPosition:b2Vec2, world:b2World, worldSpr:Sprite) {
 			worldSpr.addChild(this);
 			
@@ -58,7 +63,7 @@ package GameCom.GameComponents {
 			this.getChildAt(0).x = -this.getChildAt(0).width / 2;
 			this.getChildAt(0).y = -this.getChildAt(0).height / 2 - 15;
 			
-			this.getChildAt(0).transform.colorTransform = new ColorTransform(1, 1, 1);
+			this.getChildAt(0).transform.colorTransform = new ColorTransform(0.2, 0.2, 0.2);
 			
 			//Load the trailer
 			this.addChild(ThemeManager.Get("TruckBits/trailer.swf"));
@@ -68,7 +73,7 @@ package GameCom.GameComponents {
 			this.getChildAt(1).x = -this.getChildAt(1).width / 2;
 			this.getChildAt(1).y = -this.getChildAt(1).height / 2 + 15;
 			
-			this.getChildAt(1).transform.colorTransform = new ColorTransform(1, 1, 1);
+			this.getChildAt(1).transform.colorTransform = new ColorTransform(0.2, 0.2, 0.2);
 			
 			//////////////////////////
 			// TRUCK BODY
@@ -216,17 +221,25 @@ package GameCom.GameComponents {
 				steeringAngle = 0;
 			}
 			
+			if (Keys.isKeyDown(Keyboard.SPACE)) {
+				steeringAngle *= 0.2;
+			}
+			
 			this.graphics.clear();
 			
-			if (!Keys.isKeyDown(Keyboard.SPACE)) {
+			if (!Keys.isKeyDown(Keyboard.SHIFT)) {
 				killOrthogonalVelocity(leftWheel);
 				killOrthogonalVelocity(rightWheel);
 				killOrthogonalVelocity(leftRearWheel);
 				killOrthogonalVelocity(rightRearWheel);
 				killOrthogonalVelocity(leftMidWheel);
 				killOrthogonalVelocity(rightMidWheel);
-			} else {
-				engineSpeed *= NOSFACTOR;
+			}
+			
+			if (Keys.isKeyDown(Keyboard.SPACE)) {
+				engineSpeed = -HORSEPOWER_MAX*NOSFACTOR;
+			} else if (Math.abs(engineSpeed) > HORSEPOWER_MAX) {
+				engineSpeed *= 0.5;
 			}
 			
 			//Driving
@@ -253,12 +266,22 @@ package GameCom.GameComponents {
 			var contacts:b2ContactEdge = body.GetContactList();
 			
 			while (contacts != null) {
-				if (contacts.other.GetUserData() is PlaceObject) {
+				if (contacts.other.GetUserData() is PlaceObject && contacts.contact.IsTouching()) {
 					var place:PlaceObject = contacts.other.GetUserData() as PlaceObject;
 					
 					if(place.isActive) {
 						TriggerManager.ReportTrigger("place_" + (contacts.other.GetUserData() as PlaceObject).TriggerValue);
 					}
+				} else if (!contacts.contact.IsSensor() && contacts.contact.IsTouching()) {
+					var manifold:b2WorldManifold = new b2WorldManifold();
+					contacts.contact.GetWorldManifold(manifold);
+					
+					var vel1:b2Vec2 = this.body.GetLinearVelocityFromWorldPoint(manifold.m_points[0]);
+					
+					trace(Math.round(vel1.Length()));
+					healthCurrent -= Math.round(vel1.Length());
+					HealthPercent = Number(healthCurrent) / healthMax;
+					GUIManager.I.UpdateCache();
 				}
 				
 				contacts = contacts.next;

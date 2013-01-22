@@ -5,6 +5,7 @@ package GameCom.Managers {
 	import flash.display.Sprite;
 	import flash.utils.ByteArray;
 	import flash.utils.Endian;
+	import GameCom.GameComponents.BaseObject;
 	import GameCom.GameComponents.PlayerTruck;
 	import GameCom.GameComponents.ScenicObject
 	import GameCom.SystemComponents.PhysicsShape;
@@ -14,10 +15,10 @@ package GameCom.Managers {
 	 * @author Paul
 	 */
 	public class ScenicManager {
-		private var Types:Array = new Array();
-		private var Objects:Array = new Array();
+		private var Types:Vector.<ScenicObjectType> = new Vector.<ScenicObjectType>();
+		private var Objects:Vector.<ScenicObject> = new Vector.<ScenicObject>();
 		
-		private var drawList:Array = new Array();
+		private var drawList:Vector.<ScenicObject> = new Vector.<ScenicObject>();
 		
 		private var layer0:Sprite;
 		private var layer1:Sprite;
@@ -46,18 +47,17 @@ package GameCom.Managers {
 			var totalPhysicsShapes:int = objectTypes.readInt();
 			
             for (i = 0; i < totalTypes; i++) {
-                typeID = objectTypes.readInt();
 				var layer:int = objectTypes.readByte();
 				
-				Types[typeID] = new ScenicObjectType();
-				(Types[typeID] as ScenicObjectType).Layer = layer;
+				Types.push(new ScenicObjectType());
+				Types[i].Layer = layer;
             }
 
             for (i = 0; i < totalPhysicsShapes; i++) {
                 typeID = objectTypes.readInt();
 				var totalPhysics:int = objectTypes.readInt();
 				
-				(Types[typeID] as ScenicObjectType).Physics = new PhysicsShape();
+				Types[typeID].Physics = new PhysicsShape();
 				
                 for (j = 0; j < totalPhysics; j++) {
                     var shapeType:int = objectTypes.readByte();
@@ -68,9 +68,9 @@ package GameCom.Managers {
 					var hDim:Number = objectTypes.readFloat();
 					
 					if (shapeType == 0) { //Rectangle
-						(Types[typeID] as ScenicObjectType).Physics.AddRectangle(xPos, yPos, wDim, hDim);
+						Types[typeID].Physics.AddRectangle(xPos, yPos, wDim, hDim);
 					} else if (shapeType == 1) { //Circle
-						(Types[typeID] as ScenicObjectType).Physics.AddCircle(xPos, yPos, wDim);
+						Types[typeID].Physics.AddCircle(xPos, yPos, wDim);
 					}
                 }
             }
@@ -83,12 +83,12 @@ package GameCom.Managers {
 				var locationY:Number = objectFile.readFloat();
 				var rotation:int = objectFile.readInt();
 				
-				Objects.push(new ScenicObject(sourceID, locationX, locationY, rotation, world, (Types[sourceID] as ScenicObjectType)));
+				Objects.push(new ScenicObject(sourceID, locationX, locationY, rotation, world, Types[sourceID]));
 			}
 		}
 		
         public function DrawScenicObjects():void {
-            drawList = new Array();
+            drawList = new Vector.<ScenicObject>();
 			
 			var area:b2AABB = new b2AABB();
 			area.lowerBound.Set((player.x - this.layer0.stage.stageWidth / 2)/Global.PHYSICS_SCALE, (player.y - this.layer0.stage.stageHeight / 2)/Global.PHYSICS_SCALE);
@@ -96,7 +96,7 @@ package GameCom.Managers {
 			
             this.world.QueryAABB(QCBD, area);
 			
-			drawList.sortOn("index");
+			drawList.sort(BaseObject.Compare);
 			
 			layer0.graphics.clear();
 			layer1.graphics.clear();

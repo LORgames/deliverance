@@ -61,9 +61,11 @@ package GameCom.Managers
 			for (var i:int = 0; i < maxTilesX; i++) {
 				mapdata.push(new Array());
 				for (var j:int = 0; j < maxTilesY; j++) {
-					mapdata[i][j] = (mapfile.readByte() as uint);
-					if (mapdata[i][j] < 0 || mapdata[i][j] > 255) {
-						throw new TypeError("Not an unsigned byte");
+					mapdata[i][j] = mapfile.readByte();
+					
+					if (mapdata[i][j] < 0) {
+						trace(mapdata[i][j] + " => " + (mapdata[i][j] + 256))
+						mapdata[i][j] = mapdata[i][j] + 256;
 					}
 				}
 			}

@@ -74,7 +74,11 @@ package {
 		
 		private function progress(e:ProgressEvent):void {
 			// Update the GUI
-			progressTF.text = "Loading " + (Math.floor(e.bytesLoaded / e.bytesTotal * 10000)/100) + "%";
+			if(e.bytesLoaded != e.bytesTotal) {
+				progressTF.text = "Loading " + (Math.floor(e.bytesLoaded / e.bytesTotal * 10000) / 100) + "%";
+			} else {
+				progressTF.text = "Unpacking...";
+			}
 		}
 		
 		private function checkFrame(e:Event):void {
@@ -90,7 +94,9 @@ package {
 			loaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, ioError);
 			
 			progressTF.text = "Preparing...";
-			ThemeManager.Initialize(CleanUp);
+			//ThemeManager.Initialize(CleanUp);
+			
+			CleanUp();
 		}
 		
 		public function CleanUp():void {

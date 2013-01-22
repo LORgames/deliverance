@@ -5,6 +5,7 @@ package GameCom.Managers {
 	import flash.display.Sprite;
 	import flash.utils.ByteArray;
 	import flash.utils.Endian;
+	import GameCom.GameComponents.BaseObject;
 	import GameCom.GameComponents.PlaceObject;
 	import GameCom.GameComponents.PlayerTruck;
 	import GameCom.GameComponents.ScenicObject
@@ -17,13 +18,13 @@ package GameCom.Managers {
 	public class PlacesManager {
 		public static var instance:PlacesManager;
 		
-		private var Types:Array = new Array();
-		private var Objects:Array = new Array();
+		private var Types:Vector.<String> = new Vector.<String>();
+		private var Objects:Vector.<PlaceObject> = new Vector.<PlaceObject>();
 		
-		private var drawList:Array = new Array();
+		public var drawList:Vector.<PlaceObject> = new Vector.<PlaceObject>();
 		
-		public var PickupLocations:Array = new Array();
-		public var DropatLocations:Array = new Array();
+		public var PickupLocations:Vector.<PlaceObject> = new Vector.<PlaceObject>();
+		public var DropatLocations:Vector.<PlaceObject> = new Vector.<PlaceObject>();
 		
 		private var layer:Sprite;
 		
@@ -59,19 +60,17 @@ package GameCom.Managers {
 			var dropatIndex:int = 0;
 			
             for (i = 0; i < totalTypes; i++) {
-                typeID = objectTypes.readInt();
-				
 				var triggerNameLength:int = objectTypes.readShort();
-				
 				var triggerName:String = objectTypes.readMultiByte(triggerNameLength, "iso-8859-1");
 				
 				if (triggerName == "Pickup") {
-					pickupIndex = typeID;
+					pickupIndex = i;
 				} else if (triggerName == "Deliver") {
-					dropatIndex = typeID;
+					dropatIndex = i;
 				}
 				
-				Types[typeID] = triggerName;
+				Types.push();
+				Types[i] = triggerName;
             }
 			
 			var totalShapes:int = objectFile.readInt();
@@ -82,7 +81,7 @@ package GameCom.Managers {
 				var locationY:Number = objectFile.readFloat();
 				var rotation:int = objectFile.readInt();
 				
-				var po:PlaceObject = new PlaceObject(sourceID, locationX, locationY, rotation, world, Types[sourceID] as String);
+				var po:PlaceObject = new PlaceObject(sourceID, locationX, locationY, rotation, world, Types[sourceID]);
 				Objects.push(po);
 				
 				if (sourceID == pickupIndex) {
@@ -95,7 +94,7 @@ package GameCom.Managers {
 		}
 		
         public function DrawObjects():void {
-            drawList = new Array();
+            drawList = new Vector.<PlaceObject>();
 			
 			var area:b2AABB = new b2AABB();
 			area.lowerBound.Set((player.x - this.layer.stage.stageWidth / 2)/Global.PHYSICS_SCALE, (player.y - this.layer.stage.stageHeight / 2)/Global.PHYSICS_SCALE);
@@ -103,7 +102,7 @@ package GameCom.Managers {
 			
             this.world.QueryAABB(QCBD, area);
 			
-			drawList.sortOn("index");
+			drawList.sort(BaseObject.Compare);
 			
 			layer.graphics.clear();
 			

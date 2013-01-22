@@ -2,6 +2,7 @@ package GameCom.Managers {
 	import flash.geom.Point;
 	import flash.utils.getTimer;
 	import GameCom.GameComponents.PlaceObject;
+	import GameCom.Helpers.ReputationHelper;
 	import GameCom.States.GameScreen;
 	
 	/**
@@ -28,14 +29,16 @@ package GameCom.Managers {
 		}
 		
 		public static function CheckMissionParameters() : Boolean {
-			if(getTimer() - DeliveryStartTime > 0) {
+			if (getTimer() - DeliveryStartTime > 0) {
 				DeliveryDestination.isActive = false;
 				
 				for (var i:int = 0; i < PlacesManager.instance.PickupLocations.length; i++) {
-					(PlacesManager.instance.PickupLocations[i] as PlaceObject).isActive = true;
+					PlacesManager.instance.PickupLocations[i].isActive = true;
 				}
 				
 				DeliveryDestination = null;
+				
+				ReputationHelper.GrantReputation(499);
 				
 				//TODO: Do some varible checking things...
 				//Mission is complete

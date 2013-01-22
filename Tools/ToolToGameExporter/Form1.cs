@@ -54,8 +54,6 @@ namespace ToolToGameExporter {
 
             //OBJECT CONVERSION
             try { zip.RemoveEntry("1.map"); } catch { }
-            zip.AddEntry("1.map", File.ReadAllBytes(GetScenicStore()));
-
             try { zip.RemoveEntry("1.cache"); } catch { }
             OptimizeAndAddObjectLayer(zip);
 
@@ -65,8 +63,6 @@ namespace ToolToGameExporter {
 
             //PLACES CONVERSION
             try { zip.RemoveEntry("3.map"); } catch { }
-            zip.AddEntry("3.map", File.ReadAllBytes(GetPlacesStore()));
-
             try { zip.RemoveEntry("3.cache"); } catch { }
             OptimizeAndAddPlaces(zip);
 
@@ -96,24 +92,30 @@ namespace ToolToGameExporter {
             o.AddInt(totalPhysicsShapes);
 
             Dictionary<int, string> typeID_to_filename = new Dictionary<int, string>();
+            Dictionary<int, int> remappedKeys = new Dictionary<int, int>();
+
+            int previousKey = 0;
 
             for (int i = 0; i < totalShapes; i++) {
                 int type_id = f.GetInt();
                 string source = f.GetString();
                 byte layer = f.GetByte();
 
-                zp.AddEntry("obj/" + type_id + ".png", File.ReadAllBytes(tool_loc_TB.Text + source));
+                remappedKeys[type_id] = previousKey;
+
+                zp.AddEntry("obj/" + previousKey + ".png", File.ReadAllBytes(tool_loc_TB.Text + source));
 
                 typeID_to_filename.Add(type_id, source);
 
-                o.AddInt(type_id); //Type ID
                 o.AddByte(layer);
+
+                previousKey++;
             }
 
             for (int i = 0; i < totalPhysicsShapes; i++) {
                 int typeID = f.GetInt();
 
-                o.AddInt(typeID);
+                o.AddInt(remappedKeys[typeID]);
 
                 int totalPhysics = f.GetInt();
                 o.AddInt(totalPhysics);
@@ -154,6 +156,32 @@ namespace ToolToGameExporter {
 
             zp.AddEntry("1.cache", o.EncodedBytes());
 
+            o.Dispose();
+
+            //Now the object store
+            f = new BinaryIO(File.ReadAllBytes(GetScenicStore()));
+            o = new BinaryIO();
+
+            int totalObjects = f.GetInt();
+            o.AddInt(totalObjects);
+
+            for (int i = 0; i < totalObjects; i++) {
+                int typeID = f.GetInt();
+                float locationX = f.GetFloat();
+                float locationY = f.GetFloat();
+                int rotation = f.GetInt();
+
+                o.AddInt(remappedKeys[typeID]);
+                o.AddFloat(locationX);
+                o.AddFloat(locationY);
+                o.AddInt(rotation);
+            }
+
+            zp.AddEntry("1.map", o.EncodedBytes());
+
+            f.Dispose();
+            o.Dispose();
+
             return null;
         }
 
@@ -179,24 +207,55 @@ namespace ToolToGameExporter {
 
             o.AddInt(totalShapes);
 
+            Dictionary<int, int> remappedKeys = new Dictionary<int, int>();
+            int previousKey = 0;
+
             for (int i = 0; i < totalShapes; i++) {
                 int type_id = f.GetInt();
                 string source = f.GetString();
 
-                zp.AddEntry("Places/" + type_id + ".png", File.ReadAllBytes(tool_loc_TB.Text + source));
+                remappedKeys[type_id] = previousKey;
+
+                zp.AddEntry("Places/" + previousKey + ".png", File.ReadAllBytes(tool_loc_TB.Text + source));
 
                 int startLoc = source.LastIndexOf('\\');
                 int endLoc = source.LastIndexOf('.');
 
                 string triggerName = source.Substring(startLoc+1, endLoc-startLoc-1);
 
-                o.AddInt(type_id); //Type ID
                 o.AddString(triggerName); //Trigger name
+
+                previousKey++;
             }
 
-            f.Dispose();
-
             zp.AddEntry("3.cache", o.EncodedBytes());
+
+            f.Dispose();
+            o.Dispose();
+
+            f = new BinaryIO(File.ReadAllBytes(GetPlacesStore()));
+            o = new BinaryIO();
+
+            // Load object instances from file
+            totalShapes = f.GetInt();
+            o.AddInt(totalShapes);
+
+            for (int i = 0; i < totalShapes; i++) {
+                int sourceID = f.GetInt();
+                float locationX = f.GetFloat();
+                float locationY = f.GetFloat();
+                int rotation = f.GetInt();
+
+                o.AddInt(remappedKeys[sourceID]);
+                o.AddFloat(locationX);
+                o.AddFloat(locationY);
+                o.AddInt(rotation);
+            }
+
+            zp.AddEntry("3.map", o.EncodedBytes());
+
+            f.Dispose();
+            o.Dispose();
 
             return null;
         }
