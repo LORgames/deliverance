@@ -91,6 +91,7 @@ package GameCom.Managers {
 		
         public function DrawScenicObjects():void {
             drawList = new Vector.<ScenicObject>();
+			PlacesManager.instance.drawList = new Vector.<PlaceObject>();
 			
 			var area:b2AABB = new b2AABB();
 			area.lowerBound.Set((player.x - this.layer0.stage.stageWidth / 2)/Global.PHYSICS_SCALE, (player.y - this.layer0.stage.stageHeight / 2)/Global.PHYSICS_SCALE);

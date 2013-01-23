@@ -43,19 +43,20 @@ package {
 			loaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioError);
 			
 			// Show the Loader
-			this.graphics.beginFill(0x0, 1);
+			this.graphics.beginFill(0xFFFFFF, 1);
 			this.graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
 			this.graphics.endFill();
 			
 			var bmp:Bitmap = new Logo() as Bitmap;
 			var mat:Matrix = new Matrix(1, 0, 0, 1, (stage.stageWidth / 2) - (bmp.width / 2), (stage.stageHeight / 2) - (bmp.height / 2));
+
 			this.graphics.beginBitmapFill(bmp.bitmapData, mat, false, false);
 			this.graphics.drawRect((stage.stageWidth / 2) - (bmp.width / 2), (stage.stageHeight / 2) - (bmp.height / 2), bmp.width, bmp.height);
 			this.graphics.endFill();
 			
 			progressTF.y = 30;
 			progressTF.x = 15;
-			progressTF.defaultTextFormat = new TextFormat("Verdana", 20 * Global.UI_SCALE, 0xFFFFFF);
+			progressTF.defaultTextFormat = new TextFormat("Verdana", 20 * Global.UI_SCALE, 0x000000);
 			progressTF.autoSize = TextFieldAutoSize.LEFT;
 			progressTF.selectable = false;
 			this.addChild(progressTF);
@@ -63,7 +64,7 @@ package {
 			gameNameTF.x = 5;
 			gameNameTF.autoSize = TextFieldAutoSize.LEFT;
 			gameNameTF.selectable = false;
-			gameNameTF.defaultTextFormat = new TextFormat("Verdana", 30 * Global.UI_SCALE, 0xFFFFFF);
+			gameNameTF.defaultTextFormat = new TextFormat("Verdana", 30 * Global.UI_SCALE, 0x000000);
 			this.addChild(gameNameTF);
 			gameNameTF.text = Global.GAME_NAME;
 		}
