@@ -82,6 +82,14 @@
     <Compile Include="Places\PlacesObjectCache.cs" />
     <Compile Include="Places\PlacesPlacementHelper.cs" />
     <Compile Include="Places\PlacesType.cs" />
+    <Compile Include="Stories\StoryCache.cs" />
+    <Compile Include="StoryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StoryForm.Designer.cs">
+      <DependentUpon>StoryForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stories\Story.cs" />
     <Compile Include="Terrain\MapCache.cs" />
     <Compile Include="Core\BinaryIO.cs" />
     <Compile Include="ObjectCreatorTool.cs">
@@ -126,6 +134,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="StoryForm.resx">
+      <DependentUpon>StoryForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

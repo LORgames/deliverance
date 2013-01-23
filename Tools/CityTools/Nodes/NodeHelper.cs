@@ -16,6 +16,9 @@ namespace CityTools.Nodes {
         private static PointF p0 = Point.Empty;
         private static PointF p1 = Point.Empty;
 
+        private static float BASIC_MOVE = 1.0f;
+        private static float SHIFT_MOVE = 5.0f;
+
         public static void MouseDown(MouseEventArgs e) {
             // Clear out the node links and selected nodes
             selectedNodes.Clear();
@@ -145,6 +148,13 @@ namespace CityTools.Nodes {
             return false;
         }
 
+        internal static void MoveSelectedObjects(float x, float y) {
+            // Iterate over each selected object and move it
+            for (int i = 0; i < selectedNodes.Count; i++) {
+                selectedNodes[i].Move(x, y);
+            }
+        }
+
         internal static void DeleteSelectedObjects() {
             // Iterate over each selected object and delete it
             for (int i = 0; i < selectedNodes.Count; i++) {
@@ -156,7 +166,29 @@ namespace CityTools.Nodes {
         }
 
         public static bool ProcessCmdKey(ref Message msg, Keys keyData) {
-            if (keyData == Keys.Delete) {
+            // Ignore shift, only use actual keys
+            Keys noShift = (Keys)keyData & ~Keys.Shift;
+
+            // Is shift held?
+            bool hasShift = ((Keys)keyData & Keys.Shift) == Keys.Shift;
+
+            if (noShift == Keys.Left) {
+                // Left is negative, hence the -
+                MoveSelectedObjects(-(hasShift ? SHIFT_MOVE : BASIC_MOVE), 0.0f);
+
+            } else if (noShift == Keys.Right) {
+                // Right is positive
+                MoveSelectedObjects((hasShift ? SHIFT_MOVE : BASIC_MOVE), 0.0f);
+
+            } else if (noShift == Keys.Up) {
+                // Up is negative, hence the -
+                MoveSelectedObjects(0.0f, -(hasShift ? SHIFT_MOVE : BASIC_MOVE));
+
+            } else if (noShift == Keys.Down) {
+                // Down is positive
+                MoveSelectedObjects(0.0f, (hasShift ? SHIFT_MOVE : BASIC_MOVE));
+
+            } else if (keyData == Keys.Delete) {
                 // Pass deleting on!
                 DeleteSelectedObjects();
             }

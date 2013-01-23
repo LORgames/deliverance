@@ -33,6 +33,19 @@ namespace CityTools.Nodes {
 
             Box2D.B2System.world.QueryAABB(new Box2CS.World.QueryCallbackDelegate(NodeDrawer.QCBD), new AABB(new Box2CS.Vec2(drawArea.Left, drawArea.Top), new Vec2(drawArea.Right, drawArea.Bottom)));
 
+            foreach (KeyValuePair<int, Node> pair in NodeCache.nodes) {
+                for (int i = 0; i < pair.Value.children.Count; i++) {
+                    if (NodeCache.nodes.ContainsKey(pair.Value.children[i])) {
+                        if (drawList.Contains(NodeCache.nodes[pair.Value.children[i]])) {
+                            drawList.Add(pair.Value);
+                        }
+                    } else {
+                        pair.Value.children.RemoveAt(i);
+                        i--;
+                    }
+                }
+            }
+
             drawList.Sort();
 
             foreach (Node node in drawList) {

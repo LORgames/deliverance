@@ -65,13 +65,14 @@
             this.node_add_node_link = new System.Windows.Forms.Button();
             this.node_add_node = new System.Windows.Forms.Button();
             this.places_tab = new System.Windows.Forms.TabPage();
+            this.places_selector_btn = new System.Windows.Forms.Button();
             this.story_tab = new System.Windows.Forms.TabPage();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmSendBack = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmBringForward = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmSendToBack = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmBringToFront = new System.Windows.Forms.ToolStripMenuItem();
-            this.places_selector_btn = new System.Windows.Forms.Button();
+            this.story_new = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.main_splitter)).BeginInit();
             this.main_splitter.Panel1.SuspendLayout();
             this.main_splitter.Panel2.SuspendLayout();
@@ -97,6 +98,7 @@
             this.physics_tab.SuspendLayout();
             this.nodes_tab.SuspendLayout();
             this.places_tab.SuspendLayout();
+            this.story_tab.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -491,8 +493,7 @@
             this.cmbNodeStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbNodeStyle.FormattingEnabled = true;
             this.cmbNodeStyle.Items.AddRange(new object[] {
-            "Left",
-            "Right"});
+            "Traffic"});
             this.cmbNodeStyle.Location = new System.Drawing.Point(47, 3);
             this.cmbNodeStyle.Name = "cmbNodeStyle";
             this.cmbNodeStyle.Size = new System.Drawing.Size(121, 21);
@@ -538,8 +539,20 @@
             this.places_tab.Text = "Places";
             this.places_tab.UseVisualStyleBackColor = true;
             // 
+            // places_selector_btn
+            // 
+            this.places_selector_btn.Dock = System.Windows.Forms.DockStyle.Top;
+            this.places_selector_btn.Location = new System.Drawing.Point(0, 0);
+            this.places_selector_btn.Name = "places_selector_btn";
+            this.places_selector_btn.Size = new System.Drawing.Size(215, 23);
+            this.places_selector_btn.TabIndex = 0;
+            this.places_selector_btn.Text = "Places Selector";
+            this.places_selector_btn.UseVisualStyleBackColor = true;
+            this.places_selector_btn.Click += new System.EventHandler(this.places_select_btn_Click);
+            // 
             // story_tab
             // 
+            this.story_tab.Controls.Add(this.story_new);
             this.story_tab.Location = new System.Drawing.Point(4, 22);
             this.story_tab.Name = "story_tab";
             this.story_tab.Size = new System.Drawing.Size(223, 200);
@@ -585,16 +598,15 @@
             this.tsmBringToFront.Text = "Bring to Front";
             this.tsmBringToFront.Click += new System.EventHandler(this.tsmBringToFront_Click);
             // 
-            // places_selector_btn
+            // story_new
             // 
-            this.places_selector_btn.Dock = System.Windows.Forms.DockStyle.Top;
-            this.places_selector_btn.Location = new System.Drawing.Point(0, 0);
-            this.places_selector_btn.Name = "places_selector_btn";
-            this.places_selector_btn.Size = new System.Drawing.Size(215, 23);
-            this.places_selector_btn.TabIndex = 0;
-            this.places_selector_btn.Text = "Places Selector";
-            this.places_selector_btn.UseVisualStyleBackColor = true;
-            this.places_selector_btn.Click += new System.EventHandler(this.places_select_btn_Click);
+            this.story_new.Location = new System.Drawing.Point(74, 3);
+            this.story_new.Name = "story_new";
+            this.story_new.Size = new System.Drawing.Size(75, 23);
+            this.story_new.TabIndex = 0;
+            this.story_new.Text = "New";
+            this.story_new.UseVisualStyleBackColor = true;
+            this.story_new.Click += new System.EventHandler(this.story_new_Click);
             // 
             // MainWindow
             // 
@@ -633,6 +645,7 @@
             this.physics_tab.ResumeLayout(false);
             this.nodes_tab.ResumeLayout(false);
             this.places_tab.ResumeLayout(false);
+            this.story_tab.ResumeLayout(false);
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -683,6 +696,7 @@
         internal System.Windows.Forms.ComboBox cmbNodeStyle;
         internal System.Windows.Forms.CheckBox layer_places;
         private System.Windows.Forms.Button places_selector_btn;
+        private System.Windows.Forms.Button story_new;
     }
 }
 

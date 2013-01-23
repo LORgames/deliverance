@@ -43,6 +43,10 @@ namespace CityTools.Nodes {
                     }
                 }
             }
+
+            for (int i = 0; i < Node.drawPens.Length; i++) {
+                Node.drawPens[i].EndCap = System.Drawing.Drawing2D.LineCap.ArrowAnchor;
+            }
         }
 
         public static void AddNode(Node node) {

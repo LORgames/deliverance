@@ -139,6 +139,7 @@ namespace CityTools {
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
+            this.ActiveControl = mapViewPanel;
             if (Camera.ProcessKeys(keyData)) {
                 Camera.FixViewArea(drawArea);
 
@@ -450,6 +451,10 @@ namespace CityTools {
 
         private void node_select_btn_Click(object sender, EventArgs e) {
             paintMode = PaintMode.NodeSelector;
+        }
+
+        private void story_new_Click(object sender, EventArgs e) {
+            // Stuff happens here...
         }
     }
 }

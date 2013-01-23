@@ -9,7 +9,7 @@ using System.Drawing;
 namespace CityTools.Nodes {
     class Node : IComparable<Node> {
         // PENS
-        private static Pen[] drawPens = { new Pen(Color.Yellow), new Pen(Color.Red) };
+        internal static Pen[] drawPens = { new Pen(Color.Yellow), new Pen(Color.Red) };
         private static SolidBrush[] drawBrushes = { new SolidBrush(Color.FromArgb(64, Color.Yellow)), new SolidBrush(Color.FromArgb(64, Color.Red)) };
 
         //Circular references
@@ -24,7 +24,7 @@ namespace CityTools.Nodes {
         internal float x;
         internal float y;
 
-        internal const float RADIUS = 4.0f;
+        internal const float RADIUS = 6.0f;
 
         internal List<int> children = new List<int>();
 
@@ -53,9 +53,9 @@ namespace CityTools.Nodes {
             float realignedY = (y - RADIUS) * Camera.ZoomLevel - Camera.ViewArea.Top;
 
             buffer.gfx.FillEllipse(drawBrushes[type], realignedX, realignedY, RADIUS * 2.0f * Camera.ZoomLevel, RADIUS * 2.0f * Camera.ZoomLevel);
-            buffer.gfx.DrawEllipse(drawPens[type], realignedX, realignedY, RADIUS * 2.0f * Camera.ZoomLevel, RADIUS * 2.0f * Camera.ZoomLevel);
+            //buffer.gfx.DrawEllipse(drawPens[type], realignedX, realignedY, RADIUS * 2.0f * Camera.ZoomLevel, RADIUS * 2.0f * Camera.ZoomLevel);
 
-            // Draw links to other nodes, this could probably be done by the node...
+            // Draw links to other nodes
             for (int i = 0; i < children.Count; i++) {
                 try {
                     PointF from = new PointF();
@@ -65,9 +65,17 @@ namespace CityTools.Nodes {
                     to.X = NodeCache.nodes[children[i]].x * Camera.ZoomLevel - Camera.ViewArea.Left;
                     to.Y = NodeCache.nodes[children[i]].y * Camera.ZoomLevel - Camera.ViewArea.Top;
 
+                    drawPens[type].Width = 5;
                     buffer.gfx.DrawLine(drawPens[type], from, to);
+                    drawPens[type].Width = 1;
                 } catch { }
             }
+        }
+
+        public void Move(float x, float y) {
+            this.x += x;
+            this.y += y;
+            baseBody.Position = new Vec2(baseBody.Position.X + x, baseBody.Position.Y + y);
         }
 
         public void Delete() {
