@@ -1,11 +1,13 @@
 package GameCom.Managers 
 {
+	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	import flash.filters.GlowFilter;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
 	import GameCom.GameComponents.PlayerTruck;
+	import GameCom.Helpers.MoneyHelper;
 	import GameCom.Helpers.ReputationHelper;
 	import GameCom.Helpers.SpriteHelper;
 	/**
@@ -18,32 +20,60 @@ package GameCom.Managers
 		
 		private var GPSArrow:Sprite;
 		private var Overlay:Sprite;
-		private var currentLevel:TextField = new TextField();
 		
-		private var player:Sprite;
+		private var CurrentLevelText:TextField = new TextField();
+		private var CurrentMoneyText:TextField = new TextField();
+		private var CurrentSpeedText:TextField = new TextField();
 		
-		public function GUIManager(player:Sprite) {
+		private var CurrentMissionText:TextField = new TextField();
+		
+		private var player:PlayerTruck;
+		
+		public function GUIManager(player:PlayerTruck) {
 			I = this;
 			
 			this.player = player;
 			
-			Overlay = SpriteHelper.CreateCenteredBitmapData(ThemeManager.Get("GUI/Overlay.png"));
+			Overlay = new Sprite();
+			Overlay.addChild(new Bitmap(ThemeManager.Get("GUI/Overlay.png")));
 			this.addChild(Overlay);
-			Overlay.x = 100;
-			Overlay.y = 40;
+			Overlay.x = 10;
+			Overlay.y = 10;
 			
 			GPSArrow = SpriteHelper.CreateCenteredBitmapData(ThemeManager.Get("GUI/Directora.png"));
 			this.addChild(GPSArrow);
 			
-			currentLevel.selectable = false;
-			currentLevel.defaultTextFormat = new TextFormat("Verdana", 15, 0xFFFFFF);
-			currentLevel.x = -65;
-			currentLevel.y = -35;
-			currentLevel.autoSize = TextFieldAutoSize.CENTER
-			currentLevel.filters = new Array(new GlowFilter(0, 1, 2, 2, 2, 3));
-			Overlay.addChild(currentLevel);
+			CurrentLevelText.selectable = false;
+			CurrentLevelText.defaultTextFormat = new TextFormat("Verdana", 15, 0xFFFFFF);
+			CurrentLevelText.x = 26;
+			CurrentLevelText.y = 3;
+			CurrentLevelText.autoSize = TextFieldAutoSize.CENTER
+			CurrentLevelText.filters = new Array(new GlowFilter(0, 1, 2, 2, 5));
+			Overlay.addChild(CurrentLevelText);
 			
-			//currentLevel.defaultTextFormat = new TextFormat("Verdana", 18, 0xFFFFFF, true);
+			CurrentMoneyText.selectable = false;
+			CurrentMoneyText.defaultTextFormat = new TextFormat("Verdana", 15, 0xFFFF70);
+			CurrentMoneyText.x = 75;
+			CurrentMoneyText.y = 50;
+			CurrentMoneyText.autoSize = TextFieldAutoSize.LEFT
+			CurrentMoneyText.filters = new Array(new GlowFilter(0, 1, 2, 2, 5));
+			Overlay.addChild(CurrentMoneyText);
+			
+			CurrentSpeedText.selectable = false;
+			CurrentSpeedText.defaultTextFormat = new TextFormat("Verdana", 15, 0xFFFFFF);
+			CurrentSpeedText.x = 200;
+			CurrentSpeedText.y = 3;
+			CurrentSpeedText.autoSize = TextFieldAutoSize.LEFT
+			CurrentSpeedText.filters = new Array(new GlowFilter(0, 1, 2, 2, 5));
+			Overlay.addChild(CurrentSpeedText);
+			
+			CurrentMissionText.selectable = false;
+			CurrentMissionText.defaultTextFormat = new TextFormat("Verdana", 12, 0xFFFFFF);
+			CurrentMissionText.x = 400;
+			CurrentMissionText.y = 3;
+			CurrentMissionText.autoSize = TextFieldAutoSize.CENTER;
+			CurrentMissionText.filters = new Array(new GlowFilter(0, 1, 2, 2, 5));
+			Overlay.addChild(CurrentMissionText);
 			
 			UpdateCache();
 		}
@@ -52,23 +82,36 @@ package GameCom.Managers
 			GPSArrow.x = stage.stageWidth - 60;
 			GPSArrow.y = stage.stageHeight - 60;
 			
+			CurrentSpeedText.text = Math.round(player.body.GetLinearVelocity().Length() * 3.6) + "km/h";
+			
 			if (MissionManager.CurrentDestination() != null) {
+				GPSArrow.visible = true;
 				GPSArrow.rotation = Math.atan2(MissionManager.CurrentDestination().y - player.y, MissionManager.CurrentDestination().x - player.x) / Math.PI * 180;
 			} else {
-				GPSArrow.rotation += 30;
+				GPSArrow.visible = false;
 			}
 		}
 		
+		public function SetMessage(msg:String) :void {
+			if (stage) {
+				CurrentMissionText.x = stage.stageWidth / 2;
+				CurrentMissionText.y = stage.stageHeight - 50;
+			}
+			
+			CurrentMissionText.text = msg;
+		}
+		
 		public function UpdateCache() : void {
-			currentLevel.text = ReputationHelper.GetCurrentLevel().toString();
+			CurrentLevelText.text = ReputationHelper.GetCurrentLevel().toString();
+			CurrentMoneyText.text = "$" + MoneyHelper.GetBalance();
 			
 			Overlay.graphics.clear();
 			Overlay.graphics.beginFill(0x0000FF);
-			Overlay.graphics.drawRect(-Overlay.width/2 + 88, -Overlay.height/2 + 14, 88 * ReputationHelper.GetPercentageToNextLevel(), 4);
+			Overlay.graphics.drawRect(88, 14, 88 * ReputationHelper.GetPercentageToNextLevel(), 4);
 			Overlay.graphics.endFill();
 			
 			Overlay.graphics.beginFill(0xFF0000);
-			Overlay.graphics.drawRect(-Overlay.width/2 + 80, -Overlay.height/2 + 26, 94 * (player as PlayerTruck).HealthPercent, 18);
+			Overlay.graphics.drawRect(80, 26, 94 * player.HealthPercent, 18);
 			Overlay.graphics.endFill();
 		}
 		

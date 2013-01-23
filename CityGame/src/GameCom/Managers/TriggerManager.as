@@ -1,5 +1,6 @@
 package GameCom.Managers 
 {
+	import flash.display.Bitmap;
 	/**
 	 * ...
 	 * @author P. Fox
@@ -11,7 +12,10 @@ package GameCom.Managers
 				MissionManager.GenerateNextMission();
 			} else if (trigger == "place_Deliver") {
 				MissionManager.CheckMissionParameters();
-			} else {
+			} else if (trigger == "place_Weapons") {
+				//TODO: Actually have a shop class perhaps? You know, so its interactive
+				GUIManager.I.addChild(new Bitmap(ThemeManager.Get("GUI/Shop.png")));
+			}else {
 				trace(trigger);
 			}
 		}

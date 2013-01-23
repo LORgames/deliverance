@@ -48,20 +48,13 @@ package GameCom.Helpers {
 		/**
 		 * Grants the player reputation.
 		 * @param	newRep	How much rep the player gained
-		 * @return	True if the player levelled up, false if they didn't.
 		 */
-		public static function GrantReputation(newRep:int) : Boolean {
+		public static function GrantReputation(newRep:int) : void {
 			CurrentReputation += newRep;
 			
-			if (CurrentReputation > Levels[CurrentLevel + 1].ReputationRequired) {
+			while (CurrentReputation > Levels[CurrentLevel + 1].ReputationRequired) {
 				CurrentLevel++;
-				
-				GUIManager.I.UpdateCache();
-				return true;
 			}
-			
-			GUIManager.I.UpdateCache();
-			return false;
 		}
 		
 		public static function GetPercentageToNextLevel():Number {

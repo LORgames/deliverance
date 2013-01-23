@@ -17,6 +17,7 @@ package GameCom.States {
 	import flash.utils.getTimer;
 	import flash.utils.Timer;
 	import GameCom.Helpers.ReputationHelper;
+	import GameCom.Helpers.ResourceHelper;
 	import GameCom.Managers.GUIManager;
 	import GameCom.Managers.ObjManager;
 	import GameCom.GameComponents.PlayerTruck;
@@ -77,6 +78,7 @@ package GameCom.States {
 			
 			//Load up the helpers
 			ReputationHelper.Initialize(0);
+			ResourceHelper.Initialize();
 			
 			//Start the system
 			world = new b2World(new b2Vec2(0, 0), true);

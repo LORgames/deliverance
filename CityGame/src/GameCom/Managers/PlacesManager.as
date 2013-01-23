@@ -58,6 +58,7 @@ package GameCom.Managers {
 			
 			var pickupIndex:int = 0;
 			var dropatIndex:int = 0;
+			var shopIndex:int = 0;
 			
             for (i = 0; i < totalTypes; i++) {
 				var triggerNameLength:int = objectTypes.readShort();
@@ -67,6 +68,8 @@ package GameCom.Managers {
 					pickupIndex = i;
 				} else if (triggerName == "Deliver") {
 					dropatIndex = i;
+				} else if (triggerName == "Weapons") {
+					shopIndex = i;
 				}
 				
 				Types.push();
@@ -89,36 +92,22 @@ package GameCom.Managers {
 					po.isActive = true;
 				} else if (sourceID == dropatIndex) {
 					DropatLocations.push(po);
+				} else if (sourceID == shopIndex) {
+					po.isActive = true;
 				}
 			}
 		}
 		
         public function DrawObjects():void {
-            drawList = new Vector.<PlaceObject>();
-			
-			var area:b2AABB = new b2AABB();
-			area.lowerBound.Set((player.x - this.layer.stage.stageWidth / 2)/Global.PHYSICS_SCALE, (player.y - this.layer.stage.stageHeight / 2)/Global.PHYSICS_SCALE);
-			area.upperBound.Set((player.x + this.layer.stage.stageWidth / 2)/Global.PHYSICS_SCALE, (player.y + this.layer.stage.stageHeight / 2)/Global.PHYSICS_SCALE);
-			
-            this.world.QueryAABB(QCBD, area);
-			
-			drawList.sort(BaseObject.Compare);
+            drawList.sort(BaseObject.Compare);
 			
 			layer.graphics.clear();
 			
 			for (var i:int = 0; i < drawList.length; i++) {
-				(drawList[i] as PlaceObject).Draw(layer.graphics);
-            }
-        }
-
-        private function QCBD(fix:b2Fixture):Boolean {
-            if (fix.GetUserData() is PlaceObject) {
-				if ((fix.GetUserData() as PlaceObject).isActive) {
-					drawList.push(fix.GetUserData());
+				if(drawList[i].isActive) {
+					drawList[i].Draw(layer.graphics);
 				}
             }
-			
-            return true;
         }
 	}
 

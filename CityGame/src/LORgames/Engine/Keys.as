@@ -11,7 +11,7 @@ package LORgames.Engine {
 	
 	public class Keys {
 		
-		private static var downKeys:Array = new Array();
+		private static var downKeys:Vector.<Boolean> = new Vector.<Boolean>(256, true);
 		
 		public static function Initialize(stage:Stage):void {
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, KeyDown, false, 0, true);

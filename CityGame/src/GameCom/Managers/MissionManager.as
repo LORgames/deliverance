@@ -2,7 +2,9 @@ package GameCom.Managers {
 	import flash.geom.Point;
 	import flash.utils.getTimer;
 	import GameCom.GameComponents.PlaceObject;
+	import GameCom.Helpers.MoneyHelper;
 	import GameCom.Helpers.ReputationHelper;
+	import GameCom.Helpers.ResourceHelper;
 	import GameCom.States.GameScreen;
 	
 	/**
@@ -23,9 +25,19 @@ package GameCom.Managers {
 			DeliveryDestination.isActive = true;
 			DeliveryStartTime = getTimer();
 			
+			ResourceHelper.GenerateRandomMission();
+			
 			for (var i:int = 0; i < PlacesManager.instance.PickupLocations.length; i++) {
 				(PlacesManager.instance.PickupLocations[i] as PlaceObject).isActive = false;
 			}
+			
+			GUIManager.I.UpdateCache();
+			GUIManager.I.SetMessage("Please deliver " + DeliveryResourcesCount + ResourceHelper.GetResouce(DeliveryResourcesType).Message + " to the destination marked ASAP!");
+		}
+		
+		public static function SetDeliveryResources(type:int, value:int):void {
+			DeliveryResourcesType = type;
+			DeliveryResourcesCount = value;
 		}
 		
 		public static function CheckMissionParameters() : Boolean {
@@ -38,7 +50,11 @@ package GameCom.Managers {
 				
 				DeliveryDestination = null;
 				
-				ReputationHelper.GrantReputation(499);
+				ReputationHelper.GrantReputation(DeliveryResourcesCount * ResourceHelper.GetResouce(DeliveryResourcesType).ReputationGainPerItem);
+				MoneyHelper.Credit(DeliveryResourcesCount * ResourceHelper.GetResouce(DeliveryType).ValuePerItem);
+				
+				GUIManager.I.UpdateCache();
+				GUIManager.I.SetMessage("");
 				
 				//TODO: Do some varible checking things...
 				//Mission is complete

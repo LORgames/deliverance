@@ -3,9 +3,11 @@ package GameCom.Managers {
 	import Box2D.Dynamics.b2Fixture;
 	import Box2D.Dynamics.b2World;
 	import flash.display.Sprite;
+	import flash.sampler.NewObjectSample;
 	import flash.utils.ByteArray;
 	import flash.utils.Endian;
 	import GameCom.GameComponents.BaseObject;
+	import GameCom.GameComponents.PlaceObject;
 	import GameCom.GameComponents.PlayerTruck;
 	import GameCom.GameComponents.ScenicObject
 	import GameCom.SystemComponents.PhysicsShape;
@@ -113,6 +115,8 @@ package GameCom.Managers {
         private function QCBD(fix:b2Fixture):Boolean {
             if (fix.GetUserData() is ScenicObject) {
                 drawList.push(fix.GetUserData());
+            } else if (fix.GetUserData() is PlaceObject) {
+				PlacesManager.instance.drawList.push(fix.GetUserData());
             }
 			
             return true;

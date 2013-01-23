@@ -38,7 +38,7 @@ package GameCom.GameComponents {
 		private var engineSpeed:Number = 0;
 		private var steeringAngle:Number = 0;
 		
-		private var body:b2Body;
+		public var body:b2Body;
 		private var leftWheel:b2Body;
 		private var rightWheel:b2Body;
 		private var leftMidWheel:b2Body;
@@ -63,7 +63,7 @@ package GameCom.GameComponents {
 			this.getChildAt(0).x = -this.getChildAt(0).width / 2;
 			this.getChildAt(0).y = -this.getChildAt(0).height / 2 - 15;
 			
-			this.getChildAt(0).transform.colorTransform = new ColorTransform(0.2, 0.2, 0.2);
+			this.getChildAt(0).transform.colorTransform = new ColorTransform(1.0, 1.0, 1.0);
 			
 			//Load the trailer
 			this.addChild(ThemeManager.Get("TruckBits/trailer.swf"));
@@ -73,7 +73,7 @@ package GameCom.GameComponents {
 			this.getChildAt(1).x = -this.getChildAt(1).width / 2;
 			this.getChildAt(1).y = -this.getChildAt(1).height / 2 + 15;
 			
-			this.getChildAt(1).transform.colorTransform = new ColorTransform(0.2, 0.2, 0.2);
+			this.getChildAt(1).transform.colorTransform = new ColorTransform(1.0, 1.0, 0.4);
 			
 			//////////////////////////
 			// TRUCK BODY
@@ -278,7 +278,7 @@ package GameCom.GameComponents {
 					
 					var vel1:b2Vec2 = this.body.GetLinearVelocityFromWorldPoint(manifold.m_points[0]);
 					
-					trace(Math.round(vel1.Length()));
+					trace("HP LOSS: " + Math.round(vel1.Length()));
 					healthCurrent -= Math.round(vel1.Length());
 					HealthPercent = Number(healthCurrent) / healthMax;
 					GUIManager.I.UpdateCache();

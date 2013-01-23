@@ -64,7 +64,6 @@ package GameCom.Managers
 					mapdata[i][j] = mapfile.readByte();
 					
 					if (mapdata[i][j] < 0) {
-						trace(mapdata[i][j] + " => " + (mapdata[i][j] + 256))
 						mapdata[i][j] = mapdata[i][j] + 256;
 					}
 				}
