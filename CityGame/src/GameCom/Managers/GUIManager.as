@@ -2,6 +2,7 @@ package GameCom.Managers
 {
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
+	import flash.events.TextEvent;
 	import flash.filters.GlowFilter;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
@@ -28,6 +29,11 @@ package GameCom.Managers
 		private var CurrentMissionText:TextField = new TextField();
 		
 		private var player:PlayerTruck;
+		
+		private var hasPopup:Boolean = false;
+		private var popupText:TextField = new TextField();
+		private var popupAlpha:Number = 0;
+		private var popupFade:Boolean = false;
 		
 		public function GUIManager(player:PlayerTruck) {
 			I = this;
@@ -75,6 +81,14 @@ package GameCom.Managers
 			CurrentMissionText.filters = new Array(new GlowFilter(0, 1, 2, 2, 5));
 			Overlay.addChild(CurrentMissionText);
 			
+			popupText.selectable = false;
+			popupText.defaultTextFormat = new TextFormat("Verdana", 12, 0xFFFFFF);
+			popupText.x = 400;
+			popupText.y = 3;
+			popupText.autoSize = TextFieldAutoSize.CENTER;
+			popupText.filters = new Array(new GlowFilter(0, 1, 2, 2, 5));
+			Overlay.addChild(popupText);
+			
 			UpdateCache();
 		}
 		
@@ -90,6 +104,20 @@ package GameCom.Managers
 			} else {
 				GPSArrow.visible = false;
 			}
+			
+			if (popupAlpha > 0) {
+				if (popupFade) {
+					popupAlpha -= 0.02;
+					if (popupAlpha <= 0) {
+						popupText.text = "";
+						hasPopup = false;
+					}
+				} else {
+					popupFade = true;
+				}
+				popupText.alpha = popupAlpha;
+				UpdateCache();
+			}
 		}
 		
 		public function SetMessage(msg:String) :void {
@@ -99,6 +127,19 @@ package GameCom.Managers
 			}
 			
 			CurrentMissionText.text = msg;
+		}
+		
+		public function Popup(msg:String) :void {
+			if (!hasPopup) {
+				if (stage) {
+					popupText.x = stage.stageWidth - 120;
+					popupText.y = stage.stageHeight - 50;
+				}
+				popupText.text = msg;
+				hasPopup = true;
+			}
+			popupAlpha = 1.0;
+			popupFade = false;
 		}
 		
 		public function UpdateCache() : void {
@@ -113,6 +154,12 @@ package GameCom.Managers
 			Overlay.graphics.beginFill(0xFF0000);
 			Overlay.graphics.drawRect(80, 26, 94 * player.HealthPercent, 18);
 			Overlay.graphics.endFill();
+			
+			if (hasPopup) {
+				Overlay.graphics.beginFill(0x000000, popupAlpha);
+				Overlay.graphics.drawRect(stage.stageWidth - 240, stage.stageHeight - 80, 240, 80);
+				Overlay.graphics.endFill();
+			}
 		}
 		
 	}

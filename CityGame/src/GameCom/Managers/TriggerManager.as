@@ -1,6 +1,8 @@
 package GameCom.Managers 
 {
 	import flash.display.Bitmap;
+	import LORgames.Engine.Keys;
+	import flash.ui.Keyboard;
 	/**
 	 * ...
 	 * @author P. Fox
@@ -9,7 +11,11 @@ package GameCom.Managers
 		
 		public static function ReportTrigger(trigger:String) : void {
 			if (trigger == "place_Pickup") {
-				MissionManager.GenerateNextMission();
+				// popup notification of mission
+				GUIManager.I.Popup("Press Enter to accept mission!");
+				if (Keys.isKeyDown(Keyboard.ENTER)) {
+					MissionManager.GenerateNextMission();
+				}
 			} else if (trigger == "place_Deliver") {
 				MissionManager.CheckMissionParameters();
 			} else if (trigger == "place_Weapons") {
