@@ -115,7 +115,7 @@ package GameCom.States {
 			bgManager = new BGManager(groundLayer, player);
 			
 			// objManager is added to objectLayer
-			objManager = new ObjManager(player, world, placesLayer);
+			objManager = new ObjManager(player, world, worldSpr);
 			
 			// scenic managers for the 2 object layers
 			scenicManager = new ScenicManager(object0Layer, object1Layer, player, world);

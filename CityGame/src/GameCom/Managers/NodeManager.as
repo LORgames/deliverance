@@ -48,5 +48,9 @@ package GameCom.Managers
 			
 			return false;
 		}
+		
+		public function GetNode(node:int):Node {
+			return nodeArray[node];
+		}
 	}
 }

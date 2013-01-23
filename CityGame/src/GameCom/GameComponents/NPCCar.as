@@ -188,6 +188,7 @@ package GameCom.GameComponents
 				// if within reach of targetNode then choose next node
 				if (nodeManager.TouchNode(targetNode, x, y)) {
 					targetNode = nodeManager.NextNode(targetNode);
+					trace("Next node: " + targetNode);
 				}
 				// always accelerate toward targetNode
 				if(engineSpeed > -HORSEPOWER_MAX) {
@@ -195,7 +196,9 @@ package GameCom.GameComponents
 				}
 				// TODO: steering code
 				// find angle to targetNode and steer towards
-				//trace(body.GetAngle())
+				var angleDifference:Number = Math.atan2(nodeManager.GetNode(targetNode).y - this.y, nodeManager.GetNode(targetNode).x - this.x);
+				steeringAngle = angleDifference;
+				trace(steeringAngle*180/Math.PI);
 			} else {
 				engineSpeed = 0;
 				steeringAngle = 0;
