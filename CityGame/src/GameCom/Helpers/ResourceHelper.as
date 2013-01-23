@@ -11,8 +11,7 @@ package GameCom.Helpers {
 		
 		private static var Resources:Vector.<ResourceInformation>;
 		
-		private static var CurrentResourcesUnlocked:int = 0;
-		private static var CurrentReputation:int = 0;
+		private static var CurrentResourcesUnlockedIndex:int = 0;
 		
 		public static function Initialize():void {
 			Resources = new Vector.<ResourceInformation>();
@@ -21,16 +20,24 @@ package GameCom.Helpers {
 			bytes.position = 0;
 			var lines:Array = bytes.readUTFBytes(bytes.length).split("\n");
 			
-			//Array starts at 1 because theres a header line.
+			//Loop starts at 1 because theres a header line.
 			for (var i:int = 1; i < lines.length; i++) {
 				var b:Array = (lines[i] as String).split(",");
 				var ri:ResourceInformation = new ResourceInformation(b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7]);
 				Resources.push(ri);
 			}
+			
+			while (Resources[CurrentResourcesUnlockedIndex + 1].ReputationForUnlock <= ReputationHelper.GetCurrentLevel()) {
+				CurrentResourcesUnlockedIndex++;
+			}
 		}
 		
 		public static function GenerateRandomMission():void {
-			var rR:ResourceInformation = Resources[Math.floor(Resources.length * Math.random())];
+			while (Resources[CurrentResourcesUnlockedIndex + 1].ReputationForUnlock <= ReputationHelper.GetCurrentLevel()) {
+				CurrentResourcesUnlockedIndex++;
+			}
+			
+			var rR:ResourceInformation = Resources[Math.floor(CurrentResourcesUnlockedIndex * Math.random())];
 			
 			var total:int = rR.MinimumLoad + Math.floor(Math.random() * (rR.MaximumLoad - rR.MinimumLoad));
 			
