@@ -202,34 +202,26 @@ package GameCom.GameComponents
 				//steeringAngle = angleDifference;
 				var angle2:Number = body.GetAngle() - Math.PI/2; //Body Angle
 				
-				while (angle2 < -Math.PI) {
-					angle2 += Math.PI * 2;
-				}
+				while (angle1 < 0) angle1 += Math.PI * 2;				
+				while (angle1 >= 2*Math.PI) angle1 -= Math.PI * 2;
 				
-				while (angle2 > Math.PI) {
-					angle2 -= Math.PI * 2;
-				}
+				while (angle2 < 0) angle2 += Math.PI * 2;
+				while (angle2 >= 2*Math.PI) angle2 -= Math.PI * 2;
 				
-				var oA:Number = angle2 - angle1;
-				var oB:Number = Math.PI * 2 - Math.abs(oA);
 				
-				if (oB < -Math.PI) {
-					oB += Math.PI * 2;
-				}
+				var change:Number = angle1 - angle2;
+				while (change > Math.PI) change -= Math.PI * 2;
+				while (change < -Math.PI) change += Math.PI * 2;
 				
-				if (oB > Math.PI) {
-					oB -= Math.PI * 2;
-				}
-				
-				var change:Number = Math.min(oA, oB);
-				
-				if (change < 0) {
+				if (change > 0) {
 					steeringAngle = Math.min(MAX_STEER_ANGLE, -change);
-				} else if (change > 0) {
+				} else if (change < 0) {
 					steeringAngle = Math.min(change, -MAX_STEER_ANGLE);
+				} else {
+					steeringAngle = 0;
 				}
 				
-				trace(angle1 + " || " + angle2 + " || " + change + " || " + oA + " || " + oB);
+				trace(angle1 + " || " + angle2 + " || " + change);
 				
 				(this.parent as Sprite).graphics.clear();
 				
