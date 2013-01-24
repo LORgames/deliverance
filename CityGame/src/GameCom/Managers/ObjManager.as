@@ -23,7 +23,7 @@ package GameCom.Managers
 		
 		private var maxCars:int = 1;
 		private var carSpawnChance:Number = 0.05;
-		private var cars:Array = new Array();
+		private var cars:Vector.<NPCCar> = new Vector.<NPCCar>();
 		
 		private var nodeManager:NodeManager;
 		

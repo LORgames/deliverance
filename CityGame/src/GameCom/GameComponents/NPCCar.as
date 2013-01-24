@@ -21,17 +21,17 @@ package GameCom.GameComponents
 	public class NPCCar extends Sprite {
 		private var world:b2World;
 		
-		private const MAX_STEER_ANGLE:Number = Math.PI/4;
+		private const MAX_STEER_ANGLE:Number = Math.PI/3;
 		private const STEER_SPEED:Number = 5.0;
 		
 		private const SIDEWAYS_FRICTION_FORCE:Number = 1000;
-		private const HORSEPOWER_MAX:Number = 50;
-		private const HORSEPOWER_INC:Number = 5;
+		private const HORSEPOWER_MAX:Number = 5;
+		private const HORSEPOWER_INC:Number = 1;
 		
-		private const leftRearWheelPosition:b2Vec2 = new b2Vec2(-1.0, 1.0);
-		private const rightRearWheelPosition:b2Vec2 = new b2Vec2(1.0, 1.0);
-		private const leftFrontWheelPosition:b2Vec2 =new b2Vec2(-1.0,-1.0);
-		private const rightFrontWheelPosition:b2Vec2= new b2Vec2(1.0,-1.0);
+		private const leftRearWheelPosition:b2Vec2 = new b2Vec2(-1.0, 1.3);
+		private const rightRearWheelPosition:b2Vec2 = new b2Vec2(1.0, 1.3);
+		private const leftFrontWheelPosition:b2Vec2 =new b2Vec2(-1.0,-1.3);
+		private const rightFrontWheelPosition:b2Vec2= new b2Vec2(1.0,-1.3);
 		
 		private var engineSpeed:Number = 0;
 		private var steeringAngle:Number = 0;
@@ -54,13 +54,13 @@ package GameCom.GameComponents
 			
 			this.nodeManager = nodeManager;
 			
-			var CarA:Class = ThemeManager.GetClassFromSWF("TruckBits/Basic Car.swf", "LORgames.BasicCar");
-			this.addChild(new CarA());
+			//var CarA:Class = ThemeManager.GetClassFromSWF("TruckBits/Basic Car.swf", "LORgames.BasicCar");
+			//this.addChild(new CarA());
 			
-			this.getChildAt(0).x = -this.getChildAt(0).width / 2;
-			this.getChildAt(0).y = -this.getChildAt(0).height / 2;
+			//this.getChildAt(0).x = -this.getChildAt(0).width / 2;
+			//this.getChildAt(0).y = -this.getChildAt(0).height / 2;
 			
-			(this.getChildAt(0) as MovieClip).getChildAt(0).transform.colorTransform = new ColorTransform(Math.random(), Math.random(), Math.random());
+			//(this.getChildAt(0) as MovieClip).getChildAt(0).transform.colorTransform = new ColorTransform(Math.random(), Math.random(), Math.random());
 			
 			// Car Body
 			var bodyShape:b2PolygonShape = new b2PolygonShape();
@@ -190,15 +190,60 @@ package GameCom.GameComponents
 					targetNode = nodeManager.NextNode(targetNode);
 					trace("Next node: " + targetNode);
 				}
+				
 				// always accelerate toward targetNode
 				if(engineSpeed > -HORSEPOWER_MAX) {
 					engineSpeed -= HORSEPOWER_INC;
 				}
-				// TODO: steering code
+				
 				// find angle to targetNode and steer towards
-				var angleDifference:Number = Math.atan2(nodeManager.GetNode(targetNode).y - this.y, nodeManager.GetNode(targetNode).x - this.x);
-				steeringAngle = angleDifference;
-				trace(steeringAngle*180/Math.PI);
+				var angle1:Number = Math.atan2(nodeManager.GetNode(targetNode).y - this.y, nodeManager.GetNode(targetNode).x - this.x); //Desired Angle
+				
+				//steeringAngle = angleDifference;
+				var angle2:Number = body.GetAngle() - Math.PI/2; //Body Angle
+				
+				while (angle2 < -Math.PI) {
+					angle2 += Math.PI * 2;
+				}
+				
+				while (angle2 > Math.PI) {
+					angle2 -= Math.PI * 2;
+				}
+				
+				var oA:Number = angle2 - angle1;
+				var oB:Number = Math.PI * 2 - Math.abs(oA);
+				
+				if (oB < -Math.PI) {
+					oB += Math.PI * 2;
+				}
+				
+				if (oB > Math.PI) {
+					oB -= Math.PI * 2;
+				}
+				
+				var change:Number = Math.min(oA, oB);
+				
+				if (change < 0) {
+					steeringAngle = Math.min(MAX_STEER_ANGLE, -change);
+				} else if (change > 0) {
+					steeringAngle = Math.min(change, -MAX_STEER_ANGLE);
+				}
+				
+				trace(angle1 + " || " + angle2 + " || " + change + " || " + oA + " || " + oB);
+				
+				(this.parent as Sprite).graphics.clear();
+				
+				(this.parent as Sprite).graphics.lineStyle(1, 0x0000FF);
+				(this.parent as Sprite).graphics.moveTo(this.x, this.y);
+				(this.parent as Sprite).graphics.lineTo(nodeManager.GetNode(targetNode).x, nodeManager.GetNode(targetNode).y);
+				
+				(this.parent as Sprite).graphics.lineStyle(1, 0x00FF00);
+				(this.parent as Sprite).graphics.moveTo(this.x, this.y);
+				(this.parent as Sprite).graphics.lineTo(this.x + Math.cos(angle2) * 10, this.y + Math.sin(angle2) * 10);
+				
+				(this.parent as Sprite).graphics.lineStyle(1, 0xFF0000);
+				(this.parent as Sprite).graphics.moveTo(this.x, this.y);
+				(this.parent as Sprite).graphics.lineTo(this.x + Math.cos(angle1) * 10, this.y + Math.sin(angle1) * 10);
 			} else {
 				engineSpeed = 0;
 				steeringAngle = 0;
@@ -230,7 +275,7 @@ package GameCom.GameComponents
 			
 			this.x = body.GetPosition().x * Global.PHYSICS_SCALE;
 			this.y = body.GetPosition().y * Global.PHYSICS_SCALE;
-			this.rotation = body.GetAngle() * 180 / Math.PI;
+			//this.rotation = body.GetAngle() * 180 / Math.PI;
 		}
 		
 		public function Destroy():void {

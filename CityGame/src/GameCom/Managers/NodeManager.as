@@ -8,7 +8,7 @@ package GameCom.Managers
 	 * @author Miles
 	 */
 	public class NodeManager {
-		private var nodeArray:Array;
+		private var nodeArray:Vector.<Node>;
 		
 		public function NodeManager() {
 			// load in nodes
@@ -18,7 +18,8 @@ package GameCom.Managers
 			var x:Number;
 			var y:Number;
 			var children:Array;
-			nodeArray = new Array();
+			nodeArray = new Vector.<Node>();
+			
 			for (var i:int = 0; i < numnodes; i++) {
 				x = nodefile.readFloat();
 				y = nodefile.readFloat();

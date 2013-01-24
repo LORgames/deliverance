@@ -88,7 +88,7 @@ package GameCom.Managers
 					
                     if (f != 0) {
 						layer.graphics.beginBitmapFill(ThemeManager.Get("Tiles/" + f + ".png"));
-						layer.graphics.drawRect(i * TILESIZEX, j * TILESIZEY, TILESIZEX, TILESIZEY);
+						//layer.graphics.drawRect(i * TILESIZEX, j * TILESIZEY, TILESIZEX, TILESIZEY);
 						layer.graphics.endFill();
                     }
                 }

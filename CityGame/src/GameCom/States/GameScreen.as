@@ -38,7 +38,7 @@ package GameCom.States {
 		
 		// World stuff
 		public var world:b2World;
-		private var physicsDebugRender:Boolean = false;
+		private var physicsDebugRender:Boolean = true;
 		
 		// Playing the world
 		private var simulating:Boolean = true;
@@ -55,6 +55,8 @@ package GameCom.States {
 		private var object0Layer:Sprite = new Sprite();
 		private var placesLayer:Sprite = new Sprite();
 		private var object1Layer:Sprite = new Sprite();
+		
+		private var debugDrawLayer:Sprite = new Sprite();
 		
 		private var objManager:ObjManager;
 		private var bgManager:BGManager;
@@ -85,7 +87,7 @@ package GameCom.States {
 			
 			// set debug draw
 			var dbgDraw:b2DebugDraw = new b2DebugDraw();
-			dbgDraw.SetSprite(object1Layer);
+			dbgDraw.SetSprite(debugDrawLayer);
 			dbgDraw.SetDrawScale(Global.PHYSICS_SCALE);
 			dbgDraw.SetFillAlpha(0.3);
 			dbgDraw.SetLineThickness(1.0);
@@ -105,6 +107,8 @@ package GameCom.States {
 			worldSpr.addChild(object0Layer);
 			worldSpr.addChild(placesLayer);
 			worldSpr.addChild(object1Layer);
+			
+			worldSpr.addChild(debugDrawLayer);
 			
 			StaticBoxCreator.CreateBoxes(world);
 			
