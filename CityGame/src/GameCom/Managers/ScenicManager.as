@@ -85,7 +85,7 @@ package GameCom.Managers {
 				var locationY:Number = objectFile.readFloat();
 				var rotation:int = objectFile.readInt();
 				
-				//Objects.push(new ScenicObject(sourceID, locationX, locationY, rotation, world, Types[sourceID]));
+				Objects.push(new ScenicObject(sourceID, locationX, locationY, rotation, world, Types[sourceID]));
 			}
 		}
 		

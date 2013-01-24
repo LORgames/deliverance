@@ -19,7 +19,7 @@ package GameCom.States {
 	import GameCom.Helpers.ReputationHelper;
 	import GameCom.Helpers.ResourceHelper;
 	import GameCom.Managers.GUIManager;
-	import GameCom.Managers.ObjManager;
+	import GameCom.Managers.NPCManager;
 	import GameCom.GameComponents.PlayerTruck;
 	import GameCom.GameComponents.Water;
 	import GameCom.Managers.PlacesManager;
@@ -38,7 +38,7 @@ package GameCom.States {
 		
 		// World stuff
 		public var world:b2World;
-		private var physicsDebugRender:Boolean = true;
+		private var physicsDebugRender:Boolean = false;
 		
 		// Playing the world
 		private var simulating:Boolean = true;
@@ -58,7 +58,7 @@ package GameCom.States {
 		
 		private var debugDrawLayer:Sprite = new Sprite();
 		
-		private var objManager:ObjManager;
+		private var npcManager:NPCManager;
 		private var bgManager:BGManager;
 		private var scenicManager:ScenicManager;
 		private var placesManager:PlacesManager;
@@ -119,7 +119,7 @@ package GameCom.States {
 			bgManager = new BGManager(groundLayer, player);
 			
 			// objManager is added to objectLayer
-			objManager = new ObjManager(player, world, worldSpr);
+			npcManager = new NPCManager(player, world, object0Layer);
 			
 			// scenic managers for the 2 object layers
 			scenicManager = new ScenicManager(object0Layer, object1Layer, player, world);
@@ -143,12 +143,13 @@ package GameCom.States {
 				waterLayer.Update();
 				bgManager.Update();
 				player.Update(dt);
-				objManager.Update();
 				
 				gui.Update();
 				
 				scenicManager.DrawScenicObjects();
 				placesManager.DrawObjects();
+				
+				npcManager.Update();
 				
 				worldSpr.x = Math.floor(-player.x + stage.stageWidth/2);
 				worldSpr.y = Math.floor( -player.y + stage.stageHeight / 2);

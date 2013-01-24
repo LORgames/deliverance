@@ -15,7 +15,7 @@ package GameCom.Managers
 	 * @author Miles
 	 */
 	
-	public class ObjManager {
+	public class NPCManager {
 		private var player:PlayerTruck;
 		private var world:b2World;
 		private var worldSpr:Sprite;
@@ -27,7 +27,7 @@ package GameCom.Managers
 		
 		private var nodeManager:NodeManager;
 		
-		public function ObjManager(player:PlayerTruck, world:b2World, worldSpr:Sprite) {
+		public function NPCManager(player:PlayerTruck, world:b2World, worldSpr:Sprite) {
 			this.player = player;
 			this.world = world;
 			this.worldSpr = worldSpr;
@@ -51,7 +51,7 @@ package GameCom.Managers
 				// if car not visible destroy
 				var carRect:Rectangle = new Rectangle(car.x - car.width / 2, car.y - car.height / 2, car.width, car.height);
 				
-				if (!stageRect.containsRect(carRect)) {
+				if (false && !stageRect.containsRect(carRect)) {
 					car.Destroy();
 					worldSpr.removeChild(cars[i]);
 					cars.splice(i, 1);

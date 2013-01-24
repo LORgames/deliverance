@@ -1,6 +1,7 @@
 package GameCom.Managers 
 {
 	import Box2D.Common.Math.b2Vec2;
+	import flash.geom.Point;
 	import flash.utils.ByteArray;
 	import GameCom.GameComponents.Node;
 	/**
@@ -9,6 +10,8 @@ package GameCom.Managers
 	 */
 	public class NodeManager {
 		private var nodeArray:Vector.<Node>;
+		
+		private const TOUCH_SQUARED:Number = 5000;
 		
 		public function NodeManager() {
 			// load in nodes
@@ -23,10 +26,14 @@ package GameCom.Managers
 			for (var i:int = 0; i < numnodes; i++) {
 				x = nodefile.readFloat();
 				y = nodefile.readFloat();
+				
+				var totalChildren:int = nodefile.readByte();
+				
 				children = new Array();
-				for (var j:int = 0; j < nodefile.readByte(); j++) {
+				for (var j:int = 0; j < totalChildren; j++) {
 					children.push(nodefile.readInt());
 				}
+				
 				nodeArray.push(new Node(x, y, children));
 			}
 		}
@@ -41,17 +48,43 @@ package GameCom.Managers
 		
 		public function TouchNode(node:int, carX:Number, carY:Number):Boolean {
 			//TODO: Fix this.
-			/*if (Math.sqrt((carX-(nodeArray[node] as Node).x)*(carX-(nodeArray[node] as Node).x) - (carY-(nodeArray[node] as Node).y)*(carY-(nodeArray[node] as Node).y)) < 20.0) {
+			if (PythagSqr(new Point(nodeArray[node].x, nodeArray[node].y), new Point(carX, carY)) < TOUCH_SQUARED) {
 				return true;
 			} else {
 				return false;
-			}*/
+			}
 			
 			return false;
 		}
 		
 		public function GetNode(node:int):Node {
-			return nodeArray[node];
+			if(node >= 0 && node < nodeArray.length) {
+				return nodeArray[node];
+			}
+			
+			return null;
+		}
+		
+		public function GetNearestNode(x:Number, y:Number):int {
+			var currentNearestIndex:int = 0;
+			var currentNearestSqr:Number = Number.MAX_VALUE;
+			
+			var p:Point = new Point(x, y);
+			
+			for (var i:int = 0; i < nodeArray.length; i++) {
+				var thisDist:Number = PythagSqr(new Point(nodeArray[i].x, nodeArray[i].y), p);
+				
+				if (thisDist < currentNearestSqr) {
+					currentNearestSqr = thisDist;
+					currentNearestIndex = i;
+				}
+			}
+			
+			return currentNearestIndex;
+		}
+		
+		private function PythagSqr(n:Point, p:Point):Number {
+			return (n.x - p.x) * (n.x - p.x) + (n.y - p.y) * (n.y - p.y);
 		}
 	}
 }

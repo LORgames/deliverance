@@ -1,6 +1,7 @@
 package GameCom.GameComponents 
 {
 	import flash.geom.ColorTransform;
+	import GameCom.Managers.GUIManager;
 	import GameCom.Managers.NodeManager;
 	import GameCom.States.GameScreen;
 	import LORgames.Engine.Keys;
@@ -21,12 +22,12 @@ package GameCom.GameComponents
 	public class NPCCar extends Sprite {
 		private var world:b2World;
 		
-		private const MAX_STEER_ANGLE:Number = Math.PI/3;
+		private const MAX_STEER_ANGLE:Number = Math.PI / 3;
 		private const STEER_SPEED:Number = 5.0;
 		
 		private const SIDEWAYS_FRICTION_FORCE:Number = 1000;
-		private const HORSEPOWER_MAX:Number = 5;
-		private const HORSEPOWER_INC:Number = 1;
+		private const HORSEPOWER_MAX:Number = 25;
+		private const HORSEPOWER_INC:Number = 5;
 		
 		private const leftRearWheelPosition:b2Vec2 = new b2Vec2(-1.0, 1.3);
 		private const rightRearWheelPosition:b2Vec2 = new b2Vec2(1.0, 1.3);
@@ -54,13 +55,13 @@ package GameCom.GameComponents
 			
 			this.nodeManager = nodeManager;
 			
-			//var CarA:Class = ThemeManager.GetClassFromSWF("TruckBits/Basic Car.swf", "LORgames.BasicCar");
-			//this.addChild(new CarA());
+			var CarA:Class = ThemeManager.GetClassFromSWF("TruckBits/Basic Car.swf", "LORgames.BasicCar");
+			this.addChild(new CarA());
 			
-			//this.getChildAt(0).x = -this.getChildAt(0).width / 2;
-			//this.getChildAt(0).y = -this.getChildAt(0).height / 2;
+			this.getChildAt(0).x = -this.getChildAt(0).width / 2;
+			this.getChildAt(0).y = -this.getChildAt(0).height / 2;
 			
-			//(this.getChildAt(0) as MovieClip).getChildAt(0).transform.colorTransform = new ColorTransform(Math.random(), Math.random(), Math.random());
+			(this.getChildAt(0) as MovieClip).getChildAt(0).transform.colorTransform = new ColorTransform(Math.random(), Math.random(), Math.random());
 			
 			// Car Body
 			var bodyShape:b2PolygonShape = new b2PolygonShape();
@@ -145,6 +146,8 @@ package GameCom.GameComponents
 			 
 			world.CreateJoint(leftRearJointDef);
 			world.CreateJoint(rightRearJointDef);
+			
+			targetNode = nodeManager.GetNearestNode(spawnPosition.x*Global.PHYSICS_SCALE, spawnPosition.y*Global.PHYSICS_SCALE);
 		}
 		
 		private function killOrthogonalVelocity(targetBody:b2Body):void {
@@ -162,34 +165,14 @@ package GameCom.GameComponents
 		}
 		
 		public function Update():void {
-			/*
-			if (Keys.isKeyDown(Keyboard.UP)) {
-				if(engineSpeed > -HORSEPOWER_MAX) {
-					engineSpeed -= HORSEPOWER_INC;
-				}
-			} else if (Keys.isKeyDown(Keyboard.DOWN)) {
-				if(engineSpeed < HORSEPOWER_MAX) {
-					engineSpeed += HORSEPOWER_INC;
-				}
-			} else {
-				engineSpeed = 0;
-			}
-			
-			if(Keys.isKeyDown(Keyboard.RIGHT)) {
-				steeringAngle = MAX_STEER_ANGLE
-			} else if(Keys.isKeyDown(Keyboard.LEFT)) {
-				steeringAngle = -MAX_STEER_ANGLE
-			} else {
-				steeringAngle = 0;
-			}
-			*/
-			
 			if (targetNode != -1) {
 				// if within reach of targetNode then choose next node
 				if (nodeManager.TouchNode(targetNode, x, y)) {
 					targetNode = nodeManager.NextNode(targetNode);
-					trace("Next node: " + targetNode);
+					if (targetNode == -1) return;
 				}
+				
+				var tNode:Node = nodeManager.GetNode(targetNode);
 				
 				// always accelerate toward targetNode
 				if(engineSpeed > -HORSEPOWER_MAX) {
@@ -197,7 +180,7 @@ package GameCom.GameComponents
 				}
 				
 				// find angle to targetNode and steer towards
-				var angle1:Number = Math.atan2(nodeManager.GetNode(targetNode).y - this.y, nodeManager.GetNode(targetNode).x - this.x); //Desired Angle
+				var angle1:Number = Math.atan2(tNode.y - this.y, tNode.x - this.x); //Desired Angle
 				
 				//steeringAngle = angleDifference;
 				var angle2:Number = body.GetAngle() - Math.PI/2; //Body Angle
@@ -208,26 +191,21 @@ package GameCom.GameComponents
 				while (angle2 < 0) angle2 += Math.PI * 2;
 				while (angle2 >= 2*Math.PI) angle2 -= Math.PI * 2;
 				
-				
-				var change:Number = angle1 - angle2;
+				var change:Number = angle2 - angle1;
 				while (change > Math.PI) change -= Math.PI * 2;
 				while (change < -Math.PI) change += Math.PI * 2;
 				
-				if (change > 0) {
-					steeringAngle = Math.min(MAX_STEER_ANGLE, -change);
-				} else if (change < 0) {
-					steeringAngle = Math.min(change, -MAX_STEER_ANGLE);
+				if (change < 0) {
+					steeringAngle = Math.min(MAX_STEER_ANGLE, Math.abs(change)); //Pos?
+				} else if (change > 0) {
+					steeringAngle = -Math.min(MAX_STEER_ANGLE, Math.abs(change)); //Neg
 				} else {
 					steeringAngle = 0;
 				}
 				
-				trace(angle1 + " || " + angle2 + " || " + change);
-				
-				(this.parent as Sprite).graphics.clear();
-				
 				(this.parent as Sprite).graphics.lineStyle(1, 0x0000FF);
 				(this.parent as Sprite).graphics.moveTo(this.x, this.y);
-				(this.parent as Sprite).graphics.lineTo(nodeManager.GetNode(targetNode).x, nodeManager.GetNode(targetNode).y);
+				(this.parent as Sprite).graphics.lineTo(tNode.x, tNode.y);
 				
 				(this.parent as Sprite).graphics.lineStyle(1, 0x00FF00);
 				(this.parent as Sprite).graphics.moveTo(this.x, this.y);
@@ -235,13 +213,15 @@ package GameCom.GameComponents
 				
 				(this.parent as Sprite).graphics.lineStyle(1, 0xFF0000);
 				(this.parent as Sprite).graphics.moveTo(this.x, this.y);
-				(this.parent as Sprite).graphics.lineTo(this.x + Math.cos(angle1) * 10, this.y + Math.sin(angle1) * 10);
+				(this.parent as Sprite).graphics.lineTo(GUIManager.I.player.x, GUIManager.I.player.y);
 			} else {
+				targetNode = nodeManager.GetNearestNode(this.x, this.y);
 				engineSpeed = 0;
 				steeringAngle = 0;
 			}
 			
-			this.graphics.clear();
+			engineSpeed *= (MAX_STEER_ANGLE-Math.abs(steeringAngle)) / (2 * MAX_STEER_ANGLE) + 0.5;
+			trace((MAX_STEER_ANGLE-Math.abs(steeringAngle)) / (2 * MAX_STEER_ANGLE) + 0.5);
 			
 			killOrthogonalVelocity(leftWheel);
 			killOrthogonalVelocity(rightWheel);
@@ -267,7 +247,7 @@ package GameCom.GameComponents
 			
 			this.x = body.GetPosition().x * Global.PHYSICS_SCALE;
 			this.y = body.GetPosition().y * Global.PHYSICS_SCALE;
-			//this.rotation = body.GetAngle() * 180 / Math.PI;
+			this.rotation = body.GetAngle() * 180 / Math.PI;
 		}
 		
 		public function Destroy():void {

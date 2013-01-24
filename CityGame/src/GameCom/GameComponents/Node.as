@@ -12,17 +12,15 @@ package GameCom.GameComponents
 		public function Node(x:Number, y:Number, children:Array) {
 			this.x = x;
 			this.y = y;
-			children = children;
+			this.children = children.slice();
 		}
 		
 		public function NextChild():int {
-			if (children.length > 1) {
-				return children[Math.round(Math.random() * children.length)];
-			} else if (children.length == 1) {
-				return children[0];
-			} else {
-				return -1;
+			if(children) {
+				return children[Math.floor(Math.random() * children.length)];
 			}
+			
+			return -1;
 		}
 	}
 }

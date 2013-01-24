@@ -28,7 +28,7 @@ package GameCom.Managers
 		
 		private var CurrentMissionText:TextField = new TextField();
 		
-		private var player:PlayerTruck;
+		public var player:PlayerTruck;
 		
 		private var hasPopup:Boolean = false;
 		private var popupText:TextField = new TextField();
