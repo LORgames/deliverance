@@ -22,11 +22,11 @@ package GameCom.GameComponents
 	public class NPCCar extends Sprite {
 		private var world:b2World;
 		
-		private const MAX_STEER_ANGLE:Number = Math.PI / 3;
+		private const MAX_STEER_ANGLE:Number = Math.PI / 5;
 		private const STEER_SPEED:Number = 5.0;
 		
 		private const SIDEWAYS_FRICTION_FORCE:Number = 1000;
-		private const HORSEPOWER_MAX:Number = 25;
+		private const HORSEPOWER_MAX:Number = 15;
 		private const HORSEPOWER_INC:Number = 5;
 		
 		private const leftRearWheelPosition:b2Vec2 = new b2Vec2(-1.0, 1.3);
@@ -215,13 +215,12 @@ package GameCom.GameComponents
 				(this.parent as Sprite).graphics.moveTo(this.x, this.y);
 				(this.parent as Sprite).graphics.lineTo(GUIManager.I.player.x, GUIManager.I.player.y);
 			} else {
-				targetNode = nodeManager.GetNearestNode(this.x, this.y);
+				targetNode = nodeManager.GetNearestNode(this.x/Global.PHYSICS_SCALE, this.y/Global.PHYSICS_SCALE);
 				engineSpeed = 0;
 				steeringAngle = 0;
 			}
 			
-			engineSpeed *= (MAX_STEER_ANGLE-Math.abs(steeringAngle)) / (2 * MAX_STEER_ANGLE) + 0.5;
-			trace((MAX_STEER_ANGLE-Math.abs(steeringAngle)) / (2 * MAX_STEER_ANGLE) + 0.5);
+			engineSpeed *= (MAX_STEER_ANGLE-Math.abs(steeringAngle)) / (3 * MAX_STEER_ANGLE) + 0.333;
 			
 			killOrthogonalVelocity(leftWheel);
 			killOrthogonalVelocity(rightWheel);

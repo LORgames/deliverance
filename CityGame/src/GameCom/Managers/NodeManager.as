@@ -4,6 +4,7 @@ package GameCom.Managers
 	import flash.geom.Point;
 	import flash.utils.ByteArray;
 	import GameCom.GameComponents.Node;
+	import GameCom.Helpers.MathHelper;
 	/**
 	 * ...
 	 * @author Miles
@@ -11,7 +12,7 @@ package GameCom.Managers
 	public class NodeManager {
 		private var nodeArray:Vector.<Node>;
 		
-		private const TOUCH_SQUARED:Number = 5000;
+		private const TOUCH_SQUARED:Number = 2500;
 		
 		public function NodeManager() {
 			// load in nodes
@@ -47,11 +48,8 @@ package GameCom.Managers
 		}
 		
 		public function TouchNode(node:int, carX:Number, carY:Number):Boolean {
-			//TODO: Fix this.
-			if (PythagSqr(new Point(nodeArray[node].x, nodeArray[node].y), new Point(carX, carY)) < TOUCH_SQUARED) {
+			if (MathHelper.DistanceSquared(new Point(nodeArray[node].x, nodeArray[node].y), new Point(carX, carY)) < TOUCH_SQUARED) {
 				return true;
-			} else {
-				return false;
 			}
 			
 			return false;
@@ -72,7 +70,7 @@ package GameCom.Managers
 			var p:Point = new Point(x, y);
 			
 			for (var i:int = 0; i < nodeArray.length; i++) {
-				var thisDist:Number = PythagSqr(new Point(nodeArray[i].x, nodeArray[i].y), p);
+				var thisDist:Number = MathHelper.DistanceSquared(new Point(nodeArray[i].x, nodeArray[i].y), p);
 				
 				if (thisDist < currentNearestSqr) {
 					currentNearestSqr = thisDist;
@@ -81,10 +79,6 @@ package GameCom.Managers
 			}
 			
 			return currentNearestIndex;
-		}
-		
-		private function PythagSqr(n:Point, p:Point):Number {
-			return (n.x - p.x) * (n.x - p.x) + (n.y - p.y) * (n.y - p.y);
 		}
 	}
 }

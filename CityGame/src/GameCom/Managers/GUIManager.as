@@ -4,10 +4,12 @@ package GameCom.Managers
 	import flash.display.Sprite;
 	import flash.events.TextEvent;
 	import flash.filters.GlowFilter;
+	import flash.geom.Point;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
 	import GameCom.GameComponents.PlayerTruck;
+	import GameCom.Helpers.MathHelper;
 	import GameCom.Helpers.MoneyHelper;
 	import GameCom.Helpers.ReputationHelper;
 	import GameCom.Helpers.SpriteHelper;
@@ -19,7 +21,10 @@ package GameCom.Managers
 		
 		public static var I:GUIManager;
 		
+		private var GPSBase:Sprite = new Sprite();
 		private var GPSArrow:Sprite;
+		private var GPSDistance:TextField = new TextField();
+		
 		private var Overlay:Sprite;
 		
 		private var CurrentLevelText:TextField = new TextField();
@@ -46,14 +51,28 @@ package GameCom.Managers
 			Overlay.x = 10;
 			Overlay.y = 10;
 			
-			GPSArrow = SpriteHelper.CreateCenteredBitmapData(ThemeManager.Get("GUI/Directora.png"));
-			this.addChild(GPSArrow);
+			GPSBase.addChild(new Bitmap(ThemeManager.Get("GUI/GPS base.png")));
+			this.addChild(GPSBase);
+			
+			GPSArrow = SpriteHelper.CreateCenteredBitmapData(ThemeManager.Get("GUI/GPS arrow.png"));
+			GPSBase.addChild(GPSArrow);
+			
+			GPSArrow.x = 82;
+			GPSArrow.y = 39;
+			
+			GPSDistance.selectable = false;
+			GPSDistance.defaultTextFormat = new TextFormat("Verdana", 15, 0xFFFFFF);
+			GPSDistance.autoSize = TextFieldAutoSize.CENTER;
+			GPSDistance.x = 69;
+			GPSDistance.y = 76;
+			GPSDistance.filters = new Array(new GlowFilter(0, 1, 2, 2, 5));
+			GPSBase.addChild(GPSDistance);
 			
 			CurrentLevelText.selectable = false;
 			CurrentLevelText.defaultTextFormat = new TextFormat("Verdana", 15, 0xFFFFFF);
 			CurrentLevelText.x = 26;
 			CurrentLevelText.y = 3;
-			CurrentLevelText.autoSize = TextFieldAutoSize.CENTER
+			CurrentLevelText.autoSize = TextFieldAutoSize.CENTER;
 			CurrentLevelText.filters = new Array(new GlowFilter(0, 1, 2, 2, 5));
 			Overlay.addChild(CurrentLevelText);
 			
@@ -61,7 +80,7 @@ package GameCom.Managers
 			CurrentMoneyText.defaultTextFormat = new TextFormat("Verdana", 15, 0xFFFF70);
 			CurrentMoneyText.x = 75;
 			CurrentMoneyText.y = 50;
-			CurrentMoneyText.autoSize = TextFieldAutoSize.LEFT
+			CurrentMoneyText.autoSize = TextFieldAutoSize.LEFT;
 			CurrentMoneyText.filters = new Array(new GlowFilter(0, 1, 2, 2, 5));
 			Overlay.addChild(CurrentMoneyText);
 			
@@ -69,7 +88,7 @@ package GameCom.Managers
 			CurrentSpeedText.defaultTextFormat = new TextFormat("Verdana", 15, 0xFFFFFF);
 			CurrentSpeedText.x = 200;
 			CurrentSpeedText.y = 3;
-			CurrentSpeedText.autoSize = TextFieldAutoSize.LEFT
+			CurrentSpeedText.autoSize = TextFieldAutoSize.LEFT;
 			CurrentSpeedText.filters = new Array(new GlowFilter(0, 1, 2, 2, 5));
 			Overlay.addChild(CurrentSpeedText);
 			
@@ -93,16 +112,18 @@ package GameCom.Managers
 		}
 		
 		public function Update() : void {
-			GPSArrow.x = stage.stageWidth - 60;
-			GPSArrow.y = stage.stageHeight - 60;
+			GPSBase.x = stage.stageWidth - (GPSBase.width + 5);
+			GPSBase.y = stage.stageHeight - (GPSBase.height + 5);
 			
 			CurrentSpeedText.text = Math.round(player.body.GetLinearVelocity().Length() * 3.6) + "km/h";
 			
 			if (MissionManager.CurrentDestination() != null) {
 				GPSArrow.visible = true;
 				GPSArrow.rotation = Math.atan2(MissionManager.CurrentDestination().y - player.y, MissionManager.CurrentDestination().x - player.x) / Math.PI * 180;
+				GPSDistance.text = Math.floor(Math.sqrt(MathHelper.DistanceSquared(MissionManager.CurrentDestination(), new Point(player.x, player.y)))/Global.PHYSICS_SCALE) + "m";
 			} else {
 				GPSArrow.visible = false;
+				GPSDistance.text = "";
 			}
 			
 			if (popupAlpha > 0) {
