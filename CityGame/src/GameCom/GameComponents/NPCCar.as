@@ -22,7 +22,7 @@ package GameCom.GameComponents
 	public class NPCCar extends Sprite {
 		private var world:b2World;
 		
-		private const MAX_STEER_ANGLE:Number = Math.PI / 5;
+		private const MAX_STEER_ANGLE:Number = Math.PI / 6;
 		private const STEER_SPEED:Number = 5.0;
 		
 		private const SIDEWAYS_FRICTION_FORCE:Number = 1000;
@@ -50,7 +50,7 @@ package GameCom.GameComponents
 		private var nodeManager:NodeManager;
 		private var targetNode:int = 0;
 		
-		public function NPCCar(spawnPosition:b2Vec2, world:b2World, nodeManager:NodeManager) {
+		public function NPCCar(spawnPosition:b2Vec2, world:b2World, nodeManager:NodeManager, angle:Number, firstNodeID:int) {
 			this.world = world;
 			
 			this.nodeManager = nodeManager;
@@ -147,7 +147,9 @@ package GameCom.GameComponents
 			world.CreateJoint(leftRearJointDef);
 			world.CreateJoint(rightRearJointDef);
 			
-			targetNode = nodeManager.GetNearestNode(spawnPosition.x*Global.PHYSICS_SCALE, spawnPosition.y*Global.PHYSICS_SCALE);
+			body.SetAngle(angle - Math.PI/2);
+			
+			targetNode = firstNodeID;
 		}
 		
 		private function killOrthogonalVelocity(targetBody:b2Body):void {
@@ -202,20 +204,7 @@ package GameCom.GameComponents
 				} else {
 					steeringAngle = 0;
 				}
-				
-				(this.parent as Sprite).graphics.lineStyle(1, 0x0000FF);
-				(this.parent as Sprite).graphics.moveTo(this.x, this.y);
-				(this.parent as Sprite).graphics.lineTo(tNode.x, tNode.y);
-				
-				(this.parent as Sprite).graphics.lineStyle(1, 0x00FF00);
-				(this.parent as Sprite).graphics.moveTo(this.x, this.y);
-				(this.parent as Sprite).graphics.lineTo(this.x + Math.cos(angle2) * 10, this.y + Math.sin(angle2) * 10);
-				
-				(this.parent as Sprite).graphics.lineStyle(1, 0xFF0000);
-				(this.parent as Sprite).graphics.moveTo(this.x, this.y);
-				(this.parent as Sprite).graphics.lineTo(GUIManager.I.player.x, GUIManager.I.player.y);
 			} else {
-				targetNode = nodeManager.GetNearestNode(this.x/Global.PHYSICS_SCALE, this.y/Global.PHYSICS_SCALE);
 				engineSpeed = 0;
 				steeringAngle = 0;
 			}

@@ -12,7 +12,7 @@ package GameCom.Managers
 	public class NodeManager {
 		private var nodeArray:Vector.<Node>;
 		
-		private const TOUCH_SQUARED:Number = 2500;
+		private const TOUCH_SQUARED:Number = 1000;
 		
 		public function NodeManager() {
 			// load in nodes
