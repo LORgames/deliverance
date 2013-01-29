@@ -67,12 +67,13 @@
             this.places_tab = new System.Windows.Forms.TabPage();
             this.places_selector_btn = new System.Windows.Forms.Button();
             this.story_tab = new System.Windows.Forms.TabPage();
+            this.story_new = new System.Windows.Forms.Button();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmSendBack = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmBringForward = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmSendToBack = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmBringToFront = new System.Windows.Forms.ToolStripMenuItem();
-            this.story_new = new System.Windows.Forms.Button();
+            this.placesContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.main_splitter)).BeginInit();
             this.main_splitter.Panel1.SuspendLayout();
             this.main_splitter.Panel2.SuspendLayout();
@@ -560,44 +561,6 @@
             this.story_tab.Text = "Story";
             this.story_tab.UseVisualStyleBackColor = true;
             // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmSendBack,
-            this.tsmBringForward,
-            this.tsmSendToBack,
-            this.tsmBringToFront});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(149, 92);
-            // 
-            // tsmSendBack
-            // 
-            this.tsmSendBack.Name = "tsmSendBack";
-            this.tsmSendBack.Size = new System.Drawing.Size(148, 22);
-            this.tsmSendBack.Text = "Send Back";
-            this.tsmSendBack.Click += new System.EventHandler(this.tsmSendBack_Click);
-            // 
-            // tsmBringForward
-            // 
-            this.tsmBringForward.Name = "tsmBringForward";
-            this.tsmBringForward.Size = new System.Drawing.Size(148, 22);
-            this.tsmBringForward.Text = "Bring Forward";
-            this.tsmBringForward.Click += new System.EventHandler(this.tsmBringForward_Click);
-            // 
-            // tsmSendToBack
-            // 
-            this.tsmSendToBack.Name = "tsmSendToBack";
-            this.tsmSendToBack.Size = new System.Drawing.Size(148, 22);
-            this.tsmSendToBack.Text = "Send to Back";
-            this.tsmSendToBack.Click += new System.EventHandler(this.tsmSendToBack_Click);
-            // 
-            // tsmBringToFront
-            // 
-            this.tsmBringToFront.Name = "tsmBringToFront";
-            this.tsmBringToFront.Size = new System.Drawing.Size(148, 22);
-            this.tsmBringToFront.Text = "Bring to Front";
-            this.tsmBringToFront.Click += new System.EventHandler(this.tsmBringToFront_Click);
-            // 
             // story_new
             // 
             this.story_new.Location = new System.Drawing.Point(74, 3);
@@ -607,6 +570,49 @@
             this.story_new.Text = "New";
             this.story_new.UseVisualStyleBackColor = true;
             this.story_new.Click += new System.EventHandler(this.story_new_Click);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmSendBack,
+            this.tsmBringForward,
+            this.tsmSendToBack,
+            this.tsmBringToFront});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 92);
+            // 
+            // tsmSendBack
+            // 
+            this.tsmSendBack.Name = "tsmSendBack";
+            this.tsmSendBack.Size = new System.Drawing.Size(152, 22);
+            this.tsmSendBack.Text = "Send Back";
+            this.tsmSendBack.Click += new System.EventHandler(this.tsmSendBack_Click);
+            // 
+            // tsmBringForward
+            // 
+            this.tsmBringForward.Name = "tsmBringForward";
+            this.tsmBringForward.Size = new System.Drawing.Size(152, 22);
+            this.tsmBringForward.Text = "Bring Forward";
+            this.tsmBringForward.Click += new System.EventHandler(this.tsmBringForward_Click);
+            // 
+            // tsmSendToBack
+            // 
+            this.tsmSendToBack.Name = "tsmSendToBack";
+            this.tsmSendToBack.Size = new System.Drawing.Size(152, 22);
+            this.tsmSendToBack.Text = "Send to Back";
+            this.tsmSendToBack.Click += new System.EventHandler(this.tsmSendToBack_Click);
+            // 
+            // tsmBringToFront
+            // 
+            this.tsmBringToFront.Name = "tsmBringToFront";
+            this.tsmBringToFront.Size = new System.Drawing.Size(152, 22);
+            this.tsmBringToFront.Text = "Bring to Front";
+            this.tsmBringToFront.Click += new System.EventHandler(this.tsmBringToFront_Click);
+            // 
+            // placesContextMenu
+            // 
+            this.placesContextMenu.Name = "placesContextMenu";
+            this.placesContextMenu.Size = new System.Drawing.Size(153, 26);
             // 
             // MainWindow
             // 
@@ -697,6 +703,7 @@
         internal System.Windows.Forms.CheckBox layer_places;
         private System.Windows.Forms.Button places_selector_btn;
         private System.Windows.Forms.Button story_new;
+        internal System.Windows.Forms.ContextMenuStrip placesContextMenu;
     }
 }
 

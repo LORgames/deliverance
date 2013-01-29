@@ -55,11 +55,11 @@ package GameCom.GameComponents
 			
 			this.nodeManager = nodeManager;
 			
-			var CarA:Class = ThemeManager.GetClassFromSWF("TruckBits/Basic Car.swf", "LORgames.BasicCar");
+			var CarA:Class = ThemeManager.GetClassFromSWF("TruckBits/Cars.swf", "LORgames.CarA");
 			this.addChild(new CarA());
 			
-			this.getChildAt(0).x = -this.getChildAt(0).width / 2;
-			this.getChildAt(0).y = -this.getChildAt(0).height / 2;
+			//this.getChildAt(0).x = -this.getChildAt(0).width / 2;
+			//this.getChildAt(0).y = -this.getChildAt(0).height / 2;
 			
 			(this.getChildAt(0) as MovieClip).getChildAt(0).transform.colorTransform = new ColorTransform(Math.random(), Math.random(), Math.random());
 			
