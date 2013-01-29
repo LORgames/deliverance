@@ -44,7 +44,7 @@ namespace CityTools {
             s_buffer.gfx.DrawImage(precache, new Rectangle(Point.Empty, precache.Size));
 
             foreach (PhysicsShape p in ScenicObjectCache.s_objectTypes[objectID].Physics) {
-                p.DrawMe(s_buffer.gfx, PointF.Empty, Pens.Yellow, new SolidBrush(Color.FromArgb(128, Color.Yellow)));
+                p.DrawMe(s_buffer.gfx, PointF.Empty, 1.0f, Pens.Yellow, new SolidBrush(Color.FromArgb(128, Color.Yellow)));
             }
 
             e.Graphics.DrawImage(s_buffer.bmp, Point.Empty);
@@ -87,9 +87,9 @@ namespace CityTools {
                 p1.Y = Math.Max(p1.Y, 0);
 
                 if (ps == PhysicsShapes.Rectangle) {
-                    ScenicObjectCache.s_objectTypes[objectID].Physics.Add(new PhysicsRectangle(new RectangleF(Math.Min(p0.X, p1.X), Math.Min(p0.Y, p1.Y), Math.Abs(p1.X - p0.X), Math.Abs(p1.Y - p0.Y))));
+                    ScenicObjectCache.s_objectTypes[objectID].Physics.Add(new PhysicsRectangle(new RectangleF(Math.Min(p0.X, p1.X), Math.Min(p0.Y, p1.Y), Math.Abs(p1.X - p0.X), Math.Abs(p1.Y - p0.Y)), false));
                 } else if (ps == PhysicsShapes.Circle) {
-                    ScenicObjectCache.s_objectTypes[objectID].Physics.Add(new PhysicsCircle(new RectangleF(Math.Min(p0.X, p1.X), Math.Min(p0.Y, p1.Y), Math.Abs(p1.X - p0.X), Math.Abs(p1.X - p0.X))));
+                    ScenicObjectCache.s_objectTypes[objectID].Physics.Add(new PhysicsCircle(new RectangleF(Math.Min(p0.X, p1.X), Math.Min(p0.Y, p1.Y), Math.Abs(p1.X - p0.X), Math.Abs(p1.X - p0.X)), false));
                 }
             }
 

@@ -13,6 +13,7 @@ using CityTools.Terrain;
 using CityTools.Core;
 using CityTools.Nodes;
 using CityTools.Places;
+using CityTools.Physics;
 
 namespace CityTools {
     public enum PaintMode {
@@ -77,6 +78,7 @@ namespace CityTools {
             ScenicObjectCache.InitializeCache();
             PlacesObjectCache.InitializeCache();
             NodeCache.InitializeCache();
+            PhysicsCache.InitializeCache();
 
             obj_scenary_objs.Controls.Add(new ObjectCacheControl("Road"));
             places_tab.Controls.Add(new ObjectCacheControl(PlacesObjectCache.PLACES_FOLDER, false));
@@ -113,7 +115,6 @@ namespace CityTools {
             physics_buffer = new LBuffer();
             nodes_buffer = new LBuffer();
             input_buffer = new LBuffer();
-            Physics.PhysicsDrawer.physicsBuffer = new LBuffer();
 
             TerrainHelper.DrawTerrain(floor_buffer);
             mapViewPanel.Invalidate();
@@ -275,7 +276,7 @@ namespace CityTools {
             nodes_buffer.gfx.Clear(Color.Transparent);
 
             if (layer_objects_0.Checked || layer_objects_1.Checked || layer_physics.Checked) {
-                BaseObjectDrawer.DrawObjects(objects0_buffer, objects1_buffer, places_buffer);
+                BaseObjectDrawer.DrawObjects(objects0_buffer, objects1_buffer, places_buffer, physics_buffer);
             }
 
             if (layer_nodes.Checked) {
@@ -295,7 +296,7 @@ namespace CityTools {
             CreateBuffers();
 
             Terrain.TerrainHelper.DrawTerrain(floor_buffer);
-            BaseObjectDrawer.DrawObjects(objects0_buffer, objects1_buffer, places_buffer);
+            BaseObjectDrawer.DrawObjects(objects0_buffer, objects1_buffer, places_buffer, physics_buffer);
 
             mapViewPanel.Invalidate();
             minimap.Invalidate();
@@ -327,7 +328,7 @@ namespace CityTools {
             Camera.FixViewArea(drawArea);
 
             TerrainHelper.DrawTerrain(floor_buffer);
-            BaseObjectDrawer.DrawObjects(objects0_buffer, objects1_buffer, places_buffer);
+            BaseObjectDrawer.DrawObjects(objects0_buffer, objects1_buffer, places_buffer, physics_buffer);
 
             mapViewPanel.Invalidate();
             minimap.Invalidate();
@@ -379,6 +380,8 @@ namespace CityTools {
             PlacesObjectCache.SaveCache();
 
             NodeCache.SaveCache();
+
+            PhysicsCache.SaveCache();
 
             try {
                 minimapBuffer.bmp.Save("minimap.jpg");

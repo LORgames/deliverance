@@ -6,16 +6,19 @@ using System.Drawing;
 using Box2CS;
 using CityTools.Core;
 using CityTools.Places;
+using CityTools.Physics;
 
 namespace CityTools.ObjectSystem {
     public class BaseObjectDrawer {
 
         public static List<ScenicObject> drawList = new List<ScenicObject>();
         public static List<PlacesObject> drawList2 = new List<PlacesObject>();
+        public static List<PhysicsShape> drawList3 = new List<PhysicsShape>();
 
-        public static void DrawObjects(LBuffer buffer0, LBuffer buffer1, LBuffer places) {
+        public static void DrawObjects(LBuffer buffer0, LBuffer buffer1, LBuffer places, LBuffer physics) {
             drawList.Clear();
             drawList2.Clear();
+            drawList3.Clear();
 
             RectangleF drawArea = Camera.ViewArea;
 
@@ -35,6 +38,10 @@ namespace CityTools.ObjectSystem {
             foreach (PlacesObject obj in drawList2) {
                 obj.Draw(places);
             }
+
+            foreach (PhysicsShape obj in drawList3) {
+                obj.DrawMe(physics.gfx, Camera.Offset, Camera.ZoomLevel, PhysicsDrawer.outlinePen, PhysicsDrawer.fillBrush);
+            }
         }
 
         public static bool QCBD(Fixture fix) {
@@ -42,6 +49,8 @@ namespace CityTools.ObjectSystem {
                 drawList.Add(fix.UserData as ScenicObject);
             } else if (fix.UserData is PlacesObject) {
                 drawList2.Add(fix.UserData as PlacesObject);
+            } else if (fix.UserData is PhysicsShape) {
+                drawList3.Add(fix.UserData as PhysicsShape);
             }
 
             return true;

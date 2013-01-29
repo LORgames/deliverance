@@ -13,10 +13,6 @@ namespace CityTools.ObjectSystem {
         public Body baseBody;
         public BodyTags tag;
 
-        //There might not be either of these things
-        public BaseObject parent = null;
-        public List<BaseObject> children = null;
-
         // For indexing
         internal static int CURRENT_INDEX = 0;
         public int index = 0;

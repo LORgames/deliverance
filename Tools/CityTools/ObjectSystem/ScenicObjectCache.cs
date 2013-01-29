@@ -59,12 +59,12 @@ namespace CityTools.ObjectSystem {
                         switch ((PhysicsShapes)shapeType) {
                             case PhysicsShapes.Circle:
                                 float r = f.GetFloat();
-                                s_objectTypes[type_id].Physics.Add(new PhysicsCircle(new RectangleF(xPos, yPos, r, 0)));
+                                s_objectTypes[type_id].Physics.Add(new PhysicsCircle(new RectangleF(xPos, yPos, r, 0), false));
                                 break;
                             case PhysicsShapes.Rectangle:
                                 float w = f.GetFloat();
                                 float h = f.GetFloat();
-                                s_objectTypes[type_id].Physics.Add(new PhysicsRectangle(new RectangleF(xPos, yPos, w, h)));
+                                s_objectTypes[type_id].Physics.Add(new PhysicsRectangle(new RectangleF(xPos, yPos, w, h), false));
                                 break;
                             default:
                                 MessageBox.Show("Unknown shape found in file. Suspected corruption. Formatting C:");

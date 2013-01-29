@@ -107,7 +107,6 @@
     <Compile Include="ObjectSystem\ScenicDrawer.cs" />
     <Compile Include="ObjectSystem\ScenicObject.cs" />
     <Compile Include="Physics\PhysicsCache.cs" />
-    <Compile Include="Physics\PhysicsChunk.cs" />
     <Compile Include="Physics\PhysicsDrawer.cs" />
     <Compile Include="Physics\PhysicsShape.cs" />
     <Compile Include="Program.cs" />
