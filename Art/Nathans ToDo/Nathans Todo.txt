@@ -1,0 +1,22 @@
+Characters for missions:
+
+These characters only need to have a bust, dont need to do there legs and stuff,
+they will be shown on screen when you receive an important mission
+
+
+
+
+Mechanic  - For Mechanic Missions
+
+Gangster/Mobster  - For Black Market/ storyline Missions
+
+Generic Person - for normal house delivery missions, maybe do male and femal and recolourings for variety
+
+Guy in overalls  - For docks, farm, warehouse missions
+
+Shop Assitant/manager - For shop missions
+
+Nurse  - For hospital missions
+
+
+
