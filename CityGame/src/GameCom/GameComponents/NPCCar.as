@@ -1,6 +1,7 @@
 package GameCom.GameComponents 
 {
 	import flash.geom.ColorTransform;
+	import GameCom.Helpers.MathHelper;
 	import GameCom.Managers.GUIManager;
 	import GameCom.Managers.NodeManager;
 	import GameCom.States.GameScreen;
@@ -29,10 +30,10 @@ package GameCom.GameComponents
 		private const HORSEPOWER_MAX:Number = 15;
 		private const HORSEPOWER_INC:Number = 5;
 		
-		private const leftRearWheelPosition:b2Vec2 = new b2Vec2(-1.0, 1.3);
-		private const rightRearWheelPosition:b2Vec2 = new b2Vec2(1.0, 1.3);
-		private const leftFrontWheelPosition:b2Vec2 =new b2Vec2(-1.0,-1.3);
-		private const rightFrontWheelPosition:b2Vec2= new b2Vec2(1.0,-1.3);
+		private const _leftRearWheelPosition:b2Vec2 = new b2Vec2(-1.0, 1.3);
+		private const _rightRearWheelPosition:b2Vec2 = new b2Vec2(1.0, 1.3);
+		private const _leftFrontWheelPosition:b2Vec2 = new b2Vec2(-1.0,-1.3);
+		private const _rightFrontWheelPosition:b2Vec2 = new b2Vec2(1.0,-1.3);
 		
 		private var engineSpeed:Number = 0;
 		private var steeringAngle:Number = 0;
@@ -52,6 +53,11 @@ package GameCom.GameComponents
 		
 		public function NPCCar(spawnPosition:b2Vec2, world:b2World, nodeManager:NodeManager, angle:Number, firstNodeID:int) {
 			this.world = world;
+			
+			var leftRearWheelPosition:b2Vec2 = MathHelper.RotateVector(_leftRearWheelPosition, angle - Math.PI / 2);
+			var rightRearWheelPosition:b2Vec2 = MathHelper.RotateVector(_rightRearWheelPosition, angle - Math.PI / 2);
+			var leftFrontWheelPosition:b2Vec2 = MathHelper.RotateVector(_leftFrontWheelPosition, angle - Math.PI / 2);
+			var rightFrontWheelPosition:b2Vec2= MathHelper.RotateVector(_rightFrontWheelPosition, angle - Math.PI / 2);
 			
 			this.nodeManager = nodeManager;
 			
@@ -79,6 +85,9 @@ package GameCom.GameComponents
 			bodyBodyDef.angularDamping = 1;
 			bodyBodyDef.position = spawnPosition.Copy();
 			
+			//TODO: TRYING THIS
+			bodyBodyDef.angle = angle - Math.PI / 2;
+			
 			//Create the body
 			body = world.CreateBody(bodyBodyDef);
 			body.CreateFixture(bodyFixtureDef);
@@ -98,6 +107,7 @@ package GameCom.GameComponents
 			var wheelBodyDef:b2BodyDef = new b2BodyDef();
 			wheelBodyDef.type = b2Body.b2_dynamicBody;
 			wheelBodyDef.position = spawnPosition.Copy();
+			wheelBodyDef.angle = angle - Math.PI / 2;
 			
 			//Create the body
 			wheelBodyDef.position.Add(leftFrontWheelPosition);
@@ -147,7 +157,22 @@ package GameCom.GameComponents
 			world.CreateJoint(leftRearJointDef);
 			world.CreateJoint(rightRearJointDef);
 			
-			body.SetAngle(angle - Math.PI/2);
+			engineSpeed *= (MAX_STEER_ANGLE-Math.abs(steeringAngle)) / (3 * MAX_STEER_ANGLE) + 0.333;
+			
+			killOrthogonalVelocity(leftWheel);
+			killOrthogonalVelocity(rightWheel);
+			killOrthogonalVelocity(leftRearWheel);
+			killOrthogonalVelocity(rightRearWheel);
+			
+			//Driving
+			var ldirection:b2Vec2 = leftWheel.GetTransform().R.col2.Copy();
+			ldirection.Multiply(HORSEPOWER_MAX*-10);
+			
+			var rdirection:b2Vec2 = rightWheel.GetTransform().R.col2.Copy()
+			rdirection.Multiply(HORSEPOWER_MAX*-10);
+			
+			leftWheel.ApplyForce(ldirection, leftWheel.GetPosition());
+			rightWheel.ApplyForce(rdirection, rightWheel.GetPosition());
 			
 			targetNode = firstNodeID;
 		}

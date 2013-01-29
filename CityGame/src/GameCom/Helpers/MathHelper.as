@@ -1,5 +1,6 @@
 package GameCom.Helpers 
 {
+	import Box2D.Common.Math.b2Vec2;
 	import flash.geom.Point;
 	/**
 	 * ...
@@ -51,6 +52,13 @@ package GameCom.Helpers
 		
 		public static function GetAngleBetween(a:Point, b:Point):Number {
 			return Math.atan2(a.y - b.y, a.x - b.x);
+		}
+		
+		public static function RotateVector(vector:b2Vec2, angle:Number):b2Vec2 {
+			var x:Number = vector.x * Math.cos(angle) - vector.y * Math.sin(angle);
+			var y:Number = vector.y * Math.cos(angle) + vector.x * Math.sin(angle);
+			
+			return b2Vec2.Make(x, y);
 		}
 		
 	}
