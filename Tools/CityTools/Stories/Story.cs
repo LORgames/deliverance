@@ -7,14 +7,14 @@ namespace CityTools.Stories {
     class Story {
         internal int startLocation;
         internal int endLocation;
-        internal string npcImage;
+        internal short npcImage;
         internal int repLevel;
         internal byte resType;
         internal int quantity;
         internal string startText;
         internal string endText;
 
-        public Story(int startLocation, int endLocation, string npcImage, int repLevel, byte resType, int quantity, string startText, string endText) {
+        public Story(int startLocation, int endLocation, short npcImage, int repLevel, byte resType, int quantity, string startText, string endText) {
             this.startLocation = startLocation;
             this.endLocation = endLocation;
             this.npcImage = npcImage;

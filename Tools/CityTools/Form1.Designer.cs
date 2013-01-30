@@ -75,6 +75,8 @@
             this.tsmBringToFront = new System.Windows.Forms.ToolStripMenuItem();
             this.placesResourcesContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.placesPeopleContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.story_storyPan = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.main_splitter)).BeginInit();
             this.main_splitter.Panel1.SuspendLayout();
             this.main_splitter.Panel2.SuspendLayout();
@@ -102,6 +104,7 @@
             this.places_tab.SuspendLayout();
             this.story_tab.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // main_splitter
@@ -554,7 +557,8 @@
             // 
             // story_tab
             // 
-            this.story_tab.Controls.Add(this.story_new);
+            this.story_tab.Controls.Add(this.story_storyPan);
+            this.story_tab.Controls.Add(this.panel1);
             this.story_tab.Location = new System.Drawing.Point(4, 22);
             this.story_tab.Name = "story_tab";
             this.story_tab.Size = new System.Drawing.Size(223, 200);
@@ -619,8 +623,25 @@
             // placesPeopleContextMenu
             // 
             this.placesPeopleContextMenu.Name = "placesContextMenu";
-            this.placesPeopleContextMenu.Size = new System.Drawing.Size(153, 26);
+            this.placesPeopleContextMenu.Size = new System.Drawing.Size(61, 4);
             this.placesPeopleContextMenu.Closing += new System.Windows.Forms.ToolStripDropDownClosingEventHandler(this.placesContextMenu_Closing);
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.story_new);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(223, 29);
+            this.panel1.TabIndex = 1;
+            // 
+            // story_storyPan
+            // 
+            this.story_storyPan.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.story_storyPan.Location = new System.Drawing.Point(0, 29);
+            this.story_storyPan.Name = "story_storyPan";
+            this.story_storyPan.Size = new System.Drawing.Size(223, 171);
+            this.story_storyPan.TabIndex = 2;
             // 
             // MainWindow
             // 
@@ -661,6 +682,7 @@
             this.places_tab.ResumeLayout(false);
             this.story_tab.ResumeLayout(false);
             this.contextMenuStrip1.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -713,6 +735,8 @@
         private System.Windows.Forms.Button story_new;
         internal System.Windows.Forms.ContextMenuStrip placesResourcesContextMenu;
         internal System.Windows.Forms.ContextMenuStrip placesPeopleContextMenu;
+        private System.Windows.Forms.Panel panel1;
+        internal System.Windows.Forms.Panel story_storyPan;
     }
 }
 

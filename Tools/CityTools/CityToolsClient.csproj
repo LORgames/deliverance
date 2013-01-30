@@ -56,11 +56,23 @@
     <Compile Include="Components\CachedObject.Designer.cs">
       <DependentUpon>CachedObject.cs</DependentUpon>
     </Compile>
+    <Compile Include="Components\CachedStory.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Components\CachedStory.Designer.cs">
+      <DependentUpon>CachedStory.cs</DependentUpon>
+    </Compile>
     <Compile Include="Components\ObjectCacheControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Components\ObjectCacheControl.Designer.cs">
       <DependentUpon>ObjectCacheControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\StoryCacheControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Components\StoryCacheControl.Designer.cs">
+      <DependentUpon>StoryCacheControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\Camera.cs" />
     <Compile Include="Core\DrawingHelper.cs" />
@@ -115,8 +127,14 @@
     <EmbeddedResource Include="Components\CachedObject.resx">
       <DependentUpon>CachedObject.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Components\CachedStory.resx">
+      <DependentUpon>CachedStory.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Components\ObjectCacheControl.resx">
       <DependentUpon>ObjectCacheControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\StoryCacheControl.resx">
+      <DependentUpon>StoryCacheControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

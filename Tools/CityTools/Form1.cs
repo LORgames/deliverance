@@ -26,7 +26,8 @@ namespace CityTools {
         PlacesSelector,
         Nodes,
         NodeLinks,
-        NodeSelector
+        NodeSelector,
+        Story
     }
 
     public partial class MainWindow : Form {
@@ -82,6 +83,7 @@ namespace CityTools {
 
             obj_scenary_objs.Controls.Add(new ObjectCacheControl("Road"));
             places_tab.Controls.Add(new ObjectCacheControl(PlacesObjectCache.PLACES_FOLDER, false));
+            story_storyPan.Controls.Add(new StoryCacheControl());
 
             List<String> dark = new List<string>();
             dark.InsertRange(0, Directory.GetDirectories("objcache"));
@@ -208,8 +210,9 @@ namespace CityTools {
         }
 
         private void drawPanel_ME_move(object sender, MouseEventArgs e) {
-            mapViewPanel.Focus();
-            
+            if (ActiveForm == this) {
+                mapViewPanel.Focus();
+            }
             if (paintMode == PaintMode.Terrain) {
                 if (TerrainHelper.MouseMoveOrDown(e, input_buffer)) {
                     TerrainHelper.DrawTerrain(floor_buffer);
@@ -262,6 +265,8 @@ namespace CityTools {
                 NodeHelper.MouseDown(e);
             } else if (paintMode == PaintMode.NodeSelector) {
                 NodeHelper.MouseDown_Selector(e);
+            } else if (paintMode == PaintMode.Story) {
+                StoryForm.instance.MouseClick(e);
             }
         }
 
@@ -458,6 +463,11 @@ namespace CityTools {
 
         private void story_new_Click(object sender, EventArgs e) {
             // Stuff happens here...
+            if (StoryForm.instance == null) {
+                StoryForm.instance = new StoryForm();
+            }
+            StoryForm.instance.Show();
+            paintMode = PaintMode.Story;
         }
 
         private void placesContextMenu_Closing(object sender, ToolStripDropDownClosingEventArgs e) {

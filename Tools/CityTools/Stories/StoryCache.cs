@@ -27,7 +27,7 @@ namespace CityTools.Stories {
                 for (int i = 0; i < totalStories; i++) {
                     int startLocation = f.GetInt();
                     int endLocation = f.GetInt();
-                    string npcImage = f.GetString();
+                    short npcImage = f.GetShort();
                     int repLevel = f.GetInt();
                     byte resType = f.GetByte();
                     int quantity = f.GetInt();
@@ -53,7 +53,7 @@ namespace CityTools.Stories {
             foreach (Story story in stories) {
                 f.AddInt(story.startLocation);
                 f.AddInt(story.endLocation);
-                f.AddString(story.npcImage);
+                f.AddShort(story.npcImage);
                 f.AddInt(story.repLevel);
                 f.AddByte(story.resType);
                 f.AddInt(story.quantity);

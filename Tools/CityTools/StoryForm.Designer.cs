@@ -208,6 +208,8 @@
             this.Controls.Add(this.label1);
             this.Name = "StoryForm";
             this.Text = "StoryForm";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.StoryForm_FormClosing);
+            this.Shown += new System.EventHandler(this.StoryForm_Shown);
             this.ResumeLayout(false);
             this.PerformLayout();
 
