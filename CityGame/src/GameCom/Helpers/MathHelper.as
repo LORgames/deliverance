@@ -17,7 +17,7 @@ package GameCom.Helpers
 		}
 		
 		public static function Square(x:Number):Number {
-			return x * x
+			return x * x;
 		}
 		
 		public static function DistanceToLineSquared(p:Point, v:Point, w:Point):Number {

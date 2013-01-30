@@ -39,7 +39,7 @@ package GameCom.Managers
 		 * 				 ... 
 		 * 				}
 		 */
-		private var mapdata:Array = new Array();
+		private var mapdata:Array = new Array(); //TODO: VECTORIZE WITH 1D Number (60% faster)
 		
 		// view rect
 		private var view:Rectangle = new Rectangle();

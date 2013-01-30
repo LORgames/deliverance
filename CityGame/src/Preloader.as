@@ -74,9 +74,11 @@ package {
 		}
 		
 		private function progress(e:ProgressEvent):void {
+			var totalBytes = Math.max(e.bytesTotal, 7*1024*1024);
+			
 			// Update the GUI
-			if(e.bytesLoaded != e.bytesTotal) {
-				progressTF.text = "Loading " + (Math.floor(e.bytesLoaded / e.bytesTotal * 10000) / 100) + "%";
+			if(e.bytesLoaded != totalBytes) {
+				progressTF.text = "Loading " + (Math.floor(e.bytesLoaded / e.bytesTotal * 10000) / 100) + "% BL:" + e.bytesLoaded + " BT:" + totalBytes;
 			} else {
 				progressTF.text = "Unpacking...";
 			}
