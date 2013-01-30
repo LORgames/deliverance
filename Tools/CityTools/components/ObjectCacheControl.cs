@@ -32,7 +32,11 @@ namespace CityTools.Components {
         }
 
         public void Activate(string folder_b = "") {
+			bool requiresReload = false;
+		
             if (folder_b != "") {
+                requiresReload = true;
+
                 if (this.isCacheFolder) {
                     this.folder = OBJECT_CACHE_FOLDER + folder_b;
                 } else {
@@ -46,7 +50,7 @@ namespace CityTools.Components {
 
             string[] files = Directory.GetFiles(folder, "*.png");
 
-            if (files.Length != flowLayoutPanel1.Controls.Count) {
+            if (files.Length != flowLayoutPanel1.Controls.Count || requiresReload) {
                 Deactivate();
 
                 flowLayoutPanel1.SuspendLayout();
