@@ -48,10 +48,10 @@ package GameCom.Helpers {
 		}
 		
 		public static function GetRandomResourceFromSupportedResources(resources:int):ResourceInformation {
-			
+			return null;
 		}
 		
-		public static function HasSupportedResources(resource:int):void {
+		public static function HasSupportedResources(resource:int):Boolean {
 			if (((0xFFFF >> CurrentResourcesUnlockedIndex) & resource) > 0) {
 				return true;
 			}
