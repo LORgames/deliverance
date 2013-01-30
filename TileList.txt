@@ -46,7 +46,7 @@
 2D - Cliffs: Grass->Water: Point T
 2E - Cliffs: Grass->Water: Point L
 2F - Cliffs: Grass->Water: Encapsulated Cliff
-30 - City: Concrete (NOT DONE)
+30 - 
 31 - 
 32 - 
 33 - 
@@ -80,18 +80,18 @@
 4F - SandTransitions: J
 50 - SandTransitions: K
 51 - SandTransitions: L
-52 - 
-53 - 
-54 - 
-55 - 
-56 - 
-57 - 
-58 - 
-59 - 
-5A - 
-5B - 
-5C - 
-5D - 
+52 - Lush Sand Transitions: A
+53 - Lush Sand Transitions: B
+54 - Lush Sand Transitions: C
+55 - Lush Sand Transitions: D
+56 - Lush Sand Transitions: E
+57 - Lush Sand Transitions: F
+58 - Lush Sand Transitions: G
+59 - Lush Sand Transitions: H
+5A - Lush Sand Transitions: I
+5B - Lush Sand Transitions: J
+5C - Lush Sand Transitions: K
+5D - Lush Sand Transitions: L
 5E - 
 5F - 
 60 - 
@@ -100,7 +100,7 @@
 63 - Nature: Dead Grass
 64 - Docks: Jetty Horizontal
 65 - Docks: Jetty Vertical
-66 - 
+66 - Urban: Concrete
 67 - 
 68 - 
 69 - 
