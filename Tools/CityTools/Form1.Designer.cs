@@ -73,7 +73,8 @@
             this.tsmBringForward = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmSendToBack = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmBringToFront = new System.Windows.Forms.ToolStripMenuItem();
-            this.placesContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.placesResourcesContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.placesPeopleContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.main_splitter)).BeginInit();
             this.main_splitter.Panel1.SuspendLayout();
             this.main_splitter.Panel2.SuspendLayout();
@@ -609,10 +610,17 @@
             this.tsmBringToFront.Text = "Bring to Front";
             this.tsmBringToFront.Click += new System.EventHandler(this.tsmBringToFront_Click);
             // 
-            // placesContextMenu
+            // placesResourcesContextMenu
             // 
-            this.placesContextMenu.Name = "placesContextMenu";
-            this.placesContextMenu.Size = new System.Drawing.Size(153, 26);
+            this.placesResourcesContextMenu.Name = "placesContextMenu";
+            this.placesResourcesContextMenu.Size = new System.Drawing.Size(61, 4);
+            this.placesResourcesContextMenu.Closing += new System.Windows.Forms.ToolStripDropDownClosingEventHandler(this.placesContextMenu_Closing);
+            // 
+            // placesPeopleContextMenu
+            // 
+            this.placesPeopleContextMenu.Name = "placesContextMenu";
+            this.placesPeopleContextMenu.Size = new System.Drawing.Size(153, 26);
+            this.placesPeopleContextMenu.Closing += new System.Windows.Forms.ToolStripDropDownClosingEventHandler(this.placesContextMenu_Closing);
             // 
             // MainWindow
             // 
@@ -703,7 +711,8 @@
         internal System.Windows.Forms.CheckBox layer_places;
         private System.Windows.Forms.Button places_selector_btn;
         private System.Windows.Forms.Button story_new;
-        internal System.Windows.Forms.ContextMenuStrip placesContextMenu;
+        internal System.Windows.Forms.ContextMenuStrip placesResourcesContextMenu;
+        internal System.Windows.Forms.ContextMenuStrip placesPeopleContextMenu;
     }
 }
 

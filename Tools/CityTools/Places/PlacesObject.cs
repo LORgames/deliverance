@@ -13,6 +13,9 @@ namespace CityTools.Places {
         public int object_index = 0;
         public int angle = 0;
 
+        private short b_NPC = 0;
+        private int b_resources = 0;
+
         public bool selected = false;
 
         public PointF[] points;
@@ -105,6 +108,49 @@ namespace CityTools.Places {
 
             // Remove from world
             Box2D.B2System.world.DestroyBody(baseBody);
+        }
+
+        internal void UpdateMenu() {
+            for (int i = 0; i < 16; i++) {
+                (MainWindow.instance.placesPeopleContextMenu.Items[i] as System.Windows.Forms.ToolStripMenuItem).Checked = ((b_NPC & (0x1 << i)) > 0);
+            }
+
+            for (int i = 0; i < 32; i++) {
+                System.Diagnostics.Debug.WriteLine(i + ": " + ((b_resources & (0x1 << i)) > 0));
+                (MainWindow.instance.placesResourcesContextMenu.Items[i] as System.Windows.Forms.ToolStripMenuItem).Checked = ((b_resources & (0x1 << i)) > 0);
+            }
+        }
+
+        internal void UpdateFromContextMenu() {
+            short tempPeople = 0;
+            int tempResources = 0;
+
+            for (int i = 0; i < 16; i++) {
+                bool isTrue = (MainWindow.instance.placesPeopleContextMenu.Items[i] as System.Windows.Forms.ToolStripMenuItem).Checked;
+                if(isTrue) tempPeople += (short)(0x1 << i);
+            }
+
+            for (int i = 0; i < 32; i++) {
+                bool isTrue = (MainWindow.instance.placesResourcesContextMenu.Items[i] as System.Windows.Forms.ToolStripMenuItem).Checked;
+                if (isTrue) tempResources += (0x1 << i);
+            }
+
+            b_NPC = tempPeople;
+            b_resources = tempResources;
+        }
+
+        internal void WritePersonalData(BinaryIO f) {
+            if (object_index == 1 || object_index == 2) {
+                f.AddInt(b_resources);
+                f.AddShort(b_NPC);
+            }
+        }
+
+        internal void ReadPersonalData(BinaryIO f) {
+            if (object_index == 1 || object_index == 2) {
+                b_resources = f.GetInt();
+                b_NPC = f.GetShort();
+            }
         }
     }
 }

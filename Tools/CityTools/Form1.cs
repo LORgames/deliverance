@@ -459,5 +459,13 @@ namespace CityTools {
         private void story_new_Click(object sender, EventArgs e) {
             // Stuff happens here...
         }
+
+        private void placesContextMenu_Closing(object sender, ToolStripDropDownClosingEventArgs e) {
+            if (e.CloseReason == ToolStripDropDownCloseReason.ItemClicked) {
+                e.Cancel = true;
+            }
+
+            PlacesHelper.UpdatedSelectedFromContextMenu();
+        }
     }
 }

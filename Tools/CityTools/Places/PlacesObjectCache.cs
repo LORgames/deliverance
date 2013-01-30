@@ -14,12 +14,17 @@ namespace CityTools.Places {
         public const string PLACES_USERFILE = Program.CACHE + "places_store.bin";
         public const string PLACES_FOLDER = ".\\Places";
 
+        public const string RESOURCES_FILE = Program.CACHE + "Resources.csv";
+        public const string PEOPLE_FILE = Program.CACHE + "People.csv";
+
         private static int _highestTypeIndex = 0;
 
         public static Dictionary<int, PlacesType> s_objectTypes = new Dictionary<int, PlacesType>();
         public static Dictionary<string, int> s_StringToInt = new Dictionary<string, int>();
 
         public static List<PlacesObject> s_objectStore = new List<PlacesObject>();
+
+        public static List<String> resources = new List<string>();
 
         public static void InitializeCache() {
             if (!Directory.Exists(PLACES_FOLDER)) {
@@ -63,9 +68,39 @@ namespace CityTools.Places {
                     float locationY = f.GetFloat();
                     int rotation = f.GetInt();
 
-                    s_objectStore.Add(new PlacesObject(sourceID, new System.Drawing.PointF(locationX, locationY), rotation));
+                    PlacesObject p = new PlacesObject(sourceID, new System.Drawing.PointF(locationX, locationY), rotation);
+                    p.ReadPersonalData(f);
+                    s_objectStore.Add(p);
                 }
             }
+
+            //Load the people in
+            string[] people_lines = File.ReadAllLines(PEOPLE_FILE);
+            for (int i = 0; i < people_lines.Length; i++) {
+                string resLine = people_lines[i];
+                string name = resLine.Split(',')[1];
+                resources.Add(name);
+
+                ToolStripMenuItem tsi = (MainWindow.instance.placesPeopleContextMenu.Items.Add(name) as ToolStripMenuItem);
+                tsi.CheckOnClick = true;
+            }
+
+            //Load the resources in
+            string[] resources_lines = File.ReadAllLines(RESOURCES_FILE);
+            for(int i = 1; i < resources_lines.Length; i++) {
+                string resLine = resources_lines[i];
+                string name = resLine.Split(',')[1];
+                resources.Add(name);
+
+                ToolStripMenuItem tsi = (MainWindow.instance.placesResourcesContextMenu.Items.Add(name) as ToolStripMenuItem);
+                tsi.CheckOnClick = true;
+            }
+
+            
+        }
+
+        static void resDD_DropDownClosed(object sender, EventArgs e) {
+            
         }
 
         public static void AddShape(PlacesObject shape) {
@@ -95,6 +130,8 @@ namespace CityTools.Places {
                 f.AddFloat(ps.baseBody.Position.X);
                 f.AddFloat(ps.baseBody.Position.Y);
                 f.AddInt(ps.angle);
+
+                ps.WritePersonalData(f);
             }
 
             f.Encode(PLACES_USERFILE);

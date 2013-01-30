@@ -60,8 +60,12 @@ namespace CityTools.Places {
             }
 
             // If right clicked, show context menu
-            if (e.Button == MouseButtons.Right && selectedObjects.Count != 0) {
-                MainWindow.instance.contextMenuStrip1.Show((int)p0.X, (int)p0.Y);
+            if (e.Button == MouseButtons.Right && selectedObjects.Count == 1) {
+                selectedObjects[0].UpdateMenu();
+                MainWindow.instance.placesResourcesContextMenu.Show((int)p0.X, (int)p0.Y);
+            } else if (e.Button == MouseButtons.Middle && selectedObjects.Count == 1) {
+                selectedObjects[0].UpdateMenu();
+                MainWindow.instance.placesPeopleContextMenu.Show((int)p0.X, (int)p0.Y);
             }
 
             p0 = Point.Empty;
@@ -220,6 +224,12 @@ namespace CityTools.Places {
 
                 // Resort draw list by index
                 PlacesObjectCache.s_objectStore.Sort();
+            }
+        }
+
+        internal static void UpdatedSelectedFromContextMenu() {
+            if (selectedObjects.Count == 1) {
+                selectedObjects[0].UpdateFromContextMenu();
             }
         }
     }

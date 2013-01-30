@@ -66,6 +66,11 @@ namespace ToolToGameExporter {
             try { zip.RemoveEntry("3.cache"); } catch { }
             OptimizeAndAddPlaces(zip);
 
+            try { zip.RemoveEntry("Resources.csv"); } catch { }
+            try { zip.RemoveEntry("Characters.csv"); } catch { }
+            zip.AddEntry("Resources.csv", File.ReadAllBytes(GetToolCacheLoc() + "Resources.csv"));
+            zip.AddEntry("Characters.csv", File.ReadAllBytes(GetToolCacheLoc() + "People.csv"));
+
             //SAVE IT OUT
             while (true) {
                 try {
@@ -250,6 +255,12 @@ namespace ToolToGameExporter {
                 o.AddFloat(locationX);
                 o.AddFloat(locationY);
                 o.AddInt(rotation);
+
+                if (sourceID == 1 || sourceID == 2) {
+                    //Need resources and npc values to be copied to the other thing now
+                    o.AddInt(f.GetInt());
+                    o.AddShort(f.GetShort());
+                }
             }
 
             zp.AddEntry("3.map", o.EncodedBytes());
