@@ -44,6 +44,8 @@ package GameCom.GameComponents
 		private var leftRearWheel:b2Body;
 		private var rightRearWheel:b2Body;
 		
+		private var collisionScanner:b2Body;
+		
 		private var leftJoint:b2RevoluteJoint;
 		private var rightJoint:b2RevoluteJoint;
 		
@@ -163,6 +165,40 @@ package GameCom.GameComponents
 			killOrthogonalVelocity(rightWheel);
 			killOrthogonalVelocity(leftRearWheel);
 			killOrthogonalVelocity(rightRearWheel);
+			
+			// Collision scanner
+			var scannerShape:b2PolygonShape = new b2PolygonShape();
+			scannerShape.SetAsBox(3.0, 1.0);
+			
+			var scannerFixtureDef:b2FixtureDef = new b2FixtureDef();
+			scannerFixtureDef.shape = scannerShape;
+			scannerFixtureDef.density = 0.2;
+			scannerFixtureDef.isSensor = true; //TODO: finish sensing collisions
+			
+			var scannerBodyDef:b2BodyDef = new b2BodyDef();
+			scannerBodyDef.type = b2Body.b2_dynamicBody;
+			scannerBodyDef.linearDamping = 1.0;
+			scannerBodyDef.angularDamping = 1.0;
+			scannerBodyDef.position = spawnPosition.Copy();
+			scannerBodyDef.position.x -= 2.0;
+			
+			collisionScanner = world.CreateBody(scannerBodyDef);
+			collisionScanner.CreateFixture(scannerFixtureDef);
+			
+			var scannerJointDef:b2RevoluteJointDef = new b2RevoluteJointDef();
+			scannerJointDef.Initialize(body, collisionScanner, collisionScanner.GetWorldCenter());
+			scannerJointDef.enableLimit = true;
+			
+			world.CreateJoint(scannerJointDef);
+			
+			/*
+			var rightRearJointDef:b2PrismaticJointDef = new b2PrismaticJointDef();
+			rightRearJointDef.Initialize(body, rightRearWheel, rightRearWheel.GetWorldCenter(), new b2Vec2(1,0));
+			rightRearJointDef.enableLimit = true;
+			rightRearJointDef.lowerTranslation = rightRearJointDef.upperTranslation = 0;
+			 
+			world.CreateJoint(leftRearJointDef);
+			 */
 			
 			//Driving
 			var ldirection:b2Vec2 = leftWheel.GetTransform().R.col2.Copy();
