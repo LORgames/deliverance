@@ -3,6 +3,7 @@ package GameCom.GameComponents
 	import Box2D.Collision.Shapes.b2PolygonShape;
 	import Box2D.Dynamics.b2Body;
 	import Box2D.Dynamics.b2BodyDef;
+	import Box2D.Dynamics.b2FilterData;
 	import Box2D.Dynamics.b2FixtureDef;
 	import Box2D.Dynamics.b2World;
 	import flash.display.BitmapData;
@@ -39,8 +40,9 @@ package GameCom.GameComponents
 			//Create the fixture
 			var bodyFixtureDef:b2FixtureDef = new b2FixtureDef();
 			bodyFixtureDef.shape = bodyShape;
-			bodyFixtureDef.isSensor = true;
+//			bodyFixtureDef.isSensor = true;
 			bodyFixtureDef.userData = this;
+			bodyFixtureDef.filter.categoryBits = 0x0; // This should be a major speedup
 			
 			//Create the defintion
 			var bodyBodyDef:b2BodyDef = new b2BodyDef();

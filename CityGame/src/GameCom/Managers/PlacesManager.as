@@ -6,6 +6,7 @@ package GameCom.Managers {
 	import flash.utils.ByteArray;
 	import flash.utils.Endian;
 	import GameCom.GameComponents.BaseObject;
+	import GameCom.GameComponents.PickupPlace;
 	import GameCom.GameComponents.PlaceObject;
 	import GameCom.GameComponents.PlayerTruck;
 	import GameCom.GameComponents.ScenicObject
@@ -23,7 +24,7 @@ package GameCom.Managers {
 		
 		public var drawList:Vector.<PlaceObject> = new Vector.<PlaceObject>();
 		
-		public var PickupLocations:Vector.<PlaceObject> = new Vector.<PlaceObject>();
+		public var PickupLocations:Vector.<PickupPlace> = new Vector.<PickupPlace>();
 		public var DropatLocations:Vector.<PlaceObject> = new Vector.<PlaceObject>();
 		
 		private var layer:Sprite;
@@ -84,8 +85,20 @@ package GameCom.Managers {
 				var locationY:Number = objectFile.readFloat();
 				var rotation:int = objectFile.readInt();
 				
-				var po:PlaceObject = new PlaceObject(sourceID, locationX, locationY, rotation, world, Types[sourceID]);
+				var po:PlaceObject;
+				
+				if (sourceID != pickupIndex) {
+					po = new PlaceObject(sourceID, locationX, locationY, rotation, world, Types[sourceID]);
+				} else {
+					po = new PickupPlace(sourceID, locationX, locationY, rotation, world, Types[sourceID]);
+				}
+			
 				Objects.push(po);
+				
+				if (sourceID == pickupIndex || sourceID == dropatIndex) {
+					po.b_Resource = objectFile.readInt();
+					po.b_NPC = objectFile.readShort();
+				}
 				
 				if (sourceID == pickupIndex) {
 					PickupLocations.push(po);
@@ -104,7 +117,7 @@ package GameCom.Managers {
 			layer.graphics.clear();
 			
 			for (var i:int = 0; i < drawList.length; i++) {
-				if(drawList[i].isActive) {
+				if (drawList[i].isActive) {
 					drawList[i].Draw(layer.graphics);
 				}
             }

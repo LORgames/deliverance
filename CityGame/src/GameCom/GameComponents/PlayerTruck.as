@@ -50,8 +50,8 @@ package GameCom.GameComponents {
 		private var rightJoint:b2RevoluteJoint;
 		
 		public var HealthPercent:Number = 1;
-		private var healthMax:int = 50;
-		private var healthCurrent:int = 50;
+		private var healthMax:Number = 1000;
+		private var healthCurrent:Number = 1000;
 		
 		public function PlayerTruck(spawnPosition:b2Vec2, world:b2World, worldSpr:Sprite) {
 			worldSpr.addChild(this);
@@ -263,6 +263,7 @@ package GameCom.GameComponents {
 			this.y = int(body.GetPosition().y * Global.PHYSICS_SCALE);
 			this.rotation = body.GetAngle() / Math.PI * 180;
 			
+			
 			var contacts:b2ContactEdge = body.GetContactList();
 			
 			while (contacts != null) {
@@ -272,19 +273,29 @@ package GameCom.GameComponents {
 					if(place.isActive) {
 						TriggerManager.ReportTrigger("place_" + (contacts.other.GetUserData() as PlaceObject).TriggerValue);
 					}
-				} else if (!contacts.contact.IsSensor() && contacts.contact.IsTouching()) {
+				} /*else if (!contacts.contact.IsSensor() && contacts.contact.IsTouching()) {
 					var manifold:b2WorldManifold = new b2WorldManifold();
 					contacts.contact.GetWorldManifold(manifold);
 					
 					var vel1:b2Vec2 = this.body.GetLinearVelocityFromWorldPoint(manifold.m_points[0]);
 					
-					trace("HP LOSS: " + Math.round(vel1.Length()));
-					healthCurrent -= Math.round(vel1.Length());
-					HealthPercent = Number(healthCurrent) / healthMax;
-					GUIManager.I.UpdateCache();
-				}
+					this.graphics.lineStyle(1, 0xFF0000);
+					this.graphics.drawCircle(manifold.m_points[0].x * Global.PHYSICS_SCALE - this.x, manifold.m_points[0].y * Global.PHYSICS_SCALE - this.y, vel1.Length());
+					
+					Damage(vel1.Length());
+				}*/
 				
 				contacts = contacts.next;
+			}
+		}
+		
+		public function Damage(damage:int):void {
+			damage -= 5; //Just to balance out low impact collisions that are annoying as fuck as a player
+			if(damage > 0) {
+				trace("HP LOSS: " + damage);
+				healthCurrent -= damage;
+				HealthPercent = Number(healthCurrent) / healthMax;
+				GUIManager.I.UpdateCache();
 			}
 		}
 	}

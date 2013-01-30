@@ -8,6 +8,7 @@ package GameCom.GameComponents  {
 	import flash.display.Graphics;
 	import flash.geom.Matrix;
 	import GameCom.Managers.ScenicManager;
+	import GameCom.SystemComponents.MissionParameters;
 	import GameCom.SystemComponents.ScenicObjectType;
 	/**
 	 * ...
@@ -26,6 +27,9 @@ package GameCom.GameComponents  {
 		
 		public var isActive:Boolean = false;
 		public var TriggerValue:String;
+		
+		public var b_NPC:int = 0;
+		public var b_Resource:int = 0;
 		
         public function PlaceObject(type:int, posX:Number, posY:Number, angle:int, world:b2World, trigger:String) {
             this.typeID = type;

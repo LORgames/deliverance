@@ -16,6 +16,7 @@ package GameCom.States {
 	import flash.ui.Keyboard;
 	import flash.utils.getTimer;
 	import flash.utils.Timer;
+	import GameCom.GameComponents.CollisionSolver;
 	import GameCom.Helpers.ReputationHelper;
 	import GameCom.Helpers.ResourceHelper;
 	import GameCom.Managers.GUIManager;
@@ -38,7 +39,6 @@ package GameCom.States {
 		
 		// World stuff
 		public var world:b2World;
-		private var physicsDebugRender:Boolean = false;
 		
 		// Playing the world
 		private var simulating:Boolean = true;
@@ -115,6 +115,8 @@ package GameCom.States {
 			// player is added to objectLayer
 			player = new PlayerTruck(new b2Vec2(12762/Global.PHYSICS_SCALE, 14547/Global.PHYSICS_SCALE), world, placesLayer);
 			
+			world.SetContactListener(new CollisionSolver(player));
+			
 			// bgManager (ground) is added to groundLayer
 			bgManager = new BGManager(groundLayer, player);
 			
@@ -155,8 +157,10 @@ package GameCom.States {
 				worldSpr.y = Math.floor( -player.y + stage.stageHeight / 2);
 			}
 			
-			if(physicsDebugRender) {
+			if(Keys.isKeyDown(Keyboard.P)) {
 				world.DrawDebugData();
+			} else {
+				debugDrawLayer.graphics.clear();
 			}
 		}
 		

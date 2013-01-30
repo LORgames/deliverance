@@ -10,7 +10,6 @@ package GameCom.Helpers {
 	public class ResourceHelper {
 		
 		private static var Resources:Vector.<ResourceInformation>;
-		
 		private static var CurrentResourcesUnlockedIndex:int = 0;
 		
 		public static function Initialize():void {
@@ -46,6 +45,18 @@ package GameCom.Helpers {
 		
 		public static function GetResouce(rID:int):ResourceInformation {
 			return Resources[rID];
+		}
+		
+		public static function GetRandomResourceFromSupportedResources(resources:int):ResourceInformation {
+			
+		}
+		
+		public static function HasSupportedResources(resource:int):void {
+			if (((0xFFFF >> CurrentResourcesUnlockedIndex) & resource) > 0) {
+				return true;
+			}
+			
+			return false;
 		}
 		
 	}

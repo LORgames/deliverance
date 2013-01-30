@@ -25,7 +25,7 @@ package GameCom.Managers
 		private var worldSpr:Sprite;
 		private var stage:DisplayObject;
 		
-		private var maxCars:int = 2;
+		private var maxCars:int = 10;
 		private var carSpawnChance:Number = 0.25;
 		private var cars:Vector.<NPCCar> = new Vector.<NPCCar>();
 		
