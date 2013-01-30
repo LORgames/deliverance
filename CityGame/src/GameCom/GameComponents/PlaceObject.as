@@ -16,6 +16,7 @@ package GameCom.GameComponents  {
 	 */
 	public class PlaceObject extends BaseObject {
 		public var typeID:int = 0;
+		public var arrayIndex:int = 0;
 
 		public var drawX:int = 0;
 		public var drawY:int = 0;
@@ -28,12 +29,13 @@ package GameCom.GameComponents  {
 		public var isActive:Boolean = false;
 		public var TriggerValue:String;
 		
-		public var b_NPC:int = 0;
-		public var b_Resource:int = 0;
+		public var b_NPC:uint = 0;
+		public var b_Resource:uint = 0;
 		
-        public function PlaceObject(type:int, posX:Number, posY:Number, angle:int, world:b2World, trigger:String) {
+        public function PlaceObject(type:int, posX:Number, posY:Number, angle:int, world:b2World, trigger:String, arrayIndex:int) {
             this.typeID = type;
 			this.TriggerValue = trigger;
+			this.arrayIndex = arrayIndex;
 			
             var radians:Number = 0.0174532925;
 			

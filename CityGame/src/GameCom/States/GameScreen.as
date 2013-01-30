@@ -20,6 +20,7 @@ package GameCom.States {
 	import GameCom.Helpers.ReputationHelper;
 	import GameCom.Helpers.ResourceHelper;
 	import GameCom.Managers.GUIManager;
+	import GameCom.Managers.MissionManager;
 	import GameCom.Managers.NPCManager;
 	import GameCom.GameComponents.PlayerTruck;
 	import GameCom.GameComponents.Water;
@@ -131,6 +132,8 @@ package GameCom.States {
 			
 			gui = new GUIManager(player);
 			this.addChild(gui);
+			
+			MissionManager.GenerateAllMissions();
 		}
 		
 		private function Update(e:Event):void {

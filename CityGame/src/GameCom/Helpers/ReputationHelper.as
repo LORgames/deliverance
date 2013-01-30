@@ -61,7 +61,14 @@ package GameCom.Helpers {
 			var cXP:int = Levels[CurrentLevel].ReputationRequired;
 			var nXP:int = Levels[CurrentLevel + 1].ReputationRequired;
 			
-			return Number(CurrentReputation-cXP) / (nXP-cXP)
+			return Number(CurrentReputation - cXP) / (nXP - cXP);
+		}
+		
+		public static function GetPercentageGain(exp:int):String {
+			var cXP:int = Levels[CurrentLevel].ReputationRequired;
+			var nXP:int = Levels[CurrentLevel + 1].ReputationRequired;
+			
+			return Number(100*Number(exp) / (nXP - cXP)).toFixed(2);
 		}
 		
 		public static function GetCurrentLevel():int {

@@ -26,6 +26,7 @@ package GameCom.Managers {
 		
 		public var PickupLocations:Vector.<PickupPlace> = new Vector.<PickupPlace>();
 		public var DropatLocations:Vector.<PlaceObject> = new Vector.<PlaceObject>();
+		public var SpawnLocations:Vector.<PlaceObject> = new Vector.<PlaceObject>();
 		
 		private var layer:Sprite;
 		
@@ -60,6 +61,8 @@ package GameCom.Managers {
 			var pickupIndex:int = 0;
 			var dropatIndex:int = 0;
 			var shopIndex:int = 0;
+			var spawnIndex:int = 0;
+			var collectableIndex:int = 0;
 			
             for (i = 0; i < totalTypes; i++) {
 				var triggerNameLength:int = objectTypes.readShort();
@@ -71,6 +74,10 @@ package GameCom.Managers {
 					dropatIndex = i;
 				} else if (triggerName == "Weapons") {
 					shopIndex = i;
+				} else if (triggerName == "SpawnPoint") {
+					spawnIndex = i;
+				} else if (triggerName == "Collectable") {
+					collectableIndex = i;
 				}
 				
 				Types.push();
@@ -87,27 +94,33 @@ package GameCom.Managers {
 				
 				var po:PlaceObject;
 				
-				if (sourceID != pickupIndex) {
-					po = new PlaceObject(sourceID, locationX, locationY, rotation, world, Types[sourceID]);
-				} else {
-					po = new PickupPlace(sourceID, locationX, locationY, rotation, world, Types[sourceID]);
-				}
-			
-				Objects.push(po);
-				
-				if (sourceID == pickupIndex || sourceID == dropatIndex) {
+				if (sourceID == pickupIndex) {
+					po = new PickupPlace(sourceID, locationX, locationY, rotation, world, Types[sourceID], PickupLocations.length);
+					
 					po.b_Resource = objectFile.readInt();
 					po.b_NPC = objectFile.readShort();
-				}
-				
-				if (sourceID == pickupIndex) {
+					
 					PickupLocations.push(po);
-					po.isActive = true;
 				} else if (sourceID == dropatIndex) {
+					po = new PlaceObject(sourceID, locationX, locationY, rotation, world, Types[sourceID], DropatLocations.length);
+					
+					po.b_Resource = objectFile.readInt();
+					po.b_NPC = objectFile.readShort();
+					
 					DropatLocations.push(po);
 				} else if (sourceID == shopIndex) {
+					po = new PlaceObject(sourceID, locationX, locationY, rotation, world, Types[sourceID], 0);
 					po.isActive = true;
+				} else if (sourceID == collectableIndex) {
+					//TODO: collectables need to make sure they haven't been collected already
+					po = new PlaceObject(sourceID, locationX, locationY, rotation, world, Types[sourceID], 0);
+					po.isActive = true;
+				} else if (sourceID == spawnIndex) {
+					po = new PlaceObject(sourceID, locationX, locationY, rotation, world, Types[sourceID], 0);
+					po.isActive = false;
 				}
+				
+				Objects.push(po);
 			}
 		}
 		

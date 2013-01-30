@@ -271,7 +271,7 @@ package GameCom.GameComponents {
 					var place:PlaceObject = contacts.other.GetUserData() as PlaceObject;
 					
 					if(place.isActive) {
-						TriggerManager.ReportTrigger("place_" + (contacts.other.GetUserData() as PlaceObject).TriggerValue);
+						TriggerManager.ReportTrigger("place_" + place.TriggerValue, place);
 					}
 				} /*else if (!contacts.contact.IsSensor() && contacts.contact.IsTouching()) {
 					var manifold:b2WorldManifold = new b2WorldManifold();

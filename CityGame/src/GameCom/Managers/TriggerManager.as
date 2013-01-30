@@ -1,6 +1,7 @@
 package GameCom.Managers 
 {
 	import flash.display.Bitmap;
+	import GameCom.GameComponents.PickupPlace;
 	import LORgames.Engine.Keys;
 	import flash.ui.Keyboard;
 	/**
@@ -9,12 +10,14 @@ package GameCom.Managers
 	 */
 	public class TriggerManager {
 		
-		public static function ReportTrigger(trigger:String) : void {
+		public static function ReportTrigger(trigger:String, obj:* = null) : void {
 			if (trigger == "place_Pickup") {
+				//TODO: See if I'm on a mission to collect something?
+				
 				// popup notification of mission
 				GUIManager.I.Popup("Press Enter to accept mission!");
 				if (Keys.isKeyDown(Keyboard.ENTER)) {
-					MissionManager.GenerateNextMission();
+					MissionManager.GenerateFromPickup(obj as PickupPlace);
 				}
 			} else if (trigger == "place_Deliver") {
 				MissionManager.CheckMissionParameters();

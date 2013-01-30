@@ -1,6 +1,6 @@
 ID,Resource,Value Per Item,Min Items Per Load,Max Items Per Load,Plural,Unlock Level,Rep Per Item
 0,Furniture,120,1,1, truckload of Furniture,1,100
-1,Soil,15,7,15, tonnes of Soil,1,10.48
+1,Soil,15,7,35, tonnes of Soil,1,10.48
 2,Plants,10,10,30, palettes of Plants,1,6.67
 3,Clothes,2,50,200, boxes of Clothes,2,1.5
 4,White Powder,2,50,200, sacks of White Powder,2,1.7

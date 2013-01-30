@@ -10,7 +10,7 @@ package GameCom.Helpers {
 	public class ResourceHelper {
 		
 		private static var Resources:Vector.<ResourceInformation>;
-		private static var CurrentResourcesUnlockedIndex:int = 0;
+		private static var CurrentResourcesUnlockedIndex:uint = 0;
 		
 		public static function Initialize():void {
 			Resources = new Vector.<ResourceInformation>();
@@ -47,12 +47,34 @@ package GameCom.Helpers {
 			return Resources[rID];
 		}
 		
-		public static function GetRandomResourceFromSupportedResources(resources:int):ResourceInformation {
+		public static function GetAvailableResource(resources:int):ResourceInformation {
+			var attempts:int = 0;
+			
+			while (attempts < 5) {
+				var tried:int = Math.floor(Math.random() * CurrentResourcesUnlockedIndex);
+				
+				if ((resources & (0x1 << tried)) > 0) {
+					return Resources[tried];
+				}
+				
+				attempts++;
+			}
+			
 			return null;
 		}
 		
-		public static function HasSupportedResources(resource:int):Boolean {
-			if (((0xFFFF >> CurrentResourcesUnlockedIndex) & resource) > 0) {
+		public static function pad(num:uint, minLength:uint):String {
+			var str:String = num.toString(2);
+			while (str.length < minLength) str = "0" + str;
+			return str;
+		}
+		
+		public static function HasSupportedResources(resource:uint):Boolean {
+			if (CurrentResourcesUnlockedIndex == 32) return true;
+			
+			trace(pad(resource, 32) + "\n" + pad(0x7FFFFFFF, 32) + " => " + CurrentResourcesUnlockedIndex + "\n" + pad((0x7FFFFFFF >> (31-CurrentResourcesUnlockedIndex)), 32) + "\n-------------------");
+			
+			if (((0x7FFFFFFF >> (31-CurrentResourcesUnlockedIndex)) & resource) > 0) {
 				return true;
 			}
 			
