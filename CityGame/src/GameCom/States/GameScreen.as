@@ -174,7 +174,7 @@ package GameCom.States {
 		}
 		
 		private function Pause():void {
-			simulating = false;
+			simulating = !simulating;
 		}
 	}
 }

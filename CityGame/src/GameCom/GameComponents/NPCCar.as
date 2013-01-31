@@ -30,10 +30,10 @@ package GameCom.GameComponents
 		private const HORSEPOWER_MAX:Number = 15;
 		private const HORSEPOWER_INC:Number = 5;
 		
-		private const _leftRearWheelPosition:b2Vec2 = new b2Vec2(-1.0, 1.3);
-		private const _rightRearWheelPosition:b2Vec2 = new b2Vec2(1.0, 1.3);
-		private const _leftFrontWheelPosition:b2Vec2 = new b2Vec2(-1.0,-1.3);
-		private const _rightFrontWheelPosition:b2Vec2 = new b2Vec2(1.0,-1.3);
+		private const _leftRearWheelPosition:b2Vec2 = new b2Vec2(-1.0, 1.4);
+		private const _rightRearWheelPosition:b2Vec2 = new b2Vec2(1.0, 1.4);
+		private const _leftFrontWheelPosition:b2Vec2 = new b2Vec2(-1.0,-1.4);
+		private const _rightFrontWheelPosition:b2Vec2 = new b2Vec2(1.0,-1.4);
 		
 		private var engineSpeed:Number = 0;
 		private var steeringAngle:Number = 0;
@@ -73,7 +73,7 @@ package GameCom.GameComponents
 			
 			// Car Body
 			var bodyShape:b2PolygonShape = new b2PolygonShape();
-			bodyShape.SetAsBox(1.0,2.0);
+			bodyShape.SetAsBox(1.0,2.2);
 			
 			//Create the fixture
 			var bodyFixtureDef:b2FixtureDef = new b2FixtureDef();

@@ -198,6 +198,8 @@ package GameCom.Managers
 		
 		public function DeactivateStore():void {
 			this.removeChild(store);
+			
+			Pause.call();
 		}
 		
 	}
