@@ -72,8 +72,6 @@ package GameCom.Helpers {
 		public static function HasSupportedResources(resource:uint):Boolean {
 			if (CurrentResourcesUnlockedIndex == 32) return true;
 			
-			trace(pad(resource, 32) + "\n" + pad(0x7FFFFFFF, 32) + " => " + CurrentResourcesUnlockedIndex + "\n" + pad((0x7FFFFFFF >> (31-CurrentResourcesUnlockedIndex)), 32) + "\n-------------------");
-			
 			if (((0x7FFFFFFF >> (31-CurrentResourcesUnlockedIndex)) & resource) > 0) {
 				return true;
 			}

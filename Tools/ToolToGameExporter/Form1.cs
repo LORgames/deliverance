@@ -68,8 +68,11 @@ namespace ToolToGameExporter {
 
             try { zip.RemoveEntry("Resources.csv"); } catch { }
             try { zip.RemoveEntry("Characters.csv"); } catch { }
+            try { zip.RemoveEntry("Upgrades.csv"); } catch { }
+
             zip.AddEntry("Resources.csv", File.ReadAllBytes(GetToolCacheLoc() + "Resources.csv"));
             zip.AddEntry("Characters.csv", File.ReadAllBytes(GetToolCacheLoc() + "People.csv"));
+            zip.AddEntry("Upgrades.csv", File.ReadAllBytes(GetToolCacheLoc() + "Upgrades.csv"));
 
             //SAVE IT OUT
             while (true) {

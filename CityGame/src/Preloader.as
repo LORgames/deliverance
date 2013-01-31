@@ -74,7 +74,11 @@ package {
 		}
 		
 		private function progress(e:ProgressEvent):void {
-			var totalBytes = Math.max(e.bytesTotal, 7*1024*1024);
+			var totalBytes:int = e.bytesTotal;
+			
+			if (e.bytesTotal == 0) {
+				totalBytes = 9512033;
+			}
 			
 			// Update the GUI
 			if(e.bytesLoaded != totalBytes) {

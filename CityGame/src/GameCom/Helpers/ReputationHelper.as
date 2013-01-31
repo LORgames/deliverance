@@ -1,6 +1,7 @@
 package GameCom.Helpers {
 	import GameCom.Managers.GUIManager;
 	import GameCom.SystemComponents.ReputationLevel;
+	import LORgames.Engine.Storage;
 	/**
 	 * ...
 	 * @author P. Fox
@@ -13,15 +14,15 @@ package GameCom.Helpers {
 		private static var CurrentLevel:int = 0;
 		private static var CurrentReputation:int = 0;
 		
-		public static function Initialize(currentRep:int) : void {
+		public static function Initialize() : void {
 			Levels = new Vector.<ReputationLevel>();
 			
-			Levels.push(new ReputationLevel("A Stranger", 	     -1));
-			Levels.push(new ReputationLevel("", 			    500));
-			Levels.push(new ReputationLevel("", 			   1000));
+			Levels.push(new ReputationLevel("A Stranger", 	      0));
+			Levels.push(new ReputationLevel("That Guy", 	    500));
+			Levels.push(new ReputationLevel("",				   1000));
 			Levels.push(new ReputationLevel("", 			   2500));
 			Levels.push(new ReputationLevel("", 			   5000));
-			Levels.push(new ReputationLevel("", 			  10000));
+			Levels.push(new ReputationLevel("",  			  10000));
 			Levels.push(new ReputationLevel("", 			  25000));
 			Levels.push(new ReputationLevel("", 			  50000));
 			Levels.push(new ReputationLevel("Relied On",	  80000));
@@ -35,9 +36,9 @@ package GameCom.Helpers {
 			Levels.push(new ReputationLevel("", 			 700000));
 			Levels.push(new ReputationLevel("", 			 800000));
 			Levels.push(new ReputationLevel("A Celebrity",	 900000));
-			Levels.push(new ReputationLevel("", 			1000000));
+			Levels.push(new ReputationLevel("Godlike",		1000000));
 			
-			CurrentReputation = currentRep;
+			CurrentReputation = Storage.GetAsInt("Reputation");
 			CurrentLevel = 0;
 			
 			while (Levels[CurrentLevel + 1].ReputationRequired < CurrentReputation) {
@@ -51,6 +52,8 @@ package GameCom.Helpers {
 		 */
 		public static function GrantReputation(newRep:int) : void {
 			CurrentReputation += newRep;
+			
+			Storage.Set("Reputation", CurrentReputation);
 			
 			while (CurrentReputation > Levels[CurrentLevel + 1].ReputationRequired) {
 				CurrentLevel++;

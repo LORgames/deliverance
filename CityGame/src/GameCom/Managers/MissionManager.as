@@ -81,7 +81,7 @@ package GameCom.Managers {
 				DeliveryDestination = null;
 				
 				ReputationHelper.GrantReputation(DeliveryResourcesCount * ResourceHelper.GetResouce(DeliveryResourcesType).ReputationGainPerItem);
-				MoneyHelper.Credit(DeliveryResourcesCount * ResourceHelper.GetResouce(DeliveryType).ValuePerItem);
+				MoneyHelper.Credit(DeliveryResourcesCount * ResourceHelper.GetResouce(DeliveryResourcesType).ValuePerItem);
 				
 				GenerateAllMissions();
 				

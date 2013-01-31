@@ -23,12 +23,14 @@ package LORgames.Components
 		private var floatingDistance:Number;
 		private var maxWidth:Number;
 		private var floatingDirection:int;
+		private var _alpha:Number;
 		
-		
-		public function Tooltip(str:String = "", direction:int = UP, distance:Number = 25, maxWidth:Number = 250) {
+		public function Tooltip(str:String = "", direction:int = UP, distance:Number = 25, maxWidth:Number = 250, _alpha:Number = 0.95) {
 			this.addChild(text);
 			this.mouseEnabled = false;
 			text.mouseEnabled = false;
+			
+			this._alpha = _alpha;
 			
 			this.floatingDistance = distance;
 			floatingDirection = direction;
@@ -78,7 +80,7 @@ package LORgames.Components
 		private function Redraw():void {
 			this.graphics.clear();
 			
-			this.graphics.beginFill(0x202020, 0.95);
+			this.graphics.beginFill(0x202020, _alpha);
 			
 			if(floatingDirection == UP) {
 				text.x = -text.width / 2;

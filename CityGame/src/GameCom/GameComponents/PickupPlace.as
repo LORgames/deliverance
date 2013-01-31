@@ -15,7 +15,7 @@ package GameCom.GameComponents
 	public class PickupPlace extends PlaceObject {
 		
 		public var MissionParams:MissionParameters = null;
-		public var tooltip:Tooltip = new Tooltip();
+		public var tooltip:Tooltip = new Tooltip("", Tooltip.UP, 25, 200, 0.75);
 		
 		public function PickupPlace(type:int, posX:Number, posY:Number, angle:int, world:b2World, trigger:String, arrayIndex:int) {
 			super(type, posX, posY, angle, world, trigger, arrayIndex);
@@ -51,7 +51,7 @@ package GameCom.GameComponents
 					var expGain:int = ri.ReputationGainPerItem * MissionParams.ResourceAmount;
 					var monGain:int = ri.ValuePerItem * MissionParams.ResourceAmount;
 					
-					tooltip.SetText("Need to deliver " + ri.Name + "\n\nRewards:\n" + expGain + " Reputation ("+ReputationHelper.GetPercentageGain(expGain)+"%)\n$" + monGain);
+					tooltip.SetText("Need to deliver " + MissionParams.ResourceAmount + ri.Message + ".\n\nRewards:\n" + expGain + " Reputation ("+ReputationHelper.GetPercentageGain(expGain)+"%)\n$" + monGain);
 					
 					isActive = true;
 					

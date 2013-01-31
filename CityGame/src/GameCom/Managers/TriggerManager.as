@@ -22,8 +22,7 @@ package GameCom.Managers
 			} else if (trigger == "place_Deliver") {
 				MissionManager.CheckMissionParameters();
 			} else if (trigger == "place_Weapons") {
-				//TODO: Actually have a shop class perhaps? You know, so its interactive
-				GUIManager.I.addChild(new Bitmap(ThemeManager.Get("GUI/Shop.png")));
+				GUIManager.I.ActivateStore();
 			}else {
 				trace(trigger);
 			}

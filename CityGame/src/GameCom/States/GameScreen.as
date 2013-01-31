@@ -17,6 +17,7 @@ package GameCom.States {
 	import flash.utils.getTimer;
 	import flash.utils.Timer;
 	import GameCom.GameComponents.CollisionSolver;
+	import GameCom.Helpers.MoneyHelper;
 	import GameCom.Helpers.ReputationHelper;
 	import GameCom.Helpers.ResourceHelper;
 	import GameCom.Managers.GUIManager;
@@ -80,7 +81,8 @@ package GameCom.States {
 			removeEventListener(Event.ADDED_TO_STAGE, Init);
 			
 			//Load up the helpers
-			ReputationHelper.Initialize(0);
+			MoneyHelper.Initialize();
+			ReputationHelper.Initialize();
 			ResourceHelper.Initialize();
 			
 			//Start the system
@@ -130,7 +132,7 @@ package GameCom.States {
 			// places manager gets its layer
 			placesManager = new PlacesManager(placesLayer, player, world);
 			
-			gui = new GUIManager(player);
+			gui = new GUIManager(player, Pause);
 			this.addChild(gui);
 			
 			MissionManager.GenerateAllMissions();
@@ -169,6 +171,10 @@ package GameCom.States {
 		
 		public function Redraw(e:*= null):void {
 			//What even is this supposed to do?
+		}
+		
+		private function Pause():void {
+			simulating = false;
 		}
 	}
 }

@@ -13,6 +13,7 @@ package GameCom.Managers
 	import GameCom.Helpers.MoneyHelper;
 	import GameCom.Helpers.ReputationHelper;
 	import GameCom.Helpers.SpriteHelper;
+	import GameCom.States.StoreOverlay;
 	/**
 	 * ...
 	 * @author Paul
@@ -40,7 +41,10 @@ package GameCom.Managers
 		private var popupAlpha:Number = 0;
 		private var popupFade:Boolean = false;
 		
-		public function GUIManager(player:PlayerTruck) {
+		private var Pause:Function;
+		private var store:StoreOverlay;
+		
+		public function GUIManager(player:PlayerTruck, pauseLoopback:Function) {
 			I = this;
 			
 			this.player = player;
@@ -109,6 +113,9 @@ package GameCom.Managers
 			Overlay.addChild(popupText);
 			
 			UpdateCache();
+			
+			this.Pause = pauseLoopback;
+			store = new StoreOverlay();
 		}
 		
 		public function Update() : void {
@@ -181,6 +188,16 @@ package GameCom.Managers
 				Overlay.graphics.drawRect(stage.stageWidth - 240, stage.stageHeight - 80, 240, 80);
 				Overlay.graphics.endFill();
 			}
+		}
+		
+		public function ActivateStore():void {
+			this.addChild(store);
+			
+			Pause.call();
+		}
+		
+		public function DeactivateStore():void {
+			this.removeChild(store);
 		}
 		
 	}

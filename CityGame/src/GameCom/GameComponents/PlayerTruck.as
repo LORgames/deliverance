@@ -6,6 +6,7 @@ package GameCom.GameComponents {
 	import LORgames.Engine.Keys;
 	import flash.ui.Keyboard;
 	import GameCom.Managers.TriggerManager;
+	import LORgames.Engine.Storage;
 	
 	import Box2D.Collision.*;
 	import Box2D.Common.Math.*;
@@ -23,10 +24,30 @@ package GameCom.GameComponents {
 		private const STEER_SPEED:Number = 5.0;
 		
 		private const SIDEWAYS_FRICTION_FORCE:Number = 1000;
-		private const HORSEPOWER_MAX:Number = 50;
-		private const HORSEPOWER_INC:Number = 25;
+		private const BASE_HORSEPOWER_MAX:Number = 100;
+		private const BASE_HORSEPOWER_INC:Number = 25;
+		private const BASE_NOSFACTOR:Number = 1.5;
+		private const BASE_HEALTH:int = 500;
 		
-		private const NOSFACTOR:Number = 1.5;
+		private const HORSEPOWER_MAX_PER_LEVEL:Number = 10;
+		private const HORSEPOWER_INC_PER_LEVEL:Number = 2.5;
+		private const HEALTH_INC_PER_LEVEL:Number = 100;
+		private const ARMOUR_INC_PER_LEVEL:Number = 0.09;
+		private const NOS_INC_PER_LEVEL:Number = 0.2;
+		
+		private var speedUpgradeLevel:int = 0;
+		private var accelerationUpgradeLevel:int = 0;
+		private var healthUpgradeLevel:int = 0;
+		private var armourUpgradeLevel:int = 0;
+		private var nosUpgradeLevel:int = 0;
+		private var healthMax:Number;
+		private var healthCurrent:Number;
+		
+		public var HealthPercent:Number = 1;
+		
+		private var currentHorsePowerMax:int = 0;
+		private var currentHorsePowerInc:int = 0;
+		private var currentNOSFactor:int = 0;
 		
 		private const leftRearWheelPosition:b2Vec2 = new b2Vec2(-1.2, 3.0);
 		private const rightRearWheelPosition:b2Vec2 = new b2Vec2(1.2, 3.0);
@@ -48,10 +69,6 @@ package GameCom.GameComponents {
 		
 		private var leftJoint:b2RevoluteJoint;
 		private var rightJoint:b2RevoluteJoint;
-		
-		public var HealthPercent:Number = 1;
-		private var healthMax:Number = 1000;
-		private var healthCurrent:Number = 1000;
 		
 		public function PlayerTruck(spawnPosition:b2Vec2, world:b2World, worldSpr:Sprite) {
 			worldSpr.addChild(this);
@@ -79,7 +96,7 @@ package GameCom.GameComponents {
 			// TRUCK BODY
 			
 			var bodyShape:b2PolygonShape = new b2PolygonShape();
-			bodyShape.SetAsBox(1.2,4.0);
+			bodyShape.SetAsBox(1.2, 4.0);
 			
 			//Create the fixture
 			var bodyFixtureDef:b2FixtureDef = new b2FixtureDef();
@@ -89,7 +106,7 @@ package GameCom.GameComponents {
 			//Create the defintion
 			var bodyBodyDef:b2BodyDef = new b2BodyDef();
 			bodyBodyDef.type = b2Body.b2_dynamicBody;
-			bodyBodyDef.linearDamping = 1;
+			bodyBodyDef.linearDamping = 2;
 			bodyBodyDef.angularDamping = 1;
 			bodyBodyDef.position = spawnPosition.Copy();
 			
@@ -184,6 +201,8 @@ package GameCom.GameComponents {
 			 
 			world.CreateJoint(leftRearJointDef);
 			world.CreateJoint(rightRearJointDef);
+			
+			FixUpgradeValues();
 		}
 		
 		private function killOrthogonalVelocity(targetBody:b2Body):void {
@@ -202,12 +221,12 @@ package GameCom.GameComponents {
 		
 		public function Update(dt:Number):void {
 			if (Keys.isKeyDown(Keyboard.UP)) {
-				if(engineSpeed > -HORSEPOWER_MAX) {
-					engineSpeed -= HORSEPOWER_INC*dt;
+				if(engineSpeed > -currentHorsePowerMax) {
+					engineSpeed -= currentHorsePowerInc*dt;
 				}
 			} else if (Keys.isKeyDown(Keyboard.DOWN)) {
-				if(engineSpeed < HORSEPOWER_MAX) {
-					engineSpeed += HORSEPOWER_INC*dt;
+				if(engineSpeed < currentHorsePowerMax) {
+					engineSpeed += currentHorsePowerInc*dt;
 				}
 			} else {
 				engineSpeed = 0;
@@ -227,18 +246,16 @@ package GameCom.GameComponents {
 			
 			this.graphics.clear();
 			
-			if (!Keys.isKeyDown(Keyboard.SHIFT)) {
-				killOrthogonalVelocity(leftWheel);
-				killOrthogonalVelocity(rightWheel);
-				killOrthogonalVelocity(leftRearWheel);
-				killOrthogonalVelocity(rightRearWheel);
-				killOrthogonalVelocity(leftMidWheel);
-				killOrthogonalVelocity(rightMidWheel);
-			}
+			killOrthogonalVelocity(leftWheel);
+			killOrthogonalVelocity(rightWheel);
+			killOrthogonalVelocity(leftRearWheel);
+			killOrthogonalVelocity(rightRearWheel);
+			killOrthogonalVelocity(leftMidWheel);
+			killOrthogonalVelocity(rightMidWheel);
 			
 			if (Keys.isKeyDown(Keyboard.SPACE)) {
-				engineSpeed = -HORSEPOWER_MAX*NOSFACTOR;
-			} else if (Math.abs(engineSpeed) > HORSEPOWER_MAX) {
+				engineSpeed = -currentHorsePowerMax*currentNOSFactor;
+			} else if (Math.abs(engineSpeed) > currentHorsePowerMax) {
 				engineSpeed *= 0.5;
 			}
 			
@@ -263,7 +280,6 @@ package GameCom.GameComponents {
 			this.y = int(body.GetPosition().y * Global.PHYSICS_SCALE);
 			this.rotation = body.GetAngle() / Math.PI * 180;
 			
-			
 			var contacts:b2ContactEdge = body.GetContactList();
 			
 			while (contacts != null) {
@@ -273,30 +289,42 @@ package GameCom.GameComponents {
 					if(place.isActive) {
 						TriggerManager.ReportTrigger("place_" + place.TriggerValue, place);
 					}
-				} /*else if (!contacts.contact.IsSensor() && contacts.contact.IsTouching()) {
-					var manifold:b2WorldManifold = new b2WorldManifold();
-					contacts.contact.GetWorldManifold(manifold);
-					
-					var vel1:b2Vec2 = this.body.GetLinearVelocityFromWorldPoint(manifold.m_points[0]);
-					
-					this.graphics.lineStyle(1, 0xFF0000);
-					this.graphics.drawCircle(manifold.m_points[0].x * Global.PHYSICS_SCALE - this.x, manifold.m_points[0].y * Global.PHYSICS_SCALE - this.y, vel1.Length());
-					
-					Damage(vel1.Length());
-				}*/
+				}
 				
 				contacts = contacts.next;
 			}
 		}
 		
 		public function Damage(damage:int):void {
-			damage -= 5; //Just to balance out low impact collisions that are annoying as fuck as a player
+			damage -= 5;
+			
+			damage *= 1 - (ARMOUR_INC_PER_LEVEL * armourUpgradeLevel);
+			
 			if(damage > 0) {
-				trace("HP LOSS: " + damage);
+				trace("HP LOSS: " + damage + " armour negated " + (ARMOUR_INC_PER_LEVEL * armourUpgradeLevel * 100) + "%");
 				healthCurrent -= damage;
 				HealthPercent = Number(healthCurrent) / healthMax;
 				GUIManager.I.UpdateCache();
 			}
+		}
+		
+		public function FixUpgradeValues():void {
+			//////////////////////////
+			// LOAD UPGRADES
+			speedUpgradeLevel = Storage.GetAsInt("SpeedUpgrade", 0);
+			accelerationUpgradeLevel = Storage.GetAsInt("AccelerationUpgrade", 0);
+			healthUpgradeLevel = Storage.GetAsInt("HealthUpgrade", 0);
+			armourUpgradeLevel = Storage.GetAsInt("ArmourUpgrade", 0);
+			nosUpgradeLevel = Storage.GetAsInt("NOSUpgrade", 0);
+			
+			//Tweak internal values here based on them
+			currentHorsePowerMax = BASE_HORSEPOWER_MAX + HORSEPOWER_MAX_PER_LEVEL * speedUpgradeLevel;
+			currentHorsePowerInc = BASE_HORSEPOWER_INC + HORSEPOWER_INC_PER_LEVEL * accelerationUpgradeLevel;
+			currentNOSFactor = BASE_NOSFACTOR + NOS_INC_PER_LEVEL * nosUpgradeLevel;
+			
+			healthMax = BASE_HEALTH + HEALTH_INC_PER_LEVEL * healthUpgradeLevel;
+			healthCurrent = healthMax;
+			HealthPercent = 1;
 		}
 	}
 }
