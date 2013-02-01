@@ -1,8 +1,11 @@
 package GameCom.States {
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
+	import GameCom.Helpers.MoneyHelper;
+	import GameCom.Helpers.UpgradeHelper;
 	import GameCom.Managers.GUIManager;
 	import LORgames.Components.Button;
+	import LORgames.Components.Tooltip;
 	import LORgames.Engine.Storage;
 	/**
 	 * ...
@@ -14,11 +17,13 @@ package GameCom.States {
 		
 		private var CloseButton:Button = new Button("Close");
 		
-		private var SpeedButton:Button = new Button("$", 30, 30);
-		private var AccelerationButton:Button = new Button("$", 30, 30);
-		private var HealthButton:Button = new Button("$", 30, 30);
-		private var ArmourButton:Button = new Button("$", 30, 30);
-		private var NOSButton:Button = new Button("$", 30, 30);
+		private var SpeedButton:Button = new Button("Speed", 30, 30);
+		private var AccelerationButton:Button = new Button("Acceleration", 30, 30);
+		private var HealthButton:Button = new Button("Health", 30, 30);
+		private var ArmourButton:Button = new Button("Armour", 30, 30);
+		private var NOSButton:Button = new Button("NOS", 30, 30);
+		
+		private var tooltip:Tooltip = new Tooltip("", Tooltip.RIGHT);
 		
 		public function StoreOverlay() {
 			this.addChild(StoreBackground);
@@ -44,13 +49,29 @@ package GameCom.States {
 			NOSButton.x = 199; NOSButton.y = 517;
 			this.addChild(NOSButton);
 			
+			this.addChild(tooltip);
+			
 			SpeedButton.addEventListener(MouseEvent.CLICK, OnUpgradePurchased);
 			AccelerationButton.addEventListener(MouseEvent.CLICK, OnUpgradePurchased);
 			HealthButton.addEventListener(MouseEvent.CLICK, OnUpgradePurchased);
 			ArmourButton.addEventListener(MouseEvent.CLICK, OnUpgradePurchased);
 			NOSButton.addEventListener(MouseEvent.CLICK, OnUpgradePurchased);
 			
+			SpeedButton.addEventListener(MouseEvent.MOUSE_OVER, OnUpgradeHighlight);
+			AccelerationButton.addEventListener(MouseEvent.MOUSE_OVER, OnUpgradeHighlight);
+			HealthButton.addEventListener(MouseEvent.MOUSE_OVER, OnUpgradeHighlight);
+			ArmourButton.addEventListener(MouseEvent.MOUSE_OVER, OnUpgradeHighlight);
+			NOSButton.addEventListener(MouseEvent.MOUSE_OVER, OnUpgradeHighlight);
+			
+			SpeedButton.addEventListener(MouseEvent.MOUSE_OUT, OnUpgradeLeave);
+			AccelerationButton.addEventListener(MouseEvent.MOUSE_OUT, OnUpgradeLeave);
+			HealthButton.addEventListener(MouseEvent.MOUSE_OUT, OnUpgradeLeave);
+			ArmourButton.addEventListener(MouseEvent.MOUSE_OUT, OnUpgradeLeave);
+			NOSButton.addEventListener(MouseEvent.MOUSE_OUT, OnUpgradeLeave);
+			
 			CloseButton.addEventListener(MouseEvent.CLICK, OnCloseClicked);
+			
+			RedrawStats();
 		}
 		
 		public function Redraw():void {
@@ -62,26 +83,42 @@ package GameCom.States {
 		}
 		
 		private function OnUpgradePurchased(me:MouseEvent):void {
-			var stat:int;
+			var stat:String = me.currentTarget.getLabel();
+			var statVal:int = Storage.GetAsInt(stat + "Upgrade");
 			
-			if (me.currentTarget == SpeedButton) {
-				stat = Storage.GetAsInt("SpeedUpgrade");
-				if(stat < 10) Storage.Set("SpeedUpgrade", stat + 1);
-			} else if (me.currentTarget == AccelerationButton) {
-				stat = Storage.GetAsInt("AccelerationUpgrade");
-				if(stat < 10) Storage.Set("AccelerationUpgrade", stat + 1);
-			} else if (me.currentTarget == HealthButton) {
-				stat = Storage.GetAsInt("HealthUpgrade");
-				if(stat < 10) Storage.Set("HealthUpgrade", stat + 1);
-			} else if (me.currentTarget == ArmourButton) {
-				stat = Storage.GetAsInt("ArmourUpgrade");
-				if(stat < 10) Storage.Set("ArmourUpgrade", stat + 1);
-			} else if (me.currentTarget == NOSButton) {
-				stat = Storage.GetAsInt("NOSUpgrade");
-				if(stat < 10) Storage.Set("NOSUpgrade", stat + 1);
+			if (statVal < 10) {
+				if (MoneyHelper.CanDebit(UpgradeHelper.GetCost(stat, statVal+1))) {
+					MoneyHelper.Debit(UpgradeHelper.GetCost(stat, statVal+1));
+					Storage.Set(stat + "Upgrade", statVal + 1);
+				}
 			}
 			
+			OnUpgradeHighlight(me);
+			
 			RedrawStats();
+		}
+		
+		private function OnUpgradeHighlight(me:MouseEvent):void {
+			var statVal:int;
+			
+			var stat:String = me.currentTarget.getLabel();
+			
+			statVal = Storage.GetAsInt((me.currentTarget as Button).getLabel() + "Upgrade");
+			
+			tooltip.x = me.currentTarget.x + me.currentTarget.width;
+			tooltip.y = me.currentTarget.y + me.currentTarget.height / 2;
+			
+			if (statVal == 10) {
+				tooltip.SetText("ALREADY MAX");
+			} else {
+				tooltip.SetText("Level " + (statVal+1) + " " + stat + " costs $" + UpgradeHelper.GetCost(stat, statVal+1) + ".\n\nCurrent Benefit: " + UpgradeHelper.GetBenefit(stat, statVal) + "\nNext Level: " + UpgradeHelper.GetBenefit(me.currentTarget.getLabel(), statVal+1) + "\n\nBalance After Purchase: " + MoneyHelper.GetBalanceAfterPurchase(UpgradeHelper.GetCost(stat, statVal+1)) + "\n\n" + (MoneyHelper.CanDebit(UpgradeHelper.GetCost(stat, statVal+1))?"Click To Purcahse":"You cannot purchase at this time"));
+			}
+			
+			tooltip.visible = true;
+		}
+		
+		private function OnUpgradeLeave(me:MouseEvent):void {
+			tooltip.visible = false;
 		}
 		
 		private function RedrawStats():void {

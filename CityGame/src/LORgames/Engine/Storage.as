@@ -92,6 +92,13 @@ package LORgames.Engine
             storageObject.removeEventListener(NetStatusEvent.NET_STATUS, onFlushStatus);
         }
 		
+		public static function Format():void {
+			if (storageObject == null) Initialize();
+			
+			storageArray = new Array();
+			Save();
+		}
+		
 	}
 
 }

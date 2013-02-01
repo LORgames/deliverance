@@ -326,5 +326,12 @@ package GameCom.GameComponents {
 			healthCurrent = healthMax;
 			HealthPercent = 1;
 		}
+		
+		/**
+		 * Locate the nearest spawn point and move the truck there. Reset health to max.
+		 */
+		public function Respawn():void {
+			
+		}
 	}
 }

@@ -49,6 +49,14 @@ package GameCom.Helpers
 			return currentMoney;
 		}
 		
+		public static function GetBalanceAfterPurchase(cost:int):String {
+			if(currentMoney - cost < 0) {
+				return "-$" + Math.abs(currentMoney - cost);
+			} else {
+				return "$" + (currentMoney - cost);
+			}
+		}
+		
 	}
 
 }

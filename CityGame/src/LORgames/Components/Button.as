@@ -31,6 +31,7 @@ package LORgames.Components {
 		protected function Prepare():void {
 			this.stop();
 			this.buttonMode = true;
+			tf.mouseEnabled = false;
 			
 			this.addEventListener(MouseEvent.ROLL_OVER, highlighted);
 			this.addEventListener(MouseEvent.ROLL_OUT, released);

@@ -6,6 +6,7 @@ package GameCom.States {
 	import flash.events.MouseEvent;
 	import LORgames.Components.Button;
 	import LORgames.Components.TextBox;
+	import LORgames.Engine.Storage;
 	import LORgames.Localization.Strings;
 	import mx.core.BitmapAsset;
 	
@@ -22,6 +23,7 @@ package GameCom.States {
 		private const buttonPadding:int = 10;
 		
 		private var PlayBtn:Button = new Button(Strings.Get("PlayGame"), 200, 50);
+		private var ClearBtn:Button = new Button("CLEAR SAVE");
 		
 		public function MainMenu() {			
 			//Just make sure we're ready to do this...
@@ -40,12 +42,19 @@ package GameCom.States {
 			this.addChild(PlayBtn);
 			PlayBtn.addEventListener(MouseEvent.CLICK, PlayFunc, false, 0, true);
 			
+			this.addChild(ClearBtn);
+			ClearBtn.addEventListener(MouseEvent.CLICK, ClearFunc, false, 0, true);
+			
 			this.stage.addEventListener(Event.RESIZE, Resized, false, 0, true);
 			Resized();
 		}
 		
 		public function PlayFunc(e:MouseEvent):void {
 			SystemMain.instance.StateTo(new GameScreen());
+		}
+		
+		public function ClearFunc(e:MouseEvent):void {
+			Storage.Format();
 		}
 		
 		public function Resized(e:Event = null):void {

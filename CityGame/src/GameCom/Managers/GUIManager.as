@@ -200,6 +200,8 @@ package GameCom.Managers
 			this.removeChild(store);
 			
 			Pause.call();
+			
+			player.Respawn();
 		}
 		
 	}
