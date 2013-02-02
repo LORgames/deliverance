@@ -49,7 +49,7 @@ namespace CityTools {
                     Story temp = new Story(int.Parse(txtStartLocation.Text), int.Parse(txtEndLocation.Text),
                         (short)cmbNPCImage1.SelectedIndex, (short)cmbNPCImage2.SelectedIndex,
                         int.Parse(txtRepLevel.Text), (byte)cmbResourceType.SelectedIndex, int.Parse(txtQuantity.Text),
-                        txtStartText.Text, txtEndText.Text);
+                        txtStartText.Text, txtPickupText.Text, txtEndText.Text);
 
                     StoryCache.AddStory(temp);
                 } else {
@@ -62,6 +62,7 @@ namespace CityTools {
                     StoryCache.stories[index].resType = (byte)cmbResourceType.SelectedIndex;
                     StoryCache.stories[index].quantity = int.Parse(txtQuantity.Text);
                     StoryCache.stories[index].startText = txtStartText.Text;
+                    StoryCache.stories[index].pickupText = txtPickupText.Text;
                     StoryCache.stories[index].endText = txtEndText.Text;
                 }
 
@@ -86,6 +87,7 @@ namespace CityTools {
             }
             txtQuantity.Text = "";
             txtStartText.Text = "";
+            txtPickupText.Text = "";
             txtEndText.Text = "";
 
             index = -1;
@@ -159,6 +161,7 @@ namespace CityTools {
             cmbResourceType.SelectedIndex = story.resType;
             txtQuantity.Text = story.quantity.ToString();
             txtStartText.Text = story.startText;
+            txtPickupText.Text = story.pickupText;
             txtEndText.Text = story.endText;
 
             btnSave.Text = "Edit";

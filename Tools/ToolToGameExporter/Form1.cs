@@ -15,6 +15,8 @@ namespace ToolToGameExporter {
     public partial class Form1 : Form {
         public const float PHYSICS_SCALE = 10.0f;
 
+        Dictionary<int, int> remappedKeysForPlaces = new Dictionary<int, int>();  // <old, new>
+
         public Form1() {
             InitializeComponent();
         }
@@ -65,6 +67,9 @@ namespace ToolToGameExporter {
             try { zip.RemoveEntry("3.map"); } catch { }
             try { zip.RemoveEntry("3.cache"); } catch { }
             OptimizeAndAddPlaces(zip);
+
+            try { zip.RemoveEntry("story.bin"); } catch { }
+            OptimizeAndAddStories(zip);
 
             try { zip.RemoveEntry("Resources.csv"); } catch { }
             try { zip.RemoveEntry("Characters.csv"); } catch { }
@@ -215,14 +220,13 @@ namespace ToolToGameExporter {
 
             o.AddInt(totalShapes);
 
-            Dictionary<int, int> remappedKeys = new Dictionary<int, int>();
             int previousKey = 0;
 
             for (int i = 0; i < totalShapes; i++) {
                 int type_id = f.GetInt();
                 string source = f.GetString();
 
-                remappedKeys[type_id] = previousKey;
+                remappedKeysForPlaces[type_id] = previousKey;
 
                 zp.AddEntry("Places/" + previousKey + ".png", File.ReadAllBytes(tool_loc_TB.Text + source));
 
@@ -254,7 +258,7 @@ namespace ToolToGameExporter {
                 float locationY = f.GetFloat();
                 int rotation = f.GetInt();
 
-                o.AddInt(remappedKeys[sourceID]);
+                o.AddInt(remappedKeysForPlaces[sourceID]);
                 o.AddFloat(locationX);
                 o.AddFloat(locationY);
                 o.AddInt(rotation);
@@ -283,6 +287,44 @@ namespace ToolToGameExporter {
                     zp.RemoveEntry(entry);
                 }
             }
+        }
+
+        private void OptimizeAndAddStories(ZipFile zp) {
+            BinaryIO f = new BinaryIO(File.ReadAllBytes(GetStoryStore()));
+            BinaryIO o = new BinaryIO();
+
+            // Load story instances from file
+            int totalStories = f.GetInt();
+            o.AddInt(totalStories);
+
+            for (int i = 0; i < totalStories; i++) {
+                int startLocation = f.GetInt();
+                int endLocation = f.GetInt();
+                short npcImage1 = f.GetShort();
+                short npcImage2 = f.GetShort();
+                int repLevel = f.GetInt();
+                byte resType = f.GetByte();
+                int quantity = f.GetInt();
+                string startText = f.GetString();
+                string pickupText = f.GetString();
+                string endText = f.GetString();
+
+                o.AddInt(remappedKeysForPlaces[startLocation]);
+                o.AddInt(remappedKeysForPlaces[endLocation]);
+                o.AddShort(npcImage1);
+                o.AddShort(npcImage2);
+                o.AddInt(repLevel);
+                o.AddByte(resType);
+                o.AddInt(quantity);
+                o.AddString(startText);
+                o.AddString(pickupText);
+                o.AddString(endText);
+            }
+
+            zp.AddEntry("story.bin", o.EncodedBytes());
+
+            f.Dispose();
+            o.Dispose();
         }
 
         private void ConvertNodeFormat(ZipFile zp) {
@@ -377,6 +419,7 @@ namespace ToolToGameExporter {
         private string GetNodeStore() { return GetToolCacheLoc() + "node_data.bin"; }
         private string GetPlacesStore() { return GetToolCacheLoc() + "places_store.bin"; }
         private string GetPlacesTypes() { return GetToolCacheLoc() + "places_types.bin"; }
+        private string GetStoryStore() { return GetToolCacheLoc() + "story_data.bin"; }
     }
 
     public struct ToolNode {

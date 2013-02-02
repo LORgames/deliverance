@@ -30,7 +30,7 @@ package GameCom.Managers {
 			// load in nodes
 			var missionfile:ByteArray = ThemeManager.Get("story.bin");
 			
-			var numstories:int = nodefile.readInt();
+			var numstories:int = missionfile.readInt();
 			missionArray = new Vector.<MissionParameters>();
 			
 			for (var i:int = 0; i < numstories; i++) {

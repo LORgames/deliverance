@@ -41,6 +41,8 @@
             this.btnSave = new System.Windows.Forms.Button();
             this.cmbResourceType = new System.Windows.Forms.ComboBox();
             this.cmbNPCImage2 = new System.Windows.Forms.ComboBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.txtPickupText = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label1
@@ -175,7 +177,7 @@
             // 
             // txtEndText
             // 
-            this.txtEndText.Location = new System.Drawing.Point(98, 267);
+            this.txtEndText.Location = new System.Drawing.Point(98, 365);
             this.txtEndText.Multiline = true;
             this.txtEndText.Name = "txtEndText";
             this.txtEndText.Size = new System.Drawing.Size(272, 92);
@@ -184,7 +186,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(12, 270);
+            this.label8.Location = new System.Drawing.Point(12, 368);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(50, 13);
             this.label8.TabIndex = 15;
@@ -192,7 +194,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(154, 365);
+            this.btnSave.Location = new System.Drawing.Point(154, 463);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 9;
@@ -266,11 +268,30 @@
             this.cmbNPCImage2.Size = new System.Drawing.Size(133, 21);
             this.cmbNPCImage2.TabIndex = 3;
             // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(12, 270);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(64, 13);
+            this.label9.TabIndex = 17;
+            this.label9.Text = "Pickup Text";
+            // 
+            // txtPickupText
+            // 
+            this.txtPickupText.Location = new System.Drawing.Point(98, 267);
+            this.txtPickupText.Multiline = true;
+            this.txtPickupText.Name = "txtPickupText";
+            this.txtPickupText.Size = new System.Drawing.Size(272, 92);
+            this.txtPickupText.TabIndex = 16;
+            // 
             // StoryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(382, 393);
+            this.ClientSize = new System.Drawing.Size(382, 492);
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.txtPickupText);
             this.Controls.Add(this.cmbNPCImage2);
             this.Controls.Add(this.cmbResourceType);
             this.Controls.Add(this.btnSave);
@@ -318,5 +339,7 @@
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.ComboBox cmbResourceType;
         private System.Windows.Forms.ComboBox cmbNPCImage2;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox txtPickupText;
     }
 }

@@ -33,9 +33,10 @@ namespace CityTools.Stories {
                     byte resType = f.GetByte();
                     int quantity = f.GetInt();
                     string startText = f.GetString();
+                    string pickupText = f.GetString();
                     string endText = f.GetString();
 
-                    stories.Add(new Story(startLocation, endLocation, npcImage1, npcImage2, repLevel, resType, quantity, startText, endText));
+                    stories.Add(new Story(startLocation, endLocation, npcImage1, npcImage2, repLevel, resType, quantity, startText, pickupText, endText));
                 }
             }
         }
@@ -60,6 +61,7 @@ namespace CityTools.Stories {
                 f.AddByte(story.resType);
                 f.AddInt(story.quantity);
                 f.AddString(story.startText);
+                f.AddString(story.pickupText);
                 f.AddString(story.endText);
             }
 
