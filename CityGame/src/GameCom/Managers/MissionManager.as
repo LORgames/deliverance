@@ -1,5 +1,6 @@
 package GameCom.Managers {
 	import flash.geom.Point;
+	import flash.utils.ByteArray;
 	import flash.utils.getTimer;
 	import GameCom.GameComponents.PickupPlace;
 	import GameCom.GameComponents.PlaceObject;
@@ -22,6 +23,36 @@ package GameCom.Managers {
 		
 		private static var DeliveryType:int = 0;
 		private static var DeliveryStartTime:int = 0;
+		
+		private static var missionArray:Vector.<MissionParameters> = new Vector.<MissionParameters>();
+		
+		public static function Initialize() : void {
+			// load in nodes
+			var missionfile:ByteArray = ThemeManager.Get("story.bin");
+			
+			var numstories:int = nodefile.readInt();
+			missionArray = new Vector.<MissionParameters>();
+			
+			for (var i:int = 0; i < numstories; i++) {
+				var temp:MissionParameters = new MissionParameters();
+				
+				temp.Origin = missionfile.readInt();
+				temp.Destination = missionfile.readInt();
+				temp.NPC1 = missionfile.readShort();
+				temp.NPC2 = missionfile.readShort();
+				temp.ReputationRequired = missionfile.readInt();
+				temp.ResourceType = missionfile.readByte();
+				temp.ResourceAmount = missionfile.readInt();
+				var startTextLength:int = missionfile.readShort();
+				temp.StartText = missionfile.readMultiByte(startTextLength, "iso-8859-1");
+				var pickupTextLength:int = missionfile.readShort();
+				temp.PickupText = missionfile.readMultiByte(pickupTextLength, "iso-8859-1");
+				var endTextLength:int = missionfile.readShort();
+				temp.EndText = missionfile.readMultiByte(endTextLength, "iso-8859-1");
+				
+				missionArray.push(temp);
+			}
+		}
 		
 		public static function GenerateAllMissions() : void {
 			for (var i:int = 0; i < PlacesManager.instance.PickupLocations.length; i++) {
@@ -49,7 +80,7 @@ package GameCom.Managers {
 			var amount:int = params.ResourceAmount;
 			var pickup:int = params.Origin;
 			var dropOff:int = params.Destination;
-			var npc:int = params.NPC;
+			var npc:int = params.NPC1;
 			
 			DeliveryDestination = (PlacesManager.instance.DropatLocations[dropOff] as PlaceObject);
 			DeliveryDestination.isActive = true;
