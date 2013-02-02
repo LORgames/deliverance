@@ -23,11 +23,14 @@ package GameCom.GameComponents.Weapons {
 			
 		}
 		
+		public function StopFiring():void {
+			
+		}
+		
 		public function Update(x:Number, y:Number):void {
 			var angle:Number = Math.atan2(y - parent.stage.stageHeight / 2, x - parent.stage.stageWidth / 2);
 			this.rotation = angle / Math.PI * 180 - parent.rotation;
 		}
-		
 	}
 
 }
