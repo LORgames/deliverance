@@ -7,6 +7,7 @@ package GameCom.GameComponents  {
 	import flash.display.BitmapData;
 	import flash.display.Graphics;
 	import flash.geom.Matrix;
+	import flash.geom.Point;
 	import GameCom.Managers.ScenicManager;
 	import GameCom.SystemComponents.MissionParameters;
 	import GameCom.SystemComponents.ScenicObjectType;
@@ -18,6 +19,8 @@ package GameCom.GameComponents  {
 		public var typeID:int = 0;
 		public var arrayIndex:int = 0;
 
+		public var position:Point;
+		
 		public var drawX:int = 0;
 		public var drawY:int = 0;
 		public var drawW:int = 0;
@@ -36,6 +39,7 @@ package GameCom.GameComponents  {
             this.typeID = type;
 			this.TriggerValue = trigger;
 			this.arrayIndex = arrayIndex;
+			this.position = new Point(posX, posY);
 			
             var radians:Number = 0.0174532925;
 			

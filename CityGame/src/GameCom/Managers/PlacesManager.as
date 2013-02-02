@@ -118,6 +118,8 @@ package GameCom.Managers {
 				} else if (sourceID == spawnIndex) {
 					po = new PlaceObject(sourceID, locationX, locationY, rotation, world, Types[sourceID], 0);
 					po.isActive = false;
+					
+					SpawnLocations.push(po);
 				}
 				
 				Objects.push(po);

@@ -1,7 +1,10 @@
 package GameCom.GameComponents {
 	import Box2D.Dynamics.Contacts.b2ContactEdge;
 	import flash.geom.ColorTransform;
+	import flash.geom.Point;
+	import GameCom.Helpers.MathHelper;
 	import GameCom.Managers.GUIManager;
+	import GameCom.Managers.PlacesManager;
 	import GameCom.States.GameScreen;
 	import LORgames.Engine.Keys;
 	import flash.ui.Keyboard;
@@ -331,7 +334,22 @@ package GameCom.GameComponents {
 		 * Locate the nearest spawn point and move the truck there. Reset health to max.
 		 */
 		public function Respawn():void {
+			var closest:PlaceObject = null;
+			var closestDist:Number = Number.MAX_VALUE;
+			var bodyP:Point = new Point(this.x, this.y);
 			
+			for (var i:int = 0; i < PlacesManager.instance.SpawnLocations.length; i++) {
+				var spawnPoint:PlaceObject = PlacesManager.instance.SpawnLocations[i];
+				
+				var nPOS:Number = MathHelper.DistanceSquared(bodyP, spawnPoint.position);
+				
+				if (nPOS < closestDist) {
+					closestDist = nPOS;
+					closest = spawnPoint;
+				}
+			}
+			
+			var offsetX:Number = (this.x - closest.position.x);
 		}
 	}
 }
