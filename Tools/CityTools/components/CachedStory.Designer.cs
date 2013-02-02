@@ -47,6 +47,7 @@
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(251, 150);
             this.flowLayoutPanel1.TabIndex = 0;
+            this.flowLayoutPanel1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.flowLayoutPanel1_MouseClick);
             // 
             // lblStartLocation
             // 
@@ -56,6 +57,7 @@
             this.lblStartLocation.Size = new System.Drawing.Size(103, 13);
             this.lblStartLocation.TabIndex = 0;
             this.lblStartLocation.Text = "Start Location: 0000";
+            this.lblStartLocation.MouseClick += new System.Windows.Forms.MouseEventHandler(this.flowLayoutPanel1_MouseClick);
             // 
             // lblEndLocation
             // 
@@ -65,6 +67,7 @@
             this.lblEndLocation.Size = new System.Drawing.Size(100, 13);
             this.lblEndLocation.TabIndex = 1;
             this.lblEndLocation.Text = "End Location: 0000";
+            this.lblEndLocation.MouseClick += new System.Windows.Forms.MouseEventHandler(this.flowLayoutPanel1_MouseClick);
             // 
             // lblNPCImage
             // 
@@ -74,6 +77,7 @@
             this.lblNPCImage.Size = new System.Drawing.Size(79, 13);
             this.lblNPCImage.TabIndex = 2;
             this.lblNPCImage.Text = "NPC Image: 00";
+            this.lblNPCImage.MouseClick += new System.Windows.Forms.MouseEventHandler(this.flowLayoutPanel1_MouseClick);
             // 
             // lblRepLevel
             // 
@@ -83,6 +87,7 @@
             this.lblRepLevel.Size = new System.Drawing.Size(104, 13);
             this.lblRepLevel.TabIndex = 3;
             this.lblRepLevel.Text = "Rep Level: 0000000";
+            this.lblRepLevel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.flowLayoutPanel1_MouseClick);
             // 
             // lblResType
             // 
@@ -92,6 +97,7 @@
             this.lblResType.Size = new System.Drawing.Size(146, 13);
             this.lblResType.TabIndex = 4;
             this.lblResType.Text = "Res Type: WORDS WORDS";
+            this.lblResType.MouseClick += new System.Windows.Forms.MouseEventHandler(this.flowLayoutPanel1_MouseClick);
             // 
             // lblQuantity
             // 
@@ -101,6 +107,7 @@
             this.lblQuantity.Size = new System.Drawing.Size(88, 13);
             this.lblQuantity.TabIndex = 5;
             this.lblQuantity.Text = "Quantity: 000000";
+            this.lblQuantity.MouseClick += new System.Windows.Forms.MouseEventHandler(this.flowLayoutPanel1_MouseClick);
             // 
             // CachedStory
             // 

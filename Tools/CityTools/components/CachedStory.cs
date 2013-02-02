@@ -10,12 +10,16 @@ using CityTools.Stories;
 
 namespace CityTools.Components {
     internal partial class CachedStory : UserControl {
+        Story story;
+
         public CachedStory(Story story) {
             InitializeComponent();
 
+            this.story = story;
+
             this.lblStartLocation.Text = "Start Location: " + story.startLocation.ToString();
             this.lblEndLocation.Text = "End Location: " + story.endLocation.ToString();
-            this.lblNPCImage.Text = "NPC Image: " + story.npcImage.ToString();
+            this.lblNPCImage.Text = "NPC Image: " + story.npcImage1.ToString() + "_" + story.npcImage2.ToString();
             this.lblRepLevel.Text = "Rep Level: " + story.repLevel.ToString();
             this.lblResType.Text = "Res Type: " + story.resType.ToString();
             this.lblQuantity.Text = "Quantity: " + story.quantity.ToString();
@@ -34,6 +38,12 @@ namespace CityTools.Components {
 
             this.Width = maxWidth;
             this.Height = maxHeight + flowLayoutPanel1.Margin.Top + flowLayoutPanel1.Margin.Bottom; ;
+        }
+
+        private void flowLayoutPanel1_MouseClick(object sender, MouseEventArgs e) {
+            StoryForm.instance.Show();
+            StoryForm.instance.Fill(story);
+            MainWindow.instance.paintMode = PaintMode.Story;
         }
     }
 }

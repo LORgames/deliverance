@@ -14,6 +14,7 @@ using CityTools.Core;
 using CityTools.Nodes;
 using CityTools.Places;
 using CityTools.Physics;
+using CityTools.Stories;
 
 namespace CityTools {
     public enum PaintMode {
@@ -80,6 +81,7 @@ namespace CityTools {
             PlacesObjectCache.InitializeCache();
             NodeCache.InitializeCache();
             PhysicsCache.InitializeCache();
+            StoryCache.InitializeCache();
 
             obj_scenary_objs.Controls.Add(new ObjectCacheControl("Road"));
             places_tab.Controls.Add(new ObjectCacheControl(PlacesObjectCache.PLACES_FOLDER, false));
@@ -387,6 +389,8 @@ namespace CityTools {
             NodeCache.SaveCache();
 
             PhysicsCache.SaveCache();
+
+            StoryCache.SaveCache();
 
             try {
                 minimapBuffer.bmp.Save("minimap.jpg");

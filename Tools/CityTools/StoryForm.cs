@@ -16,6 +16,8 @@ namespace CityTools {
         private static List<PlacesObject> selectedObjects = new List<PlacesObject>();
         public static StoryForm instance;
 
+        private int index = -1;
+
         public StoryForm() {
             instance = this;
             InitializeComponent();
@@ -38,28 +40,57 @@ namespace CityTools {
         }
 
         private void btnSave_Click(object sender, EventArgs e) {
-            Story temp = new Story(int.Parse(txtStartLocation.Text), int.Parse(txtEndLocation.Text), (short)cmbNPCImage.SelectedIndex,
-                int.Parse(txtRepLevel.Text), (byte)int.Parse(txtResourceType.Text), int.Parse(txtQuantity.Text),
-                txtStartText.Text, txtEndText.Text);
+            if (txtStartLocation.Text != "" && txtEndLocation.Text != "" && cmbNPCImage1.SelectedIndex != -1
+                && cmbNPCImage2.SelectedIndex != -1 && txtRepLevel.Text != "" && cmbResourceType.SelectedIndex != -1
+                && txtQuantity.Text != "") {
 
-            StoryCache.AddStory(temp);
+                if (btnSave.Text == "Save") {
+                
+                    Story temp = new Story(int.Parse(txtStartLocation.Text), int.Parse(txtEndLocation.Text),
+                        (short)cmbNPCImage1.SelectedIndex, (short)cmbNPCImage2.SelectedIndex,
+                        int.Parse(txtRepLevel.Text), (byte)cmbResourceType.SelectedIndex, int.Parse(txtQuantity.Text),
+                        txtStartText.Text, txtEndText.Text);
 
-            MainWindow.instance.paintMode = PaintMode.Off;
+                    StoryCache.AddStory(temp);
+                } else {
+                    
+                    StoryCache.stories[index].startLocation = int.Parse(txtStartLocation.Text);
+                    StoryCache.stories[index].endLocation = int.Parse(txtEndLocation.Text);
+                    StoryCache.stories[index].npcImage1 = (short)cmbNPCImage1.SelectedIndex;
+                    StoryCache.stories[index].npcImage2 = (short)cmbNPCImage2.SelectedIndex;
+                    StoryCache.stories[index].repLevel = int.Parse(txtRepLevel.Text);
+                    StoryCache.stories[index].resType = (byte)cmbResourceType.SelectedIndex;
+                    StoryCache.stories[index].quantity = int.Parse(txtQuantity.Text);
+                    StoryCache.stories[index].startText = txtStartText.Text;
+                    StoryCache.stories[index].endText = txtEndText.Text;
+                }
 
-            MainWindow.instance.story_storyPan.Controls[0].Invalidate();
+                MainWindow.instance.paintMode = PaintMode.Off;
 
-            this.Hide();
+                MainWindow.instance.story_storyPan.Controls[0].Invalidate();
+
+                this.Hide();
+            }
         }
 
         private void StoryForm_Shown(object sender, EventArgs e) {
             txtStartLocation.Text = "";
             txtEndLocation.Text = "";
-            cmbNPCImage.SelectedIndex = -1;
+            cmbNPCImage1.SelectedIndex = -1;
+            cmbNPCImage2.SelectedIndex = -1;
             txtRepLevel.Text = "";
-            txtResourceType.Text = "";
+            cmbResourceType.SelectedIndex = -1;
+            cmbResourceType.Items.Clear();
+            for (int i = 0; i < Places.PlacesObjectCache.resources.Count; i++) {
+                cmbResourceType.Items.Add(Places.PlacesObjectCache.resources[i]);
+            }
             txtQuantity.Text = "";
             txtStartText.Text = "";
             txtEndText.Text = "";
+
+            index = -1;
+
+            btnSave.Text = "Save";
         }
 
         private void StoryForm_FormClosing(object sender, FormClosingEventArgs e) {
@@ -115,6 +146,22 @@ namespace CityTools {
             }
 
             return true;
+        }
+
+        internal void Fill(Story story) {
+            index = StoryCache.stories.IndexOf(story);
+
+            txtStartLocation.Text = story.startLocation.ToString();
+            txtEndLocation.Text = story.endLocation.ToString();
+            cmbNPCImage1.SelectedIndex = story.npcImage1;
+            cmbNPCImage2.SelectedIndex = story.npcImage2;
+            txtRepLevel.Text = story.repLevel.ToString();
+            cmbResourceType.SelectedIndex = story.resType;
+            txtQuantity.Text = story.quantity.ToString();
+            txtStartText.Text = story.startText;
+            txtEndText.Text = story.endText;
+
+            btnSave.Text = "Edit";
         }
     }
 }
