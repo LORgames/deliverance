@@ -2,6 +2,8 @@ package GameCom.GameComponents {
 	import Box2D.Dynamics.Contacts.b2ContactEdge;
 	import flash.geom.ColorTransform;
 	import flash.geom.Point;
+	import GameCom.GameComponents.Weapons.BaseWeapon;
+	import GameCom.GameComponents.Weapons.MachineGun;
 	import GameCom.Helpers.MathHelper;
 	import GameCom.Managers.GUIManager;
 	import GameCom.Managers.PlacesManager;
@@ -72,6 +74,8 @@ package GameCom.GameComponents {
 		
 		private var leftJoint:b2RevoluteJoint;
 		private var rightJoint:b2RevoluteJoint;
+		
+		public var Wep:BaseWeapon;
 		
 		public function PlayerTruck(spawnPosition:b2Vec2, world:b2World, worldSpr:Sprite) {
 			worldSpr.addChild(this);
@@ -206,6 +210,9 @@ package GameCom.GameComponents {
 			world.CreateJoint(rightRearJointDef);
 			
 			FixUpgradeValues();
+			
+			Wep = new MachineGun(world);
+			this.addChild(Wep);
 		}
 		
 		private function killOrthogonalVelocity(targetBody:b2Body):void {
@@ -306,7 +313,6 @@ package GameCom.GameComponents {
 			damage *= 1 - (ARMOUR_INC_PER_LEVEL * armourUpgradeLevel);
 			
 			if(damage > 0) {
-				trace("HP LOSS: " + damage + " armour negated " + (ARMOUR_INC_PER_LEVEL * armourUpgradeLevel * 100) + "%");
 				healthCurrent -= damage;
 				HealthPercent = Number(healthCurrent) / healthMax;
 				GUIManager.I.UpdateCache();
@@ -370,7 +376,16 @@ package GameCom.GameComponents {
 			leftRearWheel.SetLinearVelocity(new b2Vec2());
 			rightRearWheel.SetLinearVelocity(new b2Vec2());
 			
+			body.SetAngularVelocity(0);
+			leftWheel.SetAngularVelocity(0);
+			rightWheel.SetAngularVelocity(0);
+			leftMidWheel.SetAngularVelocity(0);
+			rightMidWheel.SetAngularVelocity(0);
+			leftRearWheel.SetAngularVelocity(0);
+			rightRearWheel.SetAngularVelocity(0);
+			
 			healthCurrent = healthMax;
+			GUIManager.I.Update();
 		}
 	}
 }

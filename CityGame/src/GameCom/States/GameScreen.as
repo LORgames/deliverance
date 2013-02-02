@@ -30,6 +30,8 @@ package GameCom.States {
 	import GameCom.Helpers.StaticBoxCreator;
 	import GameCom.Managers.BGManager;
 	import GameCom.Managers.ScenicManager;
+	import LORgames.Engine.Logger;
+	import LORgames.Engine.MessageBox;
 	/**
 	 * ...
 	 * @author P. Fox
@@ -136,6 +138,11 @@ package GameCom.States {
 			this.addChild(gui);
 			
 			MissionManager.GenerateAllMissions();
+			
+			this.addEventListener(MouseEvent.MOUSE_MOVE, MouseMove, false, 0, true);
+			this.addEventListener(MouseEvent.MOUSE_DOWN, MouseDown, false, 0, true);
+			
+			new MessageBox("Sound failed to open", Logger.MSG_ERROR, null, "OK");
 		}
 		
 		private function Update(e:Event):void {
@@ -171,6 +178,16 @@ package GameCom.States {
 		
 		public function Redraw(e:*= null):void {
 			//What even is this supposed to do?
+		}
+		
+		public function MouseMove(e:MouseEvent):void {
+			if (!simulating) return;
+			player.Wep.Update(e.stageX, e.stageY);
+		}
+		
+		public function MouseDown(e:MouseEvent):void {
+			if (!simulating) return;
+			player.Wep.Fire();
 		}
 		
 		private function Pause():void {

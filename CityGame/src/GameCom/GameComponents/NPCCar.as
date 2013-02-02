@@ -63,7 +63,7 @@ package GameCom.GameComponents
 			
 			this.nodeManager = nodeManager;
 			
-			var CarA:Class = ThemeManager.GetClassFromSWF("TruckBits/Cars.swf", "LORgames.CarA");
+			var CarA:Class = ThemeManager.GetClassFromSWF("SWFs/Cars.swf", "LORgames.CarA");
 			this.addChild(new CarA());
 			
 			//this.getChildAt(0).x = -this.getChildAt(0).width / 2;
