@@ -44,7 +44,9 @@ package GameCom.GameComponents
 		private var leftRearWheel:b2Body;
 		private var rightRearWheel:b2Body;
 		
+		// collision scanner
 		private var collisionScanner:b2Body;
+		public var collisions:int;
 		
 		private var leftJoint:b2RevoluteJoint;
 		private var rightJoint:b2RevoluteJoint;
@@ -86,14 +88,14 @@ package GameCom.GameComponents
 			bodyBodyDef.linearDamping = 1;
 			bodyBodyDef.angularDamping = 1;
 			bodyBodyDef.position = spawnPosition.Copy();
+			bodyBodyDef.userData = this.name;
 			
-			//TODO: TRYING THIS
+			//Angle the car body so it spawns good angles
 			bodyBodyDef.angle = angle - Math.PI / 2;
 			
 			//Create the body
 			body = world.CreateBody(bodyBodyDef);
 			body.CreateFixture(bodyFixtureDef);
-			
 			// Car Wheels
 			
 			//Wheel shape
@@ -110,6 +112,7 @@ package GameCom.GameComponents
 			wheelBodyDef.type = b2Body.b2_dynamicBody;
 			wheelBodyDef.position = spawnPosition.Copy();
 			wheelBodyDef.angle = angle - Math.PI / 2;
+			wheelBodyDef.userData = this.name;
 			
 			//Create the body
 			wheelBodyDef.position.Add(leftFrontWheelPosition);
@@ -173,14 +176,18 @@ package GameCom.GameComponents
 			var scannerFixtureDef:b2FixtureDef = new b2FixtureDef();
 			scannerFixtureDef.shape = scannerShape;
 			scannerFixtureDef.density = 0.2;
-			scannerFixtureDef.isSensor = true; //TODO: finish sensing collisions
+			scannerFixtureDef.isSensor = true;
+			scannerFixtureDef.userData = "collisionScanner";
+			scannerFixtureDef.filter.categoryBits = 4294967293; //-3 as uint
 			
 			var scannerBodyDef:b2BodyDef = new b2BodyDef();
 			scannerBodyDef.type = b2Body.b2_dynamicBody;
 			scannerBodyDef.linearDamping = 1.0;
 			scannerBodyDef.angularDamping = 1.0;
 			scannerBodyDef.position = spawnPosition.Copy();
-			scannerBodyDef.position.x -= 2.0;
+			scannerBodyDef.position.Add(MathHelper.RotateVector(new b2Vec2(-2.0,0.0), angle));
+			scannerBodyDef.userData = this.name;
+			scannerBodyDef.angle = angle;
 			
 			collisionScanner = world.CreateBody(scannerBodyDef);
 			collisionScanner.CreateFixture(scannerFixtureDef);
@@ -191,14 +198,7 @@ package GameCom.GameComponents
 			
 			world.CreateJoint(scannerJointDef);
 			
-			/*
-			var rightRearJointDef:b2PrismaticJointDef = new b2PrismaticJointDef();
-			rightRearJointDef.Initialize(body, rightRearWheel, rightRearWheel.GetWorldCenter(), new b2Vec2(1,0));
-			rightRearJointDef.enableLimit = true;
-			rightRearJointDef.lowerTranslation = rightRearJointDef.upperTranslation = 0;
-			 
-			world.CreateJoint(leftRearJointDef);
-			 */
+			collisions = 0;
 			
 			//Driving
 			var ldirection:b2Vec2 = leftWheel.GetTransform().R.col2.Copy();
@@ -237,9 +237,16 @@ package GameCom.GameComponents
 				
 				var tNode:Node = nodeManager.GetNode(targetNode);
 				
-				// always accelerate toward targetNode
-				if(engineSpeed > -HORSEPOWER_MAX) {
-					engineSpeed -= HORSEPOWER_INC;
+				trace(collisions);
+				// always accelerate toward targetNode UNLESS ABOUT TO COLLIDE OMFG JUST LIKE JACOB'S DRIVING 
+				if (collisions > 0) {
+					engineSpeed = 0;
+					body.SetLinearDamping(SIDEWAYS_FRICTION_FORCE);
+				} else {
+					body.SetLinearDamping(1.0);
+					if(engineSpeed > -HORSEPOWER_MAX) {
+						engineSpeed -= HORSEPOWER_INC;
+					}
 				}
 				
 				// find angle to targetNode and steer towards
@@ -305,6 +312,7 @@ package GameCom.GameComponents
 			world.DestroyBody(rightWheel);
 			world.DestroyBody(leftRearWheel);
 			world.DestroyBody(rightRearWheel);
+			world.DestroyBody(collisionScanner);
 		}
 	}
 

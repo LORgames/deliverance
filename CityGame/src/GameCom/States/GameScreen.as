@@ -120,8 +120,6 @@ package GameCom.States {
 			// player is added to objectLayer
 			player = new PlayerTruck(new b2Vec2(12762/Global.PHYSICS_SCALE, 14547/Global.PHYSICS_SCALE), world, placesLayer);
 			
-			world.SetContactListener(new CollisionSolver(player));
-			
 			// bgManager (ground) is added to groundLayer
 			bgManager = new BGManager(groundLayer, player);
 			
@@ -133,6 +131,8 @@ package GameCom.States {
 			
 			// places manager gets its layer
 			placesManager = new PlacesManager(placesLayer, player, world);
+			
+			world.SetContactListener(new CollisionSolver(player, npcManager));
 			
 			gui = new GUIManager(player, Pause);
 			this.addChild(gui);

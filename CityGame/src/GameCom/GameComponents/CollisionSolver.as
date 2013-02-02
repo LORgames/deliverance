@@ -1,9 +1,11 @@
 package GameCom.GameComponents {
+	import Box2D.Collision.b2ContactID;
 	import Box2D.Dynamics.b2Body;
 	import Box2D.Dynamics.b2ContactImpulse;
 	import Box2D.Dynamics.b2ContactListener;
 	import Box2D.Dynamics.b2Fixture;
 	import Box2D.Dynamics.Contacts.b2Contact;
+	import GameCom.Managers.NPCManager;
 	import GameCom.Managers.TriggerManager;
 	/**
 	 * ...
@@ -12,11 +14,45 @@ package GameCom.GameComponents {
 	public class CollisionSolver extends b2ContactListener {
 		
 		public var truck:PlayerTruck;
+		public var npcManager:NPCManager;
 		
-		public function CollisionSolver(truck:PlayerTruck) {
+		public function CollisionSolver(truck:PlayerTruck, npcManager:NPCManager) {
 			this.truck = truck;
+			this.npcManager = npcManager;
 		}
  
+		public override function BeginContact(contact:b2Contact):void {
+			var npc:NPCCar;
+			if (contact.GetFixtureA().GetUserData() == "collisionScanner") {
+				npc = npcManager.GetNPCByName(contact.GetFixtureA().GetBody().GetUserData());
+				if (npc != null && (npc.name != contact.GetFixtureB().GetBody().GetUserData())) {
+					npc.collisions++;
+				}
+			}
+			if (contact.GetFixtureB().GetUserData() == "collisionScanner") {
+				npc = npcManager.GetNPCByName(contact.GetFixtureB().GetBody().GetUserData());
+				if (npc != null && (npc.name != contact.GetFixtureA().GetBody().GetUserData())) {
+					npc.collisions++;
+				}
+			}
+		}
+		
+		public override function EndContact(contact:b2Contact):void {
+			var npc:NPCCar;
+			if (contact.GetFixtureA().GetUserData() == "collisionScanner") {
+				npc = npcManager.GetNPCByName(contact.GetFixtureA().GetBody().GetUserData());
+				if (npc != null && (npc.name != contact.GetFixtureB().GetBody().GetUserData())) {
+					npc.collisions--;
+				}
+			}
+			if (contact.GetFixtureB().GetUserData() == "collisionScanner") {
+				npc = npcManager.GetNPCByName(contact.GetFixtureB().GetBody().GetUserData());
+				if (npc != null && (npc.name != contact.GetFixtureA().GetBody().GetUserData())) {
+					npc.collisions--;
+				}
+			}
+		}
+		
         /*public override function BeginContact(contact:b2Contact):void {
 			var tFix:b2Body = null;
 			var oFix:b2Fixture = null;

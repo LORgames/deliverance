@@ -45,6 +45,15 @@ package GameCom.Managers
 			nodeManager = new NodeManager();
 		}
 		
+		public function GetNPCByName(name:String):NPCCar {
+			for each (var car:NPCCar in cars) {
+				if (car.name == name) {
+					return car;
+				}
+			}
+			return null;
+		}
+		
 		public function Update():void {
 			var fullRect:Rectangle = new Rectangle(player.x - (worldSpr.stage.stageWidth) / 2 - STAGE_OFFSET, player.y - worldSpr.stage.stageHeight / 2 - STAGE_OFFSET, worldSpr.stage.stageWidth + STAGE_OFFSET * 2, worldSpr.stage.stageHeight + STAGE_OFFSET * 2);
 			var screenRect:Rectangle = new Rectangle(player.x - (worldSpr.stage.stageWidth) / 2, player.y - worldSpr.stage.stageHeight / 2, worldSpr.stage.stageWidth, worldSpr.stage.stageHeight);

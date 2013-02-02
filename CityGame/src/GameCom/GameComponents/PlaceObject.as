@@ -54,6 +54,7 @@ package GameCom.GameComponents  {
 			bodyFixtureDef.shape = bodyShape;
 			bodyFixtureDef.isSensor = true;
 			bodyFixtureDef.userData = this;
+			bodyFixtureDef.filter.categoryBits = 4294967293; //-3 as a uint
 			
 			//Create the defintion
 			var bodyBodyDef:b2BodyDef = new b2BodyDef();
