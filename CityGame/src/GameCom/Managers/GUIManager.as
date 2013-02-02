@@ -201,6 +201,7 @@ package GameCom.Managers
 			
 			Pause.call();
 			
+			player.FixUpgradeValues();
 			player.Respawn();
 		}
 		

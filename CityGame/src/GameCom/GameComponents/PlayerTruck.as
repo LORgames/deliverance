@@ -296,6 +296,8 @@ package GameCom.GameComponents {
 				
 				contacts = contacts.next;
 			}
+			
+			if (healthCurrent < 0) Respawn();
 		}
 		
 		public function Damage(damage:int):void {
@@ -349,7 +351,26 @@ package GameCom.GameComponents {
 				}
 			}
 			
-			var offsetX:Number = (this.x - closest.position.x);
+			var offsetX:Number = closest.position.x / Global.PHYSICS_SCALE;
+			var offsetY:Number = closest.position.y / Global.PHYSICS_SCALE;
+			
+			body.SetPosition(new b2Vec2(offsetX, offsetY));
+			leftWheel.SetPosition(new b2Vec2(offsetX, offsetY));
+			rightWheel.SetPosition(new b2Vec2(offsetX, offsetY));
+			leftMidWheel.SetPosition(new b2Vec2(offsetX, offsetY));
+			rightMidWheel.SetPosition(new b2Vec2(offsetX, offsetY));
+			leftRearWheel.SetPosition(new b2Vec2(offsetX, offsetY));
+			rightRearWheel.SetPosition(new b2Vec2(offsetX, offsetY));
+			
+			body.SetLinearVelocity(new b2Vec2());
+			leftWheel.SetLinearVelocity(new b2Vec2());
+			rightWheel.SetLinearVelocity(new b2Vec2());
+			leftMidWheel.SetLinearVelocity(new b2Vec2());
+			rightMidWheel.SetLinearVelocity(new b2Vec2());
+			leftRearWheel.SetLinearVelocity(new b2Vec2());
+			rightRearWheel.SetLinearVelocity(new b2Vec2());
+			
+			healthCurrent = healthMax;
 		}
 	}
 }
