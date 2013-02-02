@@ -77,7 +77,7 @@ package GameCom.Managers
 				safeToSpawn = true;
 				
 				area.lowerBound = new b2Vec2(spawnPoint.x / Global.PHYSICS_SCALE - 2, spawnPoint.y / Global.PHYSICS_SCALE - 2);
-				area.lowerBound = new b2Vec2(spawnPoint.x / Global.PHYSICS_SCALE + 2, spawnPoint.y / Global.PHYSICS_SCALE + 2);
+				area.upperBound = new b2Vec2(spawnPoint.x / Global.PHYSICS_SCALE + 2, spawnPoint.y / Global.PHYSICS_SCALE + 2);
 				
 				world.QueryAABB(HasWorldPhysicsThing, area);
 				
