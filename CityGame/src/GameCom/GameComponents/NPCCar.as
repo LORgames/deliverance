@@ -83,6 +83,7 @@ package GameCom.GameComponents
 			var bodyFixtureDef:b2FixtureDef = new b2FixtureDef();
 			bodyFixtureDef.shape = bodyShape;
 			bodyFixtureDef.density = 0.2;
+			bodyFixtureDef.userData = this;
 			
 			//Create the defintion
 			var bodyBodyDef:b2BodyDef = new b2BodyDef();
@@ -90,7 +91,7 @@ package GameCom.GameComponents
 			bodyBodyDef.linearDamping = 1;
 			bodyBodyDef.angularDamping = 1;
 			bodyBodyDef.position = spawnPosition.Copy();
-			bodyBodyDef.userData = this.name;
+			bodyBodyDef.userData = this;
 			
 			//Angle the car body so it spawns good angles
 			bodyBodyDef.angle = angle - Math.PI / 2;
@@ -108,13 +109,13 @@ package GameCom.GameComponents
 			var wheelFixtureDef:b2FixtureDef = new b2FixtureDef();
 			wheelFixtureDef.shape = wheelShape;
 			wheelFixtureDef.density = 1.0;
+			wheelFixtureDef.userData = this;
 			
 			//Create the defintion
 			var wheelBodyDef:b2BodyDef = new b2BodyDef();
 			wheelBodyDef.type = b2Body.b2_dynamicBody;
 			wheelBodyDef.position = spawnPosition.Copy();
 			wheelBodyDef.angle = angle - Math.PI / 2;
-			wheelBodyDef.userData = this.name;
 			
 			//Create the body
 			wheelBodyDef.position.Add(leftFrontWheelPosition);
@@ -179,7 +180,7 @@ package GameCom.GameComponents
 			scannerFixtureDef.shape = scannerShape;
 			scannerFixtureDef.density = 0.2;
 			scannerFixtureDef.isSensor = true;
-			scannerFixtureDef.userData = "collisionScanner";
+			scannerFixtureDef.userData = this;
 			scannerFixtureDef.filter.groupIndex = -3;
 			
 			var scannerBodyDef:b2BodyDef = new b2BodyDef();
@@ -188,7 +189,7 @@ package GameCom.GameComponents
 			scannerBodyDef.angularDamping = 1.0;
 			scannerBodyDef.position = spawnPosition.Copy();
 			scannerBodyDef.position.Add(MathHelper.RotateVector(new b2Vec2(-2.5,0.0), angle));
-			scannerBodyDef.userData = this.name;
+			scannerBodyDef.userData = "collisionScanner";
 			scannerBodyDef.angle = angle;
 			
 			collisionScanner = world.CreateBody(scannerBodyDef);

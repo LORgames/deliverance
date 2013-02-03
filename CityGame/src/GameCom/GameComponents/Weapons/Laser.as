@@ -3,6 +3,10 @@ package GameCom.GameComponents.Weapons
 	import Box2D.Common.Math.b2Vec2;
 	import Box2D.Dynamics.b2Fixture;
 	import Box2D.Dynamics.b2World;
+	import flash.display.MovieClip;
+	import flash.geom.ColorTransform;
+	import flash.sampler.NewObjectSample;
+	import GameCom.GameComponents.NPCCar;
 	import LORgames.Engine.Mousey;
 	/**
 	 * ...
@@ -42,7 +46,16 @@ package GameCom.GameComponents.Weapons
 				var size:Number = d.Length();
 				
 				fixtureHit = null;
+				distance = 1.0;
+				
 				World.RayCast(Wrappey, b1, b2);
+				
+				if (distance < 1.0) {
+					if (fixtureHit.GetUserData() is NPCCar) {
+						var car:NPCCar = fixtureHit.GetUserData() as NPCCar;
+						(car.getChildAt(0) as MovieClip).getChildAt(0).transform.colorTransform = new ColorTransform(Math.random(), Math.random(), Math.random());
+					}
+				}
 				
 				this.graphics.moveTo(0, 0);
 				this.graphics.lineTo(size*distance*Global.PHYSICS_SCALE, 0);
@@ -50,13 +63,16 @@ package GameCom.GameComponents.Weapons
 		}
 		
 		private function Wrappey(fixture:b2Fixture, point:b2Vec2, normal:b2Vec2, fraction:Number):Number {
-			if (fixture.IsSensor() || fixture.GetFilterData().maskBits == 0 || IgnoreList.indexOf(fixture) != -1) {
-				return 1.0;
+			if (fixture.IsSensor() || IgnoreList.indexOf(fixture) != -1) {
+				return distance;
 			}
 			
-			distance = fraction;
-			fixtureHit = fixture;
-			return fraction;
+			if(fraction < distance) {
+				distance = fraction;
+				fixtureHit = fixture;
+			}
+			
+			return distance;
 		}
 		
 	}

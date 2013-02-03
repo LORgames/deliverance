@@ -40,7 +40,7 @@ package GameCom.GameComponents
 			//Create the fixture
 			var bodyFixtureDef:b2FixtureDef = new b2FixtureDef();
 			bodyFixtureDef.shape = bodyShape;
-//			bodyFixtureDef.isSensor = true;
+			bodyFixtureDef.isSensor = true;
 			bodyFixtureDef.userData = this;
 			bodyFixtureDef.filter.categoryBits = 0x0; // This should be a major speedup
 			

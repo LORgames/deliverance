@@ -22,7 +22,7 @@ package GameCom.GameComponents {
 		}
  
 		public override function BeginContact(contact:b2Contact):void {
-			var npc:NPCCar;
+			/*var npc:NPCCar;
 			if (contact.GetFixtureA().GetUserData() == "collisionScanner") {
 				npc = npcManager.GetNPCByName(contact.GetFixtureA().GetBody().GetUserData());
 				if (npc != null && (npc.name != contact.GetFixtureB().GetBody().GetUserData())) {
@@ -34,11 +34,33 @@ package GameCom.GameComponents {
 				if (npc != null && (npc.name != contact.GetFixtureA().GetBody().GetUserData())) {
 					npc.collisions++;
 				}
+			}*/
+			
+			/*var npc:NPCCar;
+			if (contact.GetFixtureA().GetUserData() == "collisionScanner") {
+				npc = npcManager.GetNPCByName(contact.GetFixtureA().GetBody().GetUserData());
+				if (npc != null && (npc.name != contact.GetFixtureB().GetBody().GetUserData())) {
+					npc.collisions++;
+				}
+			}
+			if (contact.GetFixtureB().GetUserData() == "collisionScanner") {
+				npc = npcManager.GetNPCByName(contact.GetFixtureB().GetBody().GetUserData());
+				if (npc != null && (npc.name != contact.GetFixtureA().GetBody().GetUserData())) {
+					npc.collisions++;
+				}
+			}*/
+			
+			if (contact.GetFixtureA().GetBody().GetUserData() == "collisionScanner" && contact.GetFixtureA().GetUserData() != contact.GetFixtureB().GetUserData()) {
+				(contact.GetFixtureA().GetUserData() as NPCCar).collisions++;
+			}
+			
+			if (contact.GetFixtureB().GetBody().GetUserData() == "collisionScanner" && contact.GetFixtureA().GetUserData() != contact.GetFixtureB().GetUserData()) {
+				(contact.GetFixtureB().GetUserData() as NPCCar).collisions++;
 			}
 		}
 		
 		public override function EndContact(contact:b2Contact):void {
-			var npc:NPCCar;
+			/*var npc:NPCCar;
 			if (contact.GetFixtureA().GetUserData() == "collisionScanner") {
 				npc = npcManager.GetNPCByName(contact.GetFixtureA().GetBody().GetUserData());
 				if (npc != null && (npc.name != contact.GetFixtureB().GetBody().GetUserData())) {
@@ -50,6 +72,14 @@ package GameCom.GameComponents {
 				if (npc != null && (npc.name != contact.GetFixtureA().GetBody().GetUserData())) {
 					npc.collisions--;
 				}
+			}*/
+			
+			if (contact.GetFixtureA().GetBody().GetUserData() == "collisionScanner" && contact.GetFixtureA().GetUserData() != contact.GetFixtureB().GetUserData()) {
+				(contact.GetFixtureA().GetUserData() as NPCCar).collisions--;
+			}
+			
+			if (contact.GetFixtureB().GetBody().GetUserData() == "collisionScanner" && contact.GetFixtureA().GetUserData() != contact.GetFixtureB().GetUserData()) {
+				(contact.GetFixtureB().GetUserData() as NPCCar).collisions--;
 			}
 		}
 		
