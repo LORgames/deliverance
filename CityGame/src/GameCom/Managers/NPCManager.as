@@ -25,11 +25,11 @@ package GameCom.Managers
 		private var worldSpr:Sprite;
 		private var stage:DisplayObject;
 		
-		private var maxCars:int = 10;
-		private var carSpawnChance:Number = 0.25;
+		private var maxCars:int = 15;
+		private var carSpawnChance:Number = 0.75;
 		private var cars:Vector.<NPCCar> = new Vector.<NPCCar>();
 		
-		private const STAGE_OFFSET:int = 200;
+		private const STAGE_OFFSET:int = 1000;
 		
 		private var area:b2AABB = new b2AABB();
 		private var safeToSpawn:Boolean = true;

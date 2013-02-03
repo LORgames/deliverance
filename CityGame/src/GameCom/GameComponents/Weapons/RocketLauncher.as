@@ -5,16 +5,16 @@ package GameCom.GameComponents.Weapons
 	 * ...
 	 * @author ...
 	 */
-	public class MachineGun extends BaseWeapon {
+	public class RocketLauncher extends BaseWeapon {
 		
 		private var fireTimeout:int = 0;
 		
-		public function MachineGun(world:b2World) {
+		public function RocketLauncher(world:b2World) {
 			super(world);
 			
 			FIRE_RATE = 0.1;
 			
-			var cls:Class = ThemeManager.GetClassFromSWF("SWFs/Weapons.swf", "LORgames.MachineGun");
+			var cls:Class = ThemeManager.GetClassFromSWF("SWFs/Weapons.swf", "LORgames.RocketPod");
 			this.addChild(new cls());
 		}
 		

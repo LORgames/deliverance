@@ -13,10 +13,12 @@ package LORgames.Engine {
 		
 		private static var downKeys:Vector.<Boolean> = new Vector.<Boolean>(256, true);
 		
-		public static function Initialize(stage:Stage):void {
+		public static function Initialize(stage:Stage, activateMouse:Boolean = true):void {
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, KeyDown, false, 0, true);
 			stage.addEventListener(KeyboardEvent.KEY_UP, KeyUp, false, 0, true);
 			stage.addEventListener(Event.DEACTIVATE, WipeKeys, false, 0, true);
+			
+			if (activateMouse) Mousey.Initialize(stage);
 		}
 		
 		private static function KeyDown(ke:KeyboardEvent):void {

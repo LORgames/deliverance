@@ -3,6 +3,7 @@ package GameCom.GameComponents {
 	import flash.geom.ColorTransform;
 	import flash.geom.Point;
 	import GameCom.GameComponents.Weapons.BaseWeapon;
+	import GameCom.GameComponents.Weapons.Laser;
 	import GameCom.GameComponents.Weapons.MachineGun;
 	import GameCom.Helpers.MathHelper;
 	import GameCom.Managers.GUIManager;
@@ -109,6 +110,7 @@ package GameCom.GameComponents {
 			var bodyFixtureDef:b2FixtureDef = new b2FixtureDef();
 			bodyFixtureDef.shape = bodyShape;
 			bodyFixtureDef.density = 0.2;
+			bodyFixtureDef.filter.categoryBits = 3;
 			
 			//Create the defintion
 			var bodyBodyDef:b2BodyDef = new b2BodyDef();
@@ -211,7 +213,16 @@ package GameCom.GameComponents {
 			
 			FixUpgradeValues();
 			
-			Wep = new MachineGun(world);
+			Wep = new Laser(world);
+			
+			Wep.IgnoreList.push(body.GetFixtureList());
+			Wep.IgnoreList.push(leftRearWheel.GetFixtureList());
+			Wep.IgnoreList.push(rightRearWheel.GetFixtureList());
+			Wep.IgnoreList.push(leftMidWheel.GetFixtureList());
+			Wep.IgnoreList.push(rightMidWheel.GetFixtureList());
+			Wep.IgnoreList.push(leftWheel.GetFixtureList());
+			Wep.IgnoreList.push(rightWheel.GetFixtureList());
+			
 			this.addChild(Wep);
 		}
 		
@@ -304,6 +315,7 @@ package GameCom.GameComponents {
 				contacts = contacts.next;
 			}
 			
+			Wep.Update();
 			if (healthCurrent < 0) Respawn();
 		}
 		

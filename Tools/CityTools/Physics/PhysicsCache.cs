@@ -35,6 +35,13 @@ namespace CityTools.Physics {
                         float r2 = f.GetFloat();
 
                         shapes.Add(new PhysicsCircle(new System.Drawing.RectangleF(r0, r1, r2, r2), true));
+                    } else if (shapeType == (int)PhysicsShapes.Edge) {
+                        float r0 = f.GetFloat();
+                        float r1 = f.GetFloat();
+                        float r2 = f.GetFloat();
+                        float r3 = f.GetFloat();
+
+                        shapes.Add(new PhysicsEdge(new System.Drawing.RectangleF(r0, r1, r2, r3), true));
                     }
                 }
 
@@ -64,6 +71,11 @@ namespace CityTools.Physics {
                     f.AddFloat(ps.aabb.Left);
                     f.AddFloat(ps.aabb.Top);
                     f.AddFloat(ps.aabb.Width);
+                } else if (ps.myShape == PhysicsShapes.Edge) {
+                    f.AddFloat((ps as PhysicsEdge).p0.X);
+                    f.AddFloat((ps as PhysicsEdge).p0.Y);
+                    f.AddFloat((ps as PhysicsEdge).p1.X);
+                    f.AddFloat((ps as PhysicsEdge).p1.Y);
                 }
             }
             

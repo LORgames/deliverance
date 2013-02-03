@@ -9,7 +9,8 @@ using Box2CS;
 namespace CityTools.Physics {
     public enum PhysicsShapes {
         Rectangle,
-        Circle
+        Circle,
+        Edge
     }
     
     public class PhysicsShape : ObjectSystem.BaseObject {
@@ -43,8 +44,8 @@ namespace CityTools.Physics {
         }
 
         public override void DrawMe(Graphics gfx, PointF offset, float zoom, Pen outline, Brush middle) {
-            gfx.FillRectangle(PhysicsDrawer.fillBrush, (aabb.Left - offset.X) * zoom, (aabb.Top - offset.Y) * zoom, aabb.Width * zoom, aabb.Height * zoom);
-            gfx.DrawRectangle(PhysicsDrawer.outlinePen, (aabb.Left - offset.X) * zoom, (aabb.Top - offset.Y) * zoom, aabb.Width * zoom, aabb.Height * zoom);
+            gfx.FillRectangle(middle, (aabb.Left - offset.X) * zoom, (aabb.Top - offset.Y) * zoom, aabb.Width * zoom, aabb.Height * zoom);
+            gfx.DrawRectangle(outline, (aabb.Left - offset.X) * zoom, (aabb.Top - offset.Y) * zoom, aabb.Width * zoom, aabb.Height * zoom);
         }
     }
 
@@ -54,8 +55,37 @@ namespace CityTools.Physics {
         }
 
         public override void DrawMe(Graphics gfx, PointF offset, float zoom, Pen outline, Brush middle) {
-            gfx.FillEllipse(PhysicsDrawer.fillBrush, (aabb.Left - offset.X) * zoom, (aabb.Top - offset.Y) * zoom, aabb.Width * zoom, aabb.Width * zoom);
-            gfx.DrawEllipse(PhysicsDrawer.outlinePen, (aabb.Left - offset.X) * zoom, (aabb.Top - offset.Y) * zoom, aabb.Width * zoom, aabb.Width * zoom);
+            gfx.FillEllipse(middle, (aabb.Left - offset.X) * zoom, (aabb.Top - offset.Y) * zoom, aabb.Width * zoom, aabb.Width * zoom);
+            gfx.DrawEllipse(outline, (aabb.Left - offset.X) * zoom, (aabb.Top - offset.Y) * zoom, aabb.Width * zoom, aabb.Width * zoom);
+        }
+    }
+
+    public class PhysicsEdge : PhysicsShape {
+        public PointF p0;
+        public PointF p1;
+
+        public PhysicsEdge(RectangleF size, Boolean isInWorld)
+            : base(GenerateAABB(size), isInWorld) {
+            myShape = PhysicsShapes.Edge;
+
+            p0 = size.Location;
+            p1 = size.Size.ToPointF();
+        }
+
+        public override void DrawMe(Graphics gfx, PointF offset, float zoom, Pen outline, Brush middle) {
+            gfx.DrawLine(outline, (p0.X - offset.X) * zoom, (p0.Y - offset.Y) * zoom, (p1.X - offset.X) * zoom, (p1.Y - offset.Y) * zoom);
+        }
+
+        public static RectangleF GenerateAABB(RectangleF size) {
+            PointF p0a = new PointF(Math.Min(size.Left, size.Width), Math.Min(size.Top, size.Height));
+            SizeF p1a = new SizeF(Math.Abs(size.Left - size.Width), Math.Abs(size.Top - size.Height));
+
+            p0a.X = (p0a.X + Camera.Offset.X) * Camera.ZoomLevel;
+            p0a.Y = (p0a.Y + Camera.Offset.Y) * Camera.ZoomLevel;
+            p1a.Width = p1a.Width * Camera.ZoomLevel;
+            p1a.Height = p1a.Height * Camera.ZoomLevel;
+
+            return new RectangleF(p0a, p1a);
         }
     }
 

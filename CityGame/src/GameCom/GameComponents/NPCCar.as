@@ -27,6 +27,8 @@ package GameCom.GameComponents
 		private const STEER_SPEED:Number = 5.0;
 		
 		private const SIDEWAYS_FRICTION_FORCE:Number = 1000;
+		private const BRAKE_FORCE:Number = 10;
+		
 		private const HORSEPOWER_MAX:Number = 15;
 		private const HORSEPOWER_INC:Number = 5;
 		
@@ -171,21 +173,21 @@ package GameCom.GameComponents
 			
 			// Collision scanner
 			var scannerShape:b2PolygonShape = new b2PolygonShape();
-			scannerShape.SetAsBox(3.0, 1.0);
+			scannerShape.SetAsBox(2.5, 1.0);
 			
 			var scannerFixtureDef:b2FixtureDef = new b2FixtureDef();
 			scannerFixtureDef.shape = scannerShape;
 			scannerFixtureDef.density = 0.2;
 			scannerFixtureDef.isSensor = true;
 			scannerFixtureDef.userData = "collisionScanner";
-			scannerFixtureDef.filter.categoryBits = 4294967293; //-3 as uint
+			scannerFixtureDef.filter.groupIndex = -3;
 			
 			var scannerBodyDef:b2BodyDef = new b2BodyDef();
 			scannerBodyDef.type = b2Body.b2_dynamicBody;
 			scannerBodyDef.linearDamping = 1.0;
 			scannerBodyDef.angularDamping = 1.0;
 			scannerBodyDef.position = spawnPosition.Copy();
-			scannerBodyDef.position.Add(MathHelper.RotateVector(new b2Vec2(-2.0,0.0), angle));
+			scannerBodyDef.position.Add(MathHelper.RotateVector(new b2Vec2(-2.5,0.0), angle));
 			scannerBodyDef.userData = this.name;
 			scannerBodyDef.angle = angle;
 			
@@ -237,11 +239,10 @@ package GameCom.GameComponents
 				
 				var tNode:Node = nodeManager.GetNode(targetNode);
 				
-				trace(collisions);
 				// always accelerate toward targetNode UNLESS ABOUT TO COLLIDE OMFG JUST LIKE JACOB'S DRIVING 
 				if (collisions > 0) {
 					engineSpeed = 0;
-					body.SetLinearDamping(SIDEWAYS_FRICTION_FORCE);
+					body.SetLinearDamping(BRAKE_FORCE);
 				} else {
 					body.SetLinearDamping(1.0);
 					if(engineSpeed > -HORSEPOWER_MAX) {

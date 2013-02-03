@@ -32,6 +32,9 @@ namespace CityTools.Physics {
                 case "phys_add_ellipse":
                     drawingShape = PhysicsShapes.Circle;
                     break;
+                case "phys_add_edge":
+                    drawingShape = PhysicsShapes.Edge;
+                    break;
             }
         }
 
@@ -48,6 +51,8 @@ namespace CityTools.Physics {
                 } else if (drawingShape == PhysicsShapes.Circle) {
                     inputBuffer.gfx.FillEllipse(fillBrush_draft, Math.Min(p0.X, p1.X), Math.Min(p0.Y, p1.Y), Math.Abs(p1.X - p0.X), Math.Abs(p1.X - p0.X));
                     inputBuffer.gfx.DrawEllipse(outlinePen_draft, Math.Min(p0.X, p1.X), Math.Min(p0.Y, p1.Y), Math.Abs(p1.X - p0.X), Math.Abs(p1.X - p0.X));
+                } else if (drawingShape == PhysicsShapes.Edge) {
+                    inputBuffer.gfx.DrawLine(outlinePen_draft, p0, p1);
                 }
 
                 return true;
@@ -76,6 +81,14 @@ namespace CityTools.Physics {
                 PhysicsCache.AddShape(new PhysicsRectangle(new RectangleF(p0a, p1a), true));
             } else if(drawingShape == PhysicsShapes.Circle) {
                 PhysicsCache.AddShape(new PhysicsCircle(new RectangleF(p0a, p1a), true));
+            } else if (drawingShape == PhysicsShapes.Edge) {
+                p0a.X = (p0.X + Camera.Offset.X) * Camera.ZoomLevel;
+                p0a.Y = (p0.Y + Camera.Offset.Y) * Camera.ZoomLevel;
+
+                p1a.Width = (p1.X + Camera.Offset.X) * Camera.ZoomLevel;
+                p1a.Height = (p1.Y + Camera.Offset.Y) * Camera.ZoomLevel;
+
+                PhysicsCache.AddShape(new PhysicsEdge(new RectangleF(p0a, p1a), true));
             }
 
             p0 = Point.Empty;

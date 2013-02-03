@@ -56,7 +56,7 @@
             this.obj_scenary_objs = new System.Windows.Forms.Panel();
             this.obj_scenary_cache_CB = new System.Windows.Forms.ComboBox();
             this.physics_tab = new System.Windows.Forms.TabPage();
-            this.phys_add_triangle = new System.Windows.Forms.Button();
+            this.phys_add_edge = new System.Windows.Forms.Button();
             this.phys_add_ellipse = new System.Windows.Forms.Button();
             this.phys_add_rect = new System.Windows.Forms.Button();
             this.nodes_tab = new System.Windows.Forms.TabPage();
@@ -67,6 +67,8 @@
             this.places_tab = new System.Windows.Forms.TabPage();
             this.places_selector_btn = new System.Windows.Forms.Button();
             this.story_tab = new System.Windows.Forms.TabPage();
+            this.story_storyPan = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.story_new = new System.Windows.Forms.Button();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmSendBack = new System.Windows.Forms.ToolStripMenuItem();
@@ -75,8 +77,6 @@
             this.tsmBringToFront = new System.Windows.Forms.ToolStripMenuItem();
             this.placesResourcesContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.placesPeopleContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.story_storyPan = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.main_splitter)).BeginInit();
             this.main_splitter.Panel1.SuspendLayout();
             this.main_splitter.Panel2.SuspendLayout();
@@ -103,8 +103,8 @@
             this.nodes_tab.SuspendLayout();
             this.places_tab.SuspendLayout();
             this.story_tab.SuspendLayout();
-            this.contextMenuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // main_splitter
@@ -440,7 +440,7 @@
             // 
             // physics_tab
             // 
-            this.physics_tab.Controls.Add(this.phys_add_triangle);
+            this.physics_tab.Controls.Add(this.phys_add_edge);
             this.physics_tab.Controls.Add(this.phys_add_ellipse);
             this.physics_tab.Controls.Add(this.phys_add_rect);
             this.physics_tab.Location = new System.Drawing.Point(4, 22);
@@ -450,15 +450,15 @@
             this.physics_tab.Text = "Physics";
             this.physics_tab.UseVisualStyleBackColor = true;
             // 
-            // phys_add_triangle
+            // phys_add_edge
             // 
-            this.phys_add_triangle.Location = new System.Drawing.Point(4, 64);
-            this.phys_add_triangle.Name = "phys_add_triangle";
-            this.phys_add_triangle.Size = new System.Drawing.Size(207, 23);
-            this.phys_add_triangle.TabIndex = 2;
-            this.phys_add_triangle.Text = "Draw Physics Triangle";
-            this.phys_add_triangle.UseVisualStyleBackColor = true;
-            this.phys_add_triangle.Click += new System.EventHandler(this.phys_add_shape);
+            this.phys_add_edge.Location = new System.Drawing.Point(4, 64);
+            this.phys_add_edge.Name = "phys_add_edge";
+            this.phys_add_edge.Size = new System.Drawing.Size(207, 23);
+            this.phys_add_edge.TabIndex = 2;
+            this.phys_add_edge.Text = "Draw Physics Edge";
+            this.phys_add_edge.UseVisualStyleBackColor = true;
+            this.phys_add_edge.Click += new System.EventHandler(this.phys_add_shape);
             // 
             // phys_add_ellipse
             // 
@@ -566,6 +566,23 @@
             this.story_tab.Text = "Story";
             this.story_tab.UseVisualStyleBackColor = true;
             // 
+            // story_storyPan
+            // 
+            this.story_storyPan.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.story_storyPan.Location = new System.Drawing.Point(0, 29);
+            this.story_storyPan.Name = "story_storyPan";
+            this.story_storyPan.Size = new System.Drawing.Size(223, 171);
+            this.story_storyPan.TabIndex = 2;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.story_new);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(223, 29);
+            this.panel1.TabIndex = 1;
+            // 
             // story_new
             // 
             this.story_new.Location = new System.Drawing.Point(74, 3);
@@ -584,33 +601,33 @@
             this.tsmSendToBack,
             this.tsmBringToFront});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 92);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(149, 92);
             // 
             // tsmSendBack
             // 
             this.tsmSendBack.Name = "tsmSendBack";
-            this.tsmSendBack.Size = new System.Drawing.Size(152, 22);
+            this.tsmSendBack.Size = new System.Drawing.Size(148, 22);
             this.tsmSendBack.Text = "Send Back";
             this.tsmSendBack.Click += new System.EventHandler(this.tsmSendBack_Click);
             // 
             // tsmBringForward
             // 
             this.tsmBringForward.Name = "tsmBringForward";
-            this.tsmBringForward.Size = new System.Drawing.Size(152, 22);
+            this.tsmBringForward.Size = new System.Drawing.Size(148, 22);
             this.tsmBringForward.Text = "Bring Forward";
             this.tsmBringForward.Click += new System.EventHandler(this.tsmBringForward_Click);
             // 
             // tsmSendToBack
             // 
             this.tsmSendToBack.Name = "tsmSendToBack";
-            this.tsmSendToBack.Size = new System.Drawing.Size(152, 22);
+            this.tsmSendToBack.Size = new System.Drawing.Size(148, 22);
             this.tsmSendToBack.Text = "Send to Back";
             this.tsmSendToBack.Click += new System.EventHandler(this.tsmSendToBack_Click);
             // 
             // tsmBringToFront
             // 
             this.tsmBringToFront.Name = "tsmBringToFront";
-            this.tsmBringToFront.Size = new System.Drawing.Size(152, 22);
+            this.tsmBringToFront.Size = new System.Drawing.Size(148, 22);
             this.tsmBringToFront.Text = "Bring to Front";
             this.tsmBringToFront.Click += new System.EventHandler(this.tsmBringToFront_Click);
             // 
@@ -625,23 +642,6 @@
             this.placesPeopleContextMenu.Name = "placesContextMenu";
             this.placesPeopleContextMenu.Size = new System.Drawing.Size(61, 4);
             this.placesPeopleContextMenu.Closing += new System.Windows.Forms.ToolStripDropDownClosingEventHandler(this.placesContextMenu_Closing);
-            // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.story_new);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(223, 29);
-            this.panel1.TabIndex = 1;
-            // 
-            // story_storyPan
-            // 
-            this.story_storyPan.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.story_storyPan.Location = new System.Drawing.Point(0, 29);
-            this.story_storyPan.Name = "story_storyPan";
-            this.story_storyPan.Size = new System.Drawing.Size(223, 171);
-            this.story_storyPan.TabIndex = 2;
             // 
             // MainWindow
             // 
@@ -681,8 +681,8 @@
             this.nodes_tab.ResumeLayout(false);
             this.places_tab.ResumeLayout(false);
             this.story_tab.ResumeLayout(false);
-            this.contextMenuStrip1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -707,7 +707,7 @@
         internal System.Windows.Forms.NumericUpDown obj_rot;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TabPage physics_tab;
-        private System.Windows.Forms.Button phys_add_triangle;
+        private System.Windows.Forms.Button phys_add_edge;
         private System.Windows.Forms.Button phys_add_ellipse;
         private System.Windows.Forms.Button phys_add_rect;
         private System.Windows.Forms.TabPage nodes_tab;

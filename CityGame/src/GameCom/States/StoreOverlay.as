@@ -34,19 +34,19 @@ package GameCom.States {
 			CloseButton.x = 666; CloseButton.y = 15;
 			this.addChild(CloseButton);
 			
-			SpeedButton.x = 199; SpeedButton.y = 202;
+			SpeedButton.x = 199; SpeedButton.y = 202; SpeedButton.alpha = 0;
 			this.addChild(SpeedButton);
 			
-			AccelerationButton.x = 199; AccelerationButton.y = 278;
+			AccelerationButton.x = 199; AccelerationButton.y = 278; AccelerationButton.alpha = 0;
 			this.addChild(AccelerationButton);
 			
-			HealthButton.x = 199; HealthButton.y = 355;
+			HealthButton.x = 199; HealthButton.y = 355; HealthButton.alpha = 0;
 			this.addChild(HealthButton);
 			
-			ArmourButton.x = 199; ArmourButton.y = 434;
+			ArmourButton.x = 199; ArmourButton.y = 434; ArmourButton.alpha = 0;
 			this.addChild(ArmourButton);
 			
-			NOSButton.x = 199; NOSButton.y = 517;
+			NOSButton.x = 199; NOSButton.y = 517; NOSButton.alpha = 0;
 			this.addChild(NOSButton);
 			
 			this.addChild(tooltip);
