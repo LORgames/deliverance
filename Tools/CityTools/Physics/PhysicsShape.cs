@@ -10,7 +10,8 @@ namespace CityTools.Physics {
     public enum PhysicsShapes {
         Rectangle,
         Circle,
-        Edge
+        Edge,
+        Delete
     }
     
     public class PhysicsShape : ObjectSystem.BaseObject {

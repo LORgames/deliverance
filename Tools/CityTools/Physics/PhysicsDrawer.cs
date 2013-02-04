@@ -13,7 +13,9 @@ namespace CityTools.Physics {
 
         public static PhysicsShapes drawingShape = PhysicsShapes.Rectangle;
 
-        private static List<Physics.PhysicsShape> drawList = new List<PhysicsShape>();
+        private static List<PhysicsShape> selectedObjects = new List<PhysicsShape>();
+
+        private static List<PhysicsShape> drawList = new List<PhysicsShape>();
 
         private static PointF p0 = Point.Empty;
         private static PointF p1 = Point.Empty;
@@ -34,6 +36,9 @@ namespace CityTools.Physics {
                     break;
                 case "phys_add_edge":
                     drawingShape = PhysicsShapes.Edge;
+                    break;
+                case "phys_delete":
+                    drawingShape = PhysicsShapes.Delete;
                     break;
             }
         }
@@ -66,8 +71,12 @@ namespace CityTools.Physics {
         }
 
         internal static void ReleaseMouse(MouseEventArgs e) {
-            if (Math.Floor(p0.X) == Math.Floor(p1.X)) return;
-            if (Math.Floor(p0.Y) == Math.Floor(p1.Y)) return;
+            if (drawingShape != PhysicsShapes.Delete) {
+                if (Math.Floor(p0.X) == Math.Floor(p1.X)) return;
+                if (Math.Floor(p0.Y) == Math.Floor(p1.Y)) return;
+            } else {
+                p1 = e.Location;
+            }
 
             PointF p0a = new PointF(Math.Min(p0.X, p1.X), Math.Min(p0.Y, p1.Y));
             SizeF p1a = new SizeF(Math.Abs(p1.X - p0.X), Math.Abs(p1.Y - p0.Y));
@@ -89,10 +98,32 @@ namespace CityTools.Physics {
                 p1a.Height = (p1.Y + Camera.Offset.Y) * Camera.ZoomLevel;
 
                 PhysicsCache.AddShape(new PhysicsEdge(new RectangleF(p0a, p1a), true));
+            } else if (drawingShape == PhysicsShapes.Delete) {
+                if (p0 == p1) {
+                    PointF p0b = new PointF(Math.Min(p0.X, p1.X) / Camera.ZoomLevel + Camera.ViewArea.Left, Math.Min(p0.Y, p1.Y) / Camera.ZoomLevel + Camera.ViewArea.Top);
+                    PointF p1b = new PointF(Math.Max(p0.X, p1.X) / Camera.ZoomLevel + Camera.ViewArea.Left, Math.Max(p0.Y, p1.Y) / Camera.ZoomLevel + Camera.ViewArea.Top);
+
+                    AABB aabb = new AABB(new Vec2(p0b.X, p0b.Y), new Vec2(p1b.X, p1b.Y));
+                    selectedObjects.Clear();
+                    Box2D.B2System.world.QueryAABB(new Box2CS.World.QueryCallbackDelegate(PhysicsDrawer.QCBD), aabb);
+
+                    for (int i = 0; i < selectedObjects.Count; i++) {
+                        PhysicsCache.shapes.Remove(selectedObjects[i]);
+                        Box2D.B2System.world.DestroyBody(selectedObjects[i].baseBody); // win button
+                    }
+                }
             }
 
             p0 = Point.Empty;
             p1 = Point.Empty;
+        }
+
+        public static bool QCBD(Fixture fix) {
+            if (fix.UserData is PhysicsShape) {
+                selectedObjects.Add(fix.UserData as PhysicsShape);
+            }
+
+            return true;
         }
     }
 }

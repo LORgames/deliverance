@@ -28,6 +28,7 @@
             this.circle_btn = new System.Windows.Forms.Button();
             this.square_btn = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.edge_btn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.main_splitter)).BeginInit();
             this.main_splitter.Panel1.SuspendLayout();
             this.main_splitter.Panel2.SuspendLayout();
@@ -44,6 +45,7 @@
             // 
             // main_splitter.Panel1
             // 
+            this.main_splitter.Panel1.Controls.Add(this.edge_btn);
             this.main_splitter.Panel1.Controls.Add(this.button1);
             this.main_splitter.Panel1.Controls.Add(this.circle_btn);
             this.main_splitter.Panel1.Controls.Add(this.square_btn);
@@ -58,7 +60,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(3, 61);
+            this.button1.Location = new System.Drawing.Point(3, 90);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(160, 23);
             this.button1.TabIndex = 5;
@@ -101,6 +103,16 @@
             this.pictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseUp);
             this.pictureBox1.Resize += new System.EventHandler(this.pictureBox1_Resize);
             // 
+            // edge_btn
+            // 
+            this.edge_btn.Location = new System.Drawing.Point(3, 61);
+            this.edge_btn.Name = "edge_btn";
+            this.edge_btn.Size = new System.Drawing.Size(160, 23);
+            this.edge_btn.TabIndex = 6;
+            this.edge_btn.Text = "Edge";
+            this.edge_btn.UseVisualStyleBackColor = true;
+            this.edge_btn.Click += new System.EventHandler(this.setShape);
+            // 
             // ObjectCreatorTool
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -127,5 +139,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button circle_btn;
         private System.Windows.Forms.Button square_btn;
+        private System.Windows.Forms.Button edge_btn;
     }
 }

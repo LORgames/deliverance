@@ -66,6 +66,11 @@ namespace CityTools.ObjectSystem {
                                 float h = f.GetFloat();
                                 s_objectTypes[type_id].Physics.Add(new PhysicsRectangle(new RectangleF(xPos, yPos, w, h), false));
                                 break;
+                            case PhysicsShapes.Edge:
+                                float xPos2 = f.GetFloat();
+                                float yPos2 = f.GetFloat();
+                                s_objectTypes[type_id].Physics.Add(new PhysicsEdge(new RectangleF(new PointF(xPos, yPos), new SizeF(xPos2, yPos2)), false));
+                                break;
                             default:
                                 MessageBox.Show("Unknown shape found in file. Suspected corruption. Formatting C:");
                                 break;
@@ -132,16 +137,26 @@ namespace CityTools.ObjectSystem {
                 foreach (PhysicsShape ps in s_objectTypes[index].Physics) {
                     f.AddByte((byte)ps.myShape);
 
-                    f.AddFloat(ps.aabb.Left);
-                    f.AddFloat(ps.aabb.Top);
-
                     switch (ps.myShape) {
                         case PhysicsShapes.Circle:
+
+                            f.AddFloat(ps.aabb.Left);
+                            f.AddFloat(ps.aabb.Top);
                             f.AddFloat(ps.aabb.Width);
                             break;
                         case PhysicsShapes.Rectangle:
+
+                            f.AddFloat(ps.aabb.Left);
+                            f.AddFloat(ps.aabb.Top);
                             f.AddFloat(ps.aabb.Width);
                             f.AddFloat(ps.aabb.Height);
+                            break;
+                        case PhysicsShapes.Edge:
+                            PhysicsEdge pe = ps as PhysicsEdge;
+                            f.AddFloat(pe.p0.X);
+                            f.AddFloat(pe.p0.Y);
+                            f.AddFloat(pe.p1.X);
+                            f.AddFloat(pe.p1.Y);
                             break;
                         default:
                             MessageBox.Show("Unknown shape found in file. Suspected corruption. Formatting C:");

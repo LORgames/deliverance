@@ -62,6 +62,9 @@ namespace CityTools {
             } else if ((sender as Button).Text == "Circle") {
                 pm = PaintMode.Physics;
                 ps = PhysicsShapes.Circle;
+            } else if ((sender as Button).Text == "Edge") {
+                pm = PaintMode.Physics;
+                ps = PhysicsShapes.Edge;
             } else if ((sender as Button).Text == "Clear Physics") {
                 ScenicObjectCache.s_objectTypes[objectID].Physics.Clear();
                 pictureBox1.Invalidate();
@@ -90,6 +93,8 @@ namespace CityTools {
                     ScenicObjectCache.s_objectTypes[objectID].Physics.Add(new PhysicsRectangle(new RectangleF(Math.Min(p0.X, p1.X), Math.Min(p0.Y, p1.Y), Math.Abs(p1.X - p0.X), Math.Abs(p1.Y - p0.Y)), false));
                 } else if (ps == PhysicsShapes.Circle) {
                     ScenicObjectCache.s_objectTypes[objectID].Physics.Add(new PhysicsCircle(new RectangleF(Math.Min(p0.X, p1.X), Math.Min(p0.Y, p1.Y), Math.Abs(p1.X - p0.X), Math.Abs(p1.X - p0.X)), false));
+                } else if (ps == PhysicsShapes.Edge) {
+                    ScenicObjectCache.s_objectTypes[objectID].Physics.Add(new PhysicsEdge(new RectangleF(p0, new SizeF(p1)), false));
                 }
             }
 
@@ -106,6 +111,8 @@ namespace CityTools {
                     i_buffer.gfx.DrawRectangle(Pens.Red, Math.Min(p0.X, p1.X), Math.Min(p0.Y, p1.Y), Math.Abs(p1.X - p0.X), Math.Abs(p1.Y - p0.Y));
                 } else if (ps == PhysicsShapes.Circle) {
                     i_buffer.gfx.DrawEllipse(Pens.Red, Math.Min(p0.X, p1.X), Math.Min(p0.Y, p1.Y), Math.Abs(p1.X - p0.X), Math.Abs(p1.X - p0.X));
+                } else if (ps == PhysicsShapes.Edge) {
+                    i_buffer.gfx.DrawLine(Pens.Red, p0, p1);
                 }
 
                 pictureBox1.Invalidate();

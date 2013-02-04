@@ -77,6 +77,7 @@
             this.tsmBringToFront = new System.Windows.Forms.ToolStripMenuItem();
             this.placesResourcesContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.placesPeopleContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.phys_delete = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.main_splitter)).BeginInit();
             this.main_splitter.Panel1.SuspendLayout();
             this.main_splitter.Panel2.SuspendLayout();
@@ -440,6 +441,7 @@
             // 
             // physics_tab
             // 
+            this.physics_tab.Controls.Add(this.phys_delete);
             this.physics_tab.Controls.Add(this.phys_add_edge);
             this.physics_tab.Controls.Add(this.phys_add_ellipse);
             this.physics_tab.Controls.Add(this.phys_add_rect);
@@ -643,6 +645,16 @@
             this.placesPeopleContextMenu.Size = new System.Drawing.Size(61, 4);
             this.placesPeopleContextMenu.Closing += new System.Windows.Forms.ToolStripDropDownClosingEventHandler(this.placesContextMenu_Closing);
             // 
+            // phys_delete
+            // 
+            this.phys_delete.Location = new System.Drawing.Point(4, 93);
+            this.phys_delete.Name = "phys_delete";
+            this.phys_delete.Size = new System.Drawing.Size(207, 23);
+            this.phys_delete.TabIndex = 3;
+            this.phys_delete.Text = "Delete Physics";
+            this.phys_delete.UseVisualStyleBackColor = true;
+            this.phys_delete.Click += new System.EventHandler(this.phys_add_shape);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -737,6 +749,7 @@
         internal System.Windows.Forms.ContextMenuStrip placesPeopleContextMenu;
         private System.Windows.Forms.Panel panel1;
         internal System.Windows.Forms.Panel story_storyPan;
+        private System.Windows.Forms.Button phys_delete;
     }
 }
 
