@@ -24,14 +24,6 @@ package GameCom.GameComponents.Weapons
 		
 		override public function Update():void {
 			super.Update();
-			
-			fireTimeout--;
-			
-			if(fireTimeout < 0) {
-				this.graphics.clear();
-			} else {
-				fireTimeout--;
-			}
 		}
 		
 	}

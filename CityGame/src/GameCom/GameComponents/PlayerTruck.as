@@ -213,7 +213,7 @@ package GameCom.GameComponents {
 			
 			FixUpgradeValues();
 			
-			Wep = new Laser(world);
+			Wep = new MachineGun(world);
 			
 			Wep.IgnoreList.push(body.GetFixtureList());
 			Wep.IgnoreList.push(leftRearWheel.GetFixtureList());

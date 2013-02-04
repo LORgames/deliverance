@@ -60,20 +60,6 @@ package GameCom.GameComponents {
 		}
 		
 		public override function EndContact(contact:b2Contact):void {
-			/*var npc:NPCCar;
-			if (contact.GetFixtureA().GetUserData() == "collisionScanner") {
-				npc = npcManager.GetNPCByName(contact.GetFixtureA().GetBody().GetUserData());
-				if (npc != null && (npc.name != contact.GetFixtureB().GetBody().GetUserData())) {
-					npc.collisions--;
-				}
-			}
-			if (contact.GetFixtureB().GetUserData() == "collisionScanner") {
-				npc = npcManager.GetNPCByName(contact.GetFixtureB().GetBody().GetUserData());
-				if (npc != null && (npc.name != contact.GetFixtureA().GetBody().GetUserData())) {
-					npc.collisions--;
-				}
-			}*/
-			
 			if (contact.GetFixtureA().GetBody().GetUserData() == "collisionScanner" && contact.GetFixtureA().GetUserData() != contact.GetFixtureB().GetUserData()) {
 				(contact.GetFixtureA().GetUserData() as NPCCar).collisions--;
 			}

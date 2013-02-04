@@ -27,7 +27,7 @@ package GameCom.GameComponents
 		private const STEER_SPEED:Number = 5.0;
 		
 		private const SIDEWAYS_FRICTION_FORCE:Number = 1000;
-		private const BRAKE_FORCE:Number = 10;
+		private const BRAKE_FORCE:Number = 8;
 		
 		private const HORSEPOWER_MAX:Number = 15;
 		private const HORSEPOWER_INC:Number = 5;
