@@ -21,6 +21,9 @@ package  {
 		//Number of iterations for things
 		public static const VELOCITY_ITERATIONS:int = 3;
 		public static const POSITION_ITERATIONS:int = 7;
+		
+		//Mochi authentication
+		private var _mochiads_game_id:String = "c3ebe5c39a9741ba";
 	}
 
 }
