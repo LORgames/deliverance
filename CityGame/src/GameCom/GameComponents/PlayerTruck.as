@@ -5,6 +5,7 @@ package GameCom.GameComponents {
 	import GameCom.GameComponents.Weapons.BaseWeapon;
 	import GameCom.GameComponents.Weapons.Laser;
 	import GameCom.GameComponents.Weapons.MachineGun;
+	import GameCom.GameComponents.Weapons.RocketLauncher;
 	import GameCom.Helpers.MathHelper;
 	import GameCom.Managers.GUIManager;
 	import GameCom.Managers.PlacesManager;
@@ -76,10 +77,12 @@ package GameCom.GameComponents {
 		private var leftJoint:b2RevoluteJoint;
 		private var rightJoint:b2RevoluteJoint;
 		
-		public var Wep:BaseWeapon;
+		private var Wep:BaseWeapon;
+		private var world:b2World;
 		
 		public function PlayerTruck(spawnPosition:b2Vec2, world:b2World, worldSpr:Sprite) {
 			worldSpr.addChild(this);
+			this.world = world;
 			
 			this.addChild(ThemeManager.Get("TruckBits/Truck.swf"));
 			this.getChildAt(0).scaleX = 0.25;
@@ -212,18 +215,7 @@ package GameCom.GameComponents {
 			world.CreateJoint(rightRearJointDef);
 			
 			FixUpgradeValues();
-			
-			Wep = new MachineGun(world);
-			
-			Wep.IgnoreList.push(body.GetFixtureList());
-			Wep.IgnoreList.push(leftRearWheel.GetFixtureList());
-			Wep.IgnoreList.push(rightRearWheel.GetFixtureList());
-			Wep.IgnoreList.push(leftMidWheel.GetFixtureList());
-			Wep.IgnoreList.push(rightMidWheel.GetFixtureList());
-			Wep.IgnoreList.push(leftWheel.GetFixtureList());
-			Wep.IgnoreList.push(rightWheel.GetFixtureList());
-			
-			this.addChild(Wep);
+			EquipWeapon("MachineGun");
 		}
 		
 		private function killOrthogonalVelocity(targetBody:b2Body):void {
@@ -398,6 +390,32 @@ package GameCom.GameComponents {
 			
 			healthCurrent = healthMax;
 			GUIManager.I.Update();
+		}
+		
+		public function EquipWeapon(weaponName:String):void {
+			if (Wep != null) {
+				this.removeChild(Wep);
+			}
+			
+			switch(weaponName) {
+				case "MachineGun":
+					Wep = new MachineGun(world); break;
+				case "RocketPod":
+					Wep = new RocketLauncher(world); break;
+				case "Laser":
+				default:
+					Wep = new Laser(world); break;
+			}
+			
+			Wep.IgnoreList.push(body.GetFixtureList());
+			Wep.IgnoreList.push(leftRearWheel.GetFixtureList());
+			Wep.IgnoreList.push(rightRearWheel.GetFixtureList());
+			Wep.IgnoreList.push(leftMidWheel.GetFixtureList());
+			Wep.IgnoreList.push(rightMidWheel.GetFixtureList());
+			Wep.IgnoreList.push(leftWheel.GetFixtureList());
+			Wep.IgnoreList.push(rightWheel.GetFixtureList());
+			
+			this.addChild(Wep);
 		}
 	}
 }

@@ -7,8 +7,6 @@ package GameCom.GameComponents.Weapons
 	 */
 	public class RocketLauncher extends BaseWeapon {
 		
-		private var fireTimeout:int = 0;
-		
 		public function RocketLauncher(world:b2World) {
 			super(world);
 			
@@ -24,6 +22,7 @@ package GameCom.GameComponents.Weapons
 		
 		override public function Update():void {
 			super.Update();
+			this.rotation = 0;
 		}
 		
 	}

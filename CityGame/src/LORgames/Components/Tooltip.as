@@ -64,7 +64,7 @@ package LORgames.Components
 		}
 		
 		public function SetText(str:String):void {
-			text.text = str;
+			text.htmlText = str;
 			
 			InternalSetMaxWidth(maxWidth, false);
 			text.height = text.textHeight;

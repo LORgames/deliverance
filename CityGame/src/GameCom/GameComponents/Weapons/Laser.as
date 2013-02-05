@@ -13,8 +13,6 @@ package GameCom.GameComponents.Weapons
 	 * @author ...
 	 */
 	public class Laser extends BaseWeapon {
-		
-		private var fireTimeout:int = 0;
 		private var fixtureHit:b2Fixture;
 		private var distance:Number;
 		

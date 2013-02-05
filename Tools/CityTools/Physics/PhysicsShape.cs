@@ -81,10 +81,10 @@ namespace CityTools.Physics {
             PointF p0a = new PointF(Math.Min(size.Left, size.Width), Math.Min(size.Top, size.Height));
             SizeF p1a = new SizeF(Math.Abs(size.Left - size.Width), Math.Abs(size.Top - size.Height));
 
-            p0a.X = (p0a.X + Camera.Offset.X) * Camera.ZoomLevel;
-            p0a.Y = (p0a.Y + Camera.Offset.Y) * Camera.ZoomLevel;
-            p1a.Width = p1a.Width * Camera.ZoomLevel;
-            p1a.Height = p1a.Height * Camera.ZoomLevel;
+            //p0a.X = (p0a.X + Camera.Offset.X) * Camera.ZoomLevel;
+            //p0a.Y = (p0a.Y + Camera.Offset.Y) * Camera.ZoomLevel;
+            //p1a.Width = p1a.Width * Camera.ZoomLevel;
+            //p1a.Height = p1a.Height * Camera.ZoomLevel;
 
             return new RectangleF(p0a, p1a);
         }

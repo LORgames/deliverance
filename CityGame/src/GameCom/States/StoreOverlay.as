@@ -23,6 +23,10 @@ package GameCom.States {
 		private var ArmourButton:Button = new Button("Armour", 30, 30);
 		private var NOSButton:Button = new Button("NOS", 30, 30);
 		
+		private var MachineGun:Button = new Button("MachineGun", 241, 84);
+		private var RocketPod:Button = new Button("RocketPod", 241, 84);
+		private var Laser:Button = new Button("Laser", 241, 84);
+		
 		private var tooltip:Tooltip = new Tooltip("", Tooltip.RIGHT);
 		
 		public function StoreOverlay() {
@@ -51,23 +55,35 @@ package GameCom.States {
 			
 			this.addChild(tooltip);
 			
-			SpeedButton.addEventListener(MouseEvent.CLICK, OnUpgradePurchased);
-			AccelerationButton.addEventListener(MouseEvent.CLICK, OnUpgradePurchased);
-			HealthButton.addEventListener(MouseEvent.CLICK, OnUpgradePurchased);
-			ArmourButton.addEventListener(MouseEvent.CLICK, OnUpgradePurchased);
-			NOSButton.addEventListener(MouseEvent.CLICK, OnUpgradePurchased);
+			SpeedButton.addEventListener(MouseEvent.CLICK, OnUpgradePurchased, false, 0, true);
+			AccelerationButton.addEventListener(MouseEvent.CLICK, OnUpgradePurchased, false, 0, true);
+			HealthButton.addEventListener(MouseEvent.CLICK, OnUpgradePurchased, false, 0, true);
+			ArmourButton.addEventListener(MouseEvent.CLICK, OnUpgradePurchased, false, 0, true);
+			NOSButton.addEventListener(MouseEvent.CLICK, OnUpgradePurchased, false, 0, true);
 			
-			SpeedButton.addEventListener(MouseEvent.MOUSE_OVER, OnUpgradeHighlight);
-			AccelerationButton.addEventListener(MouseEvent.MOUSE_OVER, OnUpgradeHighlight);
-			HealthButton.addEventListener(MouseEvent.MOUSE_OVER, OnUpgradeHighlight);
-			ArmourButton.addEventListener(MouseEvent.MOUSE_OVER, OnUpgradeHighlight);
-			NOSButton.addEventListener(MouseEvent.MOUSE_OVER, OnUpgradeHighlight);
+			SpeedButton.addEventListener(MouseEvent.MOUSE_OVER, OnUpgradeHighlight, false, 0, true);
+			AccelerationButton.addEventListener(MouseEvent.MOUSE_OVER, OnUpgradeHighlight, false, 0, true);
+			HealthButton.addEventListener(MouseEvent.MOUSE_OVER, OnUpgradeHighlight, false, 0, true);
+			ArmourButton.addEventListener(MouseEvent.MOUSE_OVER, OnUpgradeHighlight, false, 0, true);
+			NOSButton.addEventListener(MouseEvent.MOUSE_OVER, OnUpgradeHighlight, false, 0, true);
 			
-			SpeedButton.addEventListener(MouseEvent.MOUSE_OUT, OnUpgradeLeave);
-			AccelerationButton.addEventListener(MouseEvent.MOUSE_OUT, OnUpgradeLeave);
-			HealthButton.addEventListener(MouseEvent.MOUSE_OUT, OnUpgradeLeave);
-			ArmourButton.addEventListener(MouseEvent.MOUSE_OUT, OnUpgradeLeave);
-			NOSButton.addEventListener(MouseEvent.MOUSE_OUT, OnUpgradeLeave);
+			SpeedButton.addEventListener(MouseEvent.MOUSE_OUT, OnUpgradeLeave, false, 0, true);
+			AccelerationButton.addEventListener(MouseEvent.MOUSE_OUT, OnUpgradeLeave, false, 0, true);
+			HealthButton.addEventListener(MouseEvent.MOUSE_OUT, OnUpgradeLeave, false, 0, true);
+			ArmourButton.addEventListener(MouseEvent.MOUSE_OUT, OnUpgradeLeave, false, 0, true);
+			NOSButton.addEventListener(MouseEvent.MOUSE_OUT, OnUpgradeLeave, false, 0, true);
+			
+			MachineGun.x = 295; MachineGun.y = 201; MachineGun.alpha = 0;
+			this.addChild(MachineGun);
+			MachineGun.addEventListener(MouseEvent.CLICK, ChangeWeapon, false, 0, true);
+			
+			RocketPod.x = 295; RocketPod.y = 292; RocketPod.alpha = 0;
+			this.addChild(RocketPod);
+			RocketPod.addEventListener(MouseEvent.CLICK, ChangeWeapon, false, 0, true);
+			
+			Laser.x = 295; Laser.y = 383; Laser.alpha = 0;
+			this.addChild(Laser);
+			Laser.addEventListener(MouseEvent.CLICK, ChangeWeapon, false, 0, true);
 			
 			CloseButton.addEventListener(MouseEvent.CLICK, OnCloseClicked);
 			
@@ -105,13 +121,15 @@ package GameCom.States {
 			
 			statVal = Storage.GetAsInt((me.currentTarget as Button).getLabel() + "Upgrade");
 			
-			tooltip.x = me.currentTarget.x + me.currentTarget.width;
+			tooltip.x = me.currentTarget.x + 20;
 			tooltip.y = me.currentTarget.y + me.currentTarget.height / 2;
+			
+			trace(me.currentTarget.width);
 			
 			if (statVal == 10) {
 				tooltip.SetText("ALREADY MAX");
 			} else {
-				tooltip.SetText("Level " + (statVal+1) + " " + stat + " costs $" + UpgradeHelper.GetCost(stat, statVal+1) + ".\n\nCurrent Benefit: " + UpgradeHelper.GetBenefit(stat, statVal) + "\nNext Level: " + UpgradeHelper.GetBenefit(me.currentTarget.getLabel(), statVal+1) + "\n\nBalance After Purchase: " + MoneyHelper.GetBalanceAfterPurchase(UpgradeHelper.GetCost(stat, statVal+1)) + "\n\n" + (MoneyHelper.CanDebit(UpgradeHelper.GetCost(stat, statVal+1))?"Click To Purcahse":"You cannot purchase at this time"));
+				tooltip.SetText("Level " + (statVal+1) + " " + stat + " costs $" + UpgradeHelper.GetCost(stat, statVal+1) + ".\n\nCurrent Benefit: " + UpgradeHelper.GetBenefit(stat, statVal) + "\nNext Level: " + UpgradeHelper.GetBenefit(me.currentTarget.getLabel(), statVal+1) + "\n\nBalance After Purchase: " + MoneyHelper.GetBalanceAfterPurchase(UpgradeHelper.GetCost(stat, statVal+1)) + "\n\n" + (MoneyHelper.CanDebit(UpgradeHelper.GetCost(stat, statVal+1))?"<font color='#00FF00'>Click To Purcahse</font>":"<font color='#FF0000'>You cannot purchase at this time</font>"));
 			}
 			
 			tooltip.visible = true;
@@ -119,6 +137,20 @@ package GameCom.States {
 		
 		private function OnUpgradeLeave(me:MouseEvent):void {
 			tooltip.visible = false;
+		}
+		
+		private function ChangeWeapon(me:MouseEvent):void {
+			var weapon:String = me.currentTarget.getLabel();
+			
+			if(weapon != "RocketPod") {
+				GUIManager.I.player.EquipWeapon(weapon);
+				tooltip.visible = false;
+			} else {
+				tooltip.x = me.stageX;
+				tooltip.y = me.stageY;
+				tooltip.SetText("<font color='#FF0000'>Unlocks at level 21!</font>");
+				tooltip.visible = true;
+			}
 		}
 		
 		private function RedrawStats():void {
