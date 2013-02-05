@@ -176,7 +176,15 @@ package GameCom.GameComponents
 			
 			// Collision scanner
 			var scannerShape:b2PolygonShape = new b2PolygonShape();
+			//Rectangular scanner
 			scannerShape.SetAsBox(2.5, 1.0);
+			//Triangular scanner
+			/* 
+			var verts:Array = new Array(new b2Vec2( 1.5,-1.5),
+										new b2Vec2(-4.0, 0.0),
+										new b2Vec2( 1.5, 1.5));
+			scannerShape.SetAsArray(verts, 3);
+			*/
 			
 			var scannerFixtureDef:b2FixtureDef = new b2FixtureDef();
 			scannerFixtureDef.shape = scannerShape;
@@ -190,7 +198,7 @@ package GameCom.GameComponents
 			scannerBodyDef.linearDamping = 1.0;
 			scannerBodyDef.angularDamping = 1.0;
 			scannerBodyDef.position = spawnPosition.Copy();
-			scannerBodyDef.position.Add(MathHelper.RotateVector(new b2Vec2(-2.5,0.0), angle));
+			scannerBodyDef.position.Add(MathHelper.RotateVector(new b2Vec2(-3.0,0.0), angle));
 			scannerBodyDef.userData = "collisionScanner";
 			scannerBodyDef.angle = angle;
 			
@@ -198,8 +206,12 @@ package GameCom.GameComponents
 			collisionScanner.CreateFixture(scannerFixtureDef);
 			
 			var scannerJointDef:b2RevoluteJointDef = new b2RevoluteJointDef();
-			scannerJointDef.Initialize(body, collisionScanner, collisionScanner.GetWorldCenter());
-			scannerJointDef.enableLimit = true;
+			var scannerAnchorPoint:b2Vec2 = collisionScanner.GetWorldCenter().Copy();
+			scannerAnchorPoint.Add(MathHelper.RotateVector(new b2Vec2(2.0, 0.0), angle));
+			scannerJointDef.Initialize(body, collisionScanner, scannerAnchorPoint);
+			scannerJointDef.enableLimit = false;
+			scannerJointDef.collideConnected = false;
+			
 			
 			world.CreateJoint(scannerJointDef);
 			
@@ -308,6 +320,8 @@ package GameCom.GameComponents
 			leftJoint.SetMotorSpeed(mspeed * STEER_SPEED);
 			mspeed = steeringAngle - rightJoint.GetJointAngle();
 			rightJoint.SetMotorSpeed(mspeed * STEER_SPEED);
+			
+			collisionScanner.SetAngle(body.GetAngle() + steeringAngle + Math.PI/2);
 			
 			this.x = body.GetPosition().x * Global.PHYSICS_SCALE;
 			this.y = body.GetPosition().y * Global.PHYSICS_SCALE;
