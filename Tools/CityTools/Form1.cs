@@ -32,9 +32,6 @@ namespace CityTools {
     }
 
     public partial class MainWindow : Form {
-        public const string MAP_MINI_GROUND_CACHE = "minimap_ground.png";
-        public const string MAP_MINI_OBJECT_CACHE = "minimap_object.png";
-
         public Color BACKGROUND_COLOR = Color.CornflowerBlue;
 
         public const int MAP_SIZE_X = 18688;
@@ -501,6 +498,42 @@ namespace CityTools {
             }
 
             PlacesHelper.UpdatedSelectedFromContextMenu();
+        }
+
+        private void gameQualityMinimapBtn_Click(object sender, EventArgs e) {
+            int mapSize = 4096;
+
+            Camera.Offset.X = 0;
+            Camera.Offset.Y = 0;
+            Camera.ZoomLevel = (float)mapSize / (MapCache.TILE_SIZE_X * MapCache.TILE_TOTAL_X);
+
+            Camera.FixViewArea(new Rectangle(0, 0, mapSize, mapSize));
+
+            LBuffer m0 = new LBuffer(new Rectangle(0, 0, mapSize, mapSize));
+            LBuffer m1 = new LBuffer(new Rectangle(0, 0, mapSize, mapSize));
+            LBuffer m2 = new LBuffer(new Rectangle(0, 0, mapSize, mapSize));
+            LBuffer m3 = new LBuffer(new Rectangle(0, 0, mapSize, mapSize));
+            LBuffer m4 = new LBuffer(new Rectangle(0, 0, mapSize, mapSize));
+
+            Terrain.TerrainHelper.DrawTerrain(m0);
+            BaseObjectDrawer.DrawObjects(m1, m2, m3, m4);
+
+            LBuffer t = new LBuffer(new Rectangle(0, 0, mapSize, mapSize));
+
+            t.gfx.DrawImage(m0.bmp, Point.Empty);
+            t.gfx.DrawImage(m1.bmp, Point.Empty);
+            t.gfx.DrawImage(m2.bmp, Point.Empty);
+
+            t.gfx.Dispose();
+            t.bmp.Save(Program.CACHE + "HQ_Minimap.png");
+            t.bmp.Save(Program.CACHE + "HQ_Minimap.jpg");
+
+            LBuffer minimapB = new LBuffer(minimap.DisplayRectangle);
+            minimapB.gfx.DrawImage(t.bmp, minimap.DisplayRectangle);
+            minimapB.gfx.Dispose();
+            minimapB.bmp.Save("minimap_new.jpg");
+
+            this.Close();
         }
     }
 }

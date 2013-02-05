@@ -58,7 +58,9 @@ namespace CityTools.ObjectSystem {
             float p1x = im.Width * Camera.ZoomLevel;
             float p1y = im.Height * Camera.ZoomLevel;
 
-            buffer.gfx.DrawImage(im, p0x, p0y, p1x, p1y);
+            try {
+                buffer.gfx.DrawImage(im, p0x, p0y, p1x, p1y);
+            } catch { }
 
             if (selected) {
                 PointF[] realignedPoints = new PointF[points.Length];

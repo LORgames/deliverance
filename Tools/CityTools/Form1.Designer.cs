@@ -56,6 +56,7 @@
             this.obj_scenary_objs = new System.Windows.Forms.Panel();
             this.obj_scenary_cache_CB = new System.Windows.Forms.ComboBox();
             this.physics_tab = new System.Windows.Forms.TabPage();
+            this.phys_delete = new System.Windows.Forms.Button();
             this.phys_add_edge = new System.Windows.Forms.Button();
             this.phys_add_ellipse = new System.Windows.Forms.Button();
             this.phys_add_rect = new System.Windows.Forms.Button();
@@ -77,7 +78,7 @@
             this.tsmBringToFront = new System.Windows.Forms.ToolStripMenuItem();
             this.placesResourcesContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.placesPeopleContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.phys_delete = new System.Windows.Forms.Button();
+            this.gameQualityMinimapBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.main_splitter)).BeginInit();
             this.main_splitter.Panel1.SuspendLayout();
             this.main_splitter.Panel2.SuspendLayout();
@@ -193,6 +194,7 @@
             // 
             // settings_tab
             // 
+            this.settings_tab.Controls.Add(this.gameQualityMinimapBtn);
             this.settings_tab.Controls.Add(this.layer_places);
             this.settings_tab.Controls.Add(this.layer_objects_1);
             this.settings_tab.Controls.Add(this.layer_nodes);
@@ -452,6 +454,16 @@
             this.physics_tab.Text = "Physics";
             this.physics_tab.UseVisualStyleBackColor = true;
             // 
+            // phys_delete
+            // 
+            this.phys_delete.Location = new System.Drawing.Point(4, 93);
+            this.phys_delete.Name = "phys_delete";
+            this.phys_delete.Size = new System.Drawing.Size(207, 23);
+            this.phys_delete.TabIndex = 3;
+            this.phys_delete.Text = "Delete Physics";
+            this.phys_delete.UseVisualStyleBackColor = true;
+            this.phys_delete.Click += new System.EventHandler(this.phys_add_shape);
+            // 
             // phys_add_edge
             // 
             this.phys_add_edge.Location = new System.Drawing.Point(4, 64);
@@ -645,15 +657,16 @@
             this.placesPeopleContextMenu.Size = new System.Drawing.Size(61, 4);
             this.placesPeopleContextMenu.Closing += new System.Windows.Forms.ToolStripDropDownClosingEventHandler(this.placesContextMenu_Closing);
             // 
-            // phys_delete
+            // gameQualityMinimapBtn
             // 
-            this.phys_delete.Location = new System.Drawing.Point(4, 93);
-            this.phys_delete.Name = "phys_delete";
-            this.phys_delete.Size = new System.Drawing.Size(207, 23);
-            this.phys_delete.TabIndex = 3;
-            this.phys_delete.Text = "Delete Physics";
-            this.phys_delete.UseVisualStyleBackColor = true;
-            this.phys_delete.Click += new System.EventHandler(this.phys_add_shape);
+            this.gameQualityMinimapBtn.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.gameQualityMinimapBtn.Location = new System.Drawing.Point(3, 174);
+            this.gameQualityMinimapBtn.Name = "gameQualityMinimapBtn";
+            this.gameQualityMinimapBtn.Size = new System.Drawing.Size(217, 23);
+            this.gameQualityMinimapBtn.TabIndex = 17;
+            this.gameQualityMinimapBtn.Text = "HQ Map And Close";
+            this.gameQualityMinimapBtn.UseVisualStyleBackColor = true;
+            this.gameQualityMinimapBtn.Click += new System.EventHandler(this.gameQualityMinimapBtn_Click);
             // 
             // MainWindow
             // 
@@ -750,6 +763,7 @@
         private System.Windows.Forms.Panel panel1;
         internal System.Windows.Forms.Panel story_storyPan;
         private System.Windows.Forms.Button phys_delete;
+        private System.Windows.Forms.Button gameQualityMinimapBtn;
     }
 }
 

@@ -11,6 +11,11 @@ namespace CityTools.Minimap {
     public class MinimapDrawer {
 
         public static void RedrawAllTerrain(LBuffer buffer, Rectangle minimapDrawArea) {
+            if (File.Exists("minimap_new.jpg")) {
+                File.Delete("minimap.jpg");
+                File.Move("minimap_new.jpg", "minimap.jpg");
+            }
+
             if (File.Exists("minimap.jpg")) {
                 buffer.gfx.DrawImage(Image.FromFile("minimap.jpg"), Point.Empty);
             } else {

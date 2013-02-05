@@ -55,6 +55,9 @@ package GameCom.GameComponents
 		private var leftRearWheel:b2Body;
 		private var rightRearWheel:b2Body;
 		
+		private var LRotWheel:Sprite = new Sprite();
+		private var RRotWheel:Sprite = new Sprite();
+		
 		// collision scanner
 		private var collisionScanner:b2Body;
 		public var collisions:int;
@@ -256,6 +259,21 @@ package GameCom.GameComponents
 			
 			targetNode = firstNodeID;
 			
+			//DRAW TIRES
+			LRotWheel.graphics.beginFill(0x0);
+			LRotWheel.graphics.drawRect( -2, -5, 4, 10);
+			LRotWheel.graphics.endFill();
+			LRotWheel.x = _leftFrontWheelPosition.x * Global.PHYSICS_SCALE;
+			LRotWheel.y = _leftFrontWheelPosition.y * Global.PHYSICS_SCALE;
+			this.addChildAt(LRotWheel, 0);
+			
+			RRotWheel.graphics.beginFill(0x0);
+			RRotWheel.graphics.drawRect( -2, -5, 4, 10);
+			RRotWheel.graphics.endFill();
+			RRotWheel.x = _rightFrontWheelPosition.x * Global.PHYSICS_SCALE;
+			RRotWheel.y = _rightFrontWheelPosition.y * Global.PHYSICS_SCALE;
+			this.addChildAt(RRotWheel, 1);
+			
 			//Enemy Constructor Logic
 			if (type == VEHICLE_ENEMYVAN) {
 				var n:Number = Math.random();
@@ -374,6 +392,9 @@ package GameCom.GameComponents
 			
 			collisionScanner.SetAngle(body.GetAngle() + steeringAngle + Math.PI/2);
 			
+			LRotWheel.rotation = leftWheel.GetAngle() / Math.PI * 180 - this.rotation;
+			RRotWheel.rotation = rightWheel.GetAngle() / Math.PI * 180 - this.rotation;
+			
 			this.x = body.GetPosition().x * Global.PHYSICS_SCALE;
 			this.y = body.GetPosition().y * Global.PHYSICS_SCALE;
 			this.rotation = body.GetAngle() * 180 / Math.PI;
@@ -419,20 +440,20 @@ package GameCom.GameComponents
 			if (type == VEHICLE_DEAD) return;
 			
 			if (type != VEHICLE_ENEMYVAN) {
-				this.removeChildAt(0);
+				this.removeChildAt(2);
 				
 				cls = ThemeManager.GetClassFromSWF("SWFs/Cars.swf", "LORgames.DeadCar");
-				this.addChildAt(new cls(), 0);
-				this.getChildAt(0).transform.colorTransform = ct;
+				this.addChildAt(new cls(), 2);
+				this.getChildAt(2).transform.colorTransform = ct;
 			} else {
-				this.removeChildAt(0);
+				this.removeChildAt(2);
 				
 				cls = ThemeManager.GetClassFromSWF("SWFs/Cars.swf", "LORgames.DeadEnemyCar");
-				this.addChildAt(new cls(), 0);
+				this.addChildAt(new cls(), 2);
 			}
 			
-			body.SetLinearDamping(2.5);
-			body.SetAngularDamping(2.5);
+			body.SetLinearDamping(5);
+			body.SetAngularDamping(5);
 			
 			type = VEHICLE_DEAD;
 		}

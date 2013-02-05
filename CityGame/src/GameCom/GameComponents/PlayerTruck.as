@@ -84,6 +84,9 @@ package GameCom.GameComponents {
 		private var Wep:BaseWeapon;
 		private var world:b2World;
 		
+		private var LRotWheel:Sprite = new Sprite();
+		private var RRotWheel:Sprite = new Sprite();
+		
 		private var CurrentLoop:Sound = null;
 		private var IdleLoop:Sound = null;
 		private var ReversingLoop:Sound = null;
@@ -113,6 +116,9 @@ package GameCom.GameComponents {
 			this.getChildAt(1).y = -this.getChildAt(1).height / 2 + 15;
 			
 			this.getChildAt(1).transform.colorTransform = new ColorTransform(1.0, 1.0, 0.4);
+			
+			this.addChildAt(LRotWheel, 0);
+			this.addChildAt(RRotWheel, 1);
 			
 			//////////////////////////
 			// TRUCK BODY
@@ -230,17 +236,18 @@ package GameCom.GameComponents {
 			FixUpgradeValues();
 			EquipWeapon("MachineGun");
 			
-			this.graphics.clear();
-			this.graphics.beginFill(0x0);
+			//DRAW TIRES
+			LRotWheel.graphics.beginFill(0x0);
+			LRotWheel.graphics.drawRect( -2, -5, 4, 10);
+			LRotWheel.graphics.endFill();
+			LRotWheel.x = leftFrontWheelPosition.x * Global.PHYSICS_SCALE + 2;
+			LRotWheel.y = leftFrontWheelPosition.y * Global.PHYSICS_SCALE;
 			
-			this.graphics.drawRect(-(leftFrontWheelPosition.x + 0.2) * Global.PHYSICS_SCALE, -(leftFrontWheelPosition.y + 0.5) * Global.PHYSICS_SCALE, 4, 10);
-			this.graphics.drawRect(-(leftMidWheelPosition.x + 0.2) * Global.PHYSICS_SCALE, -(leftMidWheelPosition.y + 0.5) * Global.PHYSICS_SCALE, 4, 10);
-			this.graphics.drawRect(-(leftRearWheelPosition.x + 0.2) * Global.PHYSICS_SCALE, -(leftRearWheelPosition.y + 0.5) * Global.PHYSICS_SCALE, 4, 10);
-			this.graphics.drawRect(-(rightFrontWheelPosition.x + 0.2) * Global.PHYSICS_SCALE, -(rightFrontWheelPosition.y + 0.5) * Global.PHYSICS_SCALE, 4, 10);
-			this.graphics.drawRect(-(rightMidWheelPosition.x + 0.2) * Global.PHYSICS_SCALE, -(rightMidWheelPosition.y + 0.5) * Global.PHYSICS_SCALE, 4, 10);
-			this.graphics.drawRect(-(rightRearWheelPosition.x + 0.2) * Global.PHYSICS_SCALE, -(rightRearWheelPosition.y + 0.5) * Global.PHYSICS_SCALE, 4, 10);
-			
-			this.graphics.endFill();
+			RRotWheel.graphics.beginFill(0x0);
+			RRotWheel.graphics.drawRect( -2, -5, 4, 10);
+			RRotWheel.graphics.endFill();
+			RRotWheel.x = rightFrontWheelPosition.x * Global.PHYSICS_SCALE - 2;
+			RRotWheel.y = rightFrontWheelPosition.y * Global.PHYSICS_SCALE;
 			
 			AudioController.PlayLoop(AudioStore.TruckIdle);
 		}
@@ -331,6 +338,9 @@ package GameCom.GameComponents {
 				
 				contacts = contacts.next;
 			}
+			
+			LRotWheel.rotation = leftWheel.GetAngle() / Math.PI * 180 - this.rotation;
+			RRotWheel.rotation = rightWheel.GetAngle() / Math.PI * 180 - this.rotation;
 			
 			var mX:Number = x + Mousey.GetPosition().x - parent.stage.stageWidth / 2;
 			var mY:Number = y + Mousey.GetPosition().y - parent.stage.stageHeight / 2;
