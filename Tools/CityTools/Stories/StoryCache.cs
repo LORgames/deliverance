@@ -27,8 +27,10 @@ namespace CityTools.Stories {
                 for (int i = 0; i < totalStories; i++) {
                     int startLocation = f.GetInt();
                     int endLocation = f.GetInt();
-                    short npcImage1 = f.GetShort();
-                    short npcImage2 = f.GetShort();
+                    short npcStartImage1 = f.GetShort();
+                    short npcStartImage2 = f.GetShort();
+                    short npcEndImage1 = f.GetShort();
+                    short npcEndImage2 = f.GetShort();
                     int repLevel = f.GetInt();
                     byte resType = f.GetByte();
                     int quantity = f.GetInt();
@@ -36,7 +38,7 @@ namespace CityTools.Stories {
                     string pickupText = f.GetString();
                     string endText = f.GetString();
 
-                    stories.Add(new Story(startLocation, endLocation, npcImage1, npcImage2, repLevel, resType, quantity, startText, pickupText, endText));
+                    stories.Add(new Story(startLocation, endLocation, npcStartImage1, npcStartImage2, npcEndImage1, npcEndImage2, repLevel, resType, quantity, startText, pickupText, endText));
                 }
             }
         }
@@ -55,8 +57,10 @@ namespace CityTools.Stories {
             foreach (Story story in stories) {
                 f.AddInt(story.startLocation);
                 f.AddInt(story.endLocation);
-                f.AddShort(story.npcImage1);
-                f.AddShort(story.npcImage2);
+                f.AddShort(story.npcStartImage1);
+                f.AddShort(story.npcStartImage2);
+                f.AddShort(story.npcEndImage1);
+                f.AddShort(story.npcEndImage2);
                 f.AddInt(story.repLevel);
                 f.AddByte(story.resType);
                 f.AddInt(story.quantity);

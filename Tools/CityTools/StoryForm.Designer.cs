@@ -28,10 +28,9 @@
             this.txtStartLocation = new System.Windows.Forms.TextBox();
             this.txtEndLocation = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.cmbNPCImage1 = new System.Windows.Forms.ComboBox();
+            this.cmbStartNPCImage1 = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.txtRepLevel = new System.Windows.Forms.TextBox();
-            this.txtQuantity = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.txtStartText = new System.Windows.Forms.TextBox();
@@ -40,9 +39,19 @@
             this.label8 = new System.Windows.Forms.Label();
             this.btnSave = new System.Windows.Forms.Button();
             this.cmbResourceType = new System.Windows.Forms.ComboBox();
-            this.cmbNPCImage2 = new System.Windows.Forms.ComboBox();
+            this.cmbStartNPCImage2 = new System.Windows.Forms.ComboBox();
             this.label9 = new System.Windows.Forms.Label();
             this.txtPickupText = new System.Windows.Forms.TextBox();
+            this.tbQuantity = new System.Windows.Forms.TrackBar();
+            this.cmbEndNPCImage2 = new System.Windows.Forms.ComboBox();
+            this.cmbEndNPCImage1 = new System.Windows.Forms.ComboBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.pbStartNPC = new System.Windows.Forms.PictureBox();
+            this.pbEndNPC = new System.Windows.Forms.PictureBox();
+            this.resource_info = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.tbQuantity)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbStartNPC)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbEndNPC)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -67,14 +76,14 @@
             // 
             this.txtStartLocation.Location = new System.Drawing.Point(98, 12);
             this.txtStartLocation.Name = "txtStartLocation";
-            this.txtStartLocation.Size = new System.Drawing.Size(272, 20);
+            this.txtStartLocation.Size = new System.Drawing.Size(104, 20);
             this.txtStartLocation.TabIndex = 0;
             // 
             // txtEndLocation
             // 
             this.txtEndLocation.Location = new System.Drawing.Point(98, 38);
             this.txtEndLocation.Name = "txtEndLocation";
-            this.txtEndLocation.Size = new System.Drawing.Size(272, 20);
+            this.txtEndLocation.Size = new System.Drawing.Size(104, 20);
             this.txtEndLocation.TabIndex = 1;
             // 
             // label3
@@ -82,15 +91,15 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(12, 67);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(61, 13);
+            this.label3.Size = new System.Drawing.Size(54, 13);
             this.label3.TabIndex = 4;
-            this.label3.Text = "NPC Image";
+            this.label3.Text = "Start NPC";
             // 
-            // cmbNPCImage1
+            // cmbStartNPCImage1
             // 
-            this.cmbNPCImage1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbNPCImage1.FormattingEnabled = true;
-            this.cmbNPCImage1.Items.AddRange(new object[] {
+            this.cmbStartNPCImage1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbStartNPCImage1.FormattingEnabled = true;
+            this.cmbStartNPCImage1.Items.AddRange(new object[] {
             "0",
             "1",
             "2",
@@ -112,15 +121,16 @@
             "18",
             "19",
             "20"});
-            this.cmbNPCImage1.Location = new System.Drawing.Point(98, 64);
-            this.cmbNPCImage1.Name = "cmbNPCImage1";
-            this.cmbNPCImage1.Size = new System.Drawing.Size(133, 21);
-            this.cmbNPCImage1.TabIndex = 2;
+            this.cmbStartNPCImage1.Location = new System.Drawing.Point(98, 64);
+            this.cmbStartNPCImage1.Name = "cmbStartNPCImage1";
+            this.cmbStartNPCImage1.Size = new System.Drawing.Size(63, 21);
+            this.cmbStartNPCImage1.TabIndex = 2;
+            this.cmbStartNPCImage1.SelectedIndexChanged += new System.EventHandler(this.cmbNPCImage_SelectedIndexChanged);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 94);
+            this.label4.Location = new System.Drawing.Point(12, 124);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(56, 13);
             this.label4.TabIndex = 6;
@@ -128,22 +138,15 @@
             // 
             // txtRepLevel
             // 
-            this.txtRepLevel.Location = new System.Drawing.Point(98, 91);
+            this.txtRepLevel.Location = new System.Drawing.Point(98, 121);
             this.txtRepLevel.Name = "txtRepLevel";
             this.txtRepLevel.Size = new System.Drawing.Size(272, 20);
             this.txtRepLevel.TabIndex = 4;
             // 
-            // txtQuantity
-            // 
-            this.txtQuantity.Location = new System.Drawing.Point(98, 143);
-            this.txtQuantity.Name = "txtQuantity";
-            this.txtQuantity.Size = new System.Drawing.Size(272, 20);
-            this.txtQuantity.TabIndex = 6;
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(12, 120);
+            this.label5.Location = new System.Drawing.Point(12, 150);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(80, 13);
             this.label5.TabIndex = 10;
@@ -152,7 +155,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(12, 146);
+            this.label6.Location = new System.Drawing.Point(12, 176);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(46, 13);
             this.label6.TabIndex = 11;
@@ -160,7 +163,7 @@
             // 
             // txtStartText
             // 
-            this.txtStartText.Location = new System.Drawing.Point(98, 169);
+            this.txtStartText.Location = new System.Drawing.Point(98, 199);
             this.txtStartText.Multiline = true;
             this.txtStartText.Name = "txtStartText";
             this.txtStartText.Size = new System.Drawing.Size(272, 92);
@@ -169,7 +172,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(12, 172);
+            this.label7.Location = new System.Drawing.Point(12, 202);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(53, 13);
             this.label7.TabIndex = 13;
@@ -177,7 +180,7 @@
             // 
             // txtEndText
             // 
-            this.txtEndText.Location = new System.Drawing.Point(98, 365);
+            this.txtEndText.Location = new System.Drawing.Point(98, 395);
             this.txtEndText.Multiline = true;
             this.txtEndText.Name = "txtEndText";
             this.txtEndText.Size = new System.Drawing.Size(272, 92);
@@ -186,7 +189,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(12, 368);
+            this.label8.Location = new System.Drawing.Point(12, 398);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(50, 13);
             this.label8.TabIndex = 15;
@@ -194,7 +197,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(154, 463);
+            this.btnSave.Location = new System.Drawing.Point(154, 493);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 9;
@@ -232,16 +235,17 @@
             "23",
             "24",
             "25"});
-            this.cmbResourceType.Location = new System.Drawing.Point(98, 117);
+            this.cmbResourceType.Location = new System.Drawing.Point(98, 147);
             this.cmbResourceType.Name = "cmbResourceType";
-            this.cmbResourceType.Size = new System.Drawing.Size(272, 21);
+            this.cmbResourceType.Size = new System.Drawing.Size(104, 21);
             this.cmbResourceType.TabIndex = 5;
+            this.cmbResourceType.SelectedIndexChanged += new System.EventHandler(this.cmbResourceType_SelectedIndexChanged);
             // 
-            // cmbNPCImage2
+            // cmbStartNPCImage2
             // 
-            this.cmbNPCImage2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbNPCImage2.FormattingEnabled = true;
-            this.cmbNPCImage2.Items.AddRange(new object[] {
+            this.cmbStartNPCImage2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbStartNPCImage2.FormattingEnabled = true;
+            this.cmbStartNPCImage2.Items.AddRange(new object[] {
             "0",
             "1",
             "2",
@@ -263,15 +267,16 @@
             "18",
             "19",
             "20"});
-            this.cmbNPCImage2.Location = new System.Drawing.Point(237, 64);
-            this.cmbNPCImage2.Name = "cmbNPCImage2";
-            this.cmbNPCImage2.Size = new System.Drawing.Size(133, 21);
-            this.cmbNPCImage2.TabIndex = 3;
+            this.cmbStartNPCImage2.Location = new System.Drawing.Point(167, 64);
+            this.cmbStartNPCImage2.Name = "cmbStartNPCImage2";
+            this.cmbStartNPCImage2.Size = new System.Drawing.Size(35, 21);
+            this.cmbStartNPCImage2.TabIndex = 3;
+            this.cmbStartNPCImage2.SelectedIndexChanged += new System.EventHandler(this.UpdateNPCPicture);
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(12, 270);
+            this.label9.Location = new System.Drawing.Point(12, 300);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(64, 13);
             this.label9.TabIndex = 17;
@@ -279,32 +284,146 @@
             // 
             // txtPickupText
             // 
-            this.txtPickupText.Location = new System.Drawing.Point(98, 267);
+            this.txtPickupText.Location = new System.Drawing.Point(98, 297);
             this.txtPickupText.Multiline = true;
             this.txtPickupText.Name = "txtPickupText";
             this.txtPickupText.Size = new System.Drawing.Size(272, 92);
             this.txtPickupText.TabIndex = 16;
             // 
+            // tbQuantity
+            // 
+            this.tbQuantity.Location = new System.Drawing.Point(98, 170);
+            this.tbQuantity.Name = "tbQuantity";
+            this.tbQuantity.Size = new System.Drawing.Size(272, 45);
+            this.tbQuantity.TabIndex = 18;
+            this.tbQuantity.ValueChanged += new System.EventHandler(this.tbQuantity_ValueChanged);
+            // 
+            // cmbEndNPCImage2
+            // 
+            this.cmbEndNPCImage2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbEndNPCImage2.FormattingEnabled = true;
+            this.cmbEndNPCImage2.Items.AddRange(new object[] {
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16",
+            "17",
+            "18",
+            "19",
+            "20"});
+            this.cmbEndNPCImage2.Location = new System.Drawing.Point(167, 93);
+            this.cmbEndNPCImage2.Name = "cmbEndNPCImage2";
+            this.cmbEndNPCImage2.Size = new System.Drawing.Size(35, 21);
+            this.cmbEndNPCImage2.TabIndex = 20;
+            this.cmbEndNPCImage2.SelectedIndexChanged += new System.EventHandler(this.UpdateNPCPicture);
+            // 
+            // cmbEndNPCImage1
+            // 
+            this.cmbEndNPCImage1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbEndNPCImage1.FormattingEnabled = true;
+            this.cmbEndNPCImage1.Items.AddRange(new object[] {
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16",
+            "17",
+            "18",
+            "19",
+            "20"});
+            this.cmbEndNPCImage1.Location = new System.Drawing.Point(98, 93);
+            this.cmbEndNPCImage1.Name = "cmbEndNPCImage1";
+            this.cmbEndNPCImage1.Size = new System.Drawing.Size(63, 21);
+            this.cmbEndNPCImage1.TabIndex = 19;
+            this.cmbEndNPCImage1.SelectedIndexChanged += new System.EventHandler(this.cmbNPCImage_SelectedIndexChanged);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(12, 96);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(51, 13);
+            this.label10.TabIndex = 21;
+            this.label10.Text = "End NPC";
+            // 
+            // pbStartNPC
+            // 
+            this.pbStartNPC.Location = new System.Drawing.Point(208, 15);
+            this.pbStartNPC.Name = "pbStartNPC";
+            this.pbStartNPC.Size = new System.Drawing.Size(78, 100);
+            this.pbStartNPC.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pbStartNPC.TabIndex = 22;
+            this.pbStartNPC.TabStop = false;
+            // 
+            // pbEndNPC
+            // 
+            this.pbEndNPC.Location = new System.Drawing.Point(292, 15);
+            this.pbEndNPC.Name = "pbEndNPC";
+            this.pbEndNPC.Size = new System.Drawing.Size(78, 100);
+            this.pbEndNPC.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pbEndNPC.TabIndex = 23;
+            this.pbEndNPC.TabStop = false;
+            // 
+            // resource_info
+            // 
+            this.resource_info.AutoSize = true;
+            this.resource_info.Location = new System.Drawing.Point(208, 150);
+            this.resource_info.Name = "resource_info";
+            this.resource_info.Size = new System.Drawing.Size(108, 13);
+            this.resource_info.TabIndex = 24;
+            this.resource_info.Text = "Select+QNTY = Data";
+            // 
             // StoryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(382, 492);
+            this.ClientSize = new System.Drawing.Size(382, 521);
+            this.Controls.Add(this.resource_info);
+            this.Controls.Add(this.pbEndNPC);
+            this.Controls.Add(this.pbStartNPC);
+            this.Controls.Add(this.cmbEndNPCImage2);
+            this.Controls.Add(this.cmbEndNPCImage1);
+            this.Controls.Add(this.label10);
+            this.Controls.Add(this.txtStartText);
+            this.Controls.Add(this.tbQuantity);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.txtPickupText);
-            this.Controls.Add(this.cmbNPCImage2);
+            this.Controls.Add(this.cmbStartNPCImage2);
             this.Controls.Add(this.cmbResourceType);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.txtEndText);
             this.Controls.Add(this.label7);
-            this.Controls.Add(this.txtStartText);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.txtQuantity);
             this.Controls.Add(this.txtRepLevel);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.cmbNPCImage1);
+            this.Controls.Add(this.cmbStartNPCImage1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.txtEndLocation);
             this.Controls.Add(this.txtStartLocation);
@@ -314,6 +433,9 @@
             this.Text = "StoryForm";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.StoryForm_FormClosing);
             this.Shown += new System.EventHandler(this.StoryForm_Shown);
+            ((System.ComponentModel.ISupportInitialize)(this.tbQuantity)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbStartNPC)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbEndNPC)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -326,10 +448,9 @@
         private System.Windows.Forms.TextBox txtStartLocation;
         private System.Windows.Forms.TextBox txtEndLocation;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ComboBox cmbNPCImage1;
+        private System.Windows.Forms.ComboBox cmbStartNPCImage1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txtRepLevel;
-        private System.Windows.Forms.TextBox txtQuantity;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox txtStartText;
@@ -338,8 +459,15 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.ComboBox cmbResourceType;
-        private System.Windows.Forms.ComboBox cmbNPCImage2;
+        private System.Windows.Forms.ComboBox cmbStartNPCImage2;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox txtPickupText;
+        private System.Windows.Forms.TrackBar tbQuantity;
+        private System.Windows.Forms.ComboBox cmbEndNPCImage2;
+        private System.Windows.Forms.ComboBox cmbEndNPCImage1;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.PictureBox pbStartNPC;
+        private System.Windows.Forms.PictureBox pbEndNPC;
+        private System.Windows.Forms.Label resource_info;
     }
 }

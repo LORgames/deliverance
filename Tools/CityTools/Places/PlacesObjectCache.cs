@@ -25,6 +25,12 @@ namespace CityTools.Places {
         public static List<PlacesObject> s_objectStore = new List<PlacesObject>();
 
         public static List<String> resources = new List<string>();
+        public static List<int> resources_min = new List<int>();
+        public static List<int> resources_max = new List<int>();
+        public static List<float> resources_rep = new List<float>();
+        public static List<float> resources_money = new List<float>();
+
+        public static List<String> people = new List<string>();
 
         public static void InitializeCache() {
             if (!Directory.Exists(PLACES_FOLDER)) {
@@ -79,7 +85,7 @@ namespace CityTools.Places {
             for (int i = 0; i < people_lines.Length; i++) {
                 string resLine = people_lines[i];
                 string name = resLine.Split(',')[1];
-                resources.Add(name);
+                people.Add(name);
 
                 ToolStripMenuItem tsi = (MainWindow.instance.placesPeopleContextMenu.Items.Add(name) as ToolStripMenuItem);
                 tsi.CheckOnClick = true;
@@ -92,11 +98,15 @@ namespace CityTools.Places {
                 string name = resLine.Split(',')[1];
                 resources.Add(name);
 
+                resources_min.Add(int.Parse(resLine.Split(',')[3]));
+                resources_max.Add(int.Parse(resLine.Split(',')[4]));
+
+                resources_money.Add(float.Parse(resLine.Split(',')[2]));
+                resources_rep.Add(float.Parse(resLine.Split(',')[7]));
+
                 ToolStripMenuItem tsi = (MainWindow.instance.placesResourcesContextMenu.Items.Add(name) as ToolStripMenuItem);
                 tsi.CheckOnClick = true;
             }
-
-            
         }
 
         static void resDD_DropDownClosed(object sender, EventArgs e) {

@@ -7,8 +7,10 @@ namespace CityTools.Stories {
     class Story {
         internal int startLocation;
         internal int endLocation;
-        internal short npcImage1;
-        internal short npcImage2;
+        internal short npcStartImage1;
+        internal short npcStartImage2;
+        internal short npcEndImage1;
+        internal short npcEndImage2;
         internal int repLevel;
         internal byte resType;
         internal int quantity;
@@ -16,11 +18,13 @@ namespace CityTools.Stories {
         internal string pickupText;
         internal string endText;
 
-        public Story(int startLocation, int endLocation, short npcImage1, short npcImage2, int repLevel, byte resType, int quantity, string startText, string pickupText, string endText) {
+        public Story(int startLocation, int endLocation, short npcStartImage1, short npcStartImage2, short npcEndImage1, short npcEndImage2, int repLevel, byte resType, int quantity, string startText, string pickupText, string endText) {
             this.startLocation = startLocation;
             this.endLocation = endLocation;
-            this.npcImage1 = npcImage1;
-            this.npcImage2 = npcImage2;
+            this.npcStartImage1 = npcStartImage1;
+            this.npcStartImage2 = npcStartImage2;
+            this.npcEndImage1 = npcEndImage1;
+            this.npcEndImage2 = npcEndImage2;
             this.repLevel = repLevel;
             this.resType = resType;
             this.quantity = quantity;

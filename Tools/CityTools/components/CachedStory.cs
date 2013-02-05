@@ -19,7 +19,8 @@ namespace CityTools.Components {
 
             this.lblStartLocation.Text = "Start Location: " + story.startLocation.ToString();
             this.lblEndLocation.Text = "End Location: " + story.endLocation.ToString();
-            this.lblNPCImage.Text = "NPC Image: " + story.npcImage1.ToString() + "_" + story.npcImage2.ToString();
+            this.lblNPCImage.Text = "Start NPC Image: " + story.npcStartImage1.ToString() + "_" + story.npcStartImage2.ToString();
+            this.lblNPCImage.Text = "End NPC Image: " + story.npcEndImage1.ToString() + "_" + story.npcEndImage2.ToString();
             this.lblRepLevel.Text = "Rep Level: " + story.repLevel.ToString();
             this.lblResType.Text = "Res Type: " + story.resType.ToString();
             this.lblQuantity.Text = "Quantity: " + story.quantity.ToString();
