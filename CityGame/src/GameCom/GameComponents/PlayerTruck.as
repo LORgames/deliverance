@@ -13,6 +13,7 @@ package GameCom.GameComponents {
 	import GameCom.States.GameScreen;
 	import LORgames.Engine.AudioController;
 	import LORgames.Engine.Keys;
+	import LORgames.Engine.Mousey;
 	import flash.ui.Keyboard;
 	import GameCom.Managers.TriggerManager;
 	import LORgames.Engine.Storage;
@@ -116,6 +117,7 @@ package GameCom.GameComponents {
 			bodyFixtureDef.shape = bodyShape;
 			bodyFixtureDef.density = 0.2;
 			bodyFixtureDef.filter.categoryBits = 3;
+			bodyFixtureDef.userData = this;
 			
 			//Create the defintion
 			var bodyBodyDef:b2BodyDef = new b2BodyDef();
@@ -139,6 +141,7 @@ package GameCom.GameComponents {
 			var wheelFixtureDef:b2FixtureDef = new b2FixtureDef();
 			wheelFixtureDef.shape = wheelShape;
 			wheelFixtureDef.density = 1.0;
+			wheelFixtureDef.userData = this;
 			
 			//Create the defintion
 			var wheelBodyDef:b2BodyDef = new b2BodyDef();
@@ -311,7 +314,11 @@ package GameCom.GameComponents {
 				contacts = contacts.next;
 			}
 			
-			Wep.Update();
+			var mX:Number = x + Mousey.GetPosition().x - parent.stage.stageWidth / 2;
+			var mY:Number = y + Mousey.GetPosition().y - parent.stage.stageHeight / 2;
+			var p:Point = new Point(mX, mY);
+			
+			Wep.Update(p, Mousey.IsClicking());
 			if (healthCurrent < 0) Respawn();
 		}
 		

@@ -5,6 +5,7 @@ package GameCom.GameComponents.Weapons
 	import Box2D.Dynamics.b2World;
 	import flash.display.MovieClip;
 	import flash.geom.ColorTransform;
+	import flash.geom.Point;
 	import flash.sampler.NewObjectSample;
 	import GameCom.GameComponents.NPCCar;
 	import LORgames.Engine.Mousey;
@@ -25,18 +26,15 @@ package GameCom.GameComponents.Weapons
 			this.addChild(new cls());
 		}
 		
-		override public function Update():void {
-			super.Update();
+		override public function Update(p:Point, wantsToFire:Boolean):void {
+			super.Update(p, wantsToFire);
 			
 			this.graphics.clear();
 			this.graphics.lineStyle(5, 0xFF0000);
 			
-			if (Mousey.IsClicking()) {
-				var mX:Number = parent.x + Mousey.GetPosition().x - parent.stage.stageWidth / 2;
-				var mY:Number = parent.y + Mousey.GetPosition().y - parent.stage.stageHeight / 2
-				
+			if (wantsToFire) {
 				var b1:b2Vec2 = new b2Vec2(parent.x / Global.PHYSICS_SCALE, parent.y / Global.PHYSICS_SCALE);
-				var b2:b2Vec2 = new b2Vec2(mX / Global.PHYSICS_SCALE, mY / Global.PHYSICS_SCALE);
+				var b2:b2Vec2 = new b2Vec2(p.x / Global.PHYSICS_SCALE, p.y / Global.PHYSICS_SCALE);
 				
 				var d:b2Vec2 = b1.Copy();
 				d.Subtract(b2);

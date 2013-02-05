@@ -1,6 +1,11 @@
 package GameCom.GameComponents 
 {
 	import flash.geom.ColorTransform;
+	import flash.geom.Point;
+	import GameCom.GameComponents.Weapons.BaseWeapon;
+	import GameCom.GameComponents.Weapons.Laser;
+	import GameCom.GameComponents.Weapons.MachineGun;
+	import GameCom.GameComponents.Weapons.RocketLauncher;
 	import GameCom.Helpers.AudioStore;
 	import GameCom.Helpers.MathHelper;
 	import GameCom.Managers.GUIManager;
@@ -8,6 +13,7 @@ package GameCom.GameComponents
 	import GameCom.States.GameScreen;
 	import LORgames.Engine.AudioController;
 	import LORgames.Engine.Keys;
+	import LORgames.Engine.Mousey;
 	import flash.ui.Keyboard;
 	
 	import Box2D.Collision.*;
@@ -58,6 +64,12 @@ package GameCom.GameComponents
 		// AI
 		private var nodeManager:NodeManager;
 		private var targetNode:int = 0;
+		private var type:int = VEHICLE_CARA;
+		private const VEHICLE_CARA:int = 0;
+		private const VEHICLE_SPORTSCAR:int = 1;
+		private const VEHICLE_ENEMYVAN:int = 2;
+		
+		private var Wep:BaseWeapon;
 		
 		public function NPCCar(spawnPosition:b2Vec2, world:b2World, nodeManager:NodeManager, angle:Number, firstNodeID:int) {
 			this.world = world;
@@ -69,8 +81,20 @@ package GameCom.GameComponents
 			
 			this.nodeManager = nodeManager;
 			
-			var CarA:Class = ThemeManager.GetClassFromSWF("SWFs/Cars.swf", "LORgames.CarA");
-			this.addChild(new CarA());
+			var carChance:Number = Math.random();
+			var vehicle:Class;
+			
+			if (carChance < 0.1) {
+				vehicle = ThemeManager.GetClassFromSWF("SWFs/Cars.swf", "LORgames.CarA"); // EnemyVan
+				type = VEHICLE_ENEMYVAN;
+			} else if (carChance < 0.7) {
+				vehicle = ThemeManager.GetClassFromSWF("SWFs/Cars.swf", "LORgames.CarA"); // CarA
+				type = VEHICLE_CARA;
+			} else {
+				vehicle = ThemeManager.GetClassFromSWF("SWFs/Cars.swf", "LORgames.CarA"); // SportsCar
+				type = VEHICLE_SPORTSCAR;
+			}
+			this.addChild(new vehicle());
 			
 			//this.getChildAt(0).x = -this.getChildAt(0).width / 2;
 			//this.getChildAt(0).y = -this.getChildAt(0).height / 2;
@@ -228,6 +252,11 @@ package GameCom.GameComponents
 			rightWheel.ApplyForce(rdirection, rightWheel.GetPosition());
 			
 			targetNode = firstNodeID;
+			
+			//Enemy Constructor Logic
+			if (type == VEHICLE_ENEMYVAN) {
+				EquipWeapon("MachineGun");
+			}
 		}
 		
 		private function killOrthogonalVelocity(targetBody:b2Body):void {
@@ -253,6 +282,10 @@ package GameCom.GameComponents
 				}
 				
 				var tNode:Node = nodeManager.GetNode(targetNode);
+				
+				if (Wep != null) {
+					Wep.Update(new Point(GUIManager.I.player.x, GUIManager.I.player.y), true);
+				}
 				
 				// always accelerate toward targetNode UNLESS ABOUT TO COLLIDE OMFG JUST LIKE JACOB'S DRIVING 
 				if (collisions > 0) {
@@ -326,6 +359,30 @@ package GameCom.GameComponents
 			this.x = body.GetPosition().x * Global.PHYSICS_SCALE;
 			this.y = body.GetPosition().y * Global.PHYSICS_SCALE;
 			this.rotation = body.GetAngle() * 180 / Math.PI;
+		}
+		
+		public function EquipWeapon(weaponName:String):void {
+			if (Wep != null) {
+				this.removeChild(Wep);
+			}
+			
+			switch(weaponName) {
+				case "MachineGun":
+					Wep = new  MachineGun(world); break;
+				case "RocketPod":
+					Wep = new RocketLauncher(world); break;
+				case "Laser":
+				default:
+					Wep = new Laser(world); break;
+			}
+			
+			Wep.IgnoreList.push(body.GetFixtureList());
+			Wep.IgnoreList.push(leftRearWheel.GetFixtureList());
+			Wep.IgnoreList.push(rightRearWheel.GetFixtureList());
+			Wep.IgnoreList.push(leftWheel.GetFixtureList());
+			Wep.IgnoreList.push(rightWheel.GetFixtureList());
+			
+			this.addChild(Wep);
 		}
 		
 		public function Destroy():void {

@@ -1,6 +1,7 @@
 package GameCom.GameComponents.Weapons 
 {
 	import Box2D.Dynamics.b2World;
+	import flash.geom.Point;
 	/**
 	 * ...
 	 * @author ...
@@ -20,8 +21,8 @@ package GameCom.GameComponents.Weapons
 			
 		}
 		
-		override public function Update():void {
-			super.Update();
+		override public function Update(p:Point, wantsToFire:Boolean):void {
+			super.Update(p, wantsToFire);
 			this.rotation = 90;
 		}
 		

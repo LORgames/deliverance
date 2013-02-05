@@ -25,6 +25,9 @@ package GameCom.GameComponents.Weapons {
 		//Delay between shots in seconds?
 		protected var FIRE_RATE:Number = 0.1; //0.2=5APS, 1.0=1APS, 2.0=0.5APS, etc
 		
+		protected var p:Point;
+		protected var wantsToFire:Boolean;
+		
 		public function BaseWeapon(world:b2World) {
 			World = world;
 		}
@@ -33,17 +36,18 @@ package GameCom.GameComponents.Weapons {
 			
 		}
 		
-		public function Update():void {
-			var p:Point = Mousey.GetPosition();
+		public function Update(p:Point, wantsToFire:Boolean):void {
+			this.p = p;
+			this.wantsToFire = wantsToFire;
 			
-			var angle:Number = Math.atan2(p.y - parent.stage.stageHeight / 2, p.x - parent.stage.stageWidth / 2);
+			var angle:Number = Math.atan2(p.y - parent.y, p.x - parent.x);
 			this.rotation = angle / Math.PI * 180 - parent.rotation;
 			
 			if(_fireDelay < FIRE_RATE) {
 				_fireDelay += Global.TIME_STEP;
 			}
 			
-			while (Mousey.IsClicking() && _fireDelay >= FIRE_RATE) {
+			while (wantsToFire && _fireDelay >= FIRE_RATE) {
 				_fireDelay -= FIRE_RATE;
 				Fire();
 			}

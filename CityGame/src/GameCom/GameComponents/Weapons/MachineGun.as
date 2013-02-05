@@ -8,7 +8,9 @@ package GameCom.GameComponents.Weapons
 	import flash.display.Sprite;
 	import flash.geom.ColorTransform;
 	import flash.geom.Matrix;
+	import flash.geom.Point;
 	import GameCom.GameComponents.NPCCar;
+	import GameCom.GameComponents.PlayerTruck;
 	import GameCom.Helpers.AudioStore;
 	import GameCom.Helpers.MathHelper;
 	import LORgames.Engine.AudioController;
@@ -33,11 +35,8 @@ package GameCom.GameComponents.Weapons
 		override public function Fire():void {
 			AudioController.PlaySound(AudioStore.MachineGunBullet);
 			
-			var mX:Number = parent.x + Mousey.GetPosition().x - parent.stage.stageWidth / 2;
-			var mY:Number = parent.y + Mousey.GetPosition().y - parent.stage.stageHeight / 2;
-			
 			var b1:b2Vec2 = new b2Vec2(parent.x / Global.PHYSICS_SCALE, parent.y / Global.PHYSICS_SCALE);
-			var b2:b2Vec2 = new b2Vec2(mX / Global.PHYSICS_SCALE, mY / Global.PHYSICS_SCALE);
+			var b2:b2Vec2 = new b2Vec2(p.x / Global.PHYSICS_SCALE, p.y / Global.PHYSICS_SCALE);
 			
 			var d:b2Vec2 = b2.Copy();
 			d.Subtract(b1);
@@ -59,6 +58,9 @@ package GameCom.GameComponents.Weapons
 				if (fixtureHit.GetUserData() is NPCCar) {
 					var car:NPCCar = fixtureHit.GetUserData() as NPCCar;
 					(car.getChildAt(0) as MovieClip).getChildAt(0).transform.colorTransform = new ColorTransform(Math.random(), Math.random(), Math.random());
+				} else if (fixtureHit.GetUserData() is PlayerTruck) {
+					var player:PlayerTruck = fixtureHit.GetUserData() as PlayerTruck;
+					player.Damage(9);
 				}
 			}
 			
@@ -69,10 +71,10 @@ package GameCom.GameComponents.Weapons
 			this.graphics.lineTo(Math.cos(angleBecauseInaccurate)*size*distance*Global.PHYSICS_SCALE, Math.sin(angleBecauseInaccurate)*size*distance*Global.PHYSICS_SCALE);
 		}
 		
-		override public function Update():void {
+		override public function Update(p:Point, wantsToFire:Boolean):void {
 			this.graphics.clear();
 			
-			super.Update();
+			super.Update(p, wantsToFire);
 		}
 		
 		private function Wrappey(fixture:b2Fixture, point:b2Vec2, normal:b2Vec2, fraction:Number):Number {
