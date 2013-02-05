@@ -12,6 +12,7 @@ package GameCom.Managers {
 	import GameCom.GameComponents.ScenicObject
 	import GameCom.SystemComponents.PhysicsShape;
 	import GameCom.SystemComponents.ScenicObjectType;
+	import LORgames.Engine.Storage;
 	/**
 	 * ...
 	 * @author Paul
@@ -27,6 +28,7 @@ package GameCom.Managers {
 		public var PickupLocations:Vector.<PickupPlace> = new Vector.<PickupPlace>();
 		public var DropatLocations:Vector.<PlaceObject> = new Vector.<PlaceObject>();
 		public var SpawnLocations:Vector.<PlaceObject> = new Vector.<PlaceObject>();
+		public var CollectableLocations:Vector.<PlaceObject> = new Vector.<PlaceObject>();
 		
 		private var layer:Sprite;
 		
@@ -114,7 +116,12 @@ package GameCom.Managers {
 				} else if (sourceID == collectableIndex) {
 					//TODO: collectables need to make sure they haven't been collected already
 					po = new PlaceObject(sourceID, locationX, locationY, rotation, world, Types[sourceID], 0);
-					po.isActive = true;
+					
+					if (!Storage.GetAsBool("Collectable_" + CollectableLocations.length)) {
+						po.isActive = true;
+					}
+					
+					CollectableLocations.push(po);
 				} else if (sourceID == spawnIndex) {
 					po = new PlaceObject(sourceID, locationX, locationY, rotation, world, Types[sourceID], 0);
 					po.isActive = false;

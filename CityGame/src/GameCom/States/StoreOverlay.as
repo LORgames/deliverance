@@ -124,8 +124,6 @@ package GameCom.States {
 			tooltip.x = me.currentTarget.x + 20;
 			tooltip.y = me.currentTarget.y + me.currentTarget.height / 2;
 			
-			trace(me.currentTarget.width);
-			
 			if (statVal == 10) {
 				tooltip.SetText("ALREADY MAX");
 			} else {
@@ -142,7 +140,7 @@ package GameCom.States {
 		private function ChangeWeapon(me:MouseEvent):void {
 			var weapon:String = me.currentTarget.getLabel();
 			
-			if(weapon != "RocketPod") {
+			if(weapon != "RocketPod" || true) {
 				GUIManager.I.player.EquipWeapon(weapon);
 				tooltip.visible = false;
 			} else {

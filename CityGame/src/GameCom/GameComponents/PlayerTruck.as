@@ -233,11 +233,11 @@ package GameCom.GameComponents {
 		}
 		
 		public function Update(dt:Number):void {
-			if (Keys.isKeyDown(Keyboard.UP)) {
+			if (Keys.isKeyDown(Keyboard.UP) || Keys.isKeyDown(Keyboard.W)) {
 				if(engineSpeed > -currentHorsePowerMax) {
 					engineSpeed -= currentHorsePowerInc*dt;
 				}
-			} else if (Keys.isKeyDown(Keyboard.DOWN)) {
+			} else if (Keys.isKeyDown(Keyboard.DOWN) || Keys.isKeyDown(Keyboard.S)) {
 				if(engineSpeed < currentHorsePowerMax) {
 					engineSpeed += currentHorsePowerInc*dt;
 				}
@@ -245,9 +245,9 @@ package GameCom.GameComponents {
 				engineSpeed = 0;
 			}
 			
-			if(Keys.isKeyDown(Keyboard.RIGHT)) {
+			if(Keys.isKeyDown(Keyboard.RIGHT) || Keys.isKeyDown(Keyboard.D)) {
 				steeringAngle = MAX_STEER_ANGLE
-			} else if(Keys.isKeyDown(Keyboard.LEFT)) {
+			} else if(Keys.isKeyDown(Keyboard.LEFT) || Keys.isKeyDown(Keyboard.A)) {
 				steeringAngle = -MAX_STEER_ANGLE
 			} else {
 				steeringAngle = 0;
@@ -389,6 +389,7 @@ package GameCom.GameComponents {
 			rightRearWheel.SetAngularVelocity(0);
 			
 			healthCurrent = healthMax;
+			GUIManager.I.UpdateCache();
 			GUIManager.I.Update();
 		}
 		

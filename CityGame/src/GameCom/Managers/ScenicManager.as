@@ -73,6 +73,8 @@ package GameCom.Managers {
 						Types[typeID].Physics.AddRectangle(xPos, yPos, wDim, hDim);
 					} else if (shapeType == 1) { //Circle
 						Types[typeID].Physics.AddCircle(xPos, yPos, wDim);
+					} else if (shapeType == 2) { //Edge
+						Types[typeID].Physics.AddEdge(xPos, yPos, wDim, hDim);
 					}
                 }
             }

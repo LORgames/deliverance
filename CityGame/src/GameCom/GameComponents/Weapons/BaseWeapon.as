@@ -30,7 +30,7 @@ package GameCom.GameComponents.Weapons {
 		}
 		
 		public function Fire():void {
-			trace("Pow");
+			
 		}
 		
 		public function Update():void {

@@ -10,9 +10,9 @@ package GameCom.GameComponents.Weapons
 		public function RocketLauncher(world:b2World) {
 			super(world);
 			
-			FIRE_RATE = 0.1;
+			FIRE_RATE = 2.5;
 			
-			var cls:Class = ThemeManager.GetClassFromSWF("SWFs/Weapons.swf", "LORgames.RocketPod");
+			var cls:Class = ThemeManager.GetClassFromSWF("SWFs/Weapons.swf", "LORgames.Rocket");
 			this.addChild(new cls());
 		}
 		
@@ -22,7 +22,7 @@ package GameCom.GameComponents.Weapons
 		
 		override public function Update():void {
 			super.Update();
-			this.rotation = 0;
+			this.rotation = 90;
 		}
 		
 	}

@@ -71,6 +71,9 @@ namespace ToolToGameExporter {
             try { zip.RemoveEntry("story.bin"); } catch { }
             OptimizeAndAddStories(zip);
 
+            try { zip.RemoveEntry("WorldPhysics.bin"); } catch { }
+            zip.AddEntry("WorldPhysics.bin", File.ReadAllBytes(GetToolCacheLoc() + "physics.bin"));
+
             try { zip.RemoveEntry("Resources.csv"); } catch { }
             try { zip.RemoveEntry("Characters.csv"); } catch { }
             try { zip.RemoveEntry("Upgrades.csv"); } catch { }
@@ -149,12 +152,22 @@ namespace ToolToGameExporter {
 
                     if((PhysicsShapes)shapeType == PhysicsShapes.Rectangle) {
                         hDim = f.GetFloat();
+                    } else if ((PhysicsShapes)shapeType == PhysicsShapes.Edge) {
+                        hDim = f.GetFloat();
                     }
 
-                    xPos += (wDim - im.Width) / 2;
-                    yPos += (hDim - im.Height) / 2;
-                    wDim /= 2; // Game uses radial w and h
-                    hDim /= 2;
+
+                    if ((PhysicsShapes)shapeType != PhysicsShapes.Edge) {
+                        xPos += (wDim - im.Width) / 2;
+                        yPos += (hDim - im.Height) / 2;
+                        wDim /= 2; // Game uses radial w and h
+                        hDim /= 2;
+                    } else {
+                        xPos -= im.Width / 2;
+                        yPos -= im.Height / 2;
+                        wDim -= im.Width / 2;
+                        hDim -= im.Height / 2;
+                    }
 
                     o.AddFloat(xPos / PHYSICS_SCALE);
                     o.AddFloat(yPos / PHYSICS_SCALE);

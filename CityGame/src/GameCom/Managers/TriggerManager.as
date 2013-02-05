@@ -2,8 +2,11 @@ package GameCom.Managers
 {
 	import flash.display.Bitmap;
 	import GameCom.GameComponents.PickupPlace;
+	import GameCom.GameComponents.PlaceObject;
 	import LORgames.Engine.Keys;
 	import flash.ui.Keyboard;
+	import LORgames.Engine.MessageBox;
+	import LORgames.Engine.Storage;
 	/**
 	 * ...
 	 * @author P. Fox
@@ -23,8 +26,12 @@ package GameCom.Managers
 				MissionManager.CheckMissionParameters();
 			} else if (trigger == "place_Weapons") {
 				GUIManager.I.ActivateStore();
-			}else {
-				trace(trigger);
+			} else if (trigger == "place_Collectable") { 
+				var id:int = PlacesManager.instance.CollectableLocations.indexOf(obj);
+				(obj as PlaceObject).isActive = false;
+				
+				Storage.Set("Collectable_" + id, true);
+				new MessageBox("Found collectable " + id + " of " + PlacesManager.instance.CollectableLocations.length, 0);
 			}
 		}
 	}

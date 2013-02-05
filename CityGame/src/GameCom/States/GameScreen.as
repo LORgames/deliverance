@@ -20,6 +20,7 @@ package GameCom.States {
 	import GameCom.Helpers.MoneyHelper;
 	import GameCom.Helpers.ReputationHelper;
 	import GameCom.Helpers.ResourceHelper;
+	import GameCom.Helpers.WorldPhysicsLoader;
 	import GameCom.Managers.GUIManager;
 	import GameCom.Managers.MissionManager;
 	import GameCom.Managers.NPCManager;
@@ -118,7 +119,7 @@ package GameCom.States {
 			StaticBoxCreator.CreateBoxes(world);
 			
 			// player is added to objectLayer
-			player = new PlayerTruck(new b2Vec2(12762/Global.PHYSICS_SCALE, 14547/Global.PHYSICS_SCALE), world, placesLayer);
+			player = new PlayerTruck(new b2Vec2(10975/Global.PHYSICS_SCALE, 15290/Global.PHYSICS_SCALE), world, placesLayer);
 			
 			// bgManager (ground) is added to groundLayer
 			bgManager = new BGManager(groundLayer, player);
@@ -134,8 +135,12 @@ package GameCom.States {
 			
 			world.SetContactListener(new CollisionSolver(player, npcManager));
 			
+			WorldPhysicsLoader.InjectPhysicsIntoWorld(world);
+			
 			gui = new GUIManager(player, Pause);
 			this.addChild(gui);
+			
+			//player.Respawn();
 			
 			MissionManager.GenerateAllMissions();
 		}

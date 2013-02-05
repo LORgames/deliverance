@@ -43,6 +43,16 @@ package LORgames.Engine
 			return defaultValue;
 		}
 		
+		public static function GetAsBool(index:String, defaultValue:Boolean = false):Boolean {
+			if(storageObject == null) Initialize();
+			
+			if (storageArray[index] is Boolean) {
+				return storageArray[index];
+			}
+			
+			return defaultValue;
+		}
+		
 		public static function Set(index:String, value:*):void {
 			if (storageObject == null) Initialize();
 			
