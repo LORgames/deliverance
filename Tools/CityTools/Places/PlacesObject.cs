@@ -13,8 +13,8 @@ namespace CityTools.Places {
         public int object_index = 0;
         public int angle = 0;
 
-        private short b_NPC = 0;
-        private int b_resources = 0;
+        internal short b_NPC = 0;
+        internal int b_resources = 0;
 
         public bool selected = false;
 

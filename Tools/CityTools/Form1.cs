@@ -69,6 +69,10 @@ namespace CityTools {
         private bool minimap_initialized = false;
         public bool initialized = false;
 
+        // Places copying things
+        private int b_resources_copy = -1;
+        private short b_NPC_copy = -1;
+
         public MainWindow() {
             instance = this;
 
@@ -164,8 +168,19 @@ namespace CityTools {
                 ScenicHelper.ProcessCmdKey(ref msg, keyData);
                 mapViewPanel.Invalidate();
             } else if (paintMode == PaintMode.PlacesSelector) {
-                PlacesHelper.ProcessCmdKey(ref msg, keyData);
-                mapViewPanel.Invalidate();
+                if (keyData == (Keys.Control | Keys.C)) {
+                    //Copy Data
+                    if (PlacesHelper.selectedObjects.Count == 1) {
+                        b_resources_copy = PlacesHelper.selectedObjects[0].b_resources;
+                        b_NPC_copy = PlacesHelper.selectedObjects[0].b_NPC;
+                        paintMode = PaintMode.Places;
+                        PlacesPlacementHelper.object_index = PlacesHelper.selectedObjects[0].object_index;
+                        DrawWithObject(PlacesObjectCache.s_objectTypes[PlacesHelper.selectedObjects[0].object_index].ImageName);
+                    }
+                } else {
+                    PlacesHelper.ProcessCmdKey(ref msg, keyData);
+                    mapViewPanel.Invalidate();
+                }
             } else if (paintMode == PaintMode.NodeSelector) {
                 NodeHelper.ProcessCmdKey(ref msg, keyData);
                 mapViewPanel.Invalidate();
@@ -252,6 +267,12 @@ namespace CityTools {
                 ScenicPlacementHelper.MouseDown(e, input_buffer);
                 mapViewPanel.Invalidate();
             } else if (paintMode == PaintMode.Places) {
+                // Send through details of copied stuff
+                if (b_NPC_copy != -1 || b_resources_copy != -1) {
+                    PlacesPlacementHelper.CopiedData(b_resources_copy, b_NPC_copy);
+                    b_resources_copy = -1;
+                    b_NPC_copy = -1;
+                }
                 PlacesPlacementHelper.MouseDown(e, input_buffer);
                 mapViewPanel.Invalidate();
             } else if (paintMode == PaintMode.Physics) {

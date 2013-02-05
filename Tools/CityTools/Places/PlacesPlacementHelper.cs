@@ -12,6 +12,9 @@ namespace CityTools.Places {
 
         public static int object_index = 0;
 
+        private static int b_resource = -1;
+        private static short b_NPC = -1;
+
         internal static bool UpdateMouse(MouseEventArgs e, LBuffer inputBuffer) {
             mousePos = e.Location;
 
@@ -38,8 +41,20 @@ namespace CityTools.Places {
 
             RectangleF eA = new RectangleF(p0.X, p0.Y, p1.X, p1.Y);
             PlacesObjectCache.AddShape(new PlacesObject(object_index, new PointF(eA.Left, eA.Top), (int)MainWindow.instance.obj_rot.Value));
+            if (b_resource != -1 || b_NPC != -1) {
+                PlacesObjectCache.s_objectStore[PlacesObjectCache.s_objectStore.Count - 1].b_resources = b_resource;
+                PlacesObjectCache.s_objectStore[PlacesObjectCache.s_objectStore.Count - 1].b_NPC = b_NPC;
+            }
+
+            b_resource = -1;
+            b_NPC = -1;
 
             return true;
+        }
+
+        internal static void CopiedData(int b_resources_copy, short b_NPC_copy) {
+            b_resource = b_resources_copy;
+            b_NPC = b_NPC_copy;
         }
     }
 }

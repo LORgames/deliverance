@@ -9,7 +9,7 @@ using CityTools.Core;
 
 namespace CityTools.Places {
     public class PlacesHelper {
-        private static List<PlacesObject> selectedObjects = new List<PlacesObject>();
+        internal static List<PlacesObject> selectedObjects = new List<PlacesObject>();
 
         private static PointF p0 = Point.Empty;
         private static PointF p1 = Point.Empty;
