@@ -31,7 +31,8 @@ package GameCom.Managers
 				(obj as PlaceObject).isActive = false;
 				
 				Storage.Set("Collectable_" + id, true);
-				new MessageBox("Found collectable " + id + " of " + PlacesManager.instance.CollectableLocations.length, 0);
+				
+				GUIManager.I.SetMessage("Found collectable " + (id+1) + " of " + PlacesManager.instance.CollectableLocations.length);
 			}
 		}
 	}

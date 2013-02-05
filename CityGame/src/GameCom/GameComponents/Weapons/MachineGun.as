@@ -9,7 +9,9 @@ package GameCom.GameComponents.Weapons
 	import flash.geom.ColorTransform;
 	import flash.geom.Matrix;
 	import GameCom.GameComponents.NPCCar;
+	import GameCom.Helpers.AudioStore;
 	import GameCom.Helpers.MathHelper;
+	import LORgames.Engine.AudioController;
 	import LORgames.Engine.Mousey;
 	/**
 	 * ...
@@ -29,6 +31,8 @@ package GameCom.GameComponents.Weapons
 		}
 		
 		override public function Fire():void {
+			AudioController.PlaySound(AudioStore.MachineGunBullet);
+			
 			var mX:Number = parent.x + Mousey.GetPosition().x - parent.stage.stageWidth / 2;
 			var mY:Number = parent.y + Mousey.GetPosition().y - parent.stage.stageHeight / 2;
 			

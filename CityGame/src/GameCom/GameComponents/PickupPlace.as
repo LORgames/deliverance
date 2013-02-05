@@ -5,6 +5,7 @@ package GameCom.GameComponents
 	import GameCom.Helpers.ReputationHelper;
 	import GameCom.Helpers.ResourceHelper;
 	import GameCom.Managers.GUIManager;
+	import GameCom.Managers.PlacesManager;
 	import GameCom.SystemComponents.MissionParameters;
 	import GameCom.SystemComponents.ResourceInformation;
 	import LORgames.Components.Tooltip;
@@ -45,8 +46,12 @@ package GameCom.GameComponents
 					MissionParams.ResourceType = ri.ID;
 					MissionParams.ResourceAmount = ri.MinimumLoad + Math.floor(Math.random() * (ri.MaximumLoad - ri.MinimumLoad));
 					
+					var places:Vector.<PlaceObject> = PlacesManager.instance.DeliveryLocationsByResource[ri.ID];
+					
+					
+					
 					MissionParams.Origin = arrayIndex;
-					MissionParams.Destination = 0;
+					MissionParams.Destination = PlacesManager.instance.DropatLocations.indexOf(places[Math.floor(places.length*Math.random())]);
 					
 					var expGain:int = ri.ReputationGainPerItem * MissionParams.ResourceAmount;
 					var monGain:int = ri.ValuePerItem * MissionParams.ResourceAmount;

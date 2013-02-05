@@ -30,6 +30,8 @@ package GameCom.Managers {
 		public var SpawnLocations:Vector.<PlaceObject> = new Vector.<PlaceObject>();
 		public var CollectableLocations:Vector.<PlaceObject> = new Vector.<PlaceObject>();
 		
+		public var DeliveryLocationsByResource:Vector.<Vector.<PlaceObject>> = new Vector.<Vector.<PlaceObject>>();
+		
 		private var layer:Sprite;
 		
 		private var player:Sprite;
@@ -39,6 +41,15 @@ package GameCom.Managers {
 			if (instance != null) {
 				//We've already loaded this before
 				return;
+			}
+			
+			var i:int;
+			var j:int;
+			var typeID:int;
+			
+			//Need to add a delivery location vector for every resource
+			for (i = 0; i < 32; i++) {
+				DeliveryLocationsByResource.push(new Vector.<PlaceObject>());
 			}
 			
 			instance = this;
@@ -53,10 +64,6 @@ package GameCom.Managers {
 			
 			objectTypes.position = 0;
 			objectFile.position = 0;
-			
-			var i:int;
-			var j:int;
-			var typeID:int;
 			
             var totalTypes:int = objectTypes.readInt();
 			
@@ -109,12 +116,17 @@ package GameCom.Managers {
 					po.b_Resource = objectFile.readInt();
 					po.b_NPC = objectFile.readShort();
 					
+					for (j = 0; j < 32; j++) {
+						if (((0x1 << j) & po.b_Resource) > 0) {
+							DeliveryLocationsByResource[j].push(po);
+						}
+					}
+					
 					DropatLocations.push(po);
 				} else if (sourceID == shopIndex) {
 					po = new PlaceObject(sourceID, locationX, locationY, rotation, world, Types[sourceID], 0);
 					po.isActive = true;
 				} else if (sourceID == collectableIndex) {
-					//TODO: collectables need to make sure they haven't been collected already
 					po = new PlaceObject(sourceID, locationX, locationY, rotation, world, Types[sourceID], 0);
 					
 					if (!Storage.GetAsBool("Collectable_" + CollectableLocations.length)) {

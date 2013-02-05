@@ -6,10 +6,12 @@ package GameCom.GameComponents {
 	import GameCom.GameComponents.Weapons.Laser;
 	import GameCom.GameComponents.Weapons.MachineGun;
 	import GameCom.GameComponents.Weapons.RocketLauncher;
+	import GameCom.Helpers.AudioStore;
 	import GameCom.Helpers.MathHelper;
 	import GameCom.Managers.GUIManager;
 	import GameCom.Managers.PlacesManager;
 	import GameCom.States.GameScreen;
+	import LORgames.Engine.AudioController;
 	import LORgames.Engine.Keys;
 	import flash.ui.Keyboard;
 	import GameCom.Managers.TriggerManager;
@@ -216,6 +218,8 @@ package GameCom.GameComponents {
 			
 			FixUpgradeValues();
 			EquipWeapon("MachineGun");
+			
+			AudioController.PlayLoop(AudioStore.TruckIdle);
 		}
 		
 		private function killOrthogonalVelocity(targetBody:b2Body):void {
@@ -390,6 +394,7 @@ package GameCom.GameComponents {
 			
 			healthCurrent = healthMax;
 			HealthPercent = 1.0;
+			
 			GUIManager.I.UpdateCache();
 			GUIManager.I.Update();
 		}

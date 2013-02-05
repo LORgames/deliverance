@@ -38,8 +38,10 @@ package GameCom.Managers {
 				
 				temp.Origin = missionfile.readInt();
 				temp.Destination = missionfile.readInt();
-				temp.NPC1 = missionfile.readShort();
-				temp.NPC2 = missionfile.readShort();
+				temp.StartNPC1 = missionfile.readShort();
+				temp.StartNPC2 = missionfile.readShort();
+				temp.EndNPC1 = missionfile.readShort();
+				temp.EndNPC2 = missionfile.readShort();
 				temp.ReputationRequired = missionfile.readInt();
 				temp.ResourceType = missionfile.readByte();
 				temp.ResourceAmount = missionfile.readInt();
@@ -60,7 +62,7 @@ package GameCom.Managers {
 			}
 		}
 		
-		public static function GenerateNextMission() : void {
+		/*public static function GenerateNextMission() : void {
 			DeliveryDestination = (PlacesManager.instance.DropatLocations[int(PlacesManager.instance.DropatLocations.length * Math.random())] as PlaceObject);
 			DeliveryDestination.isActive = true;
 			DeliveryStartTime = getTimer();
@@ -73,14 +75,14 @@ package GameCom.Managers {
 			
 			GUIManager.I.UpdateCache();
 			GUIManager.I.SetMessage("Please deliver " + DeliveryResourcesCount + ResourceHelper.GetResouce(DeliveryResourcesType).Message + " to the destination marked ASAP!");
-		}
+		}*/
 		
 		public static function SetNextMission(params:MissionParameters) : void {
 			var resourceIndex:int = params.ResourceType;
 			var amount:int = params.ResourceAmount;
 			var pickup:int = params.Origin;
 			var dropOff:int = params.Destination;
-			var npc:int = params.NPC1;
+			var npc:int = params.StartNPC1;
 			
 			DeliveryDestination = (PlacesManager.instance.DropatLocations[dropOff] as PlaceObject);
 			DeliveryDestination.isActive = true;
