@@ -389,6 +389,7 @@ package GameCom.GameComponents {
 			rightRearWheel.SetAngularVelocity(0);
 			
 			healthCurrent = healthMax;
+			HealthPercent = 1.0;
 			GUIManager.I.UpdateCache();
 			GUIManager.I.Update();
 		}
