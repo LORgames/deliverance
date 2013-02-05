@@ -1,10 +1,12 @@
 package GameCom.GameComponents 
 {
 	import flash.geom.ColorTransform;
+	import GameCom.Helpers.AudioStore;
 	import GameCom.Helpers.MathHelper;
 	import GameCom.Managers.GUIManager;
 	import GameCom.Managers.NodeManager;
 	import GameCom.States.GameScreen;
+	import LORgames.Engine.AudioController;
 	import LORgames.Engine.Keys;
 	import flash.ui.Keyboard;
 	
@@ -244,6 +246,10 @@ package GameCom.GameComponents
 				if (collisions > 0) {
 					engineSpeed = 0;
 					body.SetLinearDamping(BRAKE_FORCE);
+					
+					if (Math.random() < 0.002 || (body.GetContactList() != null && body.GetContactList().contact.IsTouching())) {
+						AudioController.PlaySound(AudioStore.Horn);
+					}
 				} else {
 					body.SetLinearDamping(1.0);
 					if(engineSpeed > -HORSEPOWER_MAX) {
@@ -279,7 +285,7 @@ package GameCom.GameComponents
 				steeringAngle = 0;
 			}
 			
-			engineSpeed *= (MAX_STEER_ANGLE-Math.abs(steeringAngle)) / (3 * MAX_STEER_ANGLE) + 0.333;
+			engineSpeed *= (MAX_STEER_ANGLE-Math.abs(steeringAngle)) / (2 * MAX_STEER_ANGLE) + 0.5;
 			
 			killOrthogonalVelocity(leftWheel);
 			killOrthogonalVelocity(rightWheel);
