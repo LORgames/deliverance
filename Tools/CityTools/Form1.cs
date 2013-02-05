@@ -468,7 +468,7 @@ namespace CityTools {
         private void story_new_Click(object sender, EventArgs e) {
             // Stuff happens here...
             if (StoryForm.instance == null) {
-                StoryForm.instance = new StoryForm();
+                StoryForm.instance = new StoryForm(story_storyPan.Controls[0] as StoryCacheControl);
             }
             StoryForm.instance.Show();
             paintMode = PaintMode.Story;

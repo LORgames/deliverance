@@ -41,7 +41,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.flowLayoutPanel1);
             this.Name = "StoryCacheControl";
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.StoryCacheControl_Paint);
             this.ResumeLayout(false);
 
         }

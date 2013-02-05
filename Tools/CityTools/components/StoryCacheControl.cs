@@ -12,15 +12,24 @@ namespace CityTools.Components {
     public partial class StoryCacheControl : UserControl {
         public StoryCacheControl() {
             InitializeComponent();
+            UpdateWhenRequired();
 
             this.Dock = DockStyle.Fill;
         }
 
-        private void StoryCacheControl_Paint(object sender, PaintEventArgs e) {
+        public void UpdateWhenRequired() {
+            flowLayoutPanel1.SuspendLayout();
             flowLayoutPanel1.Controls.Clear();
+            flowLayoutPanel1.ResumeLayout();
+
+            flowLayoutPanel1.SuspendLayout();
+
             for (int i = 0; i < StoryCache.stories.Count; i++) {
-                flowLayoutPanel1.Controls.Add(new CachedStory(StoryCache.stories[i]));
+                CachedStory cs = new CachedStory(StoryCache.stories[i]);
+                flowLayoutPanel1.Controls.Add(cs);
             }
+
+            flowLayoutPanel1.ResumeLayout();
         }
     }
 }

@@ -42,6 +42,8 @@ namespace CityTools.Components {
         }
 
         private void flowLayoutPanel1_MouseClick(object sender, MouseEventArgs e) {
+            if (StoryForm.instance == null) new StoryForm(MainWindow.instance.story_storyPan.Controls[0] as StoryCacheControl);
+
             StoryForm.instance.Show();
             StoryForm.instance.Fill(story);
             MainWindow.instance.paintMode = PaintMode.Story;

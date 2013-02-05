@@ -11,6 +11,7 @@ using CityTools.Places;
 using Box2CS;
 using CityTools.Core;
 using System.IO;
+using CityTools.Components;
 
 namespace CityTools {
     public partial class StoryForm : Form {
@@ -19,8 +20,11 @@ namespace CityTools {
 
         private int index = -1;
 
-        public StoryForm() {
+        private StoryCacheControl scc;
+
+        public StoryForm(StoryCacheControl scc) {
             instance = this;
+            this.scc = scc;
             InitializeComponent();
         }
 
@@ -103,7 +107,7 @@ namespace CityTools {
                 cmbEndNPCImage1.Items.Add(Places.PlacesObjectCache.people[i]);
             }
 
-            tbQuantity.Value = 0;
+            tbQuantity.Value = tbQuantity.Minimum;
             txtStartText.Text = "";
             txtPickupText.Text = "";
             txtEndText.Text = "";
@@ -115,6 +119,7 @@ namespace CityTools {
 
         private void StoryForm_FormClosing(object sender, FormClosingEventArgs e) {
             e.Cancel = true;
+            scc.UpdateWhenRequired();
             this.Hide();
         }
 

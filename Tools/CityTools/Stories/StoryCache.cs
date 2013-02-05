@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using CityTools.Core;
+using CityTools.Components;
 
 namespace CityTools.Stories {
     class StoryCache {
@@ -45,6 +46,10 @@ namespace CityTools.Stories {
 
         public static void AddStory(Story story) {
             stories.Add(story);
+
+            try {
+                (MainWindow.instance.story_storyPan.Controls[0] as StoryCacheControl).UpdateWhenRequired();
+            } catch { }
         }
 
         public static void SaveCache() {
