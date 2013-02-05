@@ -1,6 +1,7 @@
 package GameCom.GameComponents.Weapons 
 {
 	import Box2D.Dynamics.b2World;
+	import flash.display.MovieClip;
 	import flash.geom.Point;
 	/**
 	 * ...
@@ -15,6 +16,7 @@ package GameCom.GameComponents.Weapons
 			
 			var cls:Class = ThemeManager.GetClassFromSWF("SWFs/Weapons.swf", "LORgames.Rocket");
 			this.addChild(new cls());
+			(this.getChildAt(0) as MovieClip).stop();
 		}
 		
 		override public function Fire():void {

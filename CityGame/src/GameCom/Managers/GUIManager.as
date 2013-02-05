@@ -173,6 +173,10 @@ package GameCom.Managers
 			Overlay.graphics.drawRect(88, 14, 88 * ReputationHelper.GetPercentageToNextLevel(), 4);
 			Overlay.graphics.endFill();
 			
+			Overlay.graphics.beginFill(0x808080);
+			Overlay.graphics.drawRect(80, 26, 94, 18);
+			Overlay.graphics.endFill();
+			
 			Overlay.graphics.beginFill(0xFF0000);
 			Overlay.graphics.drawRect(80, 26, 94 * player.HealthPercent, 18);
 			Overlay.graphics.endFill();

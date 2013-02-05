@@ -30,6 +30,7 @@ package GameCom.GameComponents.Weapons
 			
 			var cls:Class = ThemeManager.GetClassFromSWF("SWFs/Weapons.swf", "LORgames.MachineGun");
 			this.addChild(new cls());
+			(this.getChildAt(0) as MovieClip).stop();
 		}
 		
 		override public function Fire():void {
@@ -65,7 +66,7 @@ package GameCom.GameComponents.Weapons
 			}
 			
 			this.graphics.lineStyle(1, 0xFF9C00, 0.7);
-			this.graphics.lineGradientStyle(GradientType.RADIAL, [0xFFFF00, 0xFF9C00, 0xFF0000], [0.2, 0.5, 0.8], [0, 50, 255]);
+			this.graphics.lineGradientStyle(GradientType.RADIAL, [0xFFFF00, 0xFF9C00], [0.2, 0.8], [0, 255]);
 			
 			this.graphics.moveTo(0, 0);
 			this.graphics.lineTo(Math.cos(angleBecauseInaccurate)*size*distance*Global.PHYSICS_SCALE, Math.sin(angleBecauseInaccurate)*size*distance*Global.PHYSICS_SCALE);

@@ -87,7 +87,7 @@ package GameCom.GameComponents
 			var carChance:Number = Math.random();
 			var vehicle:Class;
 			
-			if (carChance < 10.1) {
+			if (carChance < 0.1) {
 				vehicle = ThemeManager.GetClassFromSWF("SWFs/Cars.swf", "LORgames.EnemyVan"); // EnemyVan
 				type = VEHICLE_ENEMYVAN;
 			} else if (carChance < 0.9) {
@@ -97,7 +97,9 @@ package GameCom.GameComponents
 				vehicle = ThemeManager.GetClassFromSWF("SWFs/Cars.swf", "LORgames.SportsCar"); // SportsCar
 				type = VEHICLE_SPORTSCAR;
 			}
+			
 			this.addChild(new vehicle());
+			(this.getChildAt(0) as MovieClip).stop();
 			
 			if(type != VEHICLE_ENEMYVAN) {
 				(this.getChildAt(0) as MovieClip).getChildAt(0).transform.colorTransform = ct;
@@ -308,7 +310,7 @@ package GameCom.GameComponents
 					engineSpeed = 0;
 					body.SetLinearDamping(BRAKE_FORCE);
 					
-					if (Math.random() < 0.002 || (body.GetContactList() != null && body.GetContactList().contact.IsTouching())) {
+					if (Math.random() < 0.002) {
 						AudioController.PlaySound(AudioStore.Horn);
 					}
 				} else {
@@ -382,8 +384,6 @@ package GameCom.GameComponents
 				this.removeChild(Wep);
 			}
 			
-			trace(weaponName);
-			
 			switch(weaponName) {
 				case "MachineGun":
 					Wep = new  MachineGun(world); break;
@@ -430,6 +430,9 @@ package GameCom.GameComponents
 				cls = ThemeManager.GetClassFromSWF("SWFs/Cars.swf", "LORgames.DeadEnemyCar");
 				this.addChildAt(new cls(), 0);
 			}
+			
+			body.SetLinearDamping(2.5);
+			body.SetAngularDamping(2.5);
 			
 			type = VEHICLE_DEAD;
 		}

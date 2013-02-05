@@ -27,15 +27,14 @@ package GameCom.GameComponents.Weapons
 			
 			var cls:Class = ThemeManager.GetClassFromSWF("SWFs/Weapons.swf", "LORgames.Laser");
 			this.addChild(new cls());
+			(this.getChildAt(0) as MovieClip).stop();
 		}
 		
 		override public function Update(p:Point, wantsToFire:Boolean):void {
-			trace("LASER UPDATE");
-			
 			super.Update(p, wantsToFire);
 			
 			this.graphics.clear();
-			this.graphics.lineStyle(5, 0xFF0000);
+			this.graphics.lineStyle(1, 0xFF0000);
 			
 			if (wantsToFire) {
 				var b1:b2Vec2 = new b2Vec2(parent.x / Global.PHYSICS_SCALE, parent.y / Global.PHYSICS_SCALE);

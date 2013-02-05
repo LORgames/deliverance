@@ -62,21 +62,6 @@ package GameCom.Managers {
 			}
 		}
 		
-		/*public static function GenerateNextMission() : void {
-			DeliveryDestination = (PlacesManager.instance.DropatLocations[int(PlacesManager.instance.DropatLocations.length * Math.random())] as PlaceObject);
-			DeliveryDestination.isActive = true;
-			DeliveryStartTime = getTimer();
-			
-			ResourceHelper.GenerateRandomMission();
-			
-			for (var i:int = 0; i < PlacesManager.instance.PickupLocations.length; i++) {
-				PlacesManager.instance.PickupLocations[i].Deactivate();
-			}
-			
-			GUIManager.I.UpdateCache();
-			GUIManager.I.SetMessage("Please deliver " + DeliveryResourcesCount + ResourceHelper.GetResouce(DeliveryResourcesType).Message + " to the destination marked ASAP!");
-		}*/
-		
 		public static function SetNextMission(params:MissionParameters) : void {
 			var resourceIndex:int = params.ResourceType;
 			var amount:int = params.ResourceAmount;

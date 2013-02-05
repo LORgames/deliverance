@@ -97,6 +97,7 @@ package GameCom.GameComponents {
 			this.getChildAt(0).scaleX = 0.25;
 			this.getChildAt(0).scaleY = 0.25;
 			
+			(this.getChildAt(0) as MovieClip).stop();
 			this.getChildAt(0).x = -this.getChildAt(0).width / 2;
 			this.getChildAt(0).y = -this.getChildAt(0).height / 2 - 15;
 			
@@ -107,6 +108,7 @@ package GameCom.GameComponents {
 			this.getChildAt(1).scaleX = 0.35;
 			this.getChildAt(1).scaleY = 0.3;
 			
+			(this.getChildAt(1) as MovieClip).stop();
 			this.getChildAt(1).x = -this.getChildAt(1).width / 2;
 			this.getChildAt(1).y = -this.getChildAt(1).height / 2 + 15;
 			
@@ -228,7 +230,17 @@ package GameCom.GameComponents {
 			FixUpgradeValues();
 			EquipWeapon("MachineGun");
 			
+			this.graphics.clear();
+			this.graphics.beginFill(0x0);
 			
+			this.graphics.drawRect(-(leftFrontWheelPosition.x + 0.2) * Global.PHYSICS_SCALE, -(leftFrontWheelPosition.y + 0.5) * Global.PHYSICS_SCALE, 4, 10);
+			this.graphics.drawRect(-(leftMidWheelPosition.x + 0.2) * Global.PHYSICS_SCALE, -(leftMidWheelPosition.y + 0.5) * Global.PHYSICS_SCALE, 4, 10);
+			this.graphics.drawRect(-(leftRearWheelPosition.x + 0.2) * Global.PHYSICS_SCALE, -(leftRearWheelPosition.y + 0.5) * Global.PHYSICS_SCALE, 4, 10);
+			this.graphics.drawRect(-(rightFrontWheelPosition.x + 0.2) * Global.PHYSICS_SCALE, -(rightFrontWheelPosition.y + 0.5) * Global.PHYSICS_SCALE, 4, 10);
+			this.graphics.drawRect(-(rightMidWheelPosition.x + 0.2) * Global.PHYSICS_SCALE, -(rightMidWheelPosition.y + 0.5) * Global.PHYSICS_SCALE, 4, 10);
+			this.graphics.drawRect(-(rightRearWheelPosition.x + 0.2) * Global.PHYSICS_SCALE, -(rightRearWheelPosition.y + 0.5) * Global.PHYSICS_SCALE, 4, 10);
+			
+			this.graphics.endFill();
 			
 			AudioController.PlayLoop(AudioStore.TruckIdle);
 		}
@@ -271,8 +283,6 @@ package GameCom.GameComponents {
 			if (Keys.isKeyDown(Keyboard.SPACE)) {
 				steeringAngle *= 0.2;
 			}
-			
-			this.graphics.clear();
 			
 			killOrthogonalVelocity(leftWheel);
 			killOrthogonalVelocity(rightWheel);

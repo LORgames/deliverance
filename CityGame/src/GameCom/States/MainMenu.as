@@ -60,6 +60,11 @@ package GameCom.States {
 		public function Resized(e:Event = null):void {
 			if (!this.stage) return;
 			
+			this.graphics.clear();
+			this.graphics.beginFill(0x0);
+			this.graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
+			this.graphics.endFill();
+			
 			background.x = (this.stage.stageWidth - background.width) / 2;
 			background.y = (this.stage.stageHeight - background.height) / 2;
 			
