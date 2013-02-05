@@ -84,7 +84,7 @@ namespace CityTools.Places {
             string[] people_lines = File.ReadAllLines(PEOPLE_FILE);
             for (int i = 0; i < people_lines.Length; i++) {
                 string resLine = people_lines[i];
-                string name = resLine.Split(',')[1];
+                string name = resLine.Split('|')[1];
                 people.Add(name);
 
                 ToolStripMenuItem tsi = (MainWindow.instance.placesPeopleContextMenu.Items.Add(name) as ToolStripMenuItem);

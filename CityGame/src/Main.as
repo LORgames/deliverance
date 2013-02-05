@@ -2,6 +2,7 @@ package {
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
+	import GameCom.Helpers.PeopleHelper;
 	import GameCom.Helpers.UpgradeHelper;
 	import GameCom.SystemMain;
 	import flash.display.Sprite;
@@ -38,6 +39,7 @@ package {
 
 		protected function init(e:Event = null):void {
 			UpgradeHelper.Initialize();
+			PeopleHelper.Initialize();
 			
 			this.graphics.clear();
 			this.removeChildAt(0);

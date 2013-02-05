@@ -18,7 +18,8 @@ package GameCom.Managers
 				//TODO: See if I'm on a mission to collect something?
 				
 				// popup notification of mission
-				GUIManager.I.Popup("Press Enter to accept mission!");
+				trace("NPC: " + (obj as PickupPlace).MissionParams.StartNPC1);
+				GUIManager.I.Popup("Press Enter to accept mission!", (obj as PickupPlace).MissionParams.StartNPC1);
 				if (Keys.isKeyDown(Keyboard.ENTER)) {
 					MissionManager.GenerateFromPickup(obj as PickupPlace);
 				}

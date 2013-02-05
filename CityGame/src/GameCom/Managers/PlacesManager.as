@@ -143,6 +143,8 @@ package GameCom.Managers {
 				
 				Objects.push(po);
 			}
+			
+			trace("Total Collectables: " + CollectableLocations.length);
 		}
 		
         public function DrawObjects():void {

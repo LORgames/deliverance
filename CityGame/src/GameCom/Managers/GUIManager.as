@@ -9,12 +9,14 @@ package GameCom.Managers
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
+	import flash.ui.Keyboard;
 	import GameCom.GameComponents.PlayerTruck;
 	import GameCom.Helpers.MathHelper;
 	import GameCom.Helpers.MoneyHelper;
 	import GameCom.Helpers.ReputationHelper;
 	import GameCom.Helpers.SpriteHelper;
 	import GameCom.States.StoreOverlay;
+	import LORgames.Engine.Keys;
 	/**
 	 * ...
 	 * @author Paul
@@ -39,6 +41,7 @@ package GameCom.Managers
 		private var popupText:TextField = new TextField();
 		private var popupAlpha:Number = 0;
 		private var popupFade:Boolean = false;
+		private var npcNumber:int = -1;
 		
 		private var Pause:Function;
 		private var store:StoreOverlay;
@@ -89,17 +92,24 @@ package GameCom.Managers
 			
 			CurrentSpeedText.selectable = false;
 			CurrentSpeedText.defaultTextFormat = new TextFormat("Verdana", 15, 0xFFFFFF);
-			CurrentSpeedText.x = 200;
-			CurrentSpeedText.y = 3;
+			CurrentSpeedText.x = 140;
+			CurrentSpeedText.y = -6;
 			CurrentSpeedText.autoSize = TextFieldAutoSize.LEFT;
 			CurrentSpeedText.filters = new Array(new GlowFilter(0, 1, 2, 2, 5));
 			Overlay.addChild(CurrentSpeedText);
 			
 			popupText.selectable = false;
 			popupText.defaultTextFormat = new TextFormat("Verdana", 12, 0xFFFFFF);
-			popupText.x = 400;
-			popupText.y = 3;
+			
+			//Good text field max size
+			popupText.x = 117;
+			popupText.y = 456;
+			popupText.width = 411;
+			popupText.height = 191;
+			
 			popupText.autoSize = TextFieldAutoSize.CENTER;
+			popupText.background = true;
+			popupText.backgroundColor = 0xFF0000;
 			popupText.filters = new Array(new GlowFilter(0, 1, 2, 2, 5));
 			Overlay.addChild(popupText);
 			
@@ -111,7 +121,7 @@ package GameCom.Managers
 		
 		public function Update() : void {
 			GPSBase.x = stage.stageWidth - (GPSBase.width + 5);
-			GPSBase.y = stage.stageHeight - (GPSBase.height + 5);
+			GPSBase.y = 5;
 			
 			CurrentSpeedText.text = Math.round(player.body.GetLinearVelocity().Length() * 3.6) + "km/h";
 			
@@ -146,19 +156,28 @@ package GameCom.Managers
 					Overlay.graphics.beginBitmapFill(ThemeManager.Get("GUI/Message board.png"), m, false);
 					Overlay.graphics.drawRect((stage.stageWidth - 665) / 2, stage.stageHeight - 240, 665, 240);
 					Overlay.graphics.endFill();
+					
+					if (npcNumber != -1) {
+						m.createBox(1, 1, 0, stage.stageWidth/2 + 100, stage.stageHeight - 360);
+						Overlay.graphics.beginBitmapFill(ThemeManager.Get("People/"+npcNumber+"_0.png"), m, false);
+						Overlay.graphics.drawRect(stage.stageWidth/2 + 100, stage.stageHeight - 360, 315, 354);
+						Overlay.graphics.endFill();
+					}
 				}
 			}
 		}
 		
-		public function Popup(msg:String) :void {
+		public function Popup(msg:String, npc:int = 0) :void {
 			if (!hasPopup) {
 				if (stage) {
-					popupText.x = stage.stageWidth - 120;
-					popupText.y = stage.stageHeight - 50;
+					popupText.x = stage.stageWidth / 2;
+					popupText.y = stage.stageHeight - 150;
 				}
 				popupText.text = msg;
 				hasPopup = true;
 			}
+			
+			npcNumber = npc;
 			
 			popupAlpha = 1.0;
 			popupFade = false;

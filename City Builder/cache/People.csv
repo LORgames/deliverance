@@ -1,16 +1,16 @@
-0,Mechanic
-1,Mobster
-2,Blue Collar Worker
-3,Shop Assistant
-4,Nurse
-5,Middle Class Man
-6,Middle Class Woman
-7,Slums Man
-8,Slums Woman
-9,Old Lady
-10,Business Man
-11,Unused
-12,Unused
-13,Unused
-14,Unused
-15,Unused
+0|Mechanic|Time to get back to work! Heres your cash.|
+1|Mobster|Take your cut and get outta here kid.|
+2|Blue Collar Worker|I hope you don't expect me to pay full price for that?|
+3|Shop Assistant|Ca-Ching! Heres your change. Did you want a receipt?|
+4|Nurse|Take your money, STAT!|
+5|Middle Class Man|I don't remember ordering anything, meh, take my money anyway!|
+6|Middle Class Woman|I can't afford to pay, do you want to come in?_NEWLINE_No?_NEWLINE_All right, heres your money.|
+7|Slums Man|*Munch munch* Cheers Kid.|
+8|Slums Woman|Braaaaaaains|
+9|Old Lady|Thanks Dearie, good to see kids these days still earn their pocket money and aren't playing all day, when I was a kid...|
+10|Business Man|Dear Sir/Madam, your delivery was greatly appreciated. Sincerly, The Businessman.|
+11|Unused||
+12|Unused||
+13|Unused||
+14|Unused||
+15|Unused||
