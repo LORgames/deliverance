@@ -57,7 +57,7 @@ package GameCom.GameComponents.Weapons
 			if (distance < 1.0) {
 				if (fixtureHit.GetUserData() is NPCCar) {
 					var car:NPCCar = fixtureHit.GetUserData() as NPCCar;
-					(car.getChildAt(0) as MovieClip).getChildAt(0).transform.colorTransform = new ColorTransform(Math.random(), Math.random(), Math.random());
+					car.Damage(9);
 				} else if (fixtureHit.GetUserData() is PlayerTruck) {
 					var player:PlayerTruck = fixtureHit.GetUserData() as PlayerTruck;
 					player.Damage(9);

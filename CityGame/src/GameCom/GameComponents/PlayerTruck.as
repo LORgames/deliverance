@@ -2,6 +2,7 @@ package GameCom.GameComponents {
 	import Box2D.Dynamics.Contacts.b2ContactEdge;
 	import flash.geom.ColorTransform;
 	import flash.geom.Point;
+	import flash.media.Sound;
 	import GameCom.GameComponents.Weapons.BaseWeapon;
 	import GameCom.GameComponents.Weapons.Laser;
 	import GameCom.GameComponents.Weapons.MachineGun;
@@ -82,6 +83,11 @@ package GameCom.GameComponents {
 		
 		private var Wep:BaseWeapon;
 		private var world:b2World;
+		
+		private var CurrentLoop:Sound = null;
+		private var IdleLoop:Sound = null;
+		private var ReversingLoop:Sound = null;
+		private var DrivingLoop:Sound = null;
 		
 		public function PlayerTruck(spawnPosition:b2Vec2, world:b2World, worldSpr:Sprite) {
 			worldSpr.addChild(this);
@@ -221,6 +227,8 @@ package GameCom.GameComponents {
 			
 			FixUpgradeValues();
 			EquipWeapon("MachineGun");
+			
+			
 			
 			AudioController.PlayLoop(AudioStore.TruckIdle);
 		}

@@ -8,6 +8,7 @@ package GameCom.GameComponents.Weapons
 	import flash.geom.Point;
 	import flash.sampler.NewObjectSample;
 	import GameCom.GameComponents.NPCCar;
+	import GameCom.GameComponents.PlayerTruck;
 	import LORgames.Engine.Mousey;
 	/**
 	 * ...
@@ -16,6 +17,8 @@ package GameCom.GameComponents.Weapons
 	public class Laser extends BaseWeapon {
 		private var fixtureHit:b2Fixture;
 		private var distance:Number;
+		
+		private var LASER_DAMS:int = 5;
 		
 		public function Laser(world:b2World) {
 			super(world);
@@ -27,6 +30,8 @@ package GameCom.GameComponents.Weapons
 		}
 		
 		override public function Update(p:Point, wantsToFire:Boolean):void {
+			trace("LASER UPDATE");
+			
 			super.Update(p, wantsToFire);
 			
 			this.graphics.clear();
@@ -49,7 +54,9 @@ package GameCom.GameComponents.Weapons
 				if (distance < 1.0) {
 					if (fixtureHit.GetUserData() is NPCCar) {
 						var car:NPCCar = fixtureHit.GetUserData() as NPCCar;
-						(car.getChildAt(0) as MovieClip).getChildAt(0).transform.colorTransform = new ColorTransform(Math.random(), Math.random(), Math.random());
+						car.Damage(LASER_DAMS);
+					} else if (fixtureHit.GetUserData() is PlayerTruck) {
+						(fixtureHit.GetUserData() as PlayerTruck).Damage(LASER_DAMS);
 					}
 				}
 				

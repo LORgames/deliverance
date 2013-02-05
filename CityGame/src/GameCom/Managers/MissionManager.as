@@ -95,7 +95,7 @@ package GameCom.Managers {
 			}
 			
 			GUIManager.I.UpdateCache();
-			GUIManager.I.SetMessage("Please deliver " + DeliveryResourcesCount + ResourceHelper.GetResouce(DeliveryResourcesType).Message + " to the destination marked ASAP!");
+			GUIManager.I.Popup("Please deliver " + DeliveryResourcesCount + ResourceHelper.GetResouce(DeliveryResourcesType).Message + " to the destination marked ASAP!");
 		}
 		
 		public static function GenerateFromPickup(place:PickupPlace):void {
@@ -119,7 +119,6 @@ package GameCom.Managers {
 				GenerateAllMissions();
 				
 				GUIManager.I.UpdateCache();
-				GUIManager.I.SetMessage("");
 				
 				//TODO: Do some varible checking things...
 				//Mission is complete

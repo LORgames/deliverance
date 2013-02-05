@@ -22,7 +22,7 @@ package GameCom.States {
 		private const totalButtons:int = 1;
 		private const buttonPadding:int = 10;
 		
-		private var PlayBtn:Button = new Button(Strings.Get("PlayGame"), 200, 50);
+		private var PlayBtn:Button = new Button(Strings.Get("PlayGame"), 265, 54);
 		private var ClearBtn:Button = new Button("CLEAR SAVE");
 		
 		public function MainMenu() {			
@@ -61,10 +61,10 @@ package GameCom.States {
 			if (!this.stage) return;
 			
 			background.x = (this.stage.stageWidth - background.width) / 2;
-			background.y = 50;
+			background.y = (this.stage.stageHeight - background.height) / 2;
 			
-			PlayBtn.x = (this.stage.stageWidth - PlayBtn.width) / 2;
-			PlayBtn.y = this.stage.stageHeight - 75;
+			PlayBtn.x = (this.stage.stageWidth / 2) + 49;
+			PlayBtn.y = this.stage.stageHeight / 2 - 58;
 		}
 		
 	}

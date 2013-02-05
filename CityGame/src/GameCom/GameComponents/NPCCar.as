@@ -2,6 +2,7 @@ package GameCom.GameComponents
 {
 	import flash.geom.ColorTransform;
 	import flash.geom.Point;
+	import flash.sampler.StackFrame;
 	import GameCom.GameComponents.Weapons.BaseWeapon;
 	import GameCom.GameComponents.Weapons.Laser;
 	import GameCom.GameComponents.Weapons.MachineGun;
@@ -65,11 +66,13 @@ package GameCom.GameComponents
 		private var nodeManager:NodeManager;
 		private var targetNode:int = 0;
 		private var type:int = VEHICLE_CARA;
+		private const VEHICLE_DEAD:int = -1;
 		private const VEHICLE_CARA:int = 0;
 		private const VEHICLE_SPORTSCAR:int = 1;
 		private const VEHICLE_ENEMYVAN:int = 2;
 		
-		private var Wep:BaseWeapon;
+		public var Wep:BaseWeapon;
+		private var ct:ColorTransform = new ColorTransform(Math.random(), Math.random(), Math.random());
 		
 		public function NPCCar(spawnPosition:b2Vec2, world:b2World, nodeManager:NodeManager, angle:Number, firstNodeID:int) {
 			this.world = world;
@@ -84,22 +87,21 @@ package GameCom.GameComponents
 			var carChance:Number = Math.random();
 			var vehicle:Class;
 			
-			if (carChance < 0.1) {
-				vehicle = ThemeManager.GetClassFromSWF("SWFs/Cars.swf", "LORgames.CarA"); // EnemyVan
+			if (carChance < 10.1) {
+				vehicle = ThemeManager.GetClassFromSWF("SWFs/Cars.swf", "LORgames.EnemyVan"); // EnemyVan
 				type = VEHICLE_ENEMYVAN;
-			} else if (carChance < 0.7) {
-				vehicle = ThemeManager.GetClassFromSWF("SWFs/Cars.swf", "LORgames.CarA"); // CarA
+			} else if (carChance < 0.9) {
+				vehicle = ThemeManager.GetClassFromSWF("SWFs/Cars.swf", "LORgames.BasicCar"); // CarA
 				type = VEHICLE_CARA;
 			} else {
-				vehicle = ThemeManager.GetClassFromSWF("SWFs/Cars.swf", "LORgames.CarA"); // SportsCar
+				vehicle = ThemeManager.GetClassFromSWF("SWFs/Cars.swf", "LORgames.SportsCar"); // SportsCar
 				type = VEHICLE_SPORTSCAR;
 			}
 			this.addChild(new vehicle());
 			
-			//this.getChildAt(0).x = -this.getChildAt(0).width / 2;
-			//this.getChildAt(0).y = -this.getChildAt(0).height / 2;
-			
-			(this.getChildAt(0) as MovieClip).getChildAt(0).transform.colorTransform = new ColorTransform(Math.random(), Math.random(), Math.random());
+			if(type != VEHICLE_ENEMYVAN) {
+				(this.getChildAt(0) as MovieClip).getChildAt(0).transform.colorTransform = ct;
+			}
 			
 			// Car Body
 			var bodyShape:b2PolygonShape = new b2PolygonShape();
@@ -236,7 +238,6 @@ package GameCom.GameComponents
 			scannerJointDef.enableLimit = false;
 			scannerJointDef.collideConnected = false;
 			
-			
 			world.CreateJoint(scannerJointDef);
 			
 			collisions = 0;
@@ -255,7 +256,15 @@ package GameCom.GameComponents
 			
 			//Enemy Constructor Logic
 			if (type == VEHICLE_ENEMYVAN) {
-				EquipWeapon("MachineGun");
+				var n:Number = Math.random();
+				
+				if(n < 0.333) {
+					EquipWeapon("RocketPod");
+				} else if(n < 0.666) {
+					EquipWeapon("MachineGun");
+				} else {
+					EquipWeapon("Laser");
+				}
 			}
 		}
 		
@@ -274,6 +283,13 @@ package GameCom.GameComponents
 		}
 		
 		public function Update():void {
+			if (type == VEHICLE_DEAD) {
+				this.x = body.GetPosition().x * Global.PHYSICS_SCALE;
+				this.y = body.GetPosition().y * Global.PHYSICS_SCALE;
+				this.rotation = body.GetAngle() * 180 / Math.PI;
+				return;
+			}
+			
 			if (targetNode != -1) {
 				// if within reach of targetNode then choose next node
 				if (nodeManager.TouchNode(targetNode, x, y)) {
@@ -366,14 +382,17 @@ package GameCom.GameComponents
 				this.removeChild(Wep);
 			}
 			
+			trace(weaponName);
+			
 			switch(weaponName) {
 				case "MachineGun":
 					Wep = new  MachineGun(world); break;
 				case "RocketPod":
 					Wep = new RocketLauncher(world); break;
 				case "Laser":
-				default:
 					Wep = new Laser(world); break;
+				default:
+					Wep = new MachineGun(world); break;
 			}
 			
 			Wep.IgnoreList.push(body.GetFixtureList());
@@ -392,6 +411,27 @@ package GameCom.GameComponents
 			world.DestroyBody(leftRearWheel);
 			world.DestroyBody(rightRearWheel);
 			world.DestroyBody(collisionScanner);
+		}
+		
+		public function Damage(dams:int):void {
+			var cls:Class;
+			
+			if (type == VEHICLE_DEAD) return;
+			
+			if (type != VEHICLE_ENEMYVAN) {
+				this.removeChildAt(0);
+				
+				cls = ThemeManager.GetClassFromSWF("SWFs/Cars.swf", "LORgames.DeadCar");
+				this.addChildAt(new cls(), 0);
+				this.getChildAt(0).transform.colorTransform = ct;
+			} else {
+				this.removeChildAt(0);
+				
+				cls = ThemeManager.GetClassFromSWF("SWFs/Cars.swf", "LORgames.DeadEnemyCar");
+				this.addChildAt(new cls(), 0);
+			}
+			
+			type = VEHICLE_DEAD;
 		}
 	}
 

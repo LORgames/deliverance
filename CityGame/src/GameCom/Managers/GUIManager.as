@@ -4,6 +4,7 @@ package GameCom.Managers
 	import flash.display.Sprite;
 	import flash.events.TextEvent;
 	import flash.filters.GlowFilter;
+	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
@@ -31,8 +32,6 @@ package GameCom.Managers
 		private var CurrentLevelText:TextField = new TextField();
 		private var CurrentMoneyText:TextField = new TextField();
 		private var CurrentSpeedText:TextField = new TextField();
-		
-		private var CurrentMissionText:TextField = new TextField();
 		
 		public var player:PlayerTruck;
 		
@@ -96,14 +95,6 @@ package GameCom.Managers
 			CurrentSpeedText.filters = new Array(new GlowFilter(0, 1, 2, 2, 5));
 			Overlay.addChild(CurrentSpeedText);
 			
-			CurrentMissionText.selectable = false;
-			CurrentMissionText.defaultTextFormat = new TextFormat("Verdana", 12, 0xFFFFFF);
-			CurrentMissionText.x = 400;
-			CurrentMissionText.y = 3;
-			CurrentMissionText.autoSize = TextFieldAutoSize.CENTER;
-			CurrentMissionText.filters = new Array(new GlowFilter(0, 1, 2, 2, 5));
-			Overlay.addChild(CurrentMissionText);
-			
 			popupText.selectable = false;
 			popupText.defaultTextFormat = new TextFormat("Verdana", 12, 0xFFFFFF);
 			popupText.x = 400;
@@ -143,18 +134,20 @@ package GameCom.Managers
 				} else {
 					popupFade = true;
 				}
+				
 				popupText.alpha = popupAlpha;
-				UpdateCache();
+				
+				if (hasPopup) {
+					Overlay.graphics.clear();
+					
+					var m:Matrix = new Matrix();
+					m.createBox(1, 1, 0, (stage.stageWidth - 665) / 2, stage.stageHeight - 240);
+					
+					Overlay.graphics.beginBitmapFill(ThemeManager.Get("GUI/Message board.png"), m, false);
+					Overlay.graphics.drawRect((stage.stageWidth - 665) / 2, stage.stageHeight - 240, 665, 240);
+					Overlay.graphics.endFill();
+				}
 			}
-		}
-		
-		public function SetMessage(msg:String) :void {
-			if (stage) {
-				CurrentMissionText.x = stage.stageWidth / 2;
-				CurrentMissionText.y = stage.stageHeight - 50;
-			}
-			
-			CurrentMissionText.text = msg;
 		}
 		
 		public function Popup(msg:String) :void {
@@ -166,6 +159,7 @@ package GameCom.Managers
 				popupText.text = msg;
 				hasPopup = true;
 			}
+			
 			popupAlpha = 1.0;
 			popupFade = false;
 		}
@@ -182,12 +176,6 @@ package GameCom.Managers
 			Overlay.graphics.beginFill(0xFF0000);
 			Overlay.graphics.drawRect(80, 26, 94 * player.HealthPercent, 18);
 			Overlay.graphics.endFill();
-			
-			if (hasPopup) {
-				Overlay.graphics.beginFill(0x000000, popupAlpha);
-				Overlay.graphics.drawRect(stage.stageWidth - 240, stage.stageHeight - 80, 240, 80);
-				Overlay.graphics.endFill();
-			}
 		}
 		
 		public function ActivateStore():void {
