@@ -27,6 +27,7 @@ package GameCom.States {
 	import GameCom.GameComponents.PlayerTruck;
 	import GameCom.GameComponents.Water;
 	import GameCom.Managers.PlacesManager;
+	import LORgames.Engine.AudioController;
 	import LORgames.Engine.Keys;
 	import GameCom.Helpers.StaticBoxCreator;
 	import GameCom.Managers.BGManager;
@@ -73,6 +74,9 @@ package GameCom.States {
 		private var player:PlayerTruck;
 		
 		private var previousFrameTime:Number = 0;
+		
+		//olol toggle bool for mute
+		private var mDown:Boolean = false;
 		
 		public function GameScreen() {
 			//Just make sure we're ready to do this...
@@ -174,6 +178,11 @@ package GameCom.States {
 			} else {
 				debugDrawLayer.graphics.clear();
 			}
+			
+			if (mDown && !Keys.isKeyDown(Keyboard.M)) {
+				AudioController.SetMuted(!AudioController.GetMuted());
+			}
+			mDown = Keys.isKeyDown(Keyboard.M);
 		}
 		
 		public function Redraw(e:*= null):void {
