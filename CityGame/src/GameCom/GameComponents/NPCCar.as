@@ -33,7 +33,7 @@ package GameCom.GameComponents
 	public class NPCCar extends Sprite {
 		private var world:b2World;
 		
-		private const MAX_STEER_ANGLE:Number = Math.PI / 6;
+		private const MAX_STEER_ANGLE:Number = Math.PI / 4;
 		private const STEER_SPEED:Number = 5.0;
 		
 		private const SIDEWAYS_FRICTION_FORCE:Number = 1000;

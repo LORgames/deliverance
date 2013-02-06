@@ -178,6 +178,20 @@ package GameCom.Managers {
 				}
 			}
 		}
+		
+		public static function CancelMission():Boolean {
+			if (!IsInMission() || CurrentMission.isStoryMission) return false;
+			
+			_CurrentDestination.isActive = false;
+			_CurrentDestination = null;
+			
+			CurrentMission = null;
+			GUIManager.I.UpdateCache();
+			
+			GenerateAllMissions();
+			
+			return true;
+		}
 	}
 
 }

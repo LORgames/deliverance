@@ -34,7 +34,7 @@ package GameCom.Managers
 				Storage.Set("Collectable_" + id, true);
 				Storage.Set("TotalCollectablesFound", 1 + Storage.GetAsInt("TotalCollectablesFound"));
 				
-				GUIManager.I.Popup("Now Found " + Storage.GetAsInt("TotalCollectablesFound") + " of " + PlacesManager.instance.CollectableLocations.length);
+				GUIManager.I.Popup(Storage.GetAsInt("TotalCollectablesFound") + " of " + PlacesManager.instance.CollectableLocations.length + " laser components found.");
 			}
 		}
 	}

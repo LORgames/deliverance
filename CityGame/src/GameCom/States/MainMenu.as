@@ -31,8 +31,6 @@ package GameCom.States {
 		private const totalButtons:int = 1;
 		private const buttonPadding:int = 10;
 		
-		private var ClearBtn:Button = new Button("CLEAR SAVE");
-		
 		private var TextContainer:Sprite = new Sprite();
 		private var PlayText:TextField = new TextField();
 		private var ContinueText:TextField = new TextField();
@@ -60,7 +58,7 @@ package GameCom.States {
 			PlayText.selectable = false;
 			PlayText.defaultTextFormat = new TextFormat("Verdana", 36, 0xFFFFFF);
 			PlayText.autoSize = TextFieldAutoSize.CENTER;
-			PlayText.text = "Play";
+			PlayText.text = "New Game";
 			PlayText.addEventListener(MouseEvent.ROLL_OVER, MouseOverText);
 			PlayText.addEventListener(MouseEvent.ROLL_OUT, MouseOutText);
 			PlayText.addEventListener(MouseEvent.CLICK, PlayFunc, false, 0, true);
@@ -93,14 +91,12 @@ package GameCom.States {
 			WebsiteText.addEventListener(MouseEvent.CLICK, WebsiteFunc, false, 0, true);
 			TextContainer.addChild(WebsiteText);
 			
-			this.addChild(ClearBtn);
-			ClearBtn.addEventListener(MouseEvent.CLICK, ClearFunc, false, 0, true);
-			
 			this.stage.addEventListener(Event.RESIZE, Resized, false, 0, true);
 			Resized();
 		}
 		
 		public function PlayFunc(e:MouseEvent):void {
+			Storage.Format();
 			SystemMain.instance.StateTo(new GameScreen());
 		}
 		
@@ -114,10 +110,6 @@ package GameCom.States {
 		
 		public function WebsiteFunc(e:MouseEvent):void {
 			flash.net.navigateToURL(new URLRequest("http://www.lorgames.com"), "_blank");
-		}
-		
-		public function ClearFunc(e:MouseEvent):void {
-			Storage.Format();
 		}
 		
 		public function Resized(e:Event = null):void {

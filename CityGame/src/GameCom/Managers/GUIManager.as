@@ -1,3 +1,5 @@
+
+
 package GameCom.Managers 
 {
 	import flash.display.Bitmap;
@@ -181,6 +183,9 @@ package GameCom.Managers
 					PopupSprite.graphics.beginBitmapFill(ThemeManager.Get("GUI/Message board.png"), m, false);
 					PopupSprite.graphics.drawRect((stage.stageWidth - 665) / 2, stage.stageHeight - 240, 665, 240);
 					PopupSprite.graphics.endFill();
+					
+					popupText.x = stage.stageWidth / 2 - 285; // PopupSprite.x + 115;
+					popupText.y = stage.stageHeight - 200;// PopupSprite.y + 400;
 					
 					if (popupMessages[0].npcNumber != -1) {
 						m.createBox(1, 1, 0, stage.stageWidth/2 + 100, stage.stageHeight - 354);

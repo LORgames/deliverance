@@ -38,8 +38,10 @@ package GameCom.Helpers {
 		public static function GetAvailableResource(resources:int):ResourceInformation {
 			var attempts:int = 0;
 			
+			var l_Limit:int = ReputationHelper.GetCurrentLevel() / 1.6;
+			
 			while (attempts < 5) {
-				var tried:int = Math.floor(Math.random() * CurrentResourcesUnlockedIndex);
+				var tried:int = Math.floor(Math.random() * (CurrentResourcesUnlockedIndex-l_Limit)) + l_Limit;
 				
 				if ((resources & (0x1 << tried)) > 0) {
 					return Resources[tried];

@@ -9,7 +9,9 @@ package GameCom.GameComponents {
 	import GameCom.GameComponents.Weapons.RocketLauncher;
 	import GameCom.Helpers.AudioStore;
 	import GameCom.Helpers.MathHelper;
+	import GameCom.Helpers.MoneyHelper;
 	import GameCom.Managers.GUIManager;
+	import GameCom.Managers.MissionManager;
 	import GameCom.Managers.PlacesManager;
 	import GameCom.States.GameScreen;
 	import LORgames.Engine.AudioController;
@@ -391,11 +393,11 @@ package GameCom.GameComponents {
 			
 			if (Wep != null)
 				Wep.Update(p, Mousey.IsClicking());
-			if (healthCurrent < 0) Respawn();
+			if (healthCurrent < 0) Respawn(true);
 		}
 		
 		public function Damage(damage:int):void {
-			damage -= 5;
+			damage -= 10;
 			
 			damage *= 1 - (ARMOUR_INC_PER_LEVEL * armourUpgradeLevel);
 			
@@ -473,6 +475,16 @@ package GameCom.GameComponents {
 			
 			healthCurrent = healthMax;
 			HealthPercent = 1.0;
+			
+			if (becauseOfDamage) {
+				var money:int = MoneyHelper.GetBalance();
+				MoneyHelper.Debit(money / 5);
+				if(MissionManager.CancelMission()) {
+					GUIManager.I.Popup("Noob! I'll repair your truck. It'll cost $" + Math.floor(money / 5) + " for parts and labor and your current mission will be cancel.\n\nI'll bring the tow truck...", 0, 0);
+				} else {
+					GUIManager.I.Popup("Noob! I'll repair your truck. It'll cost $" + Math.floor(money / 5) + " for parts and labor.\n\nI'll bring the tow truck...", 0, 0);
+				}
+			}
 			
 			GUIManager.I.UpdateCache();
 			GUIManager.I.Update();
