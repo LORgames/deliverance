@@ -60,6 +60,10 @@ package GameCom.Helpers {
 			}
 		}
 		
+		public static function GetCurrentReputation():int {
+			return CurrentReputation;
+		}
+		
 		public static function GetPercentageToNextLevel():Number {
 			var cXP:int = Levels[CurrentLevel].ReputationRequired;
 			var nXP:int = Levels[CurrentLevel + 1].ReputationRequired;

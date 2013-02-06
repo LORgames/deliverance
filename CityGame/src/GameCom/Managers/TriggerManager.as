@@ -16,15 +16,18 @@ package GameCom.Managers
 		public static function ReportTrigger(trigger:String, obj:* = null) : void {
 			if (trigger == "place_Pickup") {
 				//TODO: See if I'm on a mission to collect something?
-				
-				// popup notification of mission
-				trace("NPC: " + (obj as PickupPlace).MissionParams.StartNPC1);
-				GUIManager.I.Popup("Press Enter to accept mission!", (obj as PickupPlace).MissionParams.StartNPC1);
-				if (Keys.isKeyDown(Keyboard.ENTER)) {
-					MissionManager.GenerateFromPickup(obj as PickupPlace);
+				if (MissionManager.IsInMission()) {
+					MissionManager.CheckMissionParameters(obj as PlaceObject);
+				} else {
+					// popup notification of mission
+					GUIManager.I.Popup("Press Enter to accept mission!", (obj as PickupPlace).MissionParams.StartNPC1);
+					
+					if (Keys.isKeyDown(Keyboard.ENTER)) {
+						MissionManager.GenerateFromPickup(obj as PickupPlace);
+					}
 				}
 			} else if (trigger == "place_Deliver") {
-				MissionManager.CheckMissionParameters();
+				MissionManager.CheckMissionParameters(obj as PlaceObject);
 			} else if (trigger == "place_Weapons") {
 				GUIManager.I.ActivateStore();
 			} else if (trigger == "place_Collectable") { 

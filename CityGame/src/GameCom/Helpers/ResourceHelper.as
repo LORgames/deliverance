@@ -31,18 +31,6 @@ package GameCom.Helpers {
 			}
 		}
 		
-		public static function GenerateRandomMission():void {
-			while (Resources[CurrentResourcesUnlockedIndex + 1].ReputationForUnlock <= ReputationHelper.GetCurrentLevel()) {
-				CurrentResourcesUnlockedIndex++;
-			}
-			
-			var rR:ResourceInformation = Resources[Math.floor(CurrentResourcesUnlockedIndex * Math.random())];
-			
-			var total:int = rR.MinimumLoad + Math.floor(Math.random() * (rR.MaximumLoad - rR.MinimumLoad));
-			
-			MissionManager.SetDeliveryResources(rR.ID, total);
-		}
-		
 		public static function GetResouce(rID:int):ResourceInformation {
 			return Resources[rID];
 		}

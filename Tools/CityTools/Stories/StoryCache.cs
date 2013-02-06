@@ -66,10 +66,12 @@ namespace CityTools.Stories {
             foreach (Story story in stories) {
                 f.AddInt(story.startLocation);
                 f.AddInt(story.endLocation);
+
                 f.AddShort(story.npcStartImage1);
                 f.AddShort(story.npcStartImage2);
                 f.AddShort(story.npcEndImage1);
                 f.AddShort(story.npcEndImage2);
+
                 f.AddInt(story.repLevel);
 
                 f.AddInt(story.repGain);

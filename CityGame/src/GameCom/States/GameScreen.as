@@ -91,6 +91,7 @@ package GameCom.States {
 			MoneyHelper.Initialize();
 			ReputationHelper.Initialize();
 			ResourceHelper.Initialize();
+			MissionManager.Initialize();
 			
 			//Start the system
 			world = new b2World(new b2Vec2(0, 0), true);
@@ -146,6 +147,9 @@ package GameCom.States {
 			
 			//player.Respawn();
 			
+			simulating = true;
+			Update(null);
+			
 			MissionManager.GenerateAllMissions();
 		}
 		
@@ -158,20 +162,20 @@ package GameCom.States {
 				world.ClearForces();
 				
 				//Update the objects
-				waterLayer.Update();
-				bgManager.Update();
 				player.Update(dt);
-				
-				gui.Update();
-				
-				scenicManager.DrawScenicObjects();
-				placesManager.DrawObjects();
-				
 				npcManager.Update();
 				
 				worldSpr.x = Math.floor(-player.x + stage.stageWidth/2);
 				worldSpr.y = Math.floor( -player.y + stage.stageHeight / 2);
 			}
+			
+			//Update the things that draw
+			waterLayer.Update();
+			bgManager.Update();
+			scenicManager.DrawScenicObjects();
+			placesManager.DrawObjects();
+			
+			gui.Update();
 			
 			if(Keys.isKeyDown(Keyboard.P)) {
 				world.DrawDebugData();

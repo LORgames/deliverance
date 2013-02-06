@@ -16,6 +16,8 @@ namespace ToolToGameExporter {
         public const float PHYSICS_SCALE = 10.0f;
 
         Dictionary<int, int> remappedKeysForPlaces = new Dictionary<int, int>();  // <old, new>
+        Dictionary<int, int> remappedKeysForPickup = new Dictionary<int, int>(); // <old, new>
+        Dictionary<int, int> remappedKeysForDropoff = new Dictionary<int, int>(); // <old, new>
 
         public Form1() {
             InitializeComponent();
@@ -235,6 +237,9 @@ namespace ToolToGameExporter {
 
             int previousKey = 0;
 
+            short previousPICKUP = 0;
+            short previousDROPAT = 0;
+
             for (int i = 0; i < totalShapes; i++) {
                 int type_id = f.GetInt();
                 string source = f.GetString();
@@ -280,6 +285,17 @@ namespace ToolToGameExporter {
                     //Need resources and npc values to be copied to the other thing now
                     o.AddInt(f.GetInt());
                     o.AddShort(f.GetShort());
+
+                    //This needs to be remapped :)
+                    short x = f.GetShort(); // The index
+
+                    if (sourceID == 1) { // DROPAT?
+                        remappedKeysForDropoff.Add(x, previousDROPAT);
+                        previousDROPAT++;
+                    } else {
+                        remappedKeysForPickup.Add(x, previousPICKUP);
+                        previousPICKUP++;
+                    }
                 }
             }
 
@@ -313,25 +329,33 @@ namespace ToolToGameExporter {
             for (int i = 0; i < totalStories; i++) {
                 int startLocation = f.GetInt();
                 int endLocation = f.GetInt();
+
                 short npcImage1 = f.GetShort();
                 short npcImage2 = f.GetShort();
+                short npcImage3 = f.GetShort();
+                short npcImage4 = f.GetShort();
+
                 int repLevel = f.GetInt();
-                byte resType = f.GetByte();
-                int quantity = f.GetInt();
+                int repGain = f.GetInt();
+                int monGain = f.GetInt();
                 string startText = f.GetString();
                 string pickupText = f.GetString();
                 string endText = f.GetString();
+                byte numEnemies = f.GetByte();
 
-                o.AddInt(remappedKeysForPlaces[startLocation]);
-                o.AddInt(remappedKeysForPlaces[endLocation]);
+                o.AddInt(remappedKeysForPickup[startLocation]);
+                o.AddInt(remappedKeysForDropoff[endLocation]);
                 o.AddShort(npcImage1);
                 o.AddShort(npcImage2);
+                o.AddShort(npcImage3);
+                o.AddShort(npcImage4);
                 o.AddInt(repLevel);
-                o.AddByte(resType);
-                o.AddInt(quantity);
+                o.AddInt(repGain);
+                o.AddInt(monGain);
                 o.AddString(startText);
                 o.AddString(pickupText);
                 o.AddString(endText);
+                o.AddShort(numEnemies);
             }
 
             zp.AddEntry("story.bin", o.EncodedBytes());
