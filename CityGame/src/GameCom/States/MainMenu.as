@@ -1,6 +1,7 @@
 package GameCom.States {
 	import flash.filters.DropShadowFilter;
 	import flash.filters.GlowFilter;
+	import flash.net.URLRequest;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.text.TextFieldAutoSize;
@@ -30,11 +31,13 @@ package GameCom.States {
 		private const totalButtons:int = 1;
 		private const buttonPadding:int = 10;
 		
-		private var PlayBtn:Button = new Button(Strings.Get("PlayGame"), 265, 54);
 		private var ClearBtn:Button = new Button("CLEAR SAVE");
 		
 		private var TextContainer:Sprite = new Sprite();
 		private var PlayText:TextField = new TextField();
+		private var ContinueText:TextField = new TextField();
+		private var CreditsText:TextField = new TextField();
+		private var WebsiteText:TextField = new TextField();
 		
 		public function MainMenu() {
 			AudioController.PlayLoop(AudioStore.Music);
@@ -52,8 +55,6 @@ package GameCom.States {
 			//Start Menu
 			this.addChild(background);
 			
-			//TextContainer.width = 261;
-			//TextContainer.height = 198;
 			this.addChild(TextContainer);
 			
 			PlayText.selectable = false;
@@ -62,10 +63,35 @@ package GameCom.States {
 			PlayText.text = "Play";
 			PlayText.addEventListener(MouseEvent.ROLL_OVER, MouseOverText);
 			PlayText.addEventListener(MouseEvent.ROLL_OUT, MouseOutText);
+			PlayText.addEventListener(MouseEvent.CLICK, PlayFunc, false, 0, true);
 			TextContainer.addChild(PlayText);
 			
-			this.addChild(PlayBtn);
-			PlayBtn.addEventListener(MouseEvent.CLICK, PlayFunc, false, 0, true);
+			ContinueText.selectable = false;
+			ContinueText.defaultTextFormat = new TextFormat("Verdana", 36, 0xFFFFFF);
+			ContinueText.autoSize = TextFieldAutoSize.CENTER;
+			ContinueText.text = "Continue";
+			ContinueText.addEventListener(MouseEvent.ROLL_OVER, MouseOverText);
+			ContinueText.addEventListener(MouseEvent.ROLL_OUT, MouseOutText);
+			ContinueText.addEventListener(MouseEvent.CLICK, ContinueFunc, false, 0, true);
+			TextContainer.addChild(ContinueText);
+			
+			CreditsText.selectable = false;
+			CreditsText.defaultTextFormat = new TextFormat("Verdana", 36, 0xFFFFFF);
+			CreditsText.autoSize = TextFieldAutoSize.CENTER;
+			CreditsText.text = "Credits";
+			CreditsText.addEventListener(MouseEvent.ROLL_OVER, MouseOverText);
+			CreditsText.addEventListener(MouseEvent.ROLL_OUT, MouseOutText);
+			CreditsText.addEventListener(MouseEvent.CLICK, CreditsFunc, false, 0, true);
+			TextContainer.addChild(CreditsText);
+			
+			WebsiteText.selectable = false;
+			WebsiteText.defaultTextFormat = new TextFormat("Verdana", 12, 0xFFFFFF);
+			WebsiteText.autoSize = TextFieldAutoSize.CENTER;
+			WebsiteText.text = "www.lorgames.com";
+			WebsiteText.addEventListener(MouseEvent.ROLL_OVER, MouseOverText);
+			WebsiteText.addEventListener(MouseEvent.ROLL_OUT, MouseOutText);
+			WebsiteText.addEventListener(MouseEvent.CLICK, WebsiteFunc, false, 0, true);
+			TextContainer.addChild(WebsiteText);
 			
 			this.addChild(ClearBtn);
 			ClearBtn.addEventListener(MouseEvent.CLICK, ClearFunc, false, 0, true);
@@ -76,6 +102,18 @@ package GameCom.States {
 		
 		public function PlayFunc(e:MouseEvent):void {
 			SystemMain.instance.StateTo(new GameScreen());
+		}
+		
+		public function ContinueFunc(e:MouseEvent):void {
+			SystemMain.instance.StateTo(new GameScreen());
+		}
+		
+		public function CreditsFunc(e:MouseEvent):void {
+			//SystemMain.instance.StateTo(new GameScreen());
+		}
+		
+		public function WebsiteFunc(e:MouseEvent):void {
+			flash.net.navigateToURL(new URLRequest("http://www.lorgames.com"), "_blank");
 		}
 		
 		public function ClearFunc(e:MouseEvent):void {
@@ -93,21 +131,23 @@ package GameCom.States {
 			background.x = (this.stage.stageWidth - background.width) / 2;
 			background.y = (this.stage.stageHeight - background.height) / 2;
 			
-			PlayBtn.x = 0;
-			PlayBtn.y = this.stage.stageHeight / 2 - 58;
-			
 			TextContainer.x = background.x + 448 + 261/2;
 			TextContainer.y = background.y + 241;
 			
 			PlayText.x = -PlayText.width/2;
 			PlayText.y = 5;
+			ContinueText.x = -ContinueText.width/2;
+			ContinueText.y = PlayText.y + PlayText.height + 5;
+			CreditsText.x = -CreditsText.width/2;
+			CreditsText.y = ContinueText.y + ContinueText.height + 5;
+			WebsiteText.x = -WebsiteText.width / 2;
+			WebsiteText.y = CreditsText.y + CreditsText.height + 20;
 		}
 		
 		public function MouseOverText(e:MouseEvent):void {
 			var textField:TextField = e.currentTarget as TextField;
 			
 			textField.filters = new Array(new GlowFilter(0xFF0000));
-			//textField.filters = new Array(new DropShadowFilter(4, 45, 0xFF0000));
 		}
 		
 		public function MouseOutText(e:MouseEvent):void {
