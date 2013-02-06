@@ -252,7 +252,8 @@ package GameCom.GameComponents {
 			
 			IdleLoop = AudioController.PlayLoop(AudioStore.TruckIdle);
 			ReversingLoop = AudioController.PlayLoop(AudioStore.TruckReverse, false);
-			DrivingLoop = AudioController.PlayLoop(AudioStore.TruckIdle, false);
+			DrivingLoop = AudioController.PlayLoop(AudioStore.TruckDriving, false);
+			CurrentLoop = IdleLoop;
 		}
 		
 		private function killOrthogonalVelocity(targetBody:b2Body):void {

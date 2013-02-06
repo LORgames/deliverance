@@ -15,6 +15,7 @@ package GameCom.Managers
 	import GameCom.Helpers.MoneyHelper;
 	import GameCom.Helpers.ReputationHelper;
 	import GameCom.Helpers.SpriteHelper;
+	import GameCom.States.MapOverlay;
 	import GameCom.States.StoreOverlay;
 	import GameCom.SystemComponents.PopupInfo;
 	import LORgames.Components.Tooltip;
@@ -51,7 +52,9 @@ package GameCom.Managers
 		private var currentFrameTooltipIndex:int = 0;
 		
 		private var Pause:Function;
+		
 		private var store:StoreOverlay;
+		private var map:MapOverlay;
 		
 		public function GUIManager(player:PlayerTruck, pauseLoopback:Function) {
 			I = this;
@@ -124,7 +127,9 @@ package GameCom.Managers
 			UpdateCache();
 			
 			this.Pause = pauseLoopback;
+			
 			store = new StoreOverlay();
+			map = new MapOverlay();
 		}
 		
 		public function Update() : void {
@@ -289,6 +294,19 @@ package GameCom.Managers
 			
 			player.FixUpgradeValues();
 			player.Respawn();
+		}
+		
+		public function ActivateMap():void {
+			this.addChild(map);
+			
+			map.Redraw();
+			
+			Pause.call();
+		}
+		
+		public function DeactivateMap():void {
+			this.removeChild(map);
+			Pause.call();
 		}
 		
 	}

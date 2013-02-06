@@ -167,6 +167,10 @@ package GameCom.States {
 				
 				worldSpr.x = Math.floor(-player.x + stage.stageWidth/2);
 				worldSpr.y = Math.floor( -player.y + stage.stageHeight / 2);
+				
+				if (Keys.isKeyDown(Keyboard.M)) {
+					GUIManager.I.ActivateMap();
+				}
 			}
 			
 			//Update the things that draw
@@ -183,10 +187,10 @@ package GameCom.States {
 				debugDrawLayer.graphics.clear();
 			}
 			
-			if (mDown && !Keys.isKeyDown(Keyboard.M)) {
+			if (mDown && !Keys.isKeyDown(Keyboard.S)) {
 				AudioController.SetMuted(!AudioController.GetMuted());
 			}
-			mDown = Keys.isKeyDown(Keyboard.M);
+			mDown = Keys.isKeyDown(Keyboard.S);
 		}
 		
 		public function Redraw(e:*= null):void {

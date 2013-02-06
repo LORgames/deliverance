@@ -38,24 +38,16 @@ package LORgames.Engine
 				var mySound:Sound = new soundCLS();
 				var channel:SoundChannel = null;
 				channel = mySound.play();
-				
-				if (GetMuted()) {
-					channel.soundTransform.volume = 0.0;
-				}
 			}
 		}
 		
 		public static function PlayLoop(soundCLS:Class, hasVolume:Boolean = true):SoundChannel {
 			//Check that the system has the capability to play audio
-			if (Capabilities.hasAudio) {
+			if (Capabilities.hasAudio && !GetMuted()) {
 				var mySound:Sound = new soundCLS();
 				var channel:SoundChannel = null;
-				channel = mySound.play(0, int.MAX_VALUE);
+				channel = mySound.play(0, int.MAX_VALUE, new SoundTransform((hasVolume?1:0)));
 				nowPlaying.push(channel);
-				
-				if (!hasVolume || GetMuted()) {
-					channel.soundTransform.volume = 0;
-				}
 				
 				return channel;
 			}
@@ -66,13 +58,17 @@ package LORgames.Engine
 		public static function FadeOut(sound:SoundChannel):void {
 			if (sound == null) return;
 			
-			sound.soundTransform.volume = 0.0;
+			var mt:SoundTransform = sound.soundTransform;
+			mt.volume = 0.0;
+			sound.soundTransform = mt;
 		}
 		
 		public static function FadeIn(sound:SoundChannel):void {
 			if (sound == null) return;
 			
-			sound.soundTransform.volume = 1.0;
+			var mt:SoundTransform = sound.soundTransform;
+			mt.volume = 1.0;
+			sound.soundTransform = mt;
 		}
 		
 	}
