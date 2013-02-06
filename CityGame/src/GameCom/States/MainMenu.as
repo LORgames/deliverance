@@ -1,4 +1,9 @@
 package GameCom.States {
+	import flash.filters.DropShadowFilter;
+	import flash.filters.GlowFilter;
+	import flash.text.TextField;
+	import flash.text.TextFormat;
+	import flash.text.TextFieldAutoSize;
 	import GameCom.Helpers.AudioStore;
 	import GameCom.SystemMain;
 	import flash.display.Bitmap;
@@ -28,6 +33,9 @@ package GameCom.States {
 		private var PlayBtn:Button = new Button(Strings.Get("PlayGame"), 265, 54);
 		private var ClearBtn:Button = new Button("CLEAR SAVE");
 		
+		private var TextContainer:Sprite = new Sprite();
+		private var PlayText:TextField = new TextField();
+		
 		public function MainMenu() {
 			AudioController.PlayLoop(AudioStore.Music);
 			
@@ -42,9 +50,21 @@ package GameCom.States {
 			background = new Bitmap(ThemeManager.Get("Backgrounds/Menu.jpg"));
 			
 			//Start Menu
-			this.addChild(background);
+			//this.addChild(background);
 			
-			this.addChild(PlayBtn);
+			TextContainer.width = 261;
+			TextContainer.height = 198;
+			this.addChild(TextContainer);
+			
+			PlayText.selectable = false;
+			PlayText.defaultTextFormat = new TextFormat("Verdana", 36, 0xFFFFFF);
+			PlayText.autoSize = TextFieldAutoSize.CENTER;
+			PlayText.text = "Play";
+			PlayText.addEventListener(MouseEvent.ROLL_OVER, MouseOverText);
+			PlayText.addEventListener(MouseEvent.ROLL_OUT, MouseOutText);
+			//TextContainer.addChild(PlayText);
+			
+			//this.addChild(PlayBtn);
 			PlayBtn.addEventListener(MouseEvent.CLICK, PlayFunc, false, 0, true);
 			
 			this.addChild(ClearBtn);
@@ -73,8 +93,31 @@ package GameCom.States {
 			background.x = (this.stage.stageWidth - background.width) / 2;
 			background.y = (this.stage.stageHeight - background.height) / 2;
 			
-			PlayBtn.x = (this.stage.stageWidth / 2) + 49;
-			PlayBtn.y = this.stage.stageHeight / 2 - 58;
+			//PlayBtn.x = (this.stage.stageWidth / 2) + 49;
+			//PlayBtn.y = this.stage.stageHeight / 2 - 58;
+			
+			TextContainer.x = background.x + 448;
+			TextContainer.y = background.y + 241;
+			
+			TextContainer.graphics.beginFill(0xFF0000);
+			TextContainer.graphics.drawRect(0, 0, 100, 100);
+			TextContainer.graphics.endFill();
+			
+			PlayText.x = ((TextContainer.width - PlayText.width) / 2);
+			PlayText.y = 5;
+		}
+		
+		public function MouseOverText(e:MouseEvent):void {
+			var textField:TextField = e.currentTarget as TextField;
+			
+			textField.filters = new Array(new GlowFilter(0xFF0000));
+			//textField.filters = new Array(new DropShadowFilter(4, 45, 0xFF0000));
+		}
+		
+		public function MouseOutText(e:MouseEvent):void {
+			var textField:TextField = e.currentTarget as TextField;
+			
+			textField.filters = new Array();
 		}
 		
 	}
