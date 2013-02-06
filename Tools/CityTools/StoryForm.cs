@@ -147,6 +147,13 @@ namespace CityTools {
 
             // Locate the highest index
             for (int i = 0; i < selectedObjects.Count; i++) {
+                if (InStartLocation() && selectedObjects[i].object_index != 2) {
+                    continue;
+                }
+
+                if (InEndLocation() && selectedObjects[i].object_index != 1) {
+                    continue;
+                }
 
                 // If current objects index is higher, store it as the highest index
                 if (selectedObjects[i].index > highestIndex) {
@@ -162,11 +169,13 @@ namespace CityTools {
                 }
             }
 
+            if (highestIndex == -1) return;
+
             if (this.ActiveControl == this.txtStartLocation) {
-                txtStartLocation.Text = selectedObjects[0].index.ToString();
+                txtStartLocation.Text = selectedObjects[0].my_UUID.ToString();
                 selectedObjects.Clear();
             } else if (this.ActiveControl == this.txtEndLocation) {
-                txtEndLocation.Text = selectedObjects[0].index.ToString();
+                txtEndLocation.Text = selectedObjects[0].my_UUID.ToString();
                 selectedObjects.Clear();
             }
         }

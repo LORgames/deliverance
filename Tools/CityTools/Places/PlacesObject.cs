@@ -9,9 +9,13 @@ using CityTools.ObjectSystem;
 
 namespace CityTools.Places {
     public class PlacesObject : BaseObject {
+        public static Dictionary<int, short> HIGH_UUID = new Dictionary<int, short>();
+        
         private string source = ""; //Just caching it really, prevents a lookup later
         public int object_index = 0;
         public int angle = 0;
+
+        public short my_UUID = 0;
 
         internal short b_NPC = 0;
         internal int b_resources = 0;
@@ -20,11 +24,16 @@ namespace CityTools.Places {
 
         public PointF[] points;
 
-        public PlacesObject(int obj_index, PointF initialLocation, int angle) : base() {
+        public PlacesObject(int obj_index, PointF initialLocation, int angle, bool isNew = true) : base() {
             this.angle = angle;
 
             this.object_index = obj_index;
             this.source = PlacesObjectCache.s_objectTypes[obj_index].ImageName;
+
+            if (isNew) {
+                my_UUID = HIGH_UUID[object_index];
+                HIGH_UUID[object_index]++;
+            }
 
             Image im_o = ImageCache.RequestImage(source);
             Image im_a = ImageCache.RequestImage(source, angle);
@@ -143,13 +152,23 @@ namespace CityTools.Places {
             if (object_index == 1 || object_index == 2) {
                 f.AddInt(b_resources);
                 f.AddShort(b_NPC);
+                f.AddShort(my_UUID);
             }
         }
 
         internal void ReadPersonalData(BinaryIO f) {
+            if (!HIGH_UUID.ContainsKey(object_index)) {
+                HIGH_UUID.Add(object_index, 0);
+            }
+
             if (object_index == 1 || object_index == 2) {
                 b_resources = f.GetInt();
                 b_NPC = f.GetShort();
+                my_UUID = f.GetShort();
+
+                if (HIGH_UUID[object_index] < my_UUID+1) {
+                    HIGH_UUID[object_index] = (short)(my_UUID+1);
+                }
             }
         }
     }

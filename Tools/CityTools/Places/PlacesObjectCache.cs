@@ -74,7 +74,7 @@ namespace CityTools.Places {
                     float locationY = f.GetFloat();
                     int rotation = f.GetInt();
 
-                    PlacesObject p = new PlacesObject(sourceID, new System.Drawing.PointF(locationX, locationY), rotation);
+                    PlacesObject p = new PlacesObject(sourceID, new System.Drawing.PointF(locationX, locationY), rotation, false);
                     p.ReadPersonalData(f);
                     s_objectStore.Add(p);
                 }
