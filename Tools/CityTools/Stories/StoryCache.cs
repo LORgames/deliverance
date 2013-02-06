@@ -33,13 +33,17 @@ namespace CityTools.Stories {
                     short npcEndImage1 = f.GetShort();
                     short npcEndImage2 = f.GetShort();
                     int repLevel = f.GetInt();
-                    byte resType = f.GetByte();
-                    int quantity = f.GetInt();
+
+                    int repGain = f.GetInt();
+                    int monGain = f.GetInt();
+
                     string startText = f.GetString();
                     string pickupText = f.GetString();
                     string endText = f.GetString();
 
-                    stories.Add(new Story(startLocation, endLocation, npcStartImage1, npcStartImage2, npcEndImage1, npcEndImage2, repLevel, resType, quantity, startText, pickupText, endText));
+                    byte numEnemies = f.GetByte();
+
+                    stories.Add(new Story(startLocation, endLocation, npcStartImage1, npcStartImage2, npcEndImage1, npcEndImage2, repLevel, repGain, monGain, startText, pickupText, endText, numEnemies));
                 }
             }
         }
@@ -67,11 +71,15 @@ namespace CityTools.Stories {
                 f.AddShort(story.npcEndImage1);
                 f.AddShort(story.npcEndImage2);
                 f.AddInt(story.repLevel);
-                f.AddByte(story.resType);
-                f.AddInt(story.quantity);
+
+                f.AddInt(story.repGain);
+                f.AddInt(story.monGain);
+
                 f.AddString(story.startText);
                 f.AddString(story.pickupText);
                 f.AddString(story.endText);
+
+                f.AddByte(story.numEnemies);
             }
 
             f.Encode(STORY_DATAFILE);

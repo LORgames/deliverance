@@ -23,12 +23,12 @@ package {
 		private static var mStage:Stage = null;
 		
 		public function Main():void {
-			this.graphics.beginFill(0xFFFFFF)
+			this.graphics.beginFill(0x000000)
 			this.graphics.drawRect(0, 0, 10000, 10000);
 			this.graphics.endFill();
 			this.addChild(new TextField());
 			(this.getChildAt(0) as TextField).selectable = false;
-			(this.getChildAt(0) as TextField).defaultTextFormat = new TextFormat("Verdana", 10, 0x000000);
+			(this.getChildAt(0) as TextField).defaultTextFormat = new TextFormat("Verdana", 10, 0xFFFFFF);
 			(this.getChildAt(0) as TextField).autoSize = TextFieldAutoSize.LEFT;
 			(this.getChildAt(0) as TextField).x = 5;
 			(this.getChildAt(0) as TextField).y = 5;

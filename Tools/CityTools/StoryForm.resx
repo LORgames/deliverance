@@ -117,4 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="textBox1.Text" xml:space="preserve">
+    <value>These boxes support various commands.
+
+@NL
+Creates a new line in the current message
+
+@NB:X_Y
+Tells the system the next text is on the next message (press enter to continue).
+X is the NPC ID
+Y is the index of that NPC's image
+
+The system also supports a subset of HTML tabs. See link below for full list of HTML tags supported.</value>
+  </data>
 </root>

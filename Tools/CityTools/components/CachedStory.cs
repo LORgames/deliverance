@@ -22,8 +22,8 @@ namespace CityTools.Components {
             this.lblNPCImage.Text = "Start NPC Image: " + story.npcStartImage1.ToString() + "_" + story.npcStartImage2.ToString();
             this.lblNPCImage.Text = "End NPC Image: " + story.npcEndImage1.ToString() + "_" + story.npcEndImage2.ToString();
             this.lblRepLevel.Text = "Rep Level: " + story.repLevel.ToString();
-            this.lblResType.Text = "Res Type: " + story.resType.ToString();
-            this.lblQuantity.Text = "Quantity: " + story.quantity.ToString();
+            this.lblResType.Text = "RepGain: " + story.repGain.ToString() + " & MonGain: " + story.monGain.ToString();
+            this.lblQuantity.Text = "Enemies: " + story.numEnemies.ToString();
 
             int maxWidth = 0;
             int maxHeight = 0;

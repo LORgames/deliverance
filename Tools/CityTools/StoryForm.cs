@@ -46,14 +46,14 @@ namespace CityTools {
 
         private void btnSave_Click(object sender, EventArgs e) {
             if (txtStartLocation.Text != "" && txtEndLocation.Text != "" && cmbStartNPCImage1.SelectedIndex != -1
-                && cmbStartNPCImage2.SelectedIndex != -1 && txtRepLevel.Text != "" && cmbResourceType.SelectedIndex != -1) {
+                && cmbStartNPCImage2.SelectedIndex != -1 && txtRepLevel.Text != "" && txtReputationGain.Text != "" && txtMonetaryGain.Text != "") {
 
                 if (btnSave.Text == "Save") {
                 
                     Story temp = new Story(int.Parse(txtStartLocation.Text), int.Parse(txtEndLocation.Text),
                         (short)cmbStartNPCImage1.SelectedIndex, (short)cmbStartNPCImage2.SelectedIndex, (short)cmbEndNPCImage1.SelectedIndex, (short)cmbEndNPCImage2.SelectedIndex,
-                        int.Parse(txtRepLevel.Text), (byte)cmbResourceType.SelectedIndex, tbQuantity.Value,
-                        txtStartText.Text, txtPickupText.Text, txtEndText.Text);
+                        int.Parse(txtRepLevel.Text), int.Parse(txtReputationGain.Text), int.Parse(txtMonetaryGain.Text),
+                        txtStartText.Text, txtPickupText.Text, txtEndText.Text, (byte)tbEnemyQTY.Value);
 
                     StoryCache.AddStory(temp);
                 } else {
@@ -65,11 +65,12 @@ namespace CityTools {
                     StoryCache.stories[index].npcEndImage1 = (short)cmbEndNPCImage1.SelectedIndex;
                     StoryCache.stories[index].npcEndImage2 = (short)cmbEndNPCImage2.SelectedIndex;
                     StoryCache.stories[index].repLevel = int.Parse(txtRepLevel.Text);
-                    StoryCache.stories[index].resType = (byte)cmbResourceType.SelectedIndex;
-                    StoryCache.stories[index].quantity = tbQuantity.Value;
+                    StoryCache.stories[index].repGain = int.Parse(txtReputationGain.Text);
+                    StoryCache.stories[index].monGain = int.Parse(txtMonetaryGain.Text);
                     StoryCache.stories[index].startText = txtStartText.Text;
                     StoryCache.stories[index].pickupText = txtPickupText.Text;
                     StoryCache.stories[index].endText = txtEndText.Text;
+                    StoryCache.stories[index].numEnemies = (byte)tbEnemyQTY.Value;
                 }
 
                 MainWindow.instance.paintMode = PaintMode.Off;
@@ -85,8 +86,6 @@ namespace CityTools {
             txtEndLocation.Text = "";
 
             txtRepLevel.Text = "";
-            cmbResourceType.SelectedIndex = -1;
-            cmbResourceType.Items.Clear();
 
             cmbStartNPCImage1.SelectedIndex = -1;
             cmbStartNPCImage1.Items.Clear();
@@ -97,20 +96,20 @@ namespace CityTools {
             cmbEndNPCImage1.Items.Clear();
             cmbEndNPCImage2.SelectedIndex = -1;
             cmbEndNPCImage2.Items.Clear();
-            
-            for (int i = 0; i < Places.PlacesObjectCache.resources.Count; i++) {
-                cmbResourceType.Items.Add(Places.PlacesObjectCache.resources[i]);
-            }
 
             for (int i = 0; i < Places.PlacesObjectCache.people.Count; i++) {
-                cmbStartNPCImage1.Items.Add(Places.PlacesObjectCache.people[i]);
-                cmbEndNPCImage1.Items.Add(Places.PlacesObjectCache.people[i]);
+                if (Places.PlacesObjectCache.people[i] != "Unused") {
+                    cmbStartNPCImage1.Items.Add(Places.PlacesObjectCache.people[i]);
+                    cmbEndNPCImage1.Items.Add(Places.PlacesObjectCache.people[i]);
+                }
             }
 
-            tbQuantity.Value = tbQuantity.Minimum;
             txtStartText.Text = "";
             txtPickupText.Text = "";
             txtEndText.Text = "";
+
+            txtReputationGain.Text = "";
+            txtMonetaryGain.Text = "";
 
             index = -1;
 
@@ -186,11 +185,15 @@ namespace CityTools {
             cmbEndNPCImage2.SelectedIndex = story.npcEndImage2;
 
             txtRepLevel.Text = story.repLevel.ToString();
-            cmbResourceType.SelectedIndex = story.resType;
-            tbQuantity.Value = story.quantity;
+
+            txtReputationGain.Text = story.repGain.ToString();
+            txtMonetaryGain.Text = story.monGain.ToString();
+
             txtStartText.Text = story.startText;
             txtPickupText.Text = story.pickupText;
             txtEndText.Text = story.endText;
+
+            tbEnemyQTY.Value = story.numEnemies;
 
             btnSave.Text = "Edit";
         }
@@ -224,23 +227,8 @@ namespace CityTools {
             }
         }
 
-        private void cmbResourceType_SelectedIndexChanged(object sender, EventArgs e) {
-            if (cmbResourceType.SelectedIndex > -1) {
-                tbQuantity.Minimum = PlacesObjectCache.resources_min[cmbResourceType.SelectedIndex];
-                tbQuantity.Maximum = PlacesObjectCache.resources_max[cmbResourceType.SelectedIndex];
-
-                tbQuantity_ValueChanged(null, null);
-            }
-
-        }
-
-        private void tbQuantity_ValueChanged(object sender, EventArgs e) {
-            if (cmbResourceType.SelectedIndex < 0) {
-                resource_info.Text = "<V Select Both first.";
-                return;
-            }
-
-            resource_info.Text = tbQuantity.Value + "x = $" + (tbQuantity.Value * PlacesObjectCache.resources_money[cmbResourceType.SelectedIndex]) + " & " + (tbQuantity.Value * PlacesObjectCache.resources_rep[cmbResourceType.SelectedIndex]) + " Reputation";
+        private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
+            System.Diagnostics.Process.Start("http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/text/TextField.html#htmlText");
         }
     }
 }

@@ -96,7 +96,7 @@ package GameCom.Managers
 				// if car not visible destroy
 				var carRect:Rectangle = new Rectangle(car.x - car.width / 2, car.y - car.height / 2, car.width, car.height);
 				
-				if (!fullRect.containsRect(carRect)) {
+				if (!fullRect.intersects(carRect)) {
 					car.Destroy();
 					worldSpr.removeChild(cars[i]);
 					cars.splice(i, 1);
