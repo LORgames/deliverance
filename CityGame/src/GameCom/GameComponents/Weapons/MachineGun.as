@@ -23,6 +23,8 @@ package GameCom.GameComponents.Weapons
 		private var fixtureHit:b2Fixture;
 		private var distance:Number;
 		
+		private const RANGE:Number = 30;
+		
 		public function MachineGun(world:b2World) {
 			super(world);
 			
@@ -45,6 +47,8 @@ package GameCom.GameComponents.Weapons
 			var angleBecauseInaccurate:Number = (-5 + Math.random() * 10) / 180 * Math.PI;
 			
 			var b3:b2Vec2 = MathHelper.RotateVector(d, angleBecauseInaccurate);
+			
+			b3.Multiply(RANGE / b3.Length());
 			
 			b3.Add(b1);
 			

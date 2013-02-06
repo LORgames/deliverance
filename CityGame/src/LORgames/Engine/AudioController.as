@@ -38,17 +38,41 @@ package LORgames.Engine
 				var mySound:Sound = new soundCLS();
 				var channel:SoundChannel = null;
 				channel = mySound.play();
+				
+				if (GetMuted()) {
+					channel.soundTransform.volume = 0.0;
+				}
 			}
 		}
 		
-		public static function PlayLoop(soundCLS:Class):void {
+		public static function PlayLoop(soundCLS:Class, hasVolume:Boolean = true):SoundChannel {
 			//Check that the system has the capability to play audio
-			if (Capabilities.hasAudio && !GetMuted()) {
+			if (Capabilities.hasAudio) {
 				var mySound:Sound = new soundCLS();
 				var channel:SoundChannel = null;
 				channel = mySound.play(0, int.MAX_VALUE);
 				nowPlaying.push(channel);
+				
+				if (!hasVolume || GetMuted()) {
+					channel.soundTransform.volume = 0;
+				}
+				
+				return channel;
 			}
+			
+			return null;
+		}
+		
+		public static function FadeOut(sound:SoundChannel):void {
+			if (sound == null) return;
+			
+			sound.soundTransform.volume = 0.0;
+		}
+		
+		public static function FadeIn(sound:SoundChannel):void {
+			if (sound == null) return;
+			
+			sound.soundTransform.volume = 1.0;
 		}
 		
 	}

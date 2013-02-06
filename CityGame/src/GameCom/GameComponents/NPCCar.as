@@ -10,6 +10,7 @@ package GameCom.GameComponents
 	import GameCom.Helpers.AudioStore;
 	import GameCom.Helpers.MathHelper;
 	import GameCom.Managers.GUIManager;
+	import GameCom.Managers.MissionManager;
 	import GameCom.Managers.NodeManager;
 	import GameCom.States.GameScreen;
 	import LORgames.Engine.AudioController;
@@ -81,6 +82,8 @@ package GameCom.GameComponents
 		public var Wep:BaseWeapon;
 		private var ct:ColorTransform = new ColorTransform(Math.random(), Math.random(), Math.random());
 		
+		private static var CURRENT_ENEMIES:int = 0;
+		
 		public function NPCCar(spawnPosition:b2Vec2, world:b2World, nodeManager:NodeManager, angle:Number, firstNodeID:int) {
 			this.world = world;
 			
@@ -94,9 +97,10 @@ package GameCom.GameComponents
 			var carChance:Number = Math.random();
 			var vehicle:Class;
 			
-			if (carChance < 0.1) {
+			if (carChance < 0.1 && CURRENT_ENEMIES < MissionManager.CurrentAllowedEnemies()) {
 				vehicle = ThemeManager.GetClassFromSWF("SWFs/Cars.swf", "LORgames.EnemyVan"); // EnemyVan
 				type = VEHICLE_ENEMYVAN;
+				CURRENT_ENEMIES++;
 			} else if (carChance < 0.9) {
 				vehicle = ThemeManager.GetClassFromSWF("SWFs/Cars.swf", "LORgames.BasicCar"); // CarA
 				type = VEHICLE_CARA;
@@ -323,10 +327,6 @@ package GameCom.GameComponents
 				
 				var tNode:Node = nodeManager.GetNode(targetNode);
 				
-				if (Wep != null) {
-					Wep.Update(new Point(GUIManager.I.player.x, GUIManager.I.player.y), true);
-				}
-				
 				// always accelerate toward targetNode UNLESS ABOUT TO COLLIDE OMFG JUST LIKE JACOB'S DRIVING 
 				if (collisions > 0) {
 					engineSpeed = 0;
@@ -368,6 +368,13 @@ package GameCom.GameComponents
 			} else {
 				engineSpeed = 0;
 				steeringAngle = 0;
+			}
+			
+			if (Wep != null) {
+				var playerDist:Number = MathHelper.Distance(new Point(this.x, this.y), new Point(GUIManager.I.player.x, GUIManager.I.player.y));
+				if (playerDist < 300) {
+					Wep.Update(new Point(GUIManager.I.player.x, GUIManager.I.player.y), true);
+				}
 			}
 			
 			engineSpeed *= (MAX_STEER_ANGLE-Math.abs(steeringAngle)) / (2 * MAX_STEER_ANGLE) + 0.5;
@@ -430,6 +437,10 @@ package GameCom.GameComponents
 		}
 		
 		public function Destroy():void {
+			if (type == VEHICLE_ENEMYVAN) {
+				CURRENT_ENEMIES--;
+			}
+			
 			world.DestroyBody(body);
 			world.DestroyBody(leftWheel);
 			world.DestroyBody(rightWheel);
@@ -457,6 +468,7 @@ package GameCom.GameComponents
 					this.addChildAt(new cls(), 2);
 					this.getChildAt(2).transform.colorTransform = ct;
 				} else {
+					CURRENT_ENEMIES--;
 					this.removeChildAt(2);
 					
 					cls = ThemeManager.GetClassFromSWF("SWFs/Cars.swf", "LORgames.DeadEnemyCar");

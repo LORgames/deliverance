@@ -55,7 +55,7 @@ package GameCom.GameComponents
 					tooltipInfo = "Need to deliver " + MissionParams.ResourceAmount + ri.Message + ".\n\n";
 					tooltipInfo += "Rewards:\n" + expGain + " Reputation (" + ReputationHelper.GetPercentageGain(expGain) + "%)\n";
 					tooltipInfo += "$" + monGain + "\n\n";
-					tooltipInfo += PeopleHelper.Names[MissionParams.StartNPC1] + " => " + PeopleHelper.Names[MissionParams.EndNPC1];
+					tooltipInfo += "Drive over and prease Enter to accept.";
 					
 					isActive = true;
 					

@@ -182,6 +182,8 @@ package GameCom.Managers
 			for (var i:int = currentFrameTooltipIndex; i < tooltips.length; i++) {
 				tooltips[i].visible = false;
 			}
+			
+			currentFrameTooltipIndex = 0;
 		}
 		
 		private function ShowNextPopup():void {

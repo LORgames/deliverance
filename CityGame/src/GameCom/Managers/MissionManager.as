@@ -162,6 +162,22 @@ package GameCom.Managers {
 			
 			return null;
 		}
+		
+		public static function CurrentAllowedEnemies():int {
+			if (CurrentMission != null) {
+				return CurrentMission.EnemyQuantity;
+			} else {
+				if (ReputationHelper.GetCurrentLevel() < 5) {
+					return 0;
+				} else if (ReputationHelper.GetCurrentLevel() < 10) {
+					return 1;
+				} else if (ReputationHelper.GetCurrentLevel() < 15) {
+					return 2;
+				} else {
+					return 3;
+				}
+			}
+		}
 	}
 
 }

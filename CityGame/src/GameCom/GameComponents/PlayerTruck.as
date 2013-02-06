@@ -39,6 +39,7 @@ package GameCom.GameComponents {
 		private const BASE_HORSEPOWER_INC:Number = 25;
 		private const BASE_NOSFACTOR:Number = 1.5;
 		private const BASE_HEALTH:int = 500;
+		private const BASE_REVERSE_SPEED:int = 20;
 		
 		private const HORSEPOWER_MAX_PER_LEVEL:Number = 10;
 		private const HORSEPOWER_INC_PER_LEVEL:Number = 2.5;
@@ -87,10 +88,10 @@ package GameCom.GameComponents {
 		private var LRotWheel:Sprite = new Sprite();
 		private var RRotWheel:Sprite = new Sprite();
 		
-		private var CurrentLoop:Sound = null;
-		private var IdleLoop:Sound = null;
-		private var ReversingLoop:Sound = null;
-		private var DrivingLoop:Sound = null;
+		private var CurrentLoop:* = null;
+		private var IdleLoop:* = null;
+		private var ReversingLoop:* = null;
+		private var DrivingLoop:* = null;
 		
 		public function PlayerTruck(spawnPosition:b2Vec2, world:b2World, worldSpr:Sprite) {
 			worldSpr.addChild(this);
@@ -249,7 +250,9 @@ package GameCom.GameComponents {
 			RRotWheel.x = rightFrontWheelPosition.x * Global.PHYSICS_SCALE - 2;
 			RRotWheel.y = rightFrontWheelPosition.y * Global.PHYSICS_SCALE;
 			
-			AudioController.PlayLoop(AudioStore.TruckIdle);
+			IdleLoop = AudioController.PlayLoop(AudioStore.TruckIdle);
+			ReversingLoop = AudioController.PlayLoop(AudioStore.TruckReverse, false);
+			DrivingLoop = AudioController.PlayLoop(AudioStore.TruckIdle, false);
 		}
 		
 		private function killOrthogonalVelocity(targetBody:b2Body):void {
@@ -268,14 +271,32 @@ package GameCom.GameComponents {
 		
 		public function Update(dt:Number):void {
 			if (Keys.isKeyDown(Keyboard.UP) || Keys.isKeyDown(Keyboard.W)) {
+				if (CurrentLoop != DrivingLoop) {
+					AudioController.FadeOut(CurrentLoop);
+					AudioController.FadeIn(DrivingLoop);
+					CurrentLoop = DrivingLoop;
+				}
+				
 				if(engineSpeed > -currentHorsePowerMax) {
 					engineSpeed -= currentHorsePowerInc*dt;
 				}
 			} else if (Keys.isKeyDown(Keyboard.DOWN) || Keys.isKeyDown(Keyboard.S)) {
-				if(engineSpeed < currentHorsePowerMax) {
+				if (CurrentLoop != ReversingLoop) {
+					AudioController.FadeOut(CurrentLoop);
+					AudioController.FadeIn(ReversingLoop);
+					CurrentLoop = ReversingLoop;
+				}
+				
+				if(engineSpeed < BASE_REVERSE_SPEED) {
 					engineSpeed += currentHorsePowerInc*dt;
 				}
 			} else {
+				if (CurrentLoop != IdleLoop) {
+					AudioController.FadeOut(CurrentLoop);
+					AudioController.FadeIn(IdleLoop);
+					CurrentLoop = IdleLoop;
+				}
+				
 				engineSpeed = 0;
 			}
 			
