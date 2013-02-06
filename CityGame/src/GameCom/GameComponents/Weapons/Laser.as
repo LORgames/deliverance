@@ -56,7 +56,7 @@ package GameCom.GameComponents.Weapons
 						var car:NPCCar = fixtureHit.GetUserData() as NPCCar;
 						car.Damage(LASER_DAMS);
 					} else if (fixtureHit.GetUserData() is PlayerTruck) {
-						(fixtureHit.GetUserData() as PlayerTruck).Damage(LASER_DAMS);
+						(fixtureHit.GetUserData() as PlayerTruck).Damage(LASER_DAMS + 7); //Because the player damage thing mitigates damage
 					}
 				}
 				

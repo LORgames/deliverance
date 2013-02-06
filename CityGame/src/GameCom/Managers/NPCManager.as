@@ -29,7 +29,7 @@ package GameCom.Managers
 		private var carSpawnChance:Number = 0.75;
 		private var cars:Vector.<NPCCar> = new Vector.<NPCCar>();
 		
-		private const STAGE_OFFSET:int = 1000;
+		private const STAGE_OFFSET:int = 300;
 		
 		private var area:b2AABB = new b2AABB();
 		private var safeToSpawn:Boolean = true;

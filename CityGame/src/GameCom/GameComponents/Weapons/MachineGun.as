@@ -65,9 +65,8 @@ package GameCom.GameComponents.Weapons
 					var car:NPCCar = fixtureHit.GetUserData() as NPCCar;
 					car.Damage(9);
 				} else if (fixtureHit.GetUserData() is PlayerTruck) {
-					trace("HIT PLAYER");
 					var player:PlayerTruck = fixtureHit.GetUserData() as PlayerTruck;
-					player.Damage(9);
+					player.Damage(25); //player has a LOT more hp then a car
 				}
 			}
 			

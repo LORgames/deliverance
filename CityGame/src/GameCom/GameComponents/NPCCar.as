@@ -80,7 +80,7 @@ package GameCom.GameComponents
 		private const VEHICLE_ENEMYVAN:int = 2;
 		
 		public var Wep:BaseWeapon;
-		private var ct:ColorTransform = new ColorTransform(Math.random(), Math.random(), Math.random());
+		private var ct:ColorTransform = new ColorTransform(Math.random()*0.9 + 0.1, Math.random()*0.9 + 0.1, Math.random()*0.9 + 0.1);
 		
 		private static var CURRENT_ENEMIES:int = 0;
 		
@@ -215,21 +215,12 @@ package GameCom.GameComponents
 			
 			// Collision scanner
 			var scannerShape:b2PolygonShape = new b2PolygonShape();
-			//scannerShape.SetAsBox(2.5, 1.0); //Rectangular scanner
 			
-			var verts:Array = new Array(new b2Vec2( 0.0,-0.6),
+			var verts:Array = new Array(new b2Vec2( 0.0,-0.5),
 										new b2Vec2(-7.0,-1.2),
 										new b2Vec2(-7.0, 1.2),
-										new b2Vec2( 0.0, 0.6));
+										new b2Vec2( 0.0, 0.5));
 			scannerShape.SetAsArray(verts, 4);
-			
-			//Triangular scanner
-			/* 
-			var verts:Array = new Array(new b2Vec2( 1.5,-1.5),
-										new b2Vec2(-4.0, 0.0),
-										new b2Vec2( 1.5, 1.5));
-			scannerShape.SetAsArray(verts, 3);
-			*/
 			
 			var scannerFixtureDef:b2FixtureDef = new b2FixtureDef();
 			scannerFixtureDef.shape = scannerShape;
