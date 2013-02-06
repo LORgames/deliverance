@@ -64,7 +64,7 @@ package GameCom.States {
 			PlayText.addEventListener(MouseEvent.ROLL_OUT, MouseOutText);
 			TextContainer.addChild(PlayText);
 			
-			//this.addChild(PlayBtn);
+			this.addChild(PlayBtn);
 			PlayBtn.addEventListener(MouseEvent.CLICK, PlayFunc, false, 0, true);
 			
 			this.addChild(ClearBtn);
@@ -93,8 +93,8 @@ package GameCom.States {
 			background.x = (this.stage.stageWidth - background.width) / 2;
 			background.y = (this.stage.stageHeight - background.height) / 2;
 			
-			//PlayBtn.x = (this.stage.stageWidth / 2) + 49;
-			//PlayBtn.y = this.stage.stageHeight / 2 - 58;
+			PlayBtn.x = 0;
+			PlayBtn.y = this.stage.stageHeight / 2 - 58;
 			
 			TextContainer.x = background.x + 448 + 261/2;
 			TextContainer.y = background.y + 241;
