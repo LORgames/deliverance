@@ -93,6 +93,8 @@ package GameCom.GameComponents {
 		private var ReversingLoop:* = null;
 		private var DrivingLoop:* = null;
 		
+		public var Colours:Vector.<ColorTransform> = new Vector.<ColorTransform>();
+		
 		public function PlayerTruck(spawnPosition:b2Vec2, world:b2World, worldSpr:Sprite) {
 			worldSpr.addChild(this);
 			this.world = world;
@@ -235,7 +237,26 @@ package GameCom.GameComponents {
 			world.CreateJoint(rightRearJointDef);
 			
 			FixUpgradeValues();
-			EquipWeapon("MachineGun");
+			EquipWeapon(BaseWeapon.ConvertTypeToString(Storage.GetAsInt("CurrentWeapon", -1)));
+			
+			Colours.push(new ColorTransform(238/255, 223/255, 221/255),
+						 new ColorTransform(104/255, 102/255, 089/255),
+						 new ColorTransform(225/255, 206/255, 041/255),
+						 new ColorTransform(063/255, 096/255, 239/255),
+						 new ColorTransform(180/255, 059/255, 037/255),
+						 new ColorTransform(221/255, 140/255, 211/255),
+						 new ColorTransform(121/255, 042/255, 157/255),
+						 new ColorTransform(072/255, 147/255, 062/255),
+						 new ColorTransform(233/255, 162/255, 061/255),
+						 new ColorTransform(099/255, 181/255, 198/255));
+			
+			if (Storage.GetAsInt("CColour", -1) != -1) {
+				this.getChildAt(2).transform.colorTransform = Colours[Storage.GetAsInt("CColour", -1)];
+			}
+			
+			if (Storage.GetAsInt("TColour", -1) != -1) {
+				this.getChildAt(3).transform.colorTransform = Colours[Storage.GetAsInt("TColour", -1)];
+			}
 			
 			//DRAW TIRES
 			LRotWheel.graphics.beginFill(0x0);
@@ -368,7 +389,8 @@ package GameCom.GameComponents {
 			var mY:Number = y + Mousey.GetPosition().y - parent.stage.stageHeight / 2;
 			var p:Point = new Point(mX, mY);
 			
-			Wep.Update(p, Mousey.IsClicking());
+			if (Wep != null)
+				Wep.Update(p, Mousey.IsClicking());
 			if (healthCurrent < 0) Respawn();
 		}
 		
@@ -462,24 +484,39 @@ package GameCom.GameComponents {
 			}
 			
 			switch(weaponName) {
-				case "MachineGun":
+				case "Machine Gun":
 					Wep = new MachineGun(world); break;
-				case "RocketPod":
+				case "Rocket Pod":
 					Wep = new RocketLauncher(world); break;
 				case "Laser":
-				default:
 					Wep = new Laser(world); break;
+				default:
+					break;
 			}
 			
-			Wep.IgnoreList.push(body.GetFixtureList());
-			Wep.IgnoreList.push(leftRearWheel.GetFixtureList());
-			Wep.IgnoreList.push(rightRearWheel.GetFixtureList());
-			Wep.IgnoreList.push(leftMidWheel.GetFixtureList());
-			Wep.IgnoreList.push(rightMidWheel.GetFixtureList());
-			Wep.IgnoreList.push(leftWheel.GetFixtureList());
-			Wep.IgnoreList.push(rightWheel.GetFixtureList());
-			
-			this.addChild(Wep);
+			if (Wep == null) {
+				Storage.Set("CurrentWeapon", -1);
+			} else {
+				Storage.Set("CurrentWeapon", Wep.WeaponType);
+				
+				Wep.IgnoreList.push(body.GetFixtureList());
+				Wep.IgnoreList.push(leftRearWheel.GetFixtureList());
+				Wep.IgnoreList.push(rightRearWheel.GetFixtureList());
+				Wep.IgnoreList.push(leftMidWheel.GetFixtureList());
+				Wep.IgnoreList.push(rightMidWheel.GetFixtureList());
+				Wep.IgnoreList.push(leftWheel.GetFixtureList());
+				Wep.IgnoreList.push(rightWheel.GetFixtureList());
+				
+				this.addChild(Wep);
+			}
+		}
+		
+		public function GetWeapon():String {
+			if (Wep == null) {
+				return null;
+			} else {
+				return Wep.WeaponTypeToString();
+			}
 		}
 	}
 }

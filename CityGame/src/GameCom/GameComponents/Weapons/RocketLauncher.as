@@ -12,6 +12,7 @@ package GameCom.GameComponents.Weapons
 		public function RocketLauncher(world:b2World) {
 			super(world);
 			
+			WeaponType = ROCKET_POD;
 			FIRE_RATE = 2.5;
 			
 			var cls:Class = ThemeManager.GetClassFromSWF("SWFs/Weapons.swf", "LORgames.Rocket");

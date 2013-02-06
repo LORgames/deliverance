@@ -28,6 +28,7 @@ package GameCom.GameComponents.Weapons
 		public function MachineGun(world:b2World) {
 			super(world);
 			
+			WeaponType = MACHINE_GUN;
 			FIRE_RATE = 0.1;
 			
 			var cls:Class = ThemeManager.GetClassFromSWF("SWFs/Weapons.swf", "LORgames.MachineGun");

@@ -23,6 +23,7 @@ package GameCom.GameComponents.Weapons
 		public function Laser(world:b2World) {
 			super(world);
 			
+			WeaponType = LASER;
 			FIRE_RATE = 5.0; //Laser doesn't even use this...
 			
 			var cls:Class = ThemeManager.GetClassFromSWF("SWFs/Weapons.swf", "LORgames.Laser");

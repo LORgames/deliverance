@@ -10,9 +10,9 @@ package GameCom.GameComponents.Weapons {
 	 * @author Paul
 	 */
 	public class BaseWeapon extends Sprite {
-		public const MACHINE_GUN:int = 0;
-		public const ROCKET_POD:int = 1;
-		public const LASER:int = 2;
+		public static const MACHINE_GUN:int = 0;
+		public static const ROCKET_POD:int = 1;
+		public static const LASER:int = 2;
 		
 		public var WeaponType:int = -1;
 		
@@ -32,8 +32,34 @@ package GameCom.GameComponents.Weapons {
 			World = world;
 		}
 		
+		public static function ConvertTypeToString(type:int):String {
+			switch(type) {
+				case MACHINE_GUN:
+					return "Machine Gun";
+				case ROCKET_POD:
+					return "Rocket Pod";
+				case LASER:
+					return "Laser";
+				default:
+					return null;
+			}
+		}
+		
 		public function Fire():void {
 			
+		}
+		
+		public function WeaponTypeToString():String {
+			switch(WeaponType) {
+				case MACHINE_GUN:
+					return "Machine Gun";
+				case ROCKET_POD:
+					return "Rocket Pod";
+				case LASER:
+					return "Laser";
+				default:
+					return "";
+			}
 		}
 		
 		public function Update(p:Point, wantsToFire:Boolean):void {

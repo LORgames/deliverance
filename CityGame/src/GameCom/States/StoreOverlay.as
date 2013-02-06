@@ -1,7 +1,10 @@
 package GameCom.States {
+	import Box2D.Common.b2Color;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
+	import flash.geom.ColorTransform;
 	import GameCom.Helpers.MoneyHelper;
+	import GameCom.Helpers.ReputationHelper;
 	import GameCom.Helpers.UpgradeHelper;
 	import GameCom.Managers.GUIManager;
 	import LORgames.Components.Button;
@@ -23,9 +26,11 @@ package GameCom.States {
 		private var ArmourButton:Button = new Button("Armour", 30, 30);
 		private var NOSButton:Button = new Button("NOS", 30, 30);
 		
-		private var MachineGun:Button = new Button("MachineGun", 241, 84);
-		private var RocketPod:Button = new Button("RocketPod", 241, 84);
+		private var MachineGun:Button = new Button("Machine Gun", 241, 84);
 		private var Laser:Button = new Button("Laser", 241, 84);
+		
+		private var CabColourButtons:Vector.<Button> = new Vector.<Button>();
+		private var TrailerColourButtons:Vector.<Button> = new Vector.<Button>();
 		
 		private var tooltip:Tooltip = new Tooltip("", Tooltip.RIGHT);
 		
@@ -76,14 +81,52 @@ package GameCom.States {
 			MachineGun.x = 295; MachineGun.y = 201; MachineGun.alpha = 0;
 			this.addChild(MachineGun);
 			MachineGun.addEventListener(MouseEvent.CLICK, ChangeWeapon, false, 0, true);
+			MachineGun.addEventListener(MouseEvent.MOUSE_OVER, OnWeaponHighlight, false, 0, true);
+			MachineGun.addEventListener(MouseEvent.MOUSE_OUT, OnWeaponLeave, false, 0, true);
 			
-			RocketPod.x = 295; RocketPod.y = 292; RocketPod.alpha = 0;
-			this.addChild(RocketPod);
-			RocketPod.addEventListener(MouseEvent.CLICK, ChangeWeapon, false, 0, true);
-			
-			Laser.x = 295; Laser.y = 383; Laser.alpha = 0;
+			Laser.x = 295; Laser.y = 292; Laser.alpha = 0;
 			this.addChild(Laser);
 			Laser.addEventListener(MouseEvent.CLICK, ChangeWeapon, false, 0, true);
+			Laser.addEventListener(MouseEvent.MOUSE_OVER, OnWeaponHighlight, false, 0, true);
+			Laser.addEventListener(MouseEvent.MOUSE_OUT, OnWeaponLeave, false, 0, true);
+			
+			CabColourButtons.push(	new Button("C0", 18, 18),
+									new Button("C1", 18, 18),
+									new Button("C2", 18, 18),
+									new Button("C3", 18, 18),
+									new Button("C4", 18, 18),
+									new Button("C5", 18, 18),
+									new Button("C6", 18, 18),
+									new Button("C7", 18, 18),
+									new Button("C8", 18, 18),
+									new Button("C9", 18, 18));
+			
+			TrailerColourButtons.push(	new Button("T0", 18, 18),
+										new Button("T1", 18, 18),
+										new Button("T2", 18, 18),
+										new Button("T3", 18, 18),
+										new Button("T4", 18, 18),
+										new Button("T5", 18, 18),
+										new Button("T6", 18, 18),
+										new Button("T7", 18, 18),
+										new Button("T8", 18, 18),
+										new Button("T9", 18, 18));
+			
+			for (var i:int = 0; i < 10; i++) {
+				CabColourButtons[i].x = 293 + (i%5 * 26); CabColourButtons[i].y = i<5?496:523; CabColourButtons[i].alpha = 0;
+				this.addChild(CabColourButtons[i]);
+				CabColourButtons[i].addEventListener(MouseEvent.CLICK, ChangeColour, false, 0, true);
+				CabColourButtons[i].addEventListener(MouseEvent.MOUSE_OVER, OnColourHighlight, false, 0, true);
+				CabColourButtons[i].addEventListener(MouseEvent.MOUSE_OUT, OnColourLeave, false, 0, true);
+			}
+			
+			for (var j:int = 0; j < 10; j++) {
+				TrailerColourButtons[j].x = 453 + (j%5 * 26); TrailerColourButtons[j].y = j<5?496:523; TrailerColourButtons[j].alpha = 0;
+				this.addChild(TrailerColourButtons[j]);
+				TrailerColourButtons[j].addEventListener(MouseEvent.CLICK, ChangeColour, false, 0, true);
+				TrailerColourButtons[j].addEventListener(MouseEvent.MOUSE_OVER, OnColourHighlight, false, 0, true);
+				TrailerColourButtons[j].addEventListener(MouseEvent.MOUSE_OUT, OnColourLeave, false, 0, true);
+			}
 			
 			CloseButton.addEventListener(MouseEvent.CLICK, OnCloseClicked);
 			
@@ -127,7 +170,7 @@ package GameCom.States {
 			if (statVal == 10) {
 				tooltip.SetText("ALREADY MAX");
 			} else {
-				tooltip.SetText("Level " + (statVal+1) + " " + stat + " costs $" + UpgradeHelper.GetCost(stat, statVal+1) + ".\n\nCurrent Benefit: " + UpgradeHelper.GetBenefit(stat, statVal) + "\nNext Level: " + UpgradeHelper.GetBenefit(me.currentTarget.getLabel(), statVal+1) + "\n\nBalance After Purchase: " + MoneyHelper.GetBalanceAfterPurchase(UpgradeHelper.GetCost(stat, statVal+1)) + "\n\n" + (MoneyHelper.CanDebit(UpgradeHelper.GetCost(stat, statVal+1))?"<font color='#00FF00'>Click To Purcahse</font>":"<font color='#FF0000'>You cannot purchase at this time</font>"));
+				tooltip.SetText("Level " + (statVal+1) + " " + stat + " costs $" + UpgradeHelper.GetCost(stat, statVal+1) + ".\n\nCurrent Benefit: " + UpgradeHelper.GetBenefit(stat, statVal) + "\nNext Level: " + UpgradeHelper.GetBenefit(me.currentTarget.getLabel(), statVal+1) + "\n\nBalance After Purchase: " + MoneyHelper.GetBalanceAfterPurchase(UpgradeHelper.GetCost(stat, statVal+1)) + "\n\n" + (MoneyHelper.CanDebit(UpgradeHelper.GetCost(stat, statVal+1))?"<font color='#00FF00'>Click To Purchase</font>":"<font color='#FF0000'>You cannot purchase at this time</font>"));
 			}
 			
 			tooltip.visible = true;
@@ -139,16 +182,87 @@ package GameCom.States {
 		
 		private function ChangeWeapon(me:MouseEvent):void {
 			var weapon:String = me.currentTarget.getLabel();
+			var available:Boolean = false;
 			
-			if(weapon != "RocketPod" || true) {
+			if (weapon != GUIManager.I.player.GetWeapon()) {
+				switch(weapon) {
+					case "Machine Gun":
+						available = ReputationHelper.GetCurrentLevel() >= 5;
+						break;
+					case "Laser":
+						available = Storage.GetAsInt("TotalCollectablesFound") >= 50;
+						break;
+					default:
+						break;
+				}
+			}
+			
+			if (available) {
 				GUIManager.I.player.EquipWeapon(weapon);
 				tooltip.visible = false;
-			} else {
-				tooltip.x = me.stageX;
-				tooltip.y = me.stageY;
-				tooltip.SetText("<font color='#FF0000'>Unlocks at level 21!</font>");
-				tooltip.visible = true;
 			}
+		}
+		
+		private function OnWeaponHighlight(me:MouseEvent):void {
+			var weapon:String = me.currentTarget.getLabel();
+			var available:Boolean = false;
+			
+			tooltip.x = me.currentTarget.x + 231;
+			tooltip.y = me.currentTarget.y + me.currentTarget.height / 2;
+			
+			if (weapon == GUIManager.I.player.GetWeapon()) {
+				tooltip.SetText(weapon + "\n\n<font color='#FF0000'>Already equipped!</font>");
+			} else {
+				switch(weapon) {
+					case "Machine Gun":
+						available = ReputationHelper.GetCurrentLevel() >= 5;
+						tooltip.SetText(weapon + "\n\n" + (available?"<font color='#00FF00'>Click to equip!</font>":"<font color='#FF0000'>Gain more reputation to unlock this weapon!</font>"));
+						break;
+					case "Laser":
+						available = Storage.GetAsInt("TotalCollectablesFound") >= 50;
+						tooltip.SetText(weapon + "\n\n" + (available?"<font color='#00FF00'>Click to equip!</font>":"<font color='#FF0000'>Find more collectibles to unlock this weapon!</font>"));
+						break;
+					default:
+						break;
+				}
+			}
+			tooltip.visible = true;
+		}
+		
+		private function OnWeaponLeave(me:MouseEvent):void {
+			tooltip.visible = false;
+		}
+		
+		private function ChangeColour(me:MouseEvent):void {
+			var part:String = me.currentTarget.getLabel().charAt(0);
+			var col:int = parseInt(me.currentTarget.getLabel().charAt(1));
+			switch(part) {
+				case "C":
+					GUIManager.I.player.getChildAt(2).transform.colorTransform = GUIManager.I.player.Colours[col];
+					if (MoneyHelper.CanDebit(100)) {
+						MoneyHelper.Debit(100);
+						Storage.Set(part+"Colour", col);
+					}
+					break;
+				case "T":
+					GUIManager.I.player.getChildAt(3).transform.colorTransform = GUIManager.I.player.Colours[col];
+					break;
+				default:
+					break;
+			}
+		}
+		
+		private function OnColourHighlight(me:MouseEvent):void {
+			tooltip.x = me.currentTarget.x + 18;
+			tooltip.y = me.currentTarget.y + me.currentTarget.height / 2;
+			
+			tooltip.SetText("Paint job costs $100\n\nBalance After Purchase: " + MoneyHelper.GetBalanceAfterPurchase(100) + "\n\n" + (MoneyHelper.CanDebit(100)?"<font color='#00FF00'>Click To Purchase</font>":"<font color='#FF0000'>You cannot purchase at this time</font>"));
+			
+			tooltip.visible = true;
+		}
+		
+		private function OnColourLeave(me:MouseEvent):void {
+			tooltip.visible = false;
 		}
 		
 		private function RedrawStats():void {
