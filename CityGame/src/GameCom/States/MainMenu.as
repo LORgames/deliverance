@@ -50,10 +50,10 @@ package GameCom.States {
 			background = new Bitmap(ThemeManager.Get("Backgrounds/Menu.jpg"));
 			
 			//Start Menu
-			//this.addChild(background);
+			this.addChild(background);
 			
-			TextContainer.width = 261;
-			TextContainer.height = 198;
+			//TextContainer.width = 261;
+			//TextContainer.height = 198;
 			this.addChild(TextContainer);
 			
 			PlayText.selectable = false;
@@ -62,7 +62,7 @@ package GameCom.States {
 			PlayText.text = "Play";
 			PlayText.addEventListener(MouseEvent.ROLL_OVER, MouseOverText);
 			PlayText.addEventListener(MouseEvent.ROLL_OUT, MouseOutText);
-			//TextContainer.addChild(PlayText);
+			TextContainer.addChild(PlayText);
 			
 			//this.addChild(PlayBtn);
 			PlayBtn.addEventListener(MouseEvent.CLICK, PlayFunc, false, 0, true);
@@ -96,14 +96,10 @@ package GameCom.States {
 			//PlayBtn.x = (this.stage.stageWidth / 2) + 49;
 			//PlayBtn.y = this.stage.stageHeight / 2 - 58;
 			
-			TextContainer.x = background.x + 448;
+			TextContainer.x = background.x + 448 + 261/2;
 			TextContainer.y = background.y + 241;
 			
-			TextContainer.graphics.beginFill(0xFF0000);
-			TextContainer.graphics.drawRect(0, 0, 100, 100);
-			TextContainer.graphics.endFill();
-			
-			PlayText.x = ((TextContainer.width - PlayText.width) / 2);
+			PlayText.x = -PlayText.width/2;
 			PlayText.y = 5;
 		}
 		

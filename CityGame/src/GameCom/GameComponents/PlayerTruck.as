@@ -406,7 +406,7 @@ package GameCom.GameComponents {
 		/**
 		 * Locate the nearest spawn point and move the truck there. Reset health to max.
 		 */
-		public function Respawn():void {
+		public function Respawn(becauseOfDamage:Boolean = false):void {
 			var closest:PlaceObject = null;
 			var closestDist:Number = Number.MAX_VALUE;
 			var bodyP:Point = new Point(this.x, this.y);

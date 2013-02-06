@@ -32,7 +32,7 @@ package {
 			(this.getChildAt(0) as TextField).autoSize = TextFieldAutoSize.LEFT;
 			(this.getChildAt(0) as TextField).x = 5;
 			(this.getChildAt(0) as TextField).y = 5;
-			(this.getChildAt(0) as TextField).text = "Preparing and Caching for awesome non-laggy gameplay! (and no loading screens!)\n(Usually takes about 15-20 seconds)";
+			(this.getChildAt(0) as TextField).text = "Preparing for awesome non-laggy gameplay! (and no loading screens!)\n(Usually takes about 20-30 seconds, please be patient. Its worth the wait!)";
 			
 			ThemeManager.Initialize(init);
 		}
