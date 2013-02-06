@@ -17,6 +17,7 @@ package GameCom.Managers
 	import GameCom.Helpers.SpriteHelper;
 	import GameCom.States.StoreOverlay;
 	import GameCom.SystemComponents.PopupInfo;
+	import LORgames.Components.Tooltip;
 	import LORgames.Engine.Keys;
 	import LORgames.Engine.Mousey;
 	/**
@@ -44,6 +45,9 @@ package GameCom.Managers
 		private var popupText:TextField = new TextField();
 		private var popupAlpha:Number = 0;
 		private var popupFade:Boolean = false;
+		
+		private var tooltips:Vector.<Tooltip> = new Vector.<Tooltip>();
+		private var currentFrameTooltipIndex:int = 0;
 		
 		private var Pause:Function;
 		private var store:StoreOverlay;
@@ -103,7 +107,7 @@ package GameCom.Managers
 			this.addChild(PopupSprite);
 			
 			popupText.selectable = false;
-			popupText.defaultTextFormat = new TextFormat("Verdana", 12, 0xFFFFFF);
+			popupText.defaultTextFormat = new TextFormat("Verdana", 24, 0xFFFFFF);
 			popupText.wordWrap = true;
 			
 			//Good text field max size
@@ -113,7 +117,7 @@ package GameCom.Managers
 			popupText.height = 191;
 			
 			//popupText.autoSize = TextFieldAutoSize.CENTER;
-			popupText.filters = new Array(new GlowFilter(0, 1, 2, 2, 5));
+			popupText.filters = new Array(new GlowFilter(0x337C8C, 1, 7, 7, 3));
 			PopupSprite.addChild(popupText);
 			
 			UpdateCache();
@@ -164,14 +168,19 @@ package GameCom.Managers
 					PopupSprite.graphics.endFill();
 					
 					if (popupMessages[0].npcNumber != -1) {
-						m.createBox(1, 1, 0, stage.stageWidth/2 + 100, stage.stageHeight - 360);
+						m.createBox(1, 1, 0, stage.stageWidth/2 + 100, stage.stageHeight - 354);
 						PopupSprite.graphics.beginBitmapFill(ThemeManager.Get("People/"+popupMessages[0].npcNumber+"_"+popupMessages[0].npcImgIndex+".png"), m, false);
-						PopupSprite.graphics.drawRect(stage.stageWidth/2 + 100, stage.stageHeight - 360, 315, 354);
+						PopupSprite.graphics.drawRect(stage.stageWidth/2 + 100, stage.stageHeight - 354, 315, 354);
 						PopupSprite.graphics.endFill();
 					}
 				}
 				
 				PopupSprite.alpha = popupAlpha;
+			}
+			
+			//TODO: Remove extra tooltips here
+			for (var i:int = currentFrameTooltipIndex; i < tooltips.length; i++) {
+				tooltips[i].visible = false;
 			}
 		}
 		
@@ -220,7 +229,20 @@ package GameCom.Managers
 					Pause.call();
 				}
 			}
+		}
+		
+		public function ShowTooltipAt(worldX:int, worldY:int, message:String):void {
+			if (tooltips.length == currentFrameTooltipIndex) {
+				tooltips.push(new Tooltip("", Tooltip.UP, 25, 200, 0.75));
+				Overlay.addChild(tooltips[currentFrameTooltipIndex]);
+			}
 			
+			tooltips[currentFrameTooltipIndex].visible = true;
+			tooltips[currentFrameTooltipIndex].SetText(message);
+			tooltips[currentFrameTooltipIndex].x = worldX - player.x + stage.stageWidth / 2;
+			tooltips[currentFrameTooltipIndex].y = worldY - player.y + stage.stageHeight / 2;
+			
+			currentFrameTooltipIndex++;
 		}
 		
 		public function UpdateCache() : void {

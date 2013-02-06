@@ -410,10 +410,10 @@ package GameCom.GameComponents
 			}
 			
 			switch(weaponName) {
+				case "RocketPod":
+					//Wep = new RocketLauncher(world); break;
 				case "MachineGun":
 					Wep = new  MachineGun(world); break;
-				case "RocketPod":
-					Wep = new RocketLauncher(world); break;
 				case "Laser":
 					Wep = new Laser(world); break;
 				default:
@@ -461,6 +461,8 @@ package GameCom.GameComponents
 					
 					cls = ThemeManager.GetClassFromSWF("SWFs/Cars.swf", "LORgames.DeadEnemyCar");
 					this.addChildAt(new cls(), 2);
+					
+					Wep.Update(new Point(GUIManager.I.player.x, GUIManager.I.player.y), false);
 				}
 				
 				body.SetLinearDamping(5);

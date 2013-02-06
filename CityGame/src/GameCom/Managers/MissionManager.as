@@ -138,7 +138,7 @@ package GameCom.Managers {
 				MoneyHelper.Credit(CurrentMission.MonetaryGain);
 				
 				if (CurrentMission.isStoryMission) {
-					GUIManager.I.Popup(CurrentMission.EndText);
+					GUIManager.I.Popup(CurrentMission.EndText, CurrentMission.EndNPC1, CurrentMission.EndNPC2);
 					highestMissionCompleted++;
 					Storage.Set("HighestMissionCompleted", highestMissionCompleted);
 					UpdateRepRequiredForNextMission();

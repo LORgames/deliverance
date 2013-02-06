@@ -19,9 +19,6 @@ package GameCom.Managers
 				if (MissionManager.IsInMission()) {
 					MissionManager.CheckMissionParameters(obj as PlaceObject);
 				} else {
-					// popup notification of mission
-					GUIManager.I.Popup("Press Enter to accept mission!", (obj as PickupPlace).MissionParams.StartNPC1);
-					
 					if (Keys.isKeyDown(Keyboard.ENTER)) {
 						MissionManager.GenerateFromPickup(obj as PickupPlace);
 					}

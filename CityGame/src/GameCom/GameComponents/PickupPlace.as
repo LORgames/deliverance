@@ -17,7 +17,7 @@ package GameCom.GameComponents
 	public class PickupPlace extends PlaceObject {
 		
 		public var MissionParams:MissionParameters = null;
-		public var tooltip:Tooltip = new Tooltip("", Tooltip.UP, 25, 200, 0.75);
+		private var tooltipInfo:String;
 		
 		public function PickupPlace(type:int, posX:Number, posY:Number, angle:int, world:b2World, trigger:String, arrayIndex:int) {
 			super(type, posX, posY, angle, world, trigger, arrayIndex);
@@ -26,14 +26,8 @@ package GameCom.GameComponents
 		override public function Draw(buffer:Graphics):void {
 			super.Draw(buffer);
 			
-			if (tooltip.parent != null) {
-				tooltip.visible = true;
-				tooltip.x = this.drawX - GUIManager.I.player.x + drawW/2 + GUIManager.I.stage.stageWidth/2;
-				tooltip.y = this.drawY - GUIManager.I.player.y + drawH/2 + GUIManager.I.stage.stageHeight/2;
-			} else {
-				if (GUIManager.I != null) {
-					GUIManager.I.addChild(tooltip);
-				}
+			if(tooltipInfo != "") {
+				GUIManager.I.ShowTooltipAt(this.drawX + drawW / 2, this.drawY + drawH / 2, tooltipInfo);
 			}
 		}
 		
@@ -58,7 +52,10 @@ package GameCom.GameComponents
 					var expGain:int = ri.ReputationGainPerItem * MissionParams.ResourceAmount;
 					var monGain:int = ri.ValuePerItem * MissionParams.ResourceAmount;
 					
-					tooltip.SetText("Need to deliver " + MissionParams.ResourceAmount + ri.Message + ".\n\nRewards:\n" + expGain + " Reputation ("+ReputationHelper.GetPercentageGain(expGain)+"%)\n$" + monGain + "\n\n" + PeopleHelper.Names[MissionParams.StartNPC1] + " => " + PeopleHelper.Names[MissionParams.EndNPC1]);
+					tooltipInfo = "Need to deliver " + MissionParams.ResourceAmount + ri.Message + ".\n\n";
+					tooltipInfo += "Rewards:\n" + expGain + " Reputation (" + ReputationHelper.GetPercentageGain(expGain) + "%)\n";
+					tooltipInfo += "$" + monGain + "\n\n";
+					tooltipInfo += PeopleHelper.Names[MissionParams.StartNPC1] + " => " + PeopleHelper.Names[MissionParams.EndNPC1];
 					
 					isActive = true;
 					
@@ -66,12 +63,12 @@ package GameCom.GameComponents
 				}
 			}
 			
-			tooltip.visible = false;
+			tooltipInfo = "";
 			isActive = false;
 		}
 		
 		public function Deactivate():void {
-			tooltip.visible = false;
+			tooltipInfo = "";
 			isActive = false;
 		}
 		
