@@ -5,6 +5,8 @@ package GameCom.Helpers
 	 * @author ...
 	 */
 	public class AudioStore {
+		[Embed(source="../../../lib/Audio/BackgroundMusic.mp3")]
+		public static const Music:Class;
 		
 		[Embed(source="../../../lib/Audio/MachineGunFire.mp3")]
 		public static const MachineGunBullet:Class;
@@ -20,6 +22,12 @@ package GameCom.Helpers
 		
 		[Embed(source="../../../lib/Audio/Horn.mp3")]
 		public static const Horn:Class;
+		
+		[Embed(source="../../../lib/Audio/NPCHitSound.mp3")]
+		public static const NPCHit:Class;
+		
+		[Embed(source="../../../lib/Audio/Explode.mp3")]
+		public static const Explode:Class;
 	}
 
 }

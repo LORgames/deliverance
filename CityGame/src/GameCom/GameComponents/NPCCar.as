@@ -41,6 +41,8 @@ package GameCom.GameComponents
 		private const HORSEPOWER_MAX:Number = 15;
 		private const HORSEPOWER_INC:Number = 5;
 		
+		private const NPC_HP:int = 100;
+		
 		private const _leftRearWheelPosition:b2Vec2 = new b2Vec2(-1.0, 1.4);
 		private const _rightRearWheelPosition:b2Vec2 = new b2Vec2(1.0, 1.4);
 		private const _leftFrontWheelPosition:b2Vec2 = new b2Vec2(-1.0,-1.4);
@@ -64,6 +66,8 @@ package GameCom.GameComponents
 		
 		private var leftJoint:b2RevoluteJoint;
 		private var rightJoint:b2RevoluteJoint;
+		
+		private var myHP:int = NPC_HP;
 		
 		// AI
 		private var nodeManager:NodeManager;
@@ -435,27 +439,35 @@ package GameCom.GameComponents
 		}
 		
 		public function Damage(dams:int):void {
-			var cls:Class;
-			
 			if (type == VEHICLE_DEAD) return;
 			
-			if (type != VEHICLE_ENEMYVAN) {
-				this.removeChildAt(2);
+			myHP -= dams;
+			
+			AudioController.PlaySound(AudioStore.NPCHit);
+			
+			if (myHP <= 0) {
+				AudioController.PlaySound(AudioStore.Explode);
 				
-				cls = ThemeManager.GetClassFromSWF("SWFs/Cars.swf", "LORgames.DeadCar");
-				this.addChildAt(new cls(), 2);
-				this.getChildAt(2).transform.colorTransform = ct;
-			} else {
-				this.removeChildAt(2);
+				var cls:Class;
 				
-				cls = ThemeManager.GetClassFromSWF("SWFs/Cars.swf", "LORgames.DeadEnemyCar");
-				this.addChildAt(new cls(), 2);
+				if (type != VEHICLE_ENEMYVAN) {
+					this.removeChildAt(2);
+					
+					cls = ThemeManager.GetClassFromSWF("SWFs/Cars.swf", "LORgames.DeadCar");
+					this.addChildAt(new cls(), 2);
+					this.getChildAt(2).transform.colorTransform = ct;
+				} else {
+					this.removeChildAt(2);
+					
+					cls = ThemeManager.GetClassFromSWF("SWFs/Cars.swf", "LORgames.DeadEnemyCar");
+					this.addChildAt(new cls(), 2);
+				}
+				
+				body.SetLinearDamping(5);
+				body.SetAngularDamping(5);
+				
+				type = VEHICLE_DEAD;
 			}
-			
-			body.SetLinearDamping(5);
-			body.SetAngularDamping(5);
-			
-			type = VEHICLE_DEAD;
 		}
 	}
 

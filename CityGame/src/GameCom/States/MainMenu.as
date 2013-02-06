@@ -1,4 +1,5 @@
 package GameCom.States {
+	import GameCom.Helpers.AudioStore;
 	import GameCom.SystemMain;
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
@@ -6,6 +7,8 @@ package GameCom.States {
 	import flash.events.MouseEvent;
 	import LORgames.Components.Button;
 	import LORgames.Components.TextBox;
+	import LORgames.Engine.AudioController;
+	import LORgames.Engine.Keys;
 	import LORgames.Engine.Storage;
 	import LORgames.Localization.Strings;
 	import mx.core.BitmapAsset;
@@ -25,7 +28,9 @@ package GameCom.States {
 		private var PlayBtn:Button = new Button(Strings.Get("PlayGame"), 265, 54);
 		private var ClearBtn:Button = new Button("CLEAR SAVE");
 		
-		public function MainMenu() {			
+		public function MainMenu() {
+			AudioController.PlayLoop(AudioStore.Music);
+			
 			//Just make sure we're ready to do this...
 			if (this.stage) Init();
 			else addEventListener(Event.ADDED_TO_STAGE, Init, false, 0, true);
