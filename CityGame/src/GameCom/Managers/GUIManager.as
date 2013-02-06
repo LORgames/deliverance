@@ -31,7 +31,6 @@ package GameCom.Managers
 		
 		public static var I:GUIManager;
 		
-		private var GPSBase:Sprite = new Sprite();
 		private var GPSArrow:Sprite;
 		private var GPSDistance:TextField = new TextField();
 		
@@ -58,6 +57,8 @@ package GameCom.Managers
 		private var store:StoreOverlay;
 		private var map:MapOverlay;
 		
+		private var hasOverlay:Boolean = false;
+		
 		public function GUIManager(player:PlayerTruck, pauseLoopback:Function) {
 			I = this;
 			
@@ -69,22 +70,16 @@ package GameCom.Managers
 			Overlay.x = 10;
 			Overlay.y = 10;
 			
-			GPSBase.addChild(new Bitmap(ThemeManager.Get("GUI/GPS base.png")));
-			this.addChild(GPSBase);
-			
-			GPSArrow = SpriteHelper.CreateCenteredBitmapData(ThemeManager.Get("GUI/GPS arrow.png"));
-			GPSBase.addChild(GPSArrow);
-			
-			GPSArrow.x = 82;
-			GPSArrow.y = 39;
+			GPSArrow = ThemeManager.Get("SWFs/Arrow.swf");
+			this.addChild(GPSArrow);
 			
 			GPSDistance.selectable = false;
-			GPSDistance.defaultTextFormat = new TextFormat("Verdana", 15, 0xFFFFFF);
+			GPSDistance.defaultTextFormat = new TextFormat("Verdana", 10, 0xFFFFFF);
 			GPSDistance.autoSize = TextFieldAutoSize.CENTER;
-			GPSDistance.x = 69;
-			GPSDistance.y = 76;
+			GPSDistance.x = GPSArrow.x;
+			GPSDistance.y = GPSArrow.y;
 			GPSDistance.filters = new Array(new GlowFilter(0, 1, 2, 2, 5));
-			GPSBase.addChild(GPSDistance);
+			this.addChild(GPSDistance);
 			
 			CurrentLevelText.selectable = false;
 			CurrentLevelText.defaultTextFormat = new TextFormat("Verdana", 15, 0xFFFFFF);
@@ -122,7 +117,6 @@ package GameCom.Managers
 			popupText.width = 411;
 			popupText.height = 191;
 			
-			//popupText.autoSize = TextFieldAutoSize.CENTER;
 			popupText.filters = new Array(new GlowFilter(0x337C8C, 1, 7, 7, 3));
 			PopupSprite.addChild(popupText);
 			
@@ -135,15 +129,20 @@ package GameCom.Managers
 		}
 		
 		public function Update() : void {
-			GPSBase.x = stage.stageWidth - (GPSBase.width + 5);
-			GPSBase.y = 5;
-			
 			CurrentSpeedText.text = Math.round(player.body.GetLinearVelocity().Length() * 3.6) + "km/h";
 			
 			if (MissionManager.CurrentDestination() != null) {
+				GPSArrow.x = stage.stageWidth/2;
+				GPSArrow.y = stage.stageHeight / 2;
+				
+				var t_angle:Number = Math.atan2(MissionManager.CurrentDestination().y - player.y, MissionManager.CurrentDestination().x - player.x);
+				
 				GPSArrow.visible = true;
-				GPSArrow.rotation = Math.atan2(MissionManager.CurrentDestination().y - player.y, MissionManager.CurrentDestination().x - player.x) / Math.PI * 180;
-				GPSDistance.text = Math.floor(Math.sqrt(MathHelper.DistanceSquared(MissionManager.CurrentDestination(), new Point(player.x, player.y)))/Global.PHYSICS_SCALE) + "m";
+				GPSArrow.rotation = t_angle / Math.PI * 180;
+				GPSDistance.text = Math.floor(Math.sqrt(MathHelper.DistanceSquared(MissionManager.CurrentDestination(), new Point(player.x, player.y))) / Global.PHYSICS_SCALE) + "m";
+				
+				GPSDistance.x = Math.round(Math.cos(t_angle) * 77 + GPSArrow.x - GPSDistance.width/2);
+				GPSDistance.y = Math.round(Math.sin(t_angle) * 77 + GPSArrow.y + 12);
 			} else {
 				GPSArrow.visible = false;
 				GPSDistance.text = "";
@@ -167,7 +166,7 @@ package GameCom.Managers
 						}
 					}
 					
-					if(Keys.isKeyDown(Keyboard.ENTER) || Mousey.IsClicking()) {
+					if(!popupFadeIn && !popupFadeOut && (Keys.isKeyDown(Keyboard.ENTER) || Mousey.IsClicking())) {
 						popupFadeOut = true;
 					}
 				}
@@ -204,6 +203,10 @@ package GameCom.Managers
 			}
 			
 			currentFrameTooltipIndex = 0;
+			
+			if (hasOverlay) {
+				this.graphics.clear();
+			}
 		}
 		
 		private function ShowNextPopup():void {
@@ -288,6 +291,7 @@ package GameCom.Managers
 		
 		public function ActivateStore():void {
 			this.addChild(store);
+			hasOverlay = true;
 			
 			Pause.call();
 		}
@@ -303,15 +307,17 @@ package GameCom.Managers
 		
 		public function ActivateMap():void {
 			this.addChild(map);
-			
 			map.Redraw();
+			hasOverlay = true;
 			
 			Pause.call();
+			hasOverlay = false;
 		}
 		
 		public function DeactivateMap():void {
 			this.removeChild(map);
 			Pause.call();
+			hasOverlay = false;
 		}
 		
 	}

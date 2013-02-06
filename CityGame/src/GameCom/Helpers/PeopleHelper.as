@@ -7,11 +7,13 @@ package GameCom.Helpers
 	 */
 	public class PeopleHelper {
 		public static var Names:Vector.<String>;
-		public static var Message:Vector.<String>;
+		public static var DropOffMessages:Vector.<String>;
+		public static var PickupMessages:Vector.<String>;
 		
 		public static function Initialize():void {
 			Names = new Vector.<String>();
-			Message = new Vector.<String>();
+			DropOffMessages = new Vector.<String>();
+			PickupMessages = new Vector.<String>();
 			
 			var bytes:ByteArray = ThemeManager.Get("Characters.csv");
 			bytes.position = 0;
@@ -23,7 +25,8 @@ package GameCom.Helpers
 				
 				if(b[1] != "Unused") {
 					Names.push(b[1]);
-					Message.push(b[2]);
+					DropOffMessages.push(b[2]);
+					PickupMessages.push(b[3]);
 				}
 			}
 		}

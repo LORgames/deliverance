@@ -296,6 +296,7 @@ package GameCom.GameComponents {
 		public function Update(dt:Number):void {
 			if (Keys.isKeyDown(Keyboard.UP) || Keys.isKeyDown(Keyboard.W)) {
 				if (CurrentLoop != DrivingLoop) {
+					AudioController.PlaySound(AudioStore.TruckTakeoff);
 					AudioController.FadeOut(CurrentLoop);
 					AudioController.FadeIn(DrivingLoop);
 					CurrentLoop = DrivingLoop;

@@ -33,14 +33,14 @@ package GameCom.GameComponents
 	public class NPCCar extends Sprite {
 		private var world:b2World;
 		
-		private const MAX_STEER_ANGLE:Number = Math.PI / 4;
-		private const STEER_SPEED:Number = 5.0;
+		private const MAX_STEER_ANGLE:Number = Math.PI / 5;
+		private const STEER_SPEED:Number = 20.0;
 		
 		private const SIDEWAYS_FRICTION_FORCE:Number = 1000;
-		private const BRAKE_FORCE:Number = 8;
+		private const BRAKE_FORCE:Number = 9;
 		
 		private const HORSEPOWER_MAX:Number = 15;
-		private const HORSEPOWER_INC:Number = 5;
+		private const HORSEPOWER_INC:Number = 7.5;
 		
 		private const NPC_HP:int = 100;
 		
@@ -206,7 +206,7 @@ package GameCom.GameComponents
 			world.CreateJoint(leftRearJointDef);
 			world.CreateJoint(rightRearJointDef);
 			
-			engineSpeed *= (MAX_STEER_ANGLE-Math.abs(steeringAngle)) / (3 * MAX_STEER_ANGLE) + 0.333;
+			engineSpeed *= (MAX_STEER_ANGLE-Math.abs(steeringAngle)) / (4 * MAX_STEER_ANGLE) + 0.25;
 			
 			killOrthogonalVelocity(leftWheel);
 			killOrthogonalVelocity(rightWheel);
@@ -248,7 +248,7 @@ package GameCom.GameComponents
 			var scannerAnchorPoint:b2Vec2 = collisionScanner.GetWorldCenter().Copy();
 			scannerAnchorPoint.Add(MathHelper.RotateVector(new b2Vec2(2.0, 0.0), angle));
 			scannerJointDef.Initialize(body, collisionScanner, scannerAnchorPoint);
-			scannerJointDef.enableLimit = false;
+			scannerJointDef.enableLimit = true;
 			scannerJointDef.collideConnected = false;
 			
 			world.CreateJoint(scannerJointDef);
@@ -259,7 +259,7 @@ package GameCom.GameComponents
 			var ldirection:b2Vec2 = leftWheel.GetTransform().R.col2.Copy();
 			ldirection.Multiply(HORSEPOWER_MAX*-10);
 			
-			var rdirection:b2Vec2 = rightWheel.GetTransform().R.col2.Copy()
+			var rdirection:b2Vec2 = rightWheel.GetTransform().R.col2.Copy();
 			rdirection.Multiply(HORSEPOWER_MAX*-10);
 			
 			leftWheel.ApplyForce(ldirection, leftWheel.GetPosition());
@@ -269,14 +269,14 @@ package GameCom.GameComponents
 			
 			//DRAW TIRES
 			LRotWheel.graphics.beginFill(0x0);
-			LRotWheel.graphics.drawRect( -2, -5, 4, 10);
+			LRotWheel.graphics.drawRect(-2, -5, 4, 10);
 			LRotWheel.graphics.endFill();
 			LRotWheel.x = _leftFrontWheelPosition.x * Global.PHYSICS_SCALE;
 			LRotWheel.y = _leftFrontWheelPosition.y * Global.PHYSICS_SCALE;
 			this.addChildAt(LRotWheel, 0);
 			
 			RRotWheel.graphics.beginFill(0x0);
-			RRotWheel.graphics.drawRect( -2, -5, 4, 10);
+			RRotWheel.graphics.drawRect(-2, -5, 4, 10);
 			RRotWheel.graphics.endFill();
 			RRotWheel.x = _rightFrontWheelPosition.x * Global.PHYSICS_SCALE;
 			RRotWheel.y = _rightFrontWheelPosition.y * Global.PHYSICS_SCALE;
@@ -374,6 +374,8 @@ package GameCom.GameComponents
 				var playerDist:Number = MathHelper.Distance(new Point(this.x, this.y), new Point(GUIManager.I.player.x, GUIManager.I.player.y));
 				if (playerDist < 300) {
 					Wep.Update(new Point(GUIManager.I.player.x, GUIManager.I.player.y), true);
+				} else {
+					Wep.Update(new Point(GUIManager.I.player.x, GUIManager.I.player.y), false);
 				}
 			}
 			
@@ -401,7 +403,7 @@ package GameCom.GameComponents
 			mspeed = steeringAngle - rightJoint.GetJointAngle();
 			rightJoint.SetMotorSpeed(mspeed * STEER_SPEED);
 			
-			collisionScanner.SetAngle(body.GetAngle() + steeringAngle + Math.PI/2);
+			//collisionScanner.SetAngle(body.GetAngle() + steeringAngle + Math.PI/2);
 			
 			LRotWheel.rotation = leftWheel.GetAngle() / Math.PI * 180 - this.rotation;
 			RRotWheel.rotation = rightWheel.GetAngle() / Math.PI * 180 - this.rotation;

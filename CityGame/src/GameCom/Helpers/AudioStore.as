@@ -17,8 +17,11 @@ package GameCom.Helpers
 		[Embed(source = "../../../lib/Audio/TruckReverse.mp3")]
 		public static const TruckReverse:Class;
 		
-		[Embed(source = "../../../lib/Audio/TruckReverse.mp3")]
+		[Embed(source = "../../../lib/Audio/TruckDriving.mp3")]
 		public static const TruckDriving:Class;
+		
+		[Embed(source = "../../../lib/Audio/TruckTakeoff.mp3")]
+		public static const TruckTakeoff:Class;
 		
 		[Embed(source="../../../lib/Audio/Horn.mp3")]
 		public static const Horn:Class;

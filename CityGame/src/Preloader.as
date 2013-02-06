@@ -43,7 +43,7 @@ package {
 			loaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioError);
 			
 			// Show the Loader
-			this.graphics.beginFill(0xFFFFFF, 1);
+			this.graphics.beginFill(0x000000, 1);
 			this.graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
 			this.graphics.endFill();
 			
@@ -56,7 +56,7 @@ package {
 			
 			progressTF.y = 30;
 			progressTF.x = 15;
-			progressTF.defaultTextFormat = new TextFormat("Verdana", 20 * Global.UI_SCALE, 0x000000);
+			progressTF.defaultTextFormat = new TextFormat("Verdana", 20 * Global.UI_SCALE, 0xFFFFFF);
 			progressTF.autoSize = TextFieldAutoSize.LEFT;
 			progressTF.selectable = false;
 			this.addChild(progressTF);
@@ -64,7 +64,7 @@ package {
 			gameNameTF.x = 5;
 			gameNameTF.autoSize = TextFieldAutoSize.LEFT;
 			gameNameTF.selectable = false;
-			gameNameTF.defaultTextFormat = new TextFormat("Verdana", 30 * Global.UI_SCALE, 0x000000);
+			gameNameTF.defaultTextFormat = new TextFormat("Verdana", 30 * Global.UI_SCALE, 0xFFFFFF);
 			this.addChild(gameNameTF);
 			gameNameTF.text = Global.GAME_NAME;
 		}
@@ -75,14 +75,16 @@ package {
 		
 		private function progress(e:ProgressEvent):void {
 			var totalBytes:int = e.bytesTotal;
+			var approx:Boolean = false;
 			
 			if (e.bytesTotal == 0) {
-				totalBytes = 9512033;
+				totalBytes = 12186938;
+				approx = true;
 			}
 			
 			// Update the GUI
 			if(e.bytesLoaded != totalBytes) {
-				progressTF.text = "Loading " + (Math.floor(e.bytesLoaded / e.bytesTotal * 10000) / 100) + "% BL:" + e.bytesLoaded + " BT:" + totalBytes;
+				progressTF.text = "Loading " + (approx?"~":"") + (Math.floor(e.bytesLoaded / totalBytes * 10000) / 100) + "%";
 			} else {
 				progressTF.text = "Unpacking...";
 			}
@@ -101,7 +103,6 @@ package {
 			loaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, ioError);
 			
 			progressTF.text = "Preparing...";
-			//ThemeManager.Initialize(CleanUp);
 			
 			CleanUp();
 		}

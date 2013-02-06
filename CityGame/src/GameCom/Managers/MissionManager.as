@@ -5,6 +5,7 @@ package GameCom.Managers {
 	import GameCom.GameComponents.PickupPlace;
 	import GameCom.GameComponents.PlaceObject;
 	import GameCom.Helpers.MoneyHelper;
+	import GameCom.Helpers.PeopleHelper;
 	import GameCom.Helpers.ReputationHelper;
 	import GameCom.Helpers.ResourceHelper;
 	import GameCom.States.GameScreen;
@@ -98,6 +99,8 @@ package GameCom.Managers {
 			DeliveryStartTime = getTimer();
 			
 			if (!params.isStoryMission) {
+				GUIManager.I.Popup(PeopleHelper.PickupMessages[CurrentMission.StartNPC1], CurrentMission.StartNPC1, CurrentMission.StartNPC2);
+				
 				CurrentMission.hasGoods = true;
 				
 				_CurrentDestination = (PlacesManager.instance.DropatLocations[params.Destination] as PlaceObject);
@@ -142,6 +145,8 @@ package GameCom.Managers {
 					highestMissionCompleted++;
 					Storage.Set("HighestMissionCompleted", highestMissionCompleted);
 					UpdateRepRequiredForNextMission();
+				} else {
+					GUIManager.I.Popup(PeopleHelper.DropOffMessages[CurrentMission.EndNPC1], CurrentMission.EndNPC1, CurrentMission.EndNPC2);
 				}
 				
 				CurrentMission = null;
