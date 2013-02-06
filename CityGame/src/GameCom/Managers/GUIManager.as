@@ -44,7 +44,8 @@ package GameCom.Managers
 		private var popupMessages:Vector.<PopupInfo> = new Vector.<PopupInfo>();
 		private var popupText:TextField = new TextField();
 		private var popupAlpha:Number = 0;
-		private var popupFade:Boolean = false;
+		private var popupFadeIn:Boolean = false;
+		private var popupFadeOut:Boolean = false;
 		
 		private var tooltips:Vector.<Tooltip> = new Vector.<Tooltip>();
 		private var currentFrameTooltipIndex:int = 0;
@@ -111,8 +112,8 @@ package GameCom.Managers
 			popupText.wordWrap = true;
 			
 			//Good text field max size
-			popupText.x = 117;
-			popupText.y = 456;
+			popupText.x = PopupSprite.x + 115;
+			popupText.y = PopupSprite.y + 400;
 			popupText.width = 411;
 			popupText.height = 191;
 			
@@ -142,16 +143,25 @@ package GameCom.Managers
 			}
 			
 			if (popupAlpha > 0) {
-				if (popupFade) {
+				if (popupFadeOut) {
 					popupAlpha -= 0.08;
 					if (popupAlpha <= 0) {
+						popupText.alpha = 0;
 						popupText.text = "";
 						popupMessages.splice(0, 1);
 						ShowNextPopup();
 					}
 				} else {
+					if (popupFadeIn) {
+						popupAlpha += 0.08;
+						if (popupAlpha >= 1) {
+							popupText.alpha = 1;
+							popupFadeIn = false;
+						}
+					}
+					
 					if(Keys.isKeyDown(Keyboard.ENTER) || Mousey.IsClicking()) {
-						popupFade = true;
+						popupFadeOut = true;
 					}
 				}
 				
@@ -190,8 +200,9 @@ package GameCom.Managers
 			if (popupMessages.length > 0) {
 				popupText.text = popupMessages[0].message;
 				
-				popupAlpha = 1.0;
-				popupFade = false;
+				popupAlpha = 0.1;
+				popupFadeIn = true;
+				popupFadeOut = false;
 			} else {
 				Pause.call();
 			}
