@@ -187,10 +187,10 @@ package GameCom.States {
 				debugDrawLayer.graphics.clear();
 			}
 			
-			if (mDown && !Keys.isKeyDown(Keyboard.S)) {
+			if (mDown && !Keys.isKeyDown(Keyboard.Q)) {
 				AudioController.SetMuted(!AudioController.GetMuted());
 			}
-			mDown = Keys.isKeyDown(Keyboard.S);
+			mDown = Keys.isKeyDown(Keyboard.Q);
 		}
 		
 		public function Redraw(e:*= null):void {
