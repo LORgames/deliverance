@@ -488,7 +488,9 @@ namespace CityTools {
             if (StoryForm.instance == null) {
                 StoryForm.instance = new StoryForm(story_storyPan.Controls[0] as StoryCacheControl);
             }
+
             StoryForm.instance.Show();
+            StoryForm.instance.WipeValues();
             paintMode = PaintMode.Story;
         }
 

@@ -81,7 +81,7 @@ namespace CityTools {
             }
         }
 
-        private void StoryForm_Shown(object sender, EventArgs e) {
+        public void WipeValues() {
             txtStartLocation.Text = "";
             txtEndLocation.Text = "";
 
@@ -114,6 +114,13 @@ namespace CityTools {
             index = -1;
 
             btnSave.Text = "Save";
+
+            pbStartNPC.Image = null;
+            pbEndNPC.Image = null;
+        }
+
+        private void StoryForm_Shown(object sender, EventArgs e) {
+            WipeValues();
         }
 
         private void StoryForm_FormClosing(object sender, FormClosingEventArgs e) {

@@ -343,9 +343,9 @@
             // 
             // pbEndNPC
             // 
-            this.pbEndNPC.Location = new System.Drawing.Point(397, 9);
+            this.pbEndNPC.Location = new System.Drawing.Point(397, 12);
             this.pbEndNPC.Name = "pbEndNPC";
-            this.pbEndNPC.Size = new System.Drawing.Size(168, 243);
+            this.pbEndNPC.Size = new System.Drawing.Size(168, 240);
             this.pbEndNPC.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbEndNPC.TabIndex = 23;
             this.pbEndNPC.TabStop = false;
