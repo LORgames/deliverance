@@ -46,9 +46,9 @@ package GameCom.GameComponents.Weapons
 			
 			var angleBecauseInaccurate:Number = (-5 + Math.random() * 10) / 180 * Math.PI;
 			
-			var b3:b2Vec2 = MathHelper.RotateVector(d, angleBecauseInaccurate);
+			d.Multiply(RANGE / d.Length());
 			
-			b3.Multiply(RANGE / b3.Length());
+			var b3:b2Vec2 = MathHelper.RotateVector(d, angleBecauseInaccurate);
 			
 			b3.Add(b1);
 			

@@ -2,6 +2,8 @@ package GameCom.GameComponents
 {
 	import Box2D.Dynamics.b2World;
 	import flash.display.Graphics;
+	import flash.geom.Point;
+	import GameCom.Helpers.MathHelper;
 	import GameCom.Helpers.PeopleHelper;
 	import GameCom.Helpers.ReputationHelper;
 	import GameCom.Helpers.ResourceHelper;
@@ -18,6 +20,8 @@ package GameCom.GameComponents
 		
 		public var MissionParams:MissionParameters = null;
 		private var tooltipInfo:String;
+		
+		private const MINIMUM_DISTANCE:int = 500; // minimum distance between origin and destination
 		
 		public function PickupPlace(type:int, posX:Number, posY:Number, angle:int, world:b2World, trigger:String, arrayIndex:int) {
 			super(type, posX, posY, angle, world, trigger, arrayIndex);
@@ -44,7 +48,13 @@ package GameCom.GameComponents
 					var places:Vector.<PlaceObject> = PlacesManager.instance.DeliveryLocationsByResource[ri.ID];
 					
 					MissionParams.Origin = arrayIndex;
-					MissionParams.Destination = PlacesManager.instance.DropatLocations.indexOf(places[Math.floor(places.length*Math.random())]);
+					while (true) {
+						var destinationPlaceObject:PlaceObject = places[Math.floor(places.length * Math.random())];
+						MissionParams.Destination = PlacesManager.instance.DropatLocations.indexOf(destinationPlaceObject);
+						if (MathHelper.Distance(new Point(destinationPlaceObject.drawX, destinationPlaceObject.drawY), new Point(this.drawX, this.drawY)) > MINIMUM_DISTANCE) {
+							break;
+						}
+					}
 					
 					MissionParams.StartNPC1 = PeopleHelper.GetAvailableNPC(this.b_NPC);
 					MissionParams.EndNPC1 = PeopleHelper.GetAvailableNPC(PlacesManager.instance.DropatLocations[MissionParams.Destination].b_NPC);
