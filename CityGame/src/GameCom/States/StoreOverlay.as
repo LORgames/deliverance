@@ -238,14 +238,18 @@ package GameCom.States {
 			var col:int = parseInt(me.currentTarget.getLabel().charAt(1));
 			switch(part) {
 				case "C":
-					GUIManager.I.player.getChildAt(2).transform.colorTransform = GUIManager.I.player.Colours[col];
 					if (MoneyHelper.CanDebit(100)) {
 						MoneyHelper.Debit(100);
+						GUIManager.I.player.getChildAt(2).transform.colorTransform = GUIManager.I.player.Colours[col];
 						Storage.Set(part+"Colour", col);
 					}
 					break;
 				case "T":
-					GUIManager.I.player.getChildAt(3).transform.colorTransform = GUIManager.I.player.Colours[col];
+					if (MoneyHelper.CanDebit(100)) {
+						MoneyHelper.Debit(100);
+						GUIManager.I.player.getChildAt(3).transform.colorTransform = GUIManager.I.player.Colours[col];
+						Storage.Set(part+"Colour", col);
+					}
 					break;
 				default:
 					break;
