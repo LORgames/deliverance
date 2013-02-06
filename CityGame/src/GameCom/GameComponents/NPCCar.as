@@ -215,8 +215,14 @@ package GameCom.GameComponents
 			
 			// Collision scanner
 			var scannerShape:b2PolygonShape = new b2PolygonShape();
-			//Rectangular scanner
-			scannerShape.SetAsBox(2.5, 1.0);
+			//scannerShape.SetAsBox(2.5, 1.0); //Rectangular scanner
+			
+			var verts:Array = new Array(new b2Vec2( 0.0,-0.6),
+										new b2Vec2(-7.0,-1.2),
+										new b2Vec2(-7.0, 1.2),
+										new b2Vec2( 0.0, 0.6));
+			scannerShape.SetAsArray(verts, 4);
+			
 			//Triangular scanner
 			/* 
 			var verts:Array = new Array(new b2Vec2( 1.5,-1.5),
@@ -244,14 +250,14 @@ package GameCom.GameComponents
 			collisionScanner = world.CreateBody(scannerBodyDef);
 			collisionScanner.CreateFixture(scannerFixtureDef);
 			
-			var scannerJointDef:b2RevoluteJointDef = new b2RevoluteJointDef();
+			/*var scannerJointDef:b2RevoluteJointDef = new b2RevoluteJointDef();
 			var scannerAnchorPoint:b2Vec2 = collisionScanner.GetWorldCenter().Copy();
 			scannerAnchorPoint.Add(MathHelper.RotateVector(new b2Vec2(2.0, 0.0), angle));
 			scannerJointDef.Initialize(body, collisionScanner, scannerAnchorPoint);
 			scannerJointDef.enableLimit = true;
 			scannerJointDef.collideConnected = false;
 			
-			world.CreateJoint(scannerJointDef);
+			world.CreateJoint(scannerJointDef);*/
 			
 			collisions = 0;
 			
@@ -403,7 +409,7 @@ package GameCom.GameComponents
 			mspeed = steeringAngle - rightJoint.GetJointAngle();
 			rightJoint.SetMotorSpeed(mspeed * STEER_SPEED);
 			
-			//collisionScanner.SetAngle(body.GetAngle() + steeringAngle + Math.PI/2);
+			collisionScanner.SetPositionAndAngle(body.GetPosition(), body.GetAngle() + steeringAngle + Math.PI/2);
 			
 			LRotWheel.rotation = leftWheel.GetAngle() / Math.PI * 180 - this.rotation;
 			RRotWheel.rotation = rightWheel.GetAngle() / Math.PI * 180 - this.rotation;

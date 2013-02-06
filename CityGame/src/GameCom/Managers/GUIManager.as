@@ -206,6 +206,16 @@ package GameCom.Managers
 			
 			if (hasOverlay) {
 				this.graphics.clear();
+				
+				this.graphics.beginFill(0x0);
+				this.graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
+				this.graphics.endFill();
+				
+				map.x = (stage.stageWidth - map.width) / 2;
+				map.y = (stage.stageHeight - map.height) / 2;
+				
+				store.x = (stage.stageWidth - store.width) / 2;
+				store.y = (stage.stageHeight - store.height) / 2;
 			}
 		}
 		
@@ -298,11 +308,14 @@ package GameCom.Managers
 		
 		public function DeactivateStore():void {
 			this.removeChild(store);
+			hasOverlay = false;
 			
 			Pause.call();
 			
 			player.FixUpgradeValues();
 			player.Respawn();
+			
+			this.graphics.clear();
 		}
 		
 		public function ActivateMap():void {
@@ -311,13 +324,15 @@ package GameCom.Managers
 			hasOverlay = true;
 			
 			Pause.call();
-			hasOverlay = false;
 		}
 		
 		public function DeactivateMap():void {
 			this.removeChild(map);
-			Pause.call();
 			hasOverlay = false;
+			
+			Pause.call();
+			
+			this.graphics.clear();
 		}
 		
 	}
