@@ -1,5 +1,5 @@
 ID,Resource,Value Per Item,Min Items Per Load,Max Items Per Load,Plural,Unlock Level,Rep Per Item
-0,Furniture,120,1,1, truckload of Furniture,1,100
+0,Furniture,60,2,2, lots of Furniture,1,50
 1,Soil,15,7,35, tonnes of Soil,1,10.48
 2,Plants,10,10,30, palettes of Plants,1,6.67
 3,Clothes,2,50,200, boxes of Clothes,2,1.5
@@ -7,8 +7,8 @@ ID,Resource,Value Per Item,Min Items Per Load,Max Items Per Load,Plural,Unlock L
 5,Beverages,10,10,50, boxes of Beverages,3,9
 6,Books,10,10,50, boxes of Books,3,10
 7,Cleaning Supplies,4,25,150, boxes of Cleaning Supplies,4,4.5
-8,Handbags,14,10,50, box of Handbags,4,12
-9,Machinery,25,5,30, box of Machinery,5,24
+8,Handbags,14,10,50, boxes of Handbags,4,12
+9,Machinery,25,5,30, boxes of Machinery,5,24
 10,Spices,20,5,40, box of Spices,5,24
 11,Stuffed Animals,3,34,300, boxes of Stuffed Animals,6,4
 12,Food,20,5,50, boxes of Food,6,27
@@ -16,7 +16,7 @@ ID,Resource,Value Per Item,Min Items Per Load,Max Items Per Load,Plural,Unlock L
 14,Produce,5,20,200, boxes of Produce,7,7.6
 15,Appliances,40,5,25, palettes of Appliances,8,50
 16,Dubious Items,1,300,2000, boxes of Dubious Items,8,0.8
-17,Band Equipment,2500,1,1, truckload of Band Equipment,9,750
+17,Band Equipment,1250,2,2, sets of Band Equipment,9,400
 18,Crockery,10,50,500, boxes of Crockery,11,11
 19,Shoes,3,200,3000, boxes of Shoes,13,3
 20,Coffee,2,300,5000, bottles of Coffee,15,5
