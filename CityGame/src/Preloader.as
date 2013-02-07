@@ -22,7 +22,7 @@ package {
 		
 		[Embed(source="../lib/_embeds/logo.png")]
         [Bindable]
-        private static var Logo:Class;
+        public static var Logo:Class;
 		
 		private var gameNameTF:TextField = new TextField();
 		private var progressTF:TextField = new TextField();
@@ -39,6 +39,7 @@ package {
 			}
 			
 			addEventListener(Event.ENTER_FRAME, checkFrame);
+			addEventListener(Event.RESIZE, resize);
 			loaderInfo.addEventListener(ProgressEvent.PROGRESS, progress);
 			loaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioError);
 			
@@ -97,8 +98,23 @@ package {
 			}
 		}
 		
+		private function resize(e:Event):void {
+			// Show the Loader
+			this.graphics.beginFill(0x000000, 1);
+			this.graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
+			this.graphics.endFill();
+			
+			var bmp:Bitmap = new Logo() as Bitmap;
+			var mat:Matrix = new Matrix(1, 0, 0, 1, (stage.stageWidth / 2) - (bmp.width / 2), (stage.stageHeight / 2) - (bmp.height / 2));
+
+			this.graphics.beginBitmapFill(bmp.bitmapData, mat, false, false);
+			this.graphics.drawRect((stage.stageWidth / 2) - (bmp.width / 2), (stage.stageHeight / 2) - (bmp.height / 2), bmp.width, bmp.height);
+			this.graphics.endFill();
+		}
+		
 		private function loadingFinished():void {
 			removeEventListener(Event.ENTER_FRAME, checkFrame);
+			removeEventListener(Event.RESIZE, resize);
 			loaderInfo.removeEventListener(ProgressEvent.PROGRESS, progress);
 			loaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, ioError);
 			

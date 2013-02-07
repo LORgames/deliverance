@@ -537,5 +537,11 @@ namespace CityTools {
 
             this.Close();
         }
+
+        private void deleteObjectsBtn_Click(object sender, EventArgs e) {
+            if (MessageBox.Show("Are you sure? This will perma delete art things.")) {
+
+            }
+        }
     }
 }

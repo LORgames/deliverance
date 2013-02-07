@@ -19,6 +19,8 @@ namespace CityTools.Places {
 
         private static int _highestTypeIndex = 0;
 
+        public static Dictionary<int, int> ObjectUsageCountsAtLoad = new Dictionary<int, int>();
+
         public static Dictionary<int, PlacesType> s_objectTypes = new Dictionary<int, PlacesType>();
         public static Dictionary<string, int> s_StringToInt = new Dictionary<string, int>();
 
@@ -49,6 +51,8 @@ namespace CityTools.Places {
                     int type_id = f.GetInt();
                     string source = f.GetString();
 
+                    ObjectUsageCountsAtLoad.Add(type_id, 0);
+
                     s_objectTypes.Add(type_id, new PlacesType(type_id, source));
                     s_StringToInt.Add(source, type_id);
                 }
@@ -60,6 +64,8 @@ namespace CityTools.Places {
                     _highestTypeIndex++;
                     s_objectTypes.Add(_highestTypeIndex, new PlacesType(_highestTypeIndex, filename));
                     s_StringToInt.Add(filename, _highestTypeIndex);
+
+                    ObjectUsageCountsAtLoad.Add(_highestTypeIndex, 0);
                 }
             }
 
@@ -73,6 +79,8 @@ namespace CityTools.Places {
                     float locationX = f.GetFloat();
                     float locationY = f.GetFloat();
                     int rotation = f.GetInt();
+
+                    ObjectUsageCountsAtLoad[sourceID] = ObjectUsageCountsAtLoad[sourceID] + 1;
 
                     PlacesObject p = new PlacesObject(sourceID, new System.Drawing.PointF(locationX, locationY), rotation, false);
                     p.ReadPersonalData(f);

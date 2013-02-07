@@ -36,6 +36,7 @@
             this.minimap = new System.Windows.Forms.PictureBox();
             this.first_level_tabControl = new System.Windows.Forms.TabControl();
             this.settings_tab = new System.Windows.Forms.TabPage();
+            this.gameQualityMinimapBtn = new System.Windows.Forms.Button();
             this.layer_places = new System.Windows.Forms.CheckBox();
             this.layer_objects_1 = new System.Windows.Forms.CheckBox();
             this.layer_nodes = new System.Windows.Forms.CheckBox();
@@ -78,7 +79,7 @@
             this.tsmBringToFront = new System.Windows.Forms.ToolStripMenuItem();
             this.placesResourcesContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.placesPeopleContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.gameQualityMinimapBtn = new System.Windows.Forms.Button();
+            this.deleteObjectsBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.main_splitter)).BeginInit();
             this.main_splitter.Panel1.SuspendLayout();
             this.main_splitter.Panel2.SuspendLayout();
@@ -194,6 +195,7 @@
             // 
             // settings_tab
             // 
+            this.settings_tab.Controls.Add(this.deleteObjectsBtn);
             this.settings_tab.Controls.Add(this.gameQualityMinimapBtn);
             this.settings_tab.Controls.Add(this.layer_places);
             this.settings_tab.Controls.Add(this.layer_objects_1);
@@ -209,6 +211,16 @@
             this.settings_tab.TabIndex = 0;
             this.settings_tab.Text = "Settings";
             this.settings_tab.UseVisualStyleBackColor = true;
+            // 
+            // gameQualityMinimapBtn
+            // 
+            this.gameQualityMinimapBtn.Location = new System.Drawing.Point(3, 174);
+            this.gameQualityMinimapBtn.Name = "gameQualityMinimapBtn";
+            this.gameQualityMinimapBtn.Size = new System.Drawing.Size(119, 23);
+            this.gameQualityMinimapBtn.TabIndex = 17;
+            this.gameQualityMinimapBtn.Text = "HQ Map And Close";
+            this.gameQualityMinimapBtn.UseVisualStyleBackColor = true;
+            this.gameQualityMinimapBtn.Click += new System.EventHandler(this.gameQualityMinimapBtn_Click);
             // 
             // layer_places
             // 
@@ -657,16 +669,15 @@
             this.placesPeopleContextMenu.Size = new System.Drawing.Size(61, 4);
             this.placesPeopleContextMenu.Closing += new System.Windows.Forms.ToolStripDropDownClosingEventHandler(this.placesContextMenu_Closing);
             // 
-            // gameQualityMinimapBtn
+            // deleteObjectsBtn
             // 
-            this.gameQualityMinimapBtn.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.gameQualityMinimapBtn.Location = new System.Drawing.Point(3, 174);
-            this.gameQualityMinimapBtn.Name = "gameQualityMinimapBtn";
-            this.gameQualityMinimapBtn.Size = new System.Drawing.Size(217, 23);
-            this.gameQualityMinimapBtn.TabIndex = 17;
-            this.gameQualityMinimapBtn.Text = "HQ Map And Close";
-            this.gameQualityMinimapBtn.UseVisualStyleBackColor = true;
-            this.gameQualityMinimapBtn.Click += new System.EventHandler(this.gameQualityMinimapBtn_Click);
+            this.deleteObjectsBtn.Location = new System.Drawing.Point(128, 174);
+            this.deleteObjectsBtn.Name = "deleteObjectsBtn";
+            this.deleteObjectsBtn.Size = new System.Drawing.Size(87, 23);
+            this.deleteObjectsBtn.TabIndex = 18;
+            this.deleteObjectsBtn.Text = "Delete Unused";
+            this.deleteObjectsBtn.UseVisualStyleBackColor = true;
+            this.deleteObjectsBtn.Click += new System.EventHandler(this.deleteObjectsBtn_Click);
             // 
             // MainWindow
             // 
@@ -764,6 +775,7 @@
         internal System.Windows.Forms.Panel story_storyPan;
         private System.Windows.Forms.Button phys_delete;
         private System.Windows.Forms.Button gameQualityMinimapBtn;
+        private System.Windows.Forms.Button deleteObjectsBtn;
     }
 }
 

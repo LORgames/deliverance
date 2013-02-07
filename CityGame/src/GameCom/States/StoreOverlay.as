@@ -130,6 +130,8 @@ package GameCom.States {
 			
 			CloseButton.addEventListener(MouseEvent.CLICK, OnCloseClicked);
 			
+			tooltip.visible = false;
+			
 			RedrawStats();
 		}
 		

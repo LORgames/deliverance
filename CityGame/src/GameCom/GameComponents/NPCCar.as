@@ -336,6 +336,10 @@ package GameCom.GameComponents
 					body.SetLinearDamping(1.0);
 					if(engineSpeed > -HORSEPOWER_MAX) {
 						engineSpeed -= HORSEPOWER_INC;
+						
+						if (engineSpeed > -HORSEPOWER_MAX) {
+							engineSpeed = -HORSEPOWER_MAX;
+						}
 					}
 				}
 				

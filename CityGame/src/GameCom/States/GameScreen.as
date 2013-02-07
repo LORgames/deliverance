@@ -155,14 +155,11 @@ package GameCom.States {
 		
 		private function Update(e:Event):void {
 			if (simulating) {
-				var dt:Number = (getTimer() - previousFrameTime) / 1000;
-				previousFrameTime = getTimer();
-				
 				world.Step(Global.TIME_STEP, Global.VELOCITY_ITERATIONS, Global.POSITION_ITERATIONS);
 				world.ClearForces();
 				
 				//Update the objects
-				player.Update(dt);
+				player.Update(Global.TIME_STEP);
 				npcManager.Update();
 				
 				worldSpr.x = Math.floor(-player.x + stage.stageWidth/2);

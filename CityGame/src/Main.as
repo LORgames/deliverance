@@ -1,4 +1,5 @@
 package {
+	import flash.display.Bitmap;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
@@ -26,6 +27,12 @@ package {
 			this.graphics.beginFill(0x000000)
 			this.graphics.drawRect(0, 0, 10000, 10000);
 			this.graphics.endFill();
+			
+			var bmp:Bitmap = new Preloader.Logo() as Bitmap;
+			this.graphics.beginBitmapFill(bmp.bitmapData);
+			this.graphics.drawRect(0, 0, bmp.width, bmp.height);
+			this.graphics.endFill();
+			
 			this.addChild(new TextField());
 			(this.getChildAt(0) as TextField).selectable = false;
 			(this.getChildAt(0) as TextField).defaultTextFormat = new TextFormat("Verdana", 10, 0xFFFFFF);

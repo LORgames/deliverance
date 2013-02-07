@@ -1,6 +1,7 @@
 package GameCom.Helpers {
 	import adobe.utils.CustomActions;
 	import flash.utils.ByteArray;
+	import GameCom.Managers.GUIManager;
 	import GameCom.Managers.MissionManager;
 	import GameCom.SystemComponents.ResourceInformation;
 	/**
@@ -26,6 +27,10 @@ package GameCom.Helpers {
 				Resources.push(ri);
 			}
 			
+			UpdateAvailableResources();
+		}
+		
+		public static function UpdateAvailableResources():void {
 			while (Resources[CurrentResourcesUnlockedIndex + 1].ReputationForUnlock <= ReputationHelper.GetCurrentLevel()) {
 				CurrentResourcesUnlockedIndex++;
 			}
@@ -38,7 +43,9 @@ package GameCom.Helpers {
 		public static function GetAvailableResource(resources:int):ResourceInformation {
 			var attempts:int = 0;
 			
-			var l_Limit:int = ReputationHelper.GetCurrentLevel() / 1.6;
+			var l_Limit:int = Math.floor(ReputationHelper.GetCurrentLevel() / 1.4);
+			
+			trace(l_Limit);
 			
 			while (attempts < 5) {
 				var tried:int = Math.floor(Math.random() * (CurrentResourcesUnlockedIndex-l_Limit)) + l_Limit;

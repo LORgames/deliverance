@@ -1,8 +1,12 @@
 package GameCom.States {
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.geom.Matrix;
+	import flash.ui.Keyboard;
+	import flash.utils.getTimer;
 	import GameCom.Helpers.MoneyHelper;
 	import GameCom.Helpers.UpgradeHelper;
 	import GameCom.Managers.GUIManager;
@@ -10,6 +14,7 @@ package GameCom.States {
 	import GameCom.Managers.PlacesManager;
 	import LORgames.Components.Button;
 	import LORgames.Components.Tooltip;
+	import LORgames.Engine.Keys;
 	import LORgames.Engine.Storage;
 	/**
 	 * ...
@@ -24,7 +29,11 @@ package GameCom.States {
 		private const MAP_OFFSET_X:Number = -26;
 		private const MAP_OFFSET_Y:Number = -300;
 		
+		public var openTime:int = 0;
+		
 		public function MapOverlay() {
+			this.addEventListener(Event.ADDED_TO_STAGE, Added);
+			
 			CloseButton.addEventListener(MouseEvent.CLICK, OnCloseClicked);
 			this.addChild(CloseButton);
 			CloseButton.x = 0;
@@ -81,8 +90,19 @@ package GameCom.States {
 			//Need to draw many things here?
 		}
 		
+		public function Added(e:Event):void {
+			openTime = getTimer();
+		}
+		
 		private function OnCloseClicked(me:MouseEvent):void {
 			GUIManager.I.DeactivateMap();
+			openTime = getTimer();
+		}
+		
+		public function Update():void {
+			if (this.parent != null && Keys.isKeyDown(Keyboard.M) && getTimer() > openTime+250) {
+				OnCloseClicked(null);
+			}
 		}
 		
 	}

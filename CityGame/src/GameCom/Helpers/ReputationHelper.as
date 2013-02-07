@@ -57,6 +57,11 @@ package GameCom.Helpers {
 			
 			while (CurrentReputation >= Levels[CurrentLevel + 1].ReputationRequired) {
 				CurrentLevel++;
+				ResourceHelper.UpdateAvailableResources();
+				
+				if (CurrentLevel == 5) {
+					GUIManager.I.player.EquipWeapon("MachineGun");
+				}
 			}
 		}
 		
@@ -76,6 +81,13 @@ package GameCom.Helpers {
 			var nXP:int = Levels[CurrentLevel + 1].ReputationRequired;
 			
 			return Number(100*Number(exp) / (nXP - cXP)).toFixed(2);
+		}
+		
+		public static function GetAcceptableLevelPercent():int {
+			var cXP:int = Levels[CurrentLevel].ReputationRequired;
+			var nXP:int = Levels[CurrentLevel + 1].ReputationRequired;
+			
+			return ((nXP - cXP) * 0.15);
 		}
 		
 		public static function GetCurrentLevel():int {

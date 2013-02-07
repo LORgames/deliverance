@@ -17,6 +17,8 @@ namespace CityTools.ObjectSystem {
 
         private static int _highestTypeIndex = 0;
 
+        public static Dictionary<int, int> ObjectUsageCountsAtLoad = new Dictionary<int, int>();
+
         public static Dictionary<int, ScenicType> s_objectTypes = new Dictionary<int, ScenicType>();
         public static Dictionary<string, int> s_StringToInt = new Dictionary<string, int>();
         
@@ -40,6 +42,8 @@ namespace CityTools.ObjectSystem {
                     int type_id = f.GetInt();
                     string source = f.GetString();
                     byte layer = f.GetByte();
+
+                    ObjectUsageCountsAtLoad.Add(type_id, 0);
 
                     s_objectTypes.Add(type_id, new ScenicType(type_id, source, layer));
                     s_StringToInt.Add(source, type_id);
@@ -85,6 +89,8 @@ namespace CityTools.ObjectSystem {
                     _highestTypeIndex++;
                     s_objectTypes.Add(_highestTypeIndex, new ScenicType(_highestTypeIndex, filename, 0));
                     s_StringToInt.Add(filename, _highestTypeIndex);
+
+                    ObjectUsageCountsAtLoad.Add(_highestTypeIndex, 0);
                 }
             }
 
@@ -98,6 +104,8 @@ namespace CityTools.ObjectSystem {
                     float locationX = f.GetFloat();
                     float locationY = f.GetFloat();
                     int rotation = f.GetInt();
+
+                    ObjectUsageCountsAtLoad[sourceID] = ObjectUsageCountsAtLoad[sourceID] + 1;
 
                     s_objectStore.Add(new ScenicObject(sourceID, new System.Drawing.PointF(locationX, locationY), rotation));
                 }

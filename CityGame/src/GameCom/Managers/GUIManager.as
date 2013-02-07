@@ -12,6 +12,7 @@ package GameCom.Managers
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
 	import flash.ui.Keyboard;
+	import flash.utils.getTimer;
 	import GameCom.GameComponents.PlayerTruck;
 	import GameCom.Helpers.MathHelper;
 	import GameCom.Helpers.MoneyHelper;
@@ -166,7 +167,7 @@ package GameCom.Managers
 						}
 					}
 					
-					if(!popupFadeIn && !popupFadeOut && (Keys.isKeyDown(Keyboard.ENTER) || Mousey.IsClicking())) {
+					if(!popupFadeIn && !popupFadeOut && (Keys.isKeyDown(Keyboard.ENTER) || Mousey.IsClicking() || Keys.isKeyDown(Keyboard.SPACE))) {
 						popupFadeOut = true;
 					}
 				}
@@ -216,6 +217,8 @@ package GameCom.Managers
 				
 				store.x = (stage.stageWidth - store.width) / 2;
 				store.y = (stage.stageHeight - store.height) / 2;
+				
+				map.Update();
 			}
 		}
 		
@@ -302,6 +305,7 @@ package GameCom.Managers
 		public function ActivateStore():void {
 			this.addChild(store);
 			hasOverlay = true;
+			Overlay.visible = false;
 			
 			Pause.call();
 		}
@@ -309,6 +313,7 @@ package GameCom.Managers
 		public function DeactivateStore():void {
 			this.removeChild(store);
 			hasOverlay = false;
+			Overlay.visible = true;
 			
 			Pause.call();
 			
@@ -319,9 +324,14 @@ package GameCom.Managers
 		}
 		
 		public function ActivateMap():void {
+			if (map.openTime + 250 > getTimer()) {
+				return;
+			}
+			
 			this.addChild(map);
 			map.Redraw();
 			hasOverlay = true;
+			Overlay.visible = false;
 			
 			Pause.call();
 		}
@@ -329,6 +339,7 @@ package GameCom.Managers
 		public function DeactivateMap():void {
 			this.removeChild(map);
 			hasOverlay = false;
+			Overlay.visible = true;
 			
 			Pause.call();
 			

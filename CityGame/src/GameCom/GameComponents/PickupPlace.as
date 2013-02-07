@@ -41,19 +41,38 @@ package GameCom.GameComponents
 				
 				var ri:ResourceInformation = ResourceHelper.GetAvailableResource(b_Resource);
 				
-				if(ri != null) {
+				if (ri != null) {
 					MissionParams.ResourceType = ri.ID;
-					MissionParams.ResourceAmount = ri.MinimumLoad + Math.floor(Math.random() * (ri.MaximumLoad - ri.MinimumLoad));
+					
+					var minAmount:int = ri.MinimumLoad;
+					
+					if (ReputationHelper.GetAcceptableLevelPercent() / ri.ReputationGainPerItem > minAmount) {
+						minAmount = ReputationHelper.GetAcceptableLevelPercent() / ri.ReputationGainPerItem;
+						minAmount = Math.min(minAmount, ri.MaximumLoad);
+					}
+					
+					MissionParams.ResourceAmount = minAmount + Math.floor(Math.random() * (ri.MaximumLoad - minAmount));
 					
 					var places:Vector.<PlaceObject> = PlacesManager.instance.DeliveryLocationsByResource[ri.ID];
 					
 					MissionParams.Origin = arrayIndex;
-					while (true) {
+					
+					var deliverDistance:Number;
+					var attempts:int = 0;
+					
+					while (attempts < 5) {
 						var destinationPlaceObject:PlaceObject = places[Math.floor(places.length * Math.random())];
 						MissionParams.Destination = PlacesManager.instance.DropatLocations.indexOf(destinationPlaceObject);
-						if (MathHelper.Distance(new Point(destinationPlaceObject.drawX, destinationPlaceObject.drawY), new Point(this.drawX, this.drawY)) > MINIMUM_DISTANCE) {
+						
+						deliverDistance = MathHelper.Distance(new Point(destinationPlaceObject.drawX, destinationPlaceObject.drawY), new Point(this.drawX, this.drawY));
+						
+						if (deliverDistance > MINIMUM_DISTANCE) {
 							break;
 						}
+						
+						trace(attempts + "?");
+						
+						attempts++;
 					}
 					
 					MissionParams.StartNPC1 = PeopleHelper.GetAvailableNPC(this.b_NPC);
@@ -62,7 +81,7 @@ package GameCom.GameComponents
 					var expGain:int = ri.ReputationGainPerItem * MissionParams.ResourceAmount;
 					var monGain:int = ri.ValuePerItem * MissionParams.ResourceAmount;
 					
-					tooltipInfo = "Need to deliver " + MissionParams.ResourceAmount + ri.Message + ".\n\n";
+					tooltipInfo = "Need to deliver " + MissionParams.ResourceAmount + ri.Message + " to the " + PeopleHelper.Names[MissionParams.EndNPC1] + " " + int(deliverDistance/Global.PHYSICS_SCALE) + "m away.\n\n";
 					tooltipInfo += "Rewards:\n" + expGain + " Reputation (" + ReputationHelper.GetPercentageGain(expGain) + "%)\n";
 					tooltipInfo += "$" + monGain + "\n\n";
 					tooltipInfo += "Drive into pickup zone and press Enter to accept.";
