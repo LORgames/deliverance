@@ -91,7 +91,7 @@ package GameCom.States {
 			MoneyHelper.Initialize();
 			ReputationHelper.Initialize();
 			ResourceHelper.Initialize();
-			MissionManager.Initialize();
+			if (!MissionManager.Initialize()) return;
 			
 			//Start the system
 			world = new b2World(new b2Vec2(0, 0), true);

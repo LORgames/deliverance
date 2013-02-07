@@ -20,11 +20,11 @@ package GameCom.GameComponents.Weapons
 			(this.getChildAt(0) as MovieClip).stop();
 		}
 		
-		override public function Fire():void {
+		override public function Fire(damageMultipler:Number = 1.0):void {
 			
 		}
 		
-		override public function Update(p:Point, wantsToFire:Boolean):void {
+		override public function Update(p:Point, wantsToFire:Boolean, damageMultipler:Number = 1.0):void {
 			super.Update(p, wantsToFire);
 			this.rotation = 90;
 		}

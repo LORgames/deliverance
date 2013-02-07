@@ -48,10 +48,13 @@ package GameCom.GameComponents
 					
 					if (ReputationHelper.GetAcceptableLevelPercent() / ri.ReputationGainPerItem > minAmount) {
 						minAmount = ReputationHelper.GetAcceptableLevelPercent() / ri.ReputationGainPerItem;
-						minAmount = Math.min(minAmount, ri.MaximumLoad);
 					}
 					
-					MissionParams.ResourceAmount = minAmount + Math.floor(Math.random() * (ri.MaximumLoad - minAmount));
+					if (minAmount > ri.MaximumLoad) {
+						MissionParams.ResourceAmount = minAmount;
+					}else {
+						MissionParams.ResourceAmount = minAmount + Math.floor(Math.random() * (ri.MaximumLoad - minAmount));
+					}
 					
 					var places:Vector.<PlaceObject> = PlacesManager.instance.DeliveryLocationsByResource[ri.ID];
 					
@@ -69,8 +72,6 @@ package GameCom.GameComponents
 						if (deliverDistance > MINIMUM_DISTANCE) {
 							break;
 						}
-						
-						trace(attempts + "?");
 						
 						attempts++;
 					}

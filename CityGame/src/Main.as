@@ -3,6 +3,7 @@ package {
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
+	import GameCom.Helpers.AudioStore;
 	import GameCom.Helpers.PeopleHelper;
 	import GameCom.Helpers.UpgradeHelper;
 	import GameCom.SystemMain;
@@ -10,6 +11,7 @@ package {
 	import flash.display.Stage;
 	import flash.events.Event;
 	import GameCom.SystemMain;
+	import LORgames.Engine.AudioController;
 	import LORgames.Engine.Keys;
 
 	/**
@@ -24,6 +26,13 @@ package {
 		private static var mStage:Stage = null;
 		
 		public function Main():void {
+			if (stage) init();
+			else this.addEventListener(Event.ADDED_TO_STAGE, init);
+		}
+
+		protected function init(e:Event = null):void {
+			this.removeEventListener(Event.ADDED_TO_STAGE, init);
+			
 			this.graphics.beginFill(0x000000)
 			this.graphics.drawRect(0, 0, 10000, 10000);
 			this.graphics.endFill();
@@ -41,12 +50,14 @@ package {
 			(this.getChildAt(0) as TextField).y = 5;
 			(this.getChildAt(0) as TextField).text = "Preparing for awesome non-laggy gameplay! (and no loading screens!)\n(Usually takes about 20-30 seconds, please be patient. Its worth the wait!)";
 			
-			ThemeManager.Initialize(init);
+			ThemeManager.Initialize(Gogo);
 		}
-
-		protected function init(e:Event = null):void {
+		
+		public function Gogo():void {
 			UpgradeHelper.Initialize();
 			PeopleHelper.Initialize();
+			
+			AudioController.PlayLoop(AudioStore.Music);
 			
 			this.graphics.clear();
 			this.removeChildAt(0);

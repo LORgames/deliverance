@@ -41,7 +41,7 @@ package GameCom.Helpers {
 			CurrentReputation = Storage.GetAsInt("Reputation");
 			CurrentLevel = 0;
 			
-			while (Levels[CurrentLevel + 1].ReputationRequired < CurrentReputation) {
+			while (CurrentLevel < 19 && Levels[CurrentLevel + 1].ReputationRequired < CurrentReputation) {
 				CurrentLevel++;
 			}
 		}
@@ -55,7 +55,7 @@ package GameCom.Helpers {
 			
 			Storage.Set("Reputation", CurrentReputation);
 			
-			while (CurrentReputation >= Levels[CurrentLevel + 1].ReputationRequired) {
+			while (CurrentLevel < 19 && CurrentReputation >= Levels[CurrentLevel + 1].ReputationRequired) {
 				CurrentLevel++;
 				ResourceHelper.UpdateAvailableResources();
 				
@@ -70,6 +70,8 @@ package GameCom.Helpers {
 		}
 		
 		public static function GetPercentageToNextLevel():Number {
+			if (CurrentLevel == 19) return 1;
+			
 			var cXP:int = Levels[CurrentLevel].ReputationRequired;
 			var nXP:int = Levels[CurrentLevel + 1].ReputationRequired;
 			
@@ -87,7 +89,9 @@ package GameCom.Helpers {
 			var cXP:int = Levels[CurrentLevel].ReputationRequired;
 			var nXP:int = Levels[CurrentLevel + 1].ReputationRequired;
 			
-			return ((nXP - cXP) * 0.15);
+			var x:Number = Math.random() / 5 + 0.1;
+			
+			return ((nXP - cXP) * x);
 		}
 		
 		public static function GetCurrentLevel():int {

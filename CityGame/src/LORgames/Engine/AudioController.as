@@ -65,6 +65,7 @@ package LORgames.Engine
 		
 		public static function FadeIn(sound:SoundChannel):void {
 			if (sound == null) return;
+			if (GetMuted()) return;
 			
 			var mt:SoundTransform = sound.soundTransform;
 			mt.volume = 1.0;

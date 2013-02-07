@@ -36,7 +36,7 @@ package GameCom.GameComponents.Weapons
 			(this.getChildAt(0) as MovieClip).stop();
 		}
 		
-		override public function Fire():void {
+		override public function Fire(damageMultipler:Number = 1.0):void {
 			AudioController.PlaySound(AudioStore.MachineGunBullet);
 			
 			var b1:b2Vec2 = new b2Vec2(parent.x / Global.PHYSICS_SCALE, parent.y / Global.PHYSICS_SCALE);
@@ -63,10 +63,10 @@ package GameCom.GameComponents.Weapons
 			if (distance < 1.0) {
 				if (fixtureHit.GetUserData() is NPCCar) {
 					var car:NPCCar = fixtureHit.GetUserData() as NPCCar;
-					car.Damage(9);
+					car.Damage(25*damageMultipler);
 				} else if (fixtureHit.GetUserData() is PlayerTruck) {
 					var player:PlayerTruck = fixtureHit.GetUserData() as PlayerTruck;
-					player.Damage(25); //player has a LOT more hp then a car
+					player.Damage(25*damageMultipler); //player has a LOT more hp then a car
 				}
 			}
 			
@@ -77,7 +77,7 @@ package GameCom.GameComponents.Weapons
 			this.graphics.lineTo(Math.cos(angleBecauseInaccurate)*size*distance*Global.PHYSICS_SCALE, Math.sin(angleBecauseInaccurate)*size*distance*Global.PHYSICS_SCALE);
 		}
 		
-		override public function Update(p:Point, wantsToFire:Boolean):void {
+		override public function Update(p:Point, wantsToFire:Boolean, damageMultipler:Number = 1.0):void {
 			this.graphics.clear();
 			
 			super.Update(p, wantsToFire);

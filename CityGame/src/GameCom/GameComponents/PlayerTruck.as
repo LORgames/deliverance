@@ -39,21 +39,22 @@ package GameCom.GameComponents {
 		private const SIDEWAYS_FRICTION_FORCE:Number = 1000;
 		private const BASE_HORSEPOWER_MAX:Number = 100;
 		private const BASE_HORSEPOWER_INC:Number = 25;
-		private const BASE_NOSFACTOR:Number = 1.5;
 		private const BASE_HEALTH:int = 500;
 		private const BASE_REVERSE_SPEED:int = 20;
+		
+		private const BASE_DAMAGEFACTOR:Number = 1.0;
 		
 		private const HORSEPOWER_MAX_PER_LEVEL:Number = 10;
 		private const HORSEPOWER_INC_PER_LEVEL:Number = 2.5;
 		private const HEALTH_INC_PER_LEVEL:Number = 100;
 		private const ARMOUR_INC_PER_LEVEL:Number = 0.09;
-		private const NOS_INC_PER_LEVEL:Number = 0.2;
+		private const DAMAGE_INC_PER_LEVEL:Number = 0.2;
 		
 		private var speedUpgradeLevel:int = 0;
 		private var accelerationUpgradeLevel:int = 0;
 		private var healthUpgradeLevel:int = 0;
 		private var armourUpgradeLevel:int = 0;
-		private var nosUpgradeLevel:int = 0;
+		private var damageUpgradeLevel:int = 0;
 		private var healthMax:Number;
 		private var healthCurrent:Number;
 		
@@ -61,7 +62,7 @@ package GameCom.GameComponents {
 		
 		private var currentHorsePowerMax:int = 0;
 		private var currentHorsePowerInc:int = 0;
-		private var currentNOSFactor:int = 0;
+		private var currentDamageFactor:int = 0;
 		
 		private const leftRearWheelPosition:b2Vec2 = new b2Vec2(-1.2, 3.0);
 		private const rightRearWheelPosition:b2Vec2 = new b2Vec2(1.2, 3.0);
@@ -333,10 +334,6 @@ package GameCom.GameComponents {
 				steeringAngle = 0;
 			}
 			
-			if (Keys.isKeyDown(Keyboard.SPACE)) {
-				steeringAngle *= 0.2;
-			}
-			
 			killOrthogonalVelocity(leftWheel);
 			killOrthogonalVelocity(rightWheel);
 			killOrthogonalVelocity(leftRearWheel);
@@ -344,10 +341,8 @@ package GameCom.GameComponents {
 			killOrthogonalVelocity(leftMidWheel);
 			killOrthogonalVelocity(rightMidWheel);
 			
-			if (Keys.isKeyDown(Keyboard.SPACE)) {
-				engineSpeed = -currentHorsePowerMax*currentNOSFactor;
-			} else if (Math.abs(engineSpeed) > currentHorsePowerMax) {
-				engineSpeed *= 0.5;
+			if (Math.abs(engineSpeed) > currentHorsePowerMax) {
+				engineSpeed *= 0.75;
 			}
 			
 			//Driving
@@ -393,7 +388,8 @@ package GameCom.GameComponents {
 			var p:Point = new Point(mX, mY);
 			
 			if (Wep != null)
-				Wep.Update(p, Mousey.IsClicking());
+				Wep.Update(p, Mousey.IsClicking(), currentDamageFactor);
+			
 			if (healthCurrent < 0) Respawn(true);
 		}
 		
@@ -416,12 +412,12 @@ package GameCom.GameComponents {
 			accelerationUpgradeLevel = Storage.GetAsInt("AccelerationUpgrade", 0);
 			healthUpgradeLevel = Storage.GetAsInt("HealthUpgrade", 0);
 			armourUpgradeLevel = Storage.GetAsInt("ArmourUpgrade", 0);
-			nosUpgradeLevel = Storage.GetAsInt("NOSUpgrade", 0);
+			damageUpgradeLevel = Storage.GetAsInt("DamageUpgrade", 0);
 			
 			//Tweak internal values here based on them
 			currentHorsePowerMax = BASE_HORSEPOWER_MAX + HORSEPOWER_MAX_PER_LEVEL * speedUpgradeLevel;
 			currentHorsePowerInc = BASE_HORSEPOWER_INC + HORSEPOWER_INC_PER_LEVEL * accelerationUpgradeLevel;
-			currentNOSFactor = BASE_NOSFACTOR + NOS_INC_PER_LEVEL * nosUpgradeLevel;
+			currentDamageFactor = BASE_DAMAGEFACTOR + DAMAGE_INC_PER_LEVEL * damageUpgradeLevel;
 			
 			healthMax = BASE_HEALTH + HEALTH_INC_PER_LEVEL * healthUpgradeLevel;
 			healthCurrent = healthMax;

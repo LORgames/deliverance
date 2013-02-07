@@ -18,7 +18,7 @@ package GameCom.GameComponents.Weapons
 		private var fixtureHit:b2Fixture;
 		private var distance:Number;
 		
-		private var LASER_DAMS:int = 5;
+		private var LASER_DAMS:int = 13;
 		
 		public function Laser(world:b2World) {
 			super(world);
@@ -31,7 +31,7 @@ package GameCom.GameComponents.Weapons
 			(this.getChildAt(0) as MovieClip).stop();
 		}
 		
-		override public function Update(p:Point, wantsToFire:Boolean):void {
+		override public function Update(p:Point, wantsToFire:Boolean, damageMultipler:Number = 1.0):void {
 			super.Update(p, wantsToFire);
 			
 			this.graphics.clear();
@@ -54,9 +54,9 @@ package GameCom.GameComponents.Weapons
 				if (distance < 1.0) {
 					if (fixtureHit.GetUserData() is NPCCar) {
 						var car:NPCCar = fixtureHit.GetUserData() as NPCCar;
-						car.Damage(LASER_DAMS);
+						car.Damage(LASER_DAMS*damageMultipler);
 					} else if (fixtureHit.GetUserData() is PlayerTruck) {
-						(fixtureHit.GetUserData() as PlayerTruck).Damage(LASER_DAMS + 7); //Because the player damage thing mitigates damage
+						(fixtureHit.GetUserData() as PlayerTruck).Damage((LASER_DAMS + 7)*damageMultipler); //Because the player damage thing mitigates damage
 					}
 				}
 				

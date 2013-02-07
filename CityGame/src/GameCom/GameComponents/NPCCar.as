@@ -97,7 +97,7 @@ package GameCom.GameComponents
 			var carChance:Number = Math.random();
 			var vehicle:Class;
 			
-			if (carChance < 0.1 && CURRENT_ENEMIES < MissionManager.CurrentAllowedEnemies()) {
+			if (CURRENT_ENEMIES < MissionManager.CurrentAllowedEnemies()) {
 				vehicle = ThemeManager.GetClassFromSWF("SWFs/Cars.swf", "LORgames.EnemyVan"); // EnemyVan
 				type = VEHICLE_ENEMYVAN;
 				CURRENT_ENEMIES++;
@@ -329,7 +329,7 @@ package GameCom.GameComponents
 					engineSpeed = 0;
 					body.SetLinearDamping(BRAKE_FORCE);
 					
-					if (Math.random() < 0.002) {
+					if (Math.random() < 0.001) {
 						AudioController.PlaySound(AudioStore.Horn);
 					}
 				} else {

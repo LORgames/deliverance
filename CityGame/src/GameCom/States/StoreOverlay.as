@@ -24,7 +24,7 @@ package GameCom.States {
 		private var AccelerationButton:Button = new Button("Acceleration", 30, 30);
 		private var HealthButton:Button = new Button("Health", 30, 30);
 		private var ArmourButton:Button = new Button("Armour", 30, 30);
-		private var NOSButton:Button = new Button("NOS", 30, 30);
+		private var NOSButton:Button = new Button("Damage", 30, 30);
 		
 		private var MachineGun:Button = new Button("Machine Gun", 241, 84);
 		private var Laser:Button = new Button("Laser", 241, 84);

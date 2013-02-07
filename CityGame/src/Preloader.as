@@ -13,6 +13,7 @@ package {
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
 	import flash.utils.getDefinitionByName;
+	import mochi.as3.MochiAd;
 	
 	/**
 	 * ...
@@ -24,12 +25,16 @@ package {
         [Bindable]
         public static var Logo:Class;
 		
-		private var gameNameTF:TextField = new TextField();
 		private var progressTF:TextField = new TextField();
+		
+		private var adContainer:MovieClip = new MovieClip();
+		
+		private var isAdFinished:Boolean = false;
+		private var isLoadingFinished:Boolean = false;
 		
 		public function Preloader() {
 			if (stage) Init();
-			this.addEventListener(Event.ADDED_TO_STAGE, Init);
+			else this.addEventListener(Event.ADDED_TO_STAGE, Init);
 		}
 		
 		private function Init(e:*= null):void {
@@ -62,12 +67,15 @@ package {
 			progressTF.selectable = false;
 			this.addChild(progressTF);
 			
-			gameNameTF.x = 5;
-			gameNameTF.autoSize = TextFieldAutoSize.LEFT;
-			gameNameTF.selectable = false;
-			gameNameTF.defaultTextFormat = new TextFormat("Verdana", 30 * Global.UI_SCALE, 0xFFFFFF);
-			this.addChild(gameNameTF);
-			gameNameTF.text = Global.GAME_NAME;
+			this.addChild(adContainer);
+			MochiAd.showPreGameAd({clip:adContainer, id:"c3ebe5c39a9741ba", res:"800x600", ad_finished:fAdFinished});
+		}
+		
+		public function fAdFinished():void {
+			this.removeChild(adContainer);
+			isAdFinished = true;
+			
+			CleanUp();
 		}
 		
 		private function ioError(e:IOErrorEvent):void {
@@ -79,7 +87,7 @@ package {
 			var approx:Boolean = false;
 			
 			if (e.bytesTotal == 0) {
-				totalBytes = 12186938;
+				totalBytes = 10627557;
 				approx = true;
 			}
 			
@@ -113,6 +121,8 @@ package {
 		}
 		
 		private function loadingFinished():void {
+			isLoadingFinished = true;
+			
 			removeEventListener(Event.ENTER_FRAME, checkFrame);
 			removeEventListener(Event.RESIZE, resize);
 			loaderInfo.removeEventListener(ProgressEvent.PROGRESS, progress);
@@ -124,9 +134,10 @@ package {
 		}
 		
 		public function CleanUp():void {
+			if (!isLoadingFinished || !isAdFinished) return;
+			
 			// Hide the loader
 			this.removeChild(progressTF);
-			this.removeChild(gameNameTF);
 			this.graphics.clear();
 			startup();
 		}

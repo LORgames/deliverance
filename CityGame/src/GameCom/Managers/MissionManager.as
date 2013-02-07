@@ -8,9 +8,11 @@ package GameCom.Managers {
 	import GameCom.Helpers.PeopleHelper;
 	import GameCom.Helpers.ReputationHelper;
 	import GameCom.Helpers.ResourceHelper;
+	import GameCom.States.EndGame;
 	import GameCom.States.GameScreen;
 	import GameCom.SystemComponents.MissionParameters;
 	import GameCom.SystemComponents.ResourceInformation;
+	import GameCom.SystemMain;
 	import LORgames.Engine.Storage;
 	
 	/**
@@ -27,7 +29,7 @@ package GameCom.Managers {
 		private static var nextMissionRepRequired:int = 0;
 		private static var highestMissionCompleted:int = -1;
 			
-		public static function Initialize() : void {
+		public static function Initialize() : Boolean {
 			// load in nodes
 			var missionfile:ByteArray = ThemeManager.Get("story.bin");
 			missionfile.position = 0;
@@ -68,15 +70,22 @@ package GameCom.Managers {
 			}
 			
 			highestMissionCompleted = Storage.GetAsInt("HighestMissionCompleted", -1);
-			UpdateRepRequiredForNextMission();
+			return UpdateRepRequiredForNextMission();
 		}
 		
-		private static function UpdateRepRequiredForNextMission():void {
+		private static function UpdateRepRequiredForNextMission():Boolean {
 			if (highestMissionCompleted == missionArray.length) {
 				nextMissionRepRequired = int.MAX_VALUE; //LOTS OF REP NEEDED
 			} else {
-				nextMissionRepRequired = missionArray[highestMissionCompleted + 1].ReputationRequired;
+				if(highestMissionCompleted+1 < missionArray.length) {
+					nextMissionRepRequired = missionArray[highestMissionCompleted + 1].ReputationRequired;
+				} else {
+					SystemMain.instance.StateTo(new EndGame());
+					return false;
+				}
 			}
+			
+			return true;
 		}
 		
 		public static function GenerateAllMissions() : void {

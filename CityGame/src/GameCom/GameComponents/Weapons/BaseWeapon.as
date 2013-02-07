@@ -45,7 +45,7 @@ package GameCom.GameComponents.Weapons {
 			}
 		}
 		
-		public function Fire():void {
+		public function Fire(damageMultipler:Number = 1.0):void {
 			
 		}
 		
@@ -62,7 +62,7 @@ package GameCom.GameComponents.Weapons {
 			}
 		}
 		
-		public function Update(p:Point, wantsToFire:Boolean):void {
+		public function Update(p:Point, wantsToFire:Boolean, damageMultipler:Number = 1.0):void {
 			this.p = p;
 			this.wantsToFire = wantsToFire;
 			
