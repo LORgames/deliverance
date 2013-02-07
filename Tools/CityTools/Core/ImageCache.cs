@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using CityTools.Core;
+using System.IO;
 
 namespace CityTools.Core {
     public class ImageCache {
@@ -24,7 +25,9 @@ namespace CityTools.Core {
 
             //If its not cached, then boohoo...
             if (rotation == 0) {
-                img_store.Add(cacheName, Image.FromFile(filename)); //(well that was easy)
+                using (var bmpTemp = new Bitmap(filename)) {
+                    img_store.Add(cacheName, new Bitmap(bmpTemp)); //(well that was easy)
+                }
             } else {
                 Image original = RequestImage(filename); //Pretty much HAS to be always cached anyway
                 Bitmap imToCache;
@@ -42,7 +45,9 @@ namespace CityTools.Core {
         }
 
         internal static void ForceCache(string filename) {
-            img_store.Add(filename + "_0", Image.FromFile(filename)); //(well that was easy)
+            using (var bmpTemp = new Bitmap(filename)) {
+                img_store.Add(filename + "_0", new Bitmap(bmpTemp)); //(well that was easy)
+            }
         }
     }
 }

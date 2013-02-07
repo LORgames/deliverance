@@ -539,8 +539,8 @@ namespace CityTools {
         }
 
         private void deleteObjectsBtn_Click(object sender, EventArgs e) {
-            if (MessageBox.Show("Are you sure? This will perma delete art things.")) {
-
+            if (MessageBox.Show("Are you sure? This will perma delete art things.", "Confirm!", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes) {
+                ScenicObjectCache.DeleteUnused();
             }
         }
     }

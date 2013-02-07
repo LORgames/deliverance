@@ -48,7 +48,7 @@ package GameCom.States {
 		public function Init(e:Event = null):void {
 			removeEventListener(Event.ADDED_TO_STAGE, Init);
 			
-			background = new Bitmap(ThemeManager.Get("Backgrounds/Menu.jpg"));
+			background = new Preloader.Logo();//new Bitmap(ThemeManager.Get("Backgrounds/Menu.jpg"));
 			
 			//Start Menu
 			this.addChild(background);

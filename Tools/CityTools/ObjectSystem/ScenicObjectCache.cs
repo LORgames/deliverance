@@ -189,5 +189,22 @@ namespace CityTools.ObjectSystem {
 
             f.Encode(SCENIC_USERFILE);
         }
+
+        internal static void DeleteUnused() {
+            List<int> deadKeys = new List<int>();
+
+            foreach (KeyValuePair<int, int> kvp in ObjectUsageCountsAtLoad) {
+                if (kvp.Value == 0) {
+                    deadKeys.Add(kvp.Key);
+                }
+            }
+
+            if (!Directory.Exists("objcacheDeletes")) Directory.CreateDirectory("objcacheDeletes");
+
+            foreach (int key in deadKeys) {
+                File.Move(s_objectTypes[key].ImageName, ".\\objcacheDeletes\\" + key + "_" + DateTime.Now.ToFileTime() + ".png");
+                s_objectTypes.Remove(key);
+            }
+        }
     }
 }

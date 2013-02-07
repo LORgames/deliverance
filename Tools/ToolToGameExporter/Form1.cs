@@ -54,7 +54,7 @@ namespace ToolToGameExporter {
 
             //TILE CONVERSTION
             try { zip.RemoveEntry("0.map"); } catch { }
-            zip.AddEntry("0.map", File.ReadAllBytes(GetToolMap()));
+            ProcessMap(zip);
 
             //OBJECT CONVERSION
             try { zip.RemoveEntry("1.map"); } catch { }
@@ -94,6 +94,41 @@ namespace ToolToGameExporter {
                     MessageBox.Show("Please close the zip and then click OK");
                 }
             }
+        }
+
+        private void ProcessMap(ZipFile zip) {
+            zip.AddEntry("0.map", File.ReadAllBytes(GetToolMap()));
+
+            //Clean out the old tiles
+            string[] files = new string[zip.EntryFileNames.Count];
+            zip.EntryFileNames.CopyTo(files, 0);
+
+            foreach (string entry in files) {
+                if (entry.Length > 9 && entry.Substring(0, 6) == "Tiles/") {
+                    zip.RemoveEntry(entry);
+                }
+            }
+
+            // Load the map from database
+            BinaryIO mapFile = new BinaryIO(File.ReadAllBytes(GetToolMap()));
+
+            int lmSizeX = mapFile.GetInt();
+            int lmSizeY = mapFile.GetInt();
+
+            Dictionary<byte, Boolean> loadedTiles = new Dictionary<byte, bool>();
+
+            for (int i = 0; i < lmSizeX; i++) {
+                for (int j = 0; j < lmSizeY; j++) {
+                    byte tileID = mapFile.GetByte();
+
+                    if (!loadedTiles.ContainsKey(tileID)) {
+                        loadedTiles.Add(tileID, true);
+                        zip.AddEntry("Tiles/" + tileID.ToString() + ".png", File.ReadAllBytes("../Tiles/" + tileID.ToString() + ".png"));
+                    }
+                }
+            }
+
+            mapFile.Dispose();
         }
 
         private byte[] OptimizeAndAddObjectLayer(ZipFile zp) {
