@@ -36,7 +36,15 @@ package GameCom.Managers
 		
 		private var nodeManager:NodeManager;
 		
+		public static var I:NPCManager;
+		
 		public function NPCManager(player:PlayerTruck, world:b2World, worldSpr:Sprite) {
+			if (I != null) {
+				I.DestroyAllCars();
+			}
+			
+			I = this;
+			
 			this.player = player;
 			this.world = world;
 			this.worldSpr = worldSpr;
@@ -103,6 +111,15 @@ package GameCom.Managers
 				} else {
 					i++;
 				}
+			}
+		}
+		
+		public function DestroyAllCars():void {
+			while (cars.length > 0) {
+				var car:NPCCar = cars.pop();
+				
+				car.Destroy();
+				worldSpr.removeChild(car);
 			}
 		}
 		

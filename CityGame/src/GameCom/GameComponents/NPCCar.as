@@ -9,6 +9,7 @@ package GameCom.GameComponents
 	import GameCom.GameComponents.Weapons.RocketLauncher;
 	import GameCom.Helpers.AudioStore;
 	import GameCom.Helpers.MathHelper;
+	import GameCom.Helpers.ReputationHelper;
 	import GameCom.Managers.GUIManager;
 	import GameCom.Managers.MissionManager;
 	import GameCom.Managers.NodeManager;
@@ -289,12 +290,10 @@ package GameCom.GameComponents
 			if (type == VEHICLE_ENEMYVAN) {
 				var n:Number = Math.random();
 				
-				if(n < 0.333) {
-					EquipWeapon("RocketPod");
-				} else if(n < 0.666) {
-					EquipWeapon("MachineGun");
-				} else {
+				if(n > 0.9 && ReputationHelper.GetCurrentLevel() > 15) {
 					EquipWeapon("Laser");
+				} else {
+					EquipWeapon("MachineGun");
 				}
 			}
 		}
@@ -427,8 +426,6 @@ package GameCom.GameComponents
 			}
 			
 			switch(weaponName) {
-				case "RocketPod":
-					//Wep = new RocketLauncher(world); break;
 				case "MachineGun":
 					Wep = new  MachineGun(world); break;
 				case "Laser":

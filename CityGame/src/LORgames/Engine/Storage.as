@@ -43,6 +43,16 @@ package LORgames.Engine
 			return defaultValue;
 		}
 		
+		public static function GetAsNumber(index:String, defaultValue:Number = 0):Number {
+			if(storageObject == null) Initialize();
+			
+			if (storageArray[index] is Number) {
+				return storageArray[index];
+			}
+			
+			return defaultValue;
+		}
+		
 		public static function GetAsBool(index:String, defaultValue:Boolean = false):Boolean {
 			if(storageObject == null) Initialize();
 			

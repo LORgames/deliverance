@@ -12,6 +12,7 @@ package GameCom.GameComponents {
 	import GameCom.Helpers.MoneyHelper;
 	import GameCom.Managers.GUIManager;
 	import GameCom.Managers.MissionManager;
+	import GameCom.Managers.NPCManager;
 	import GameCom.Managers.PlacesManager;
 	import GameCom.States.GameScreen;
 	import LORgames.Engine.AudioController;
@@ -487,6 +488,8 @@ package GameCom.GameComponents {
 					GUIManager.I.Popup("I'll repair your truck. It'll cost $" + Math.floor(money / 5) + " for parts and labor.\nRemember to purchase armour and health upgrades at a garage!", 0, 0, true);
 				}
 			}
+			
+			NPCManager.I.DestroyAllCars();
 			
 			GUIManager.I.UpdateCache();
 			GUIManager.I.Update();
