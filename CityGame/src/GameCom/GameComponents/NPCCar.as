@@ -39,8 +39,8 @@ package GameCom.GameComponents
 		private const SIDEWAYS_FRICTION_FORCE:Number = 1000;
 		private const BRAKE_FORCE:Number = 9;
 		
-		private const HORSEPOWER_MAX:Number = 15;
-		private const HORSEPOWER_INC:Number = 7.5;
+		private const HORSEPOWER_MAX:Number = 12;
+		private const HORSEPOWER_INC:Number = 5;
 		
 		private const NPC_HP:int = 100;
 		
@@ -216,10 +216,16 @@ package GameCom.GameComponents
 			// Collision scanner
 			var scannerShape:b2PolygonShape = new b2PolygonShape();
 			
-			var verts:Array = new Array(new b2Vec2( 0.0,-0.5),
+			/*var verts:Array = new Array(new b2Vec2( 0.0,-0.5),
 										new b2Vec2(-7.0,-1.2),
 										new b2Vec2(-7.0, 1.2),
-										new b2Vec2( 0.0, 0.5));
+										new b2Vec2( 0.0, 0.5));*/
+										
+			var verts:Array = new Array(new b2Vec2( 1.4,-1.5),
+										new b2Vec2(-5.6,-2.2),
+										new b2Vec2(-5.6, 0.2),
+										new b2Vec2( 1.4, -0.5));
+			
 			scannerShape.SetAsArray(verts, 4);
 			
 			var scannerFixtureDef:b2FixtureDef = new b2FixtureDef();
@@ -404,7 +410,8 @@ package GameCom.GameComponents
 			mspeed = steeringAngle - rightJoint.GetJointAngle();
 			rightJoint.SetMotorSpeed(mspeed * STEER_SPEED);
 			
-			collisionScanner.SetPositionAndAngle(body.GetPosition(), body.GetAngle() + steeringAngle + Math.PI/2);
+			//TODO: Find out how expensive this is...
+			collisionScanner.SetPositionAndAngle(leftWheel.GetPosition(), leftWheel.GetAngle() + Math.PI/2);
 			
 			LRotWheel.rotation = leftWheel.GetAngle() / Math.PI * 180 - this.rotation;
 			RRotWheel.rotation = rightWheel.GetAngle() / Math.PI * 180 - this.rotation;

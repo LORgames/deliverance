@@ -22,7 +22,8 @@ package GameCom {
 			
 			this.addChild(contentLayer);
 			
-			contentLayer.addChild(new MainMenu());
+			contentLayer.addChild(new WorldPreparation());
+			//contentLayer.addChild(new MainMenu());
 		}
 		
 		public function StateTo(xx:Sprite):void {

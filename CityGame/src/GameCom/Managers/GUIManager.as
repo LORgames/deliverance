@@ -54,13 +54,14 @@ package GameCom.Managers
 		private var currentFrameTooltipIndex:int = 0;
 		
 		private var Pause:Function;
+		private var MockUpdateWorld:Function;
 		
 		private var store:StoreOverlay;
 		private var map:MapOverlay;
 		
 		private var hasOverlay:Boolean = false;
 		
-		public function GUIManager(player:PlayerTruck, pauseLoopback:Function) {
+		public function GUIManager(player:PlayerTruck, pauseLoopback:Function, mockupdate:Function) {
 			I = this;
 			
 			this.player = player;
@@ -124,6 +125,7 @@ package GameCom.Managers
 			UpdateCache();
 			
 			this.Pause = pauseLoopback;
+			this.MockUpdateWorld = mockupdate;
 			
 			store = new StoreOverlay();
 			map = new MapOverlay();
@@ -164,6 +166,9 @@ package GameCom.Managers
 						if (popupAlpha >= 1) {
 							popupText.alpha = 1;
 							popupFadeIn = false;
+							
+							//Need 1 frame of update if the popup is a blackout to allow respawn to work
+							MockUpdateWorld.call();
 						}
 					}
 					
@@ -179,6 +184,12 @@ package GameCom.Managers
 					
 					var m:Matrix = new Matrix();
 					m.createBox(1, 1, 0, (stage.stageWidth - 665) / 2, stage.stageHeight - 240);
+					
+					if (popupMessages[0].blackOut) {
+						PopupSprite.graphics.beginFill(0x0);
+						PopupSprite.graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
+						PopupSprite.graphics.endFill();
+					}
 					
 					PopupSprite.graphics.beginBitmapFill(ThemeManager.Get("GUI/Message board.png"), m, false);
 					PopupSprite.graphics.drawRect((stage.stageWidth - 665) / 2, stage.stageHeight - 240, 665, 240);
@@ -198,7 +209,6 @@ package GameCom.Managers
 				PopupSprite.alpha = popupAlpha;
 			}
 			
-			//TODO: Remove extra tooltips here
 			for (var i:int = currentFrameTooltipIndex; i < tooltips.length; i++) {
 				tooltips[i].visible = false;
 			}
@@ -234,13 +244,14 @@ package GameCom.Managers
 			}
 		}
 		
-		public function Popup(msg:String, npc:int = 0, npcImageIndex:int = 0) :void {
+		public function Popup(msg:String, npc:int = 0, npcImageIndex:int = 0, blackout:Boolean = false) :void {
 			
 			//Message needs to be split up, but this will do for now
 			var messages:Array = msg.split("@NB:");
 			
 			for (var i:int = 0; i < messages.length; i++) {
 				var message:String = messages[i];
+				var t_blackout:Boolean = blackout;
 				
 				if (message.length < 3) continue;
 				
@@ -257,9 +268,15 @@ package GameCom.Managers
 					message = message.substr(message.indexOf(" ") + 1);
 				}
 				
+				if (message.indexOf("@BLACK") > -1) {
+					message = message.split("@BLACK").join("");
+					t_blackout = true;
+				}
+				
 				popupData.message = message;
 				popupData.npcImgIndex = npcII;
 				popupData.npcNumber = npcID;
+				popupData.blackOut = t_blackout;
 				
 				popupMessages.push(popupData);
 				
@@ -272,7 +289,7 @@ package GameCom.Managers
 		
 		public function ShowTooltipAt(worldX:int, worldY:int, message:String):void {
 			if (tooltips.length == currentFrameTooltipIndex) {
-				tooltips.push(new Tooltip("", Tooltip.UP, 25, 200, 0.75));
+				tooltips.push(new Tooltip("", Tooltip.UP, 25, 200, 0.85));
 				Overlay.addChild(tooltips[currentFrameTooltipIndex]);
 			}
 			

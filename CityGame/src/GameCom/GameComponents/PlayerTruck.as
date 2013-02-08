@@ -33,8 +33,10 @@ package GameCom.GameComponents {
 	 * @author Paul
 	 */
 	public class PlayerTruck extends Sprite {
-		private const MAX_STEER_ANGLE:Number = Math.PI/4;
-		private const STEER_SPEED:Number = 5.0;
+		private const MAX_STEER_ANGLE:Number = Math.PI / 4;
+		
+		private const STEER_SPEED:Number = 2.0;
+		private const STEERING_CORRECT_SPEED:Number = 5.0;
 		
 		private const SIDEWAYS_FRICTION_FORCE:Number = 1000;
 		private const BASE_HORSEPOWER_MAX:Number = 100;
@@ -327,9 +329,9 @@ package GameCom.GameComponents {
 			}
 			
 			if(Keys.isKeyDown(Keyboard.RIGHT) || Keys.isKeyDown(Keyboard.D)) {
-				steeringAngle = MAX_STEER_ANGLE
+				steeringAngle = MAX_STEER_ANGLE;
 			} else if(Keys.isKeyDown(Keyboard.LEFT) || Keys.isKeyDown(Keyboard.A)) {
-				steeringAngle = -MAX_STEER_ANGLE
+				steeringAngle = -MAX_STEER_ANGLE;
 			} else {
 				steeringAngle = 0;
 			}
@@ -357,10 +359,12 @@ package GameCom.GameComponents {
 			
 			//Steering
 			var mspeed:Number;
+			
 			mspeed = steeringAngle - leftJoint.GetJointAngle();
-			leftJoint.SetMotorSpeed(mspeed * STEER_SPEED);
+			leftJoint.SetMotorSpeed(mspeed * (steeringAngle==0?STEERING_CORRECT_SPEED:STEER_SPEED));
+			
 			mspeed = steeringAngle - rightJoint.GetJointAngle();
-			rightJoint.SetMotorSpeed(mspeed * STEER_SPEED);
+			rightJoint.SetMotorSpeed(mspeed * (steeringAngle==0?STEERING_CORRECT_SPEED:STEER_SPEED));
 			
 			this.x = int(body.GetPosition().x * Global.PHYSICS_SCALE);
 			this.y = int(body.GetPosition().y * Global.PHYSICS_SCALE);
@@ -476,10 +480,11 @@ package GameCom.GameComponents {
 			if (becauseOfDamage) {
 				var money:int = MoneyHelper.GetBalance();
 				MoneyHelper.Debit(money / 5);
+				
 				if(MissionManager.CancelMission()) {
-					GUIManager.I.Popup("Noob! I'll repair your truck. It'll cost $" + Math.floor(money / 5) + " for parts and labor and your current mission will be cancel.\n\nI'll bring the tow truck...", 0, 0);
+					GUIManager.I.Popup("I'll repair your truck. It'll cost $" + Math.floor(money / 5) + " for parts and labor and your current mission will be cancelled.\nRemember to purchase armour and health upgrades at a garage!", 0, 0, true);
 				} else {
-					GUIManager.I.Popup("Noob! I'll repair your truck. It'll cost $" + Math.floor(money / 5) + " for parts and labor.\n\nI'll bring the tow truck...", 0, 0);
+					GUIManager.I.Popup("I'll repair your truck. It'll cost $" + Math.floor(money / 5) + " for parts and labor.\nRemember to purchase armour and health upgrades at a garage!", 0, 0, true);
 				}
 			}
 			

@@ -24,6 +24,9 @@ package  {
 		
 		//Mochi authentication
 		private var _mochiads_game_id:String = "c3ebe5c39a9741ba";
+		
+		//Use local steering?
+		public static var UseGlobalSteering:Boolean = false;
 	}
 
 }

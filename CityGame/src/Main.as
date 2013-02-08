@@ -1,17 +1,8 @@
 package {
-	import flash.display.Bitmap;
-	import flash.text.TextField;
-	import flash.text.TextFieldAutoSize;
-	import flash.text.TextFormat;
-	import GameCom.Helpers.AudioStore;
-	import GameCom.Helpers.PeopleHelper;
-	import GameCom.Helpers.UpgradeHelper;
-	import GameCom.SystemMain;
 	import flash.display.Sprite;
 	import flash.display.Stage;
 	import flash.events.Event;
 	import GameCom.SystemMain;
-	import LORgames.Engine.AudioController;
 	import LORgames.Engine.Keys;
 
 	/**
@@ -32,38 +23,6 @@ package {
 
 		protected function init(e:Event = null):void {
 			this.removeEventListener(Event.ADDED_TO_STAGE, init);
-			
-			this.graphics.beginFill(0x000000)
-			this.graphics.drawRect(0, 0, 10000, 10000);
-			this.graphics.endFill();
-			
-			var bmp:Bitmap = new Preloader.Logo() as Bitmap;
-			this.graphics.beginBitmapFill(bmp.bitmapData);
-			this.graphics.drawRect(0, 0, bmp.width, bmp.height);
-			this.graphics.endFill();
-			
-			this.addChild(new TextField());
-			(this.getChildAt(0) as TextField).selectable = false;
-			(this.getChildAt(0) as TextField).defaultTextFormat = new TextFormat("Verdana", 10, 0xFFFFFF);
-			(this.getChildAt(0) as TextField).autoSize = TextFieldAutoSize.LEFT;
-			(this.getChildAt(0) as TextField).x = 5;
-			(this.getChildAt(0) as TextField).y = 5;
-			(this.getChildAt(0) as TextField).text = "Preparing for awesome non-laggy gameplay! (and no loading screens!)\n(Usually takes about 20-30 seconds, please be patient. Its worth the wait!)";
-			
-			ThemeManager.Initialize(Gogo);
-		}
-		
-		public function Gogo():void {
-			UpgradeHelper.Initialize();
-			PeopleHelper.Initialize();
-			
-			AudioController.PlayLoop(AudioStore.Music);
-			
-			this.graphics.clear();
-			this.removeChildAt(0);
-			
-			removeEventListener(Event.ADDED_TO_STAGE, init);
-			// entry point
 			
 			mStage = this.stage;
 			Keys.Initialize(this.stage);

@@ -142,7 +142,7 @@ package GameCom.States {
 			
 			WorldPhysicsLoader.InjectPhysicsIntoWorld(world);
 			
-			gui = new GUIManager(player, Pause);
+			gui = new GUIManager(player, Pause, MockUpdate);
 			this.addChild(gui);
 			
 			//player.Respawn();
@@ -188,6 +188,17 @@ package GameCom.States {
 				AudioController.SetMuted(!AudioController.GetMuted());
 			}
 			mDown = Keys.isKeyDown(Keyboard.Q);
+		}
+		
+		public function MockUpdate():void {
+			world.Step(0, Global.VELOCITY_ITERATIONS, Global.POSITION_ITERATIONS);
+			world.ClearForces();
+			
+			//Update the objects
+			player.Update(0);
+			
+			worldSpr.x = Math.floor(-player.x + stage.stageWidth/2);
+			worldSpr.y = Math.floor( -player.y + stage.stageHeight / 2);
 		}
 		
 		public function Redraw(e:*= null):void {

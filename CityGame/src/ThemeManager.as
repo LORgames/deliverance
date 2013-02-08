@@ -32,20 +32,20 @@ package {
 		private static var zip:FZip = new FZip();
 		private static var loader:Loader = new Loader();
 		private static var imageLoadList:Array = new Array();
-		private static var finLoad:Array = new Array();
+		private static var finLoad:Vector.<Function> = new Vector.<Function>();
 		
-		public static function Initialize(run:Function = null):void {
+		private static var progressFunctionCallback:Function = null;
+		private static var finishedFunctionCallback:Function = null;
+		
+		public static function Initialize(run:Function = null, progress:Function = null):void {
+			progressFunctionCallback = progress;
+			finishedFunctionCallback = run;
+			
 			zip = new FZip();
 			zip.addEventListener(Event.COMPLETE, LoadedThemeZip, false, 0, true);
 			
 			var bytes:ByteArray = new DefaultBytes() as ByteArray;
 			zip.loadBytes(bytes);
-			
-			LoadHook(run);
-		}
-		
-		private static function LoadHook(run:Function = null):void {
-			(finLoad as Array).push(run);
 		}
 		
 		public static function Get(string:String):* {
@@ -81,6 +81,7 @@ package {
 			zipLib.formatAsDisplayObject(".swf");
 			
 			zipLib.addEventListener(Event.COMPLETE, ProcessedThemeZip, false, 0, true);
+			zipLib.addEventListener(ProgressEvent.PROGRESS, ProcessingProgress, false, 0, true);
 			zipLib.addZip(zip);
 		}
 		
@@ -101,8 +102,14 @@ package {
 				}
 			}
 			
-			while ((finLoad as Array).length > 0){
-				((finLoad as Array).pop() as Function).call();
+			if (finishedFunctionCallback != null) {
+				finishedFunctionCallback.call();
+			}
+		}
+		
+		private static function ProcessingProgress(pe:ProgressEvent):void {
+			if (progressFunctionCallback != null) {
+				progressFunctionCallback.call(null, (100.0 * pe.bytesLoaded / pe.bytesTotal).toFixed(0));
 			}
 		}
 		

@@ -1,4 +1,5 @@
 package {
+	import flash.display.Sprite;
 	import GameCom.Helpers.SpriteHelper;
 	import flash.display.Bitmap;
 	import flash.display.DisplayObject;
@@ -21,15 +22,21 @@ package {
 	 */
 	public class Preloader extends MovieClip {
 		
+		private const AD_SIZE_X:int = 800;
+		private const AD_SIZE_Y:int = 600;
+		
 		[Embed(source="../lib/_embeds/logo.png")]
         [Bindable]
         public static var Logo:Class;
 		
-		private var progressTF:TextField = new TextField();
+		private var TextContainer:Sprite = new Sprite();
+		
+		private var DisplayText:TextField = new TextField();
+		private var PercentageText:TextField = new TextField();
 		
 		private var adContainer:MovieClip = new MovieClip();
 		
-		private var isAdFinished:Boolean = false;
+		private var isAdFinished:Boolean = true;
 		private var isLoadingFinished:Boolean = false;
 		
 		public function Preloader() {
@@ -44,31 +51,28 @@ package {
 			}
 			
 			addEventListener(Event.ENTER_FRAME, checkFrame);
-			addEventListener(Event.RESIZE, resize);
+			stage.addEventListener(Event.RESIZE, resize);
 			loaderInfo.addEventListener(ProgressEvent.PROGRESS, progress);
 			loaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioError);
 			
 			// Show the Loader
-			this.graphics.beginFill(0x000000, 1);
-			this.graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
-			this.graphics.endFill();
+			this.addChild(TextContainer);
 			
-			var bmp:Bitmap = new Logo() as Bitmap;
-			var mat:Matrix = new Matrix(1, 0, 0, 1, (stage.stageWidth / 2) - (bmp.width / 2), (stage.stageHeight / 2) - (bmp.height / 2));
-
-			this.graphics.beginBitmapFill(bmp.bitmapData, mat, false, false);
-			this.graphics.drawRect((stage.stageWidth / 2) - (bmp.width / 2), (stage.stageHeight / 2) - (bmp.height / 2), bmp.width, bmp.height);
-			this.graphics.endFill();
+			PercentageText.selectable = false;
+			PercentageText.defaultTextFormat = new TextFormat("Verdana", 40, 0xFFFFFF);
+			PercentageText.autoSize = TextFieldAutoSize.CENTER;
+			PercentageText.text = "0.00%";
+			TextContainer.addChild(PercentageText);
 			
-			progressTF.y = 30;
-			progressTF.x = 15;
-			progressTF.defaultTextFormat = new TextFormat("Verdana", 20 * Global.UI_SCALE, 0xFFFFFF);
-			progressTF.autoSize = TextFieldAutoSize.LEFT;
-			progressTF.selectable = false;
-			this.addChild(progressTF);
+			DisplayText.defaultTextFormat = new TextFormat("Verdana", 16, 0xFFFFFF);
+			DisplayText.autoSize = TextFieldAutoSize.CENTER;
+			DisplayText.selectable = false;
+			TextContainer.addChild(DisplayText);
 			
-			this.addChild(adContainer);
-			MochiAd.showPreGameAd({clip:adContainer, id:"c3ebe5c39a9741ba", res:"800x600", ad_finished:fAdFinished});
+			//this.addChild(adContainer);
+			//MochiAd.showPreGameAd({clip:adContainer, id:"c3ebe5c39a9741ba", res:stage.stageWidth+"x"+stage.stageHeight, ad_finished:fAdFinished});
+			
+			resize(null);
 		}
 		
 		public function fAdFinished():void {
@@ -92,10 +96,11 @@ package {
 			}
 			
 			// Update the GUI
-			if(e.bytesLoaded != totalBytes) {
-				progressTF.text = "Loading " + (approx?"~":"") + (Math.floor(e.bytesLoaded / totalBytes * 10000) / 100) + "%";
+			if (e.bytesLoaded != totalBytes) {
+				PercentageText.text = (approx?"~":"") + Number(e.bytesLoaded / totalBytes * 100.0).toFixed(1) + "%";
+				DisplayText.text = "Downloading.";
 			} else {
-				progressTF.text = "Unpacking...";
+				DisplayText.text = "Unpacking.";
 			}
 		}
 		
@@ -113,22 +118,34 @@ package {
 			this.graphics.endFill();
 			
 			var bmp:Bitmap = new Logo() as Bitmap;
-			var mat:Matrix = new Matrix(1, 0, 0, 1, (stage.stageWidth / 2) - (bmp.width / 2), (stage.stageHeight / 2) - (bmp.height / 2));
+			var mat:Matrix = new Matrix(1, 0, 0, 1, (stage.stageWidth - bmp.width) / 2, (stage.stageHeight - bmp.height) / 2);
 
 			this.graphics.beginBitmapFill(bmp.bitmapData, mat, false, false);
-			this.graphics.drawRect((stage.stageWidth / 2) - (bmp.width / 2), (stage.stageHeight / 2) - (bmp.height / 2), bmp.width, bmp.height);
+			this.graphics.drawRect((stage.stageWidth - bmp.width) / 2, (stage.stageHeight - bmp.height) / 2, bmp.width, bmp.height);
 			this.graphics.endFill();
+			
+			TextContainer.x = mat.tx + 448 + 261/2;
+			TextContainer.y = mat.ty + 241;
+			
+			PercentageText.x = -PercentageText.width / 2;
+			PercentageText.y = 65;
+			
+			DisplayText.x = -DisplayText.width / 2;
+			DisplayText.y = 50;
+			
+			//adContainer.x = (stage.stageWidth - AD_SIZE_X) / 2;
+			//adContainer.y = (stage.stageHeight - AD_SIZE_Y) / 2;
 		}
 		
 		private function loadingFinished():void {
 			isLoadingFinished = true;
 			
 			removeEventListener(Event.ENTER_FRAME, checkFrame);
-			removeEventListener(Event.RESIZE, resize);
 			loaderInfo.removeEventListener(ProgressEvent.PROGRESS, progress);
 			loaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, ioError);
 			
-			progressTF.text = "Preparing...";
+			PercentageText.text = "";
+			DisplayText.text = "Watching Ad";
 			
 			CleanUp();
 		}
@@ -136,8 +153,13 @@ package {
 		public function CleanUp():void {
 			if (!isLoadingFinished || !isAdFinished) return;
 			
+			stage.removeEventListener(Event.RESIZE, resize);
+			
 			// Hide the loader
-			this.removeChild(progressTF);
+			TextContainer.removeChild(DisplayText);
+			TextContainer.removeChild(PercentageText);
+			this.removeChild(TextContainer);
+			
 			this.graphics.clear();
 			startup();
 		}

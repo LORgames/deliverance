@@ -45,8 +45,6 @@ package GameCom.Helpers {
 			
 			var l_Limit:int = Math.floor(ReputationHelper.GetCurrentLevel() / 1.4);
 			
-			trace(l_Limit);
-			
 			while (attempts < 5) {
 				var tried:int = Math.floor(Math.random() * (CurrentResourcesUnlockedIndex-l_Limit)) + l_Limit;
 				

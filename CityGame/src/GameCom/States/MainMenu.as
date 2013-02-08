@@ -1,6 +1,7 @@
 package GameCom.States {
 	import flash.filters.DropShadowFilter;
 	import flash.filters.GlowFilter;
+	import flash.geom.Matrix;
 	import flash.net.URLRequest;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
@@ -34,8 +35,8 @@ package GameCom.States {
 		private var TextContainer:Sprite = new Sprite();
 		private var PlayText:TextField = new TextField();
 		private var ContinueText:TextField = new TextField();
-		private var CreditsText:TextField = new TextField();
 		private var WebsiteText:TextField = new TextField();
+		private var CreditsText:TextField = new TextField();
 		
 		public function MainMenu() {
 			//Just make sure we're ready to do this...
@@ -46,11 +47,7 @@ package GameCom.States {
 		public function Init(e:Event = null):void {
 			removeEventListener(Event.ADDED_TO_STAGE, Init);
 			
-			background = new Preloader.Logo();
-			
 			//Start Menu
-			this.addChild(background);
-			
 			this.addChild(TextContainer);
 			
 			PlayText.selectable = false;
@@ -71,15 +68,6 @@ package GameCom.States {
 			ContinueText.addEventListener(MouseEvent.CLICK, ContinueFunc, false, 0, true);
 			TextContainer.addChild(ContinueText);
 			
-			CreditsText.selectable = false;
-			CreditsText.defaultTextFormat = new TextFormat("Verdana", 36, 0xFFFFFF);
-			CreditsText.autoSize = TextFieldAutoSize.CENTER;
-			CreditsText.text = "Credits";
-			CreditsText.addEventListener(MouseEvent.ROLL_OVER, MouseOverText);
-			CreditsText.addEventListener(MouseEvent.ROLL_OUT, MouseOutText);
-			CreditsText.addEventListener(MouseEvent.CLICK, CreditsFunc, false, 0, true);
-			TextContainer.addChild(CreditsText);
-			
 			WebsiteText.selectable = false;
 			WebsiteText.defaultTextFormat = new TextFormat("Verdana", 12, 0xFFFFFF);
 			WebsiteText.autoSize = TextFieldAutoSize.CENTER;
@@ -88,6 +76,14 @@ package GameCom.States {
 			WebsiteText.addEventListener(MouseEvent.ROLL_OUT, MouseOutText);
 			WebsiteText.addEventListener(MouseEvent.CLICK, WebsiteFunc, false, 0, true);
 			TextContainer.addChild(WebsiteText);
+			
+			CreditsText.selectable = false;
+			CreditsText.defaultTextFormat = new TextFormat("Verdana", 10, 0xFFFFFF);
+			CreditsText.autoSize = TextFieldAutoSize.CENTER;
+			CreditsText.htmlText = "LORgames: Paul Fox, Ryan Furlong, Ying Luo, Nathan Perry, Samuel Surtees and Miles Till.\n\nPowered by FZip and Box2DFlashAS3.";
+			CreditsText.wordWrap = true;
+			CreditsText.width = 274;
+			this.addChild(CreditsText);
 			
 			this.stage.addEventListener(Event.RESIZE, Resized, false, 0, true);
 			Resized();
@@ -102,10 +98,6 @@ package GameCom.States {
 			SystemMain.instance.StateTo(new GameScreen());
 		}
 		
-		public function CreditsFunc(e:MouseEvent):void {
-			//SystemMain.instance.StateTo(new GameScreen());
-		}
-		
 		public function WebsiteFunc(e:MouseEvent):void {
 			flash.net.navigateToURL(new URLRequest("http://www.lorgames.com"), "_blank");
 		}
@@ -118,20 +110,29 @@ package GameCom.States {
 			this.graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
 			this.graphics.endFill();
 			
-			background.x = (this.stage.stageWidth - background.width) / 2;
-			background.y = (this.stage.stageHeight - background.height) / 2;
+			var bmp:Bitmap = new Preloader.Logo() as Bitmap;
+			var mat:Matrix = new Matrix(1, 0, 0, 1, (stage.stageWidth - bmp.width) / 2, (stage.stageHeight - bmp.height) / 2);
+
+			this.graphics.beginBitmapFill(bmp.bitmapData, mat, false, false);
+			this.graphics.drawRect((stage.stageWidth - bmp.width) / 2, (stage.stageHeight - bmp.height) / 2, bmp.width, bmp.height);
+			this.graphics.endFill();
 			
-			TextContainer.x = background.x + 448 + 261/2;
-			TextContainer.y = background.y + 241;
+			this.graphics.beginFill(0x0, 0.7);
+			this.graphics.lineStyle(2);
+			this.graphics.drawRoundRect(mat.tx + 438, mat.ty + 460, CreditsText.width+10, CreditsText.height+10, 20);
+			
+			TextContainer.x = mat.tx + 448 + 261/2;
+			TextContainer.y = mat.ty + 241;
 			
 			PlayText.x = -PlayText.width/2;
-			PlayText.y = 5;
+			PlayText.y = 15;
 			ContinueText.x = -ContinueText.width/2;
-			ContinueText.y = PlayText.y + PlayText.height + 5;
-			CreditsText.x = -CreditsText.width/2;
-			CreditsText.y = ContinueText.y + ContinueText.height + 5;
+			ContinueText.y = PlayText.y + PlayText.height + 15;
 			WebsiteText.x = -WebsiteText.width / 2;
-			WebsiteText.y = CreditsText.y + CreditsText.height + 20;
+			WebsiteText.y = ContinueText.y + ContinueText.height + 30;
+			
+			CreditsText.x = mat.tx + 443;
+			CreditsText.y = mat.ty + 465;
 		}
 		
 		public function MouseOverText(e:MouseEvent):void {

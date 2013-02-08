@@ -34,7 +34,11 @@ package GameCom.Managers
 				Storage.Set("Collectable_" + id, true);
 				Storage.Set("TotalCollectablesFound", 1 + Storage.GetAsInt("TotalCollectablesFound"));
 				
-				GUIManager.I.Popup(Storage.GetAsInt("TotalCollectablesFound") + " of " + PlacesManager.instance.CollectableLocations.length + " laser components found.");
+				if(Storage.GetAsInt("TotalCollectablesFound") > 50) {
+					GUIManager.I.Popup(Storage.GetAsInt("TotalCollectablesFound") + " of " + PlacesManager.instance.CollectableLocations.length + " laser components found.");
+				} else {
+					GUIManager.I.Popup("You found them all! Your laser is ready to collect at any garage!");
+				}
 			}
 		}
 	}

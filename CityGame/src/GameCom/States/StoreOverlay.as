@@ -276,7 +276,7 @@ package GameCom.States {
 			var s1:int = Storage.GetAsInt("AccelerationUpgrade");
 			var s2:int = Storage.GetAsInt("HealthUpgrade");
 			var s3:int = Storage.GetAsInt("ArmourUpgrade");
-			var s4:int = Storage.GetAsInt("NOSUpgrade");
+			var s4:int = Storage.GetAsInt("DamageUpgrade");
 			
 			this.graphics.clear();
 			

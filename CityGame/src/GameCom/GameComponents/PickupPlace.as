@@ -82,9 +82,10 @@ package GameCom.GameComponents
 					var expGain:int = ri.ReputationGainPerItem * MissionParams.ResourceAmount;
 					var monGain:int = ri.ValuePerItem * MissionParams.ResourceAmount;
 					
-					tooltipInfo = "Need to deliver " + MissionParams.ResourceAmount + ri.Message + " to the " + PeopleHelper.Names[MissionParams.EndNPC1] + " " + int(deliverDistance/Global.PHYSICS_SCALE) + "m away.\n\n";
-					tooltipInfo += "Rewards:\n" + expGain + " Reputation (" + ReputationHelper.GetPercentageGain(expGain) + "%)\n";
-					tooltipInfo += "$" + monGain + "\n\n";
+					tooltipInfo = "Need to deliver " + MissionParams.ResourceAmount + ri.Message + " to the " + PeopleHelper.Names[MissionParams.EndNPC1];
+					tooltipInfo += " <font color='#28D32D'>" + int(deliverDistance / Global.PHYSICS_SCALE) + "m</font> away.\n\n";
+					tooltipInfo += "Rewards:\n<font color='#27AEFF'>" + expGain + " Reputation (" + ReputationHelper.GetPercentageGain(expGain) + "%)</font>\n";
+					tooltipInfo += "<font color='#FFAA00'>$" + monGain + "</font>\n\n";
 					tooltipInfo += "Drive into pickup zone and press Enter to accept.";
 					
 					isActive = true;
