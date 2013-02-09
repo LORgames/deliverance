@@ -15,11 +15,13 @@ package GameCom.GameComponents {
 	import GameCom.Managers.NPCManager;
 	import GameCom.Managers.PlacesManager;
 	import GameCom.States.GameScreen;
+	import GameCom.SystemComponents.Stat;
 	import LORgames.Engine.AudioController;
 	import LORgames.Engine.Keys;
 	import LORgames.Engine.Mousey;
 	import flash.ui.Keyboard;
 	import GameCom.Managers.TriggerManager;
+	import LORgames.Engine.Stats;
 	import LORgames.Engine.Storage;
 	
 	import Box2D.Collision.*;
@@ -492,6 +494,8 @@ package GameCom.GameComponents {
 				} else {
 					GUIManager.I.Popup("I'll repair your truck. It'll cost $" + Math.floor(money / 5) + " for parts and labor.\nRemember to purchase armour and health upgrades at a garage!", 0, 0, true);
 				}
+				
+				Stats.AddOne(Stat.NUMBER_OF_DEATHS);
 			}
 			
 			NPCManager.I.DestroyAllCars();

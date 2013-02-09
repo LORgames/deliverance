@@ -79,6 +79,8 @@ package GameCom.GameComponents
 					MissionParams.StartNPC1 = PeopleHelper.GetAvailableNPC(this.b_NPC);
 					MissionParams.EndNPC1 = PeopleHelper.GetAvailableNPC(PlacesManager.instance.DropatLocations[MissionParams.Destination].b_NPC);
 					
+					MissionParams.TotalDistance = deliverDistance;
+					
 					var expGain:int = ri.ReputationGainPerItem * MissionParams.ResourceAmount;
 					var monGain:int = ri.ValuePerItem * MissionParams.ResourceAmount;
 					

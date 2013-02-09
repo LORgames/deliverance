@@ -19,8 +19,8 @@ package LORgames.Engine
 		}
 		
 		public static function SetLowestInt(statname:String, newLowest:int):void {
-			if (Storage.GetAsInt(statname, 0) > newHighest) {
-				Storage.Set(statname, newHighest);
+			if (Storage.GetAsInt(statname, 0) > newLowest) {
+				Storage.Set(statname, newLowest);
 			}
 		}
 		
@@ -31,8 +31,8 @@ package LORgames.Engine
 		}
 		
 		public static function SetLowestNumber(statname:String, newLowest:Number):void {
-			if (Storage.GetAsNumber(statname, 0) > newHighest) {
-				Storage.Set(statname, newHighest);
+			if (Storage.GetAsNumber(statname, 0) > newLowest) {
+				Storage.Set(statname, newLowest);
 			}
 		}
 		

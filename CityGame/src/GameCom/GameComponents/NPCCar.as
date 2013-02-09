@@ -14,10 +14,12 @@ package GameCom.GameComponents
 	import GameCom.Managers.MissionManager;
 	import GameCom.Managers.NodeManager;
 	import GameCom.States.GameScreen;
+	import GameCom.SystemComponents.Stat;
 	import LORgames.Engine.AudioController;
 	import LORgames.Engine.Keys;
 	import LORgames.Engine.Mousey;
 	import flash.ui.Keyboard;
+	import LORgames.Engine.Stats;
 	
 	import Box2D.Collision.*;
 	import Box2D.Common.Math.*;
@@ -464,6 +466,7 @@ package GameCom.GameComponents
 			AudioController.PlaySound(AudioStore.NPCHit);
 			
 			if (myHP <= 0) {
+				Stats.AddOne(Stat.TOTAL_CARS_WRECKED);
 				AudioController.PlaySound(AudioStore.Explode);
 				
 				var cls:Class;
@@ -475,6 +478,8 @@ package GameCom.GameComponents
 					this.addChildAt(new cls(), 2);
 					this.getChildAt(2).transform.colorTransform = ct;
 				} else {
+					Stats.AddOne(Stat.TOTAL_ENEMIES_WRECKED);
+					
 					CURRENT_ENEMIES--;
 					this.removeChildAt(2);
 					

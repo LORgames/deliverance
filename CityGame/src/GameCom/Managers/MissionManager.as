@@ -12,7 +12,9 @@ package GameCom.Managers {
 	import GameCom.States.GameScreen;
 	import GameCom.SystemComponents.MissionParameters;
 	import GameCom.SystemComponents.ResourceInformation;
+	import GameCom.SystemComponents.Stat;
 	import GameCom.SystemMain;
+	import LORgames.Engine.Stats;
 	import LORgames.Engine.Storage;
 	
 	/**
@@ -154,7 +156,12 @@ package GameCom.Managers {
 					highestMissionCompleted++;
 					Storage.Set("HighestMissionCompleted", highestMissionCompleted);
 					UpdateRepRequiredForNextMission();
+					
+					Stats.SetHighestInt(Stat.HIGHEST_STORY_MISSION, highestMissionCompleted);
 				} else {
+					Stats.SetHighestInt(Stat.LONGEST_DELIVERY, CurrentMission.TotalDistance);
+					Stats.SetLowestInt(Stat.SHORTEST_DELIVERY, CurrentMission.TotalDistance);
+					
 					GUIManager.I.Popup(PeopleHelper.DropOffMessages[CurrentMission.EndNPC1], CurrentMission.EndNPC1, CurrentMission.EndNPC2);
 				}
 				
