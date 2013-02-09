@@ -1,0 +1,10 @@
+Popup should have enter/space/click to continue.
+Disgusting close on shop and map
+Tips on main menu
+Turn ads back on
+Sound for opening and closing GUI overlay
+? Explosions
+Laser Sound
+Stats API
+-> Stats Mochi
+-> Stats Kongregate

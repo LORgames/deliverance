@@ -17,7 +17,7 @@ package LORgames.Components {
 		
 		public function Button(label:String = "", width:int = 100, height:int = 30) {
 			tf.selectable = false;
-			tf.defaultTextFormat = new TextFormat("Verdana", 10 * Global.UI_SCALE, 0xFFFFFF);
+			tf.defaultTextFormat = new TextFormat("Verdana", 10, 0xFFFFFF);
 			tf.text = label;
 			tf.autoSize = TextFieldAutoSize.LEFT;
 			this.tabEnabled = false;

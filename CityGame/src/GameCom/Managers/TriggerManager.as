@@ -19,7 +19,7 @@ package GameCom.Managers
 				if (MissionManager.IsInMission()) {
 					MissionManager.CheckMissionParameters(obj as PlaceObject);
 				} else {
-					if (Keys.isKeyDown(Keyboard.ENTER)) {
+					if (Keys.isKeyDown(Keyboard.SPACE)) {
 						MissionManager.GenerateFromPickup(obj as PickupPlace);
 					}
 				}

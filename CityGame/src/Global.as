@@ -8,9 +8,6 @@ package  {
 		//The name of the game
 		public static const GAME_NAME:String = "Deliverance";
 		
-		//The UI scaling factor (pretty damned important now that its needed everywhere... sigh)
-		public static var UI_SCALE:Number = 1.0;
-		
 		// Pixels per Meter
 		public static const PHYSICS_SCALE:Number = 10.0;
 		
@@ -25,8 +22,9 @@ package  {
 		//Mochi authentication
 		private var _mochiads_game_id:String = "c3ebe5c39a9741ba";
 		
-		//Use local steering?
-		public static var UseGlobalSteering:Boolean = false;
+		//Storage things
+		public static const StorageRevision:int = 1;
+		public static const WipeStorageBelowRevision:int = 0;
 	}
 
 }

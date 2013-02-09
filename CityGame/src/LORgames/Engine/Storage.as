@@ -21,6 +21,12 @@ package LORgames.Engine
 			} else {
 				storageArray = storageObject.data.D as Array;
 			}
+			
+			if (GetAsInt("StorageRevision") != 0 && GetAsInt("StorageRevision") < Global.WipeStorageBelowRevision) {
+				Storage.Format();
+			}
+			
+			Set("StorageRevision", Global.StorageRevision);
 		}
 		
 		public static function GetAsVoid(index:String):* {

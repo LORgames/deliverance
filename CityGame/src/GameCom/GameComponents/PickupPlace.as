@@ -86,7 +86,7 @@ package GameCom.GameComponents
 					tooltipInfo += " <font color='#28D32D'>" + int(deliverDistance / Global.PHYSICS_SCALE) + "m</font> away.\n\n";
 					tooltipInfo += "Rewards:\n<font color='#27AEFF'>" + expGain + " Reputation (" + ReputationHelper.GetPercentageGain(expGain) + "%)</font>\n";
 					tooltipInfo += "<font color='#FFAA00'>$" + monGain + "</font>\n\n";
-					tooltipInfo += "Drive into pickup zone and press Enter to accept.";
+					tooltipInfo += "Drive into pickup zone and press Spacebar to accept.";
 					
 					isActive = true;
 					

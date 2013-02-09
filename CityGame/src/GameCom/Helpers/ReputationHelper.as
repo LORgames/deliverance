@@ -59,7 +59,7 @@ package GameCom.Helpers {
 				CurrentLevel++;
 				ResourceHelper.UpdateAvailableResources();
 				
-				if (CurrentLevel == 5) {
+				if (CurrentLevel == 4) {
 					GUIManager.I.player.EquipWeapon("MachineGun");
 				}
 			}

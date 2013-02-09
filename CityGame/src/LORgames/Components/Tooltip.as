@@ -35,7 +35,7 @@ package LORgames.Components
 			this.floatingDistance = distance;
 			floatingDirection = direction;
 			
-			text.defaultTextFormat = new TextFormat("Verdana", 10 * Global.UI_SCALE, 0xFFFFFF);
+			text.defaultTextFormat = new TextFormat("Verdana", 10, 0xFFFFFF);
 			text.wordWrap = true;
 			text.multiline = true;
 			text.selectable = false;

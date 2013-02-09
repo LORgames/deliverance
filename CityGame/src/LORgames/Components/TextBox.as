@@ -22,7 +22,7 @@ package LORgames.Components
 		
 		public function TextBox() {
 			text.selectable = false;
-			text.defaultTextFormat = new TextFormat("Arial", 14 * Global.UI_SCALE, 0x000000);
+			text.defaultTextFormat = new TextFormat("Arial", 14, 0x000000);
 			text.wordWrap = true;
 			text.multiline = true;
 			text.mouseEnabled = true;
