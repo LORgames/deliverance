@@ -42,7 +42,7 @@ package GameCom.GameComponents {
 		private const SIDEWAYS_FRICTION_FORCE:Number = 1000;
 		private const BASE_HORSEPOWER_MAX:Number = 100;
 		private const BASE_HORSEPOWER_INC:Number = 25;
-		private const BASE_HEALTH:int = 500;
+		private const BASE_HEALTH:int = 800;
 		private const BASE_REVERSE_SPEED:int = 20;
 		
 		private const BASE_DAMAGEFACTOR:Number = 1.0;
@@ -51,14 +51,14 @@ package GameCom.GameComponents {
 		private const HORSEPOWER_INC_PER_LEVEL:Number = 2.5;
 		private const HEALTH_INC_PER_LEVEL:Number = 100;
 		private const ARMOUR_INC_PER_LEVEL:Number = 0.09;
-		private const DAMAGE_INC_PER_LEVEL:Number = 0.2;
+		private const DAMAGE_INC_PER_LEVEL:Number = 0.4;
 		
 		private var speedUpgradeLevel:int = 0;
 		private var accelerationUpgradeLevel:int = 0;
 		private var healthUpgradeLevel:int = 0;
 		private var armourUpgradeLevel:int = 0;
 		private var damageUpgradeLevel:int = 0;
-		private var healthMax:Number;
+		public var HealthMax:Number;
 		private var healthCurrent:Number;
 		
 		public var HealthPercent:Number = 1;
@@ -298,6 +298,11 @@ package GameCom.GameComponents {
 		}
 		
 		public function Update(dt:Number):void {
+			if (Keys.isKeyDown(Keyboard.E) && Keys.isKeyDown(Keyboard.K)) {
+				MoneyHelper.Credit(2500);
+				GUIManager.I.UpdateCache();
+			}
+			
 			if (Keys.isKeyDown(Keyboard.UP) || Keys.isKeyDown(Keyboard.W)) {
 				if (CurrentLoop != DrivingLoop) {
 					AudioController.PlaySound(AudioStore.TruckTakeoff);
@@ -405,7 +410,7 @@ package GameCom.GameComponents {
 			
 			if(damage > 0) {
 				healthCurrent -= damage;
-				HealthPercent = Number(healthCurrent) / healthMax;
+				HealthPercent = Number(healthCurrent) / HealthMax;
 				GUIManager.I.UpdateCache();
 			}
 		}
@@ -424,8 +429,8 @@ package GameCom.GameComponents {
 			currentHorsePowerInc = BASE_HORSEPOWER_INC + HORSEPOWER_INC_PER_LEVEL * accelerationUpgradeLevel;
 			currentDamageFactor = BASE_DAMAGEFACTOR + DAMAGE_INC_PER_LEVEL * damageUpgradeLevel;
 			
-			healthMax = BASE_HEALTH + HEALTH_INC_PER_LEVEL * healthUpgradeLevel;
-			healthCurrent = healthMax;
+			HealthMax = BASE_HEALTH + HEALTH_INC_PER_LEVEL * healthUpgradeLevel;
+			healthCurrent = HealthMax;
 			HealthPercent = 1;
 		}
 		
@@ -475,7 +480,7 @@ package GameCom.GameComponents {
 			leftRearWheel.SetAngularVelocity(0);
 			rightRearWheel.SetAngularVelocity(0);
 			
-			healthCurrent = healthMax;
+			healthCurrent = HealthMax;
 			HealthPercent = 1.0;
 			
 			if (becauseOfDamage) {

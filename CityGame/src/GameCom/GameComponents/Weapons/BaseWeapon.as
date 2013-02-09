@@ -75,7 +75,7 @@ package GameCom.GameComponents.Weapons {
 			
 			while (wantsToFire && _fireDelay >= FIRE_RATE) {
 				_fireDelay -= FIRE_RATE;
-				Fire();
+				Fire(damageMultipler);
 			}
 		}
 	}

@@ -310,13 +310,20 @@ package GameCom.Managers
 			Overlay.graphics.drawRect(88, 14, 88 * ReputationHelper.GetPercentageToNextLevel(), 4);
 			Overlay.graphics.endFill();
 			
-			Overlay.graphics.beginFill(0x808080);
+			Overlay.graphics.beginFill(0xC8C8C8);
 			Overlay.graphics.drawRect(80, 26, 94, 18);
 			Overlay.graphics.endFill();
 			
 			Overlay.graphics.beginFill(0xFF0000);
 			Overlay.graphics.drawRect(80, 26, 94 * player.HealthPercent, 18);
 			Overlay.graphics.endFill();
+			
+			Overlay.graphics.lineStyle(1);
+			
+			for (var i:int = 0; i < player.HealthMax; i+=100) {
+				Overlay.graphics.moveTo(80 + (i / player.HealthMax) * 94, 26);
+				Overlay.graphics.lineTo(80 + (i / player.HealthMax) * 94, 44);
+			}
 		}
 		
 		public function ActivateStore():void {
