@@ -10,11 +10,11 @@ package GameCom.Managers
 	 * @author Miles
 	 */
 	public class NodeManager {
-		private var nodeArray:Vector.<Node>;
+		private static var nodeArray:Vector.<Node>;
 		
-		private const TOUCH_SQUARED:Number = 1000;
+		private static const TOUCH_SQUARED:Number = 1000;
 		
-		public function NodeManager() {
+		public static function Initialize():void {
 			// load in nodes
 			var nodefile:ByteArray = ThemeManager.Get("2.map");
 			
@@ -39,15 +39,15 @@ package GameCom.Managers
 			}
 		}
 		
-		public function NextNode(node:int):int {
+		public static function NextNode(node:int):int {
 			return nodeArray[node].NextChild();
 		}
 		
-		public function FirstNode(carX:Number, carY:Number):int {
+		public static function FirstNode(carX:Number, carY:Number):int {
 			return 0;
 		}
 		
-		public function TouchNode(node:int, carX:Number, carY:Number):Boolean {
+		public static function TouchNode(node:int, carX:Number, carY:Number):Boolean {
 			if (MathHelper.DistanceSquared(new Point(nodeArray[node].x, nodeArray[node].y), new Point(carX, carY)) < TOUCH_SQUARED) {
 				return true;
 			}
@@ -55,7 +55,7 @@ package GameCom.Managers
 			return false;
 		}
 		
-		public function GetNode(node:int):Node {
+		public static function GetNode(node:int):Node {
 			if(node >= 0 && node < nodeArray.length) {
 				return nodeArray[node];
 			}
@@ -63,7 +63,7 @@ package GameCom.Managers
 			return null;
 		}
 		
-		public function GetNearestNode(x:Number, y:Number):int {
+		public static function GetNearestNode(x:Number, y:Number):int {
 			var currentNearestIndex:int = 0;
 			var currentNearestSqr:Number = Number.MAX_VALUE;
 			

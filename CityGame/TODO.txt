@@ -3,4 +3,4 @@ Turn ads back on
 <- Explosions
 -> Stats Mochi
 -> Stats Kongregate
-Add laser building message to the "this is the last chance to upgrade" story.
+Mark all elements internal

@@ -10,6 +10,7 @@ package GameCom.GameComponents
 	import flash.display.Graphics;
 	import flash.geom.Matrix;
 	import GameCom.Managers.ScenicManager;
+	import GameCom.Managers.WorldManager;
 	import GameCom.SystemComponents.ScenicObjectType;
 	/**
 	 * ...
@@ -26,7 +27,7 @@ package GameCom.GameComponents
 		
 		public var drawM:Matrix = new Matrix();
 		
-        public function ScenicObject(type:int, posX:Number, posY:Number, angle:int, world:b2World, sot:ScenicObjectType) {
+        public function ScenicObject(type:int, posX:Number, posY:Number, angle:int, sot:ScenicObjectType) {
             this.typeID = type;
 			
             var radians:Number = 0.0174532925;
@@ -51,7 +52,7 @@ package GameCom.GameComponents
 			bodyBodyDef.angle = angle*radians;
 			
 			//Create the body
-			baseBody = world.CreateBody(bodyBodyDef);
+			baseBody = WorldManager.World.CreateBody(bodyBodyDef);
 			baseBody.CreateFixture(bodyFixtureDef);
 			
 			if (sot.Physics != null) {

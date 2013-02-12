@@ -11,6 +11,7 @@ package GameCom.GameComponents.Weapons
 	import GameCom.GameComponents.NPCCar;
 	import GameCom.GameComponents.PlayerTruck;
 	import GameCom.Helpers.AudioStore;
+	import GameCom.Managers.WorldManager;
 	import LORgames.Engine.AudioController;
 	import LORgames.Engine.Mousey;
 	/**
@@ -25,8 +26,8 @@ package GameCom.GameComponents.Weapons
 		
 		private var myLaserSound:SoundChannel;
 		
-		public function Laser(world:b2World) {
-			super(world);
+		public function Laser() {
+			super();
 			
 			WeaponType = LASER;
 			FIRE_RATE = 5.0; //Laser doesn't even use this...
@@ -58,7 +59,7 @@ package GameCom.GameComponents.Weapons
 				fixtureHit = null;
 				distance = 1.0;
 				
-				World.RayCast(Wrappey, b1, b2);
+				WorldManager.World.RayCast(Wrappey, b1, b2);
 				
 				if (distance < 1.0) {
 					if (fixtureHit.GetUserData() is NPCCar) {

@@ -16,8 +16,6 @@ package GameCom.GameComponents.Weapons {
 		
 		public var WeaponType:int = -1;
 		
-		protected var World:b2World;
-		
 		public var IgnoreList:Vector.<b2Fixture> = new Vector.<b2Fixture>();
 		
 		private var _fireDelay:Number = 0.0;
@@ -28,8 +26,8 @@ package GameCom.GameComponents.Weapons {
 		protected var p:Point;
 		protected var wantsToFire:Boolean;
 		
-		public function BaseWeapon(world:b2World) {
-			World = world;
+		public function BaseWeapon() {
+			
 		}
 		
 		public static function ConvertTypeToString(type:int):String {

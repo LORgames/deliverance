@@ -17,8 +17,8 @@ package GameCom.Managers {
 	 * @author Paul
 	 */
 	public class ScenicManager {
-		private var Types:Vector.<ScenicObjectType> = new Vector.<ScenicObjectType>();
-		private var Objects:Vector.<ScenicObject> = new Vector.<ScenicObject>();
+		private static var Types:Vector.<ScenicObjectType> = new Vector.<ScenicObjectType>();
+		private static var Objects:Vector.<ScenicObject> = new Vector.<ScenicObject>();
 		
 		private var drawList:Vector.<ScenicObject> = new Vector.<ScenicObject>();
 		
@@ -26,15 +26,8 @@ package GameCom.Managers {
 		private var layer1:Sprite;
 		
 		private var player:Sprite;
-		private var world:b2World;
 		
-		public function ScenicManager(layer0:Sprite, layer1:Sprite, player:Sprite, world:b2World) {
-			this.layer0 = layer0;
-			this.layer1 = layer1;
-			
-			this.player = player;
-			this.world = world;
-			
+		public static function Initialize():void {
 			var objectTypes:ByteArray = ThemeManager.Get("1.cache"); //Will be needed for physics
 			var objectFile:ByteArray = ThemeManager.Get("1.map");
 			
@@ -87,11 +80,20 @@ package GameCom.Managers {
 				var locationY:Number = objectFile.readFloat();
 				var rotation:int = objectFile.readInt();
 				
-				Objects.push(new ScenicObject(sourceID, locationX, locationY, rotation, world, Types[sourceID]));
+				Objects.push(new ScenicObject(sourceID, locationX, locationY, rotation, Types[sourceID]));
 			}
 		}
 		
+		public function ScenicManager(layer0:Sprite, layer1:Sprite, player:Sprite) {
+			this.layer0 = layer0;
+			this.layer1 = layer1;
+			
+			this.player = player;
+		}
+		
         public function DrawScenicObjects():void {
+			if (this.layer0.stage == null) return;
+			
             drawList = new Vector.<ScenicObject>();
 			PlacesManager.instance.drawList = new Vector.<PlaceObject>();
 			
@@ -99,7 +101,7 @@ package GameCom.Managers {
 			area.lowerBound.Set((player.x - this.layer0.stage.stageWidth / 2)/Global.PHYSICS_SCALE, (player.y - this.layer0.stage.stageHeight / 2)/Global.PHYSICS_SCALE);
 			area.upperBound.Set((player.x + this.layer0.stage.stageWidth / 2)/Global.PHYSICS_SCALE, (player.y + this.layer0.stage.stageHeight / 2)/Global.PHYSICS_SCALE);
 			
-            this.world.QueryAABB(QCBD, area);
+            WorldManager.World.QueryAABB(QCBD, area);
 			
 			drawList.sort(BaseObject.Compare);
 			

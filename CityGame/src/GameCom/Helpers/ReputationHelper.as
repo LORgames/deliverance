@@ -40,6 +40,7 @@ package GameCom.Helpers {
 			Levels.push(new ReputationLevel("", 			 800000));
 			Levels.push(new ReputationLevel("A Celebrity",	 900000));
 			Levels.push(new ReputationLevel("Godlike",		1000000));
+			Levels.push(new ReputationLevel("HACKER", int.MAX_VALUE));
 			
 			CurrentReputation = Storage.GetAsInt("Reputation");
 			CurrentLevel = 0;

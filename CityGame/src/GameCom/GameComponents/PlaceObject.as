@@ -9,6 +9,7 @@ package GameCom.GameComponents  {
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import GameCom.Managers.ScenicManager;
+	import GameCom.Managers.WorldManager;
 	import GameCom.SystemComponents.MissionParameters;
 	import GameCom.SystemComponents.ScenicObjectType;
 	/**
@@ -35,7 +36,7 @@ package GameCom.GameComponents  {
 		public var b_NPC:uint = 0;
 		public var b_Resource:uint = 0;
 		
-        public function PlaceObject(type:int, posX:Number, posY:Number, angle:int, world:b2World, trigger:String, arrayIndex:int) {
+        public function PlaceObject(type:int, posX:Number, posY:Number, angle:int, trigger:String, arrayIndex:int) {
             this.typeID = type;
 			this.TriggerValue = trigger;
 			this.arrayIndex = arrayIndex;
@@ -63,7 +64,7 @@ package GameCom.GameComponents  {
 			bodyBodyDef.angle = angle*radians;
 			
 			//Create the body
-			baseBody = world.CreateBody(bodyBodyDef);
+			baseBody = WorldManager.World.CreateBody(bodyBodyDef);
 			baseBody.CreateFixture(bodyFixtureDef);
 			baseBody.SetUserData(this);
 			

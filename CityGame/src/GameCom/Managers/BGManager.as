@@ -54,6 +54,7 @@ package GameCom.Managers
 			this.player = player;
 			
 			var mapfile:ByteArray = ThemeManager.Get("0.map");
+			mapfile.position = 0;
 			
 			maxTilesX = mapfile.readInt();
 			maxTilesY = mapfile.readInt();
@@ -74,6 +75,8 @@ package GameCom.Managers
 		}
 		
 		public function Update():void {
+			if (layer.stage == null) return;
+			
             var LeftEdge : int = Math.floor(Math.abs(player.x-layer.stage.stageWidth/2-VIEW_OFFSET) / TILESIZEX);
             var TopEdge : int = Math.floor(Math.abs(player.y-layer.stage.stageWidth/2-VIEW_OFFSET) / TILESIZEY);
 

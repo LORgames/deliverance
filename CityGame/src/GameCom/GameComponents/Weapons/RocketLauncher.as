@@ -9,9 +9,7 @@ package GameCom.GameComponents.Weapons
 	 */
 	public class RocketLauncher extends BaseWeapon {
 		
-		public function RocketLauncher(world:b2World) {
-			super(world);
-			
+		public function RocketLauncher() {
 			WeaponType = ROCKET_POD;
 			FIRE_RATE = 2.5;
 			

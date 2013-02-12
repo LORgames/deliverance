@@ -23,8 +23,8 @@ package GameCom.GameComponents
 		
 		private const MINIMUM_DISTANCE:int = 500; // minimum distance between origin and destination
 		
-		public function PickupPlace(type:int, posX:Number, posY:Number, angle:int, world:b2World, trigger:String, arrayIndex:int) {
-			super(type, posX, posY, angle, world, trigger, arrayIndex);
+		public function PickupPlace(type:int, posX:Number, posY:Number, angle:int, trigger:String, arrayIndex:int) {
+			super(type, posX, posY, angle, trigger, arrayIndex);
 		}
 		
 		override public function Draw(buffer:Graphics):void {
@@ -56,7 +56,7 @@ package GameCom.GameComponents
 						MissionParams.ResourceAmount = minAmount + Math.floor(Math.random() * (ri.MaximumLoad - minAmount));
 					}
 					
-					var places:Vector.<PlaceObject> = PlacesManager.instance.DeliveryLocationsByResource[ri.ID];
+					var places:Vector.<PlaceObject> = PlacesManager.DeliveryLocationsByResource[ri.ID];
 					
 					MissionParams.Origin = arrayIndex;
 					
@@ -65,7 +65,7 @@ package GameCom.GameComponents
 					
 					while (attempts < 5) {
 						var destinationPlaceObject:PlaceObject = places[Math.floor(places.length * Math.random())];
-						MissionParams.Destination = PlacesManager.instance.DropatLocations.indexOf(destinationPlaceObject);
+						MissionParams.Destination = PlacesManager.DropatLocations.indexOf(destinationPlaceObject);
 						
 						deliverDistance = MathHelper.Distance(new Point(destinationPlaceObject.drawX, destinationPlaceObject.drawY), new Point(this.drawX, this.drawY));
 						
@@ -77,7 +77,7 @@ package GameCom.GameComponents
 					}
 					
 					MissionParams.StartNPC1 = PeopleHelper.GetAvailableNPC(this.b_NPC);
-					MissionParams.EndNPC1 = PeopleHelper.GetAvailableNPC(PlacesManager.instance.DropatLocations[MissionParams.Destination].b_NPC);
+					MissionParams.EndNPC1 = PeopleHelper.GetAvailableNPC(PlacesManager.DropatLocations[MissionParams.Destination].b_NPC);
 					
 					MissionParams.TotalDistance = deliverDistance;
 					

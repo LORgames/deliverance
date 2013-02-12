@@ -74,10 +74,10 @@ package GameCom.States {
 			} else {
 				var bmpd3:BitmapData = ThemeManager.Get("GUI/Pickup points.png");
 				
-				for (var i:int = 0; i < PlacesManager.instance.PickupLocations.length; i++) {
-					if (PlacesManager.instance.PickupLocations[i].isActive) {
-						var zX:Number = PlacesManager.instance.PickupLocations[i].drawX * MAP_SCALE + MAP_OFFSET_X - bmpd3.width/2;
-						var zY:Number = PlacesManager.instance.PickupLocations[i].drawY * MAP_SCALE + MAP_OFFSET_Y - bmpd3.height/2;
+				for (var i:int = 0; i < PlacesManager.PickupLocations.length; i++) {
+					if (PlacesManager.PickupLocations[i].isActive) {
+						var zX:Number = PlacesManager.PickupLocations[i].drawX * MAP_SCALE + MAP_OFFSET_X - bmpd3.width/2;
+						var zY:Number = PlacesManager.PickupLocations[i].drawY * MAP_SCALE + MAP_OFFSET_Y - bmpd3.height/2;
 						
 						m.createBox(1, 1, 0, zX, zY);
 						

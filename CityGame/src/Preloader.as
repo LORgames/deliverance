@@ -36,7 +36,7 @@ package {
 		
 		private var adContainer:MovieClip = new MovieClip();
 		
-		private var isAdFinished:Boolean = true;
+		private var isAdFinished:Boolean = false;
 		private var isLoadingFinished:Boolean = false;
 		
 		public function Preloader() {
@@ -69,8 +69,8 @@ package {
 			DisplayText.selectable = false;
 			TextContainer.addChild(DisplayText);
 			
-			//this.addChild(adContainer);
-			//MochiAd.showPreGameAd({clip:adContainer, id:"c3ebe5c39a9741ba", res:stage.stageWidth+"x"+stage.stageHeight, ad_finished:fAdFinished});
+			this.addChild(adContainer);
+			MochiAd.showPreGameAd({clip:adContainer, id:"c3ebe5c39a9741ba", res:stage.stageWidth+"x"+stage.stageHeight, ad_finished:fAdFinished});
 			
 			resize(null);
 		}

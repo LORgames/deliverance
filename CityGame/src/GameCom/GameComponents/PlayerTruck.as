@@ -3,6 +3,7 @@ package GameCom.GameComponents {
 	import flash.geom.ColorTransform;
 	import flash.geom.Point;
 	import flash.media.Sound;
+	import flash.media.SoundChannel;
 	import GameCom.GameComponents.Weapons.BaseWeapon;
 	import GameCom.GameComponents.Weapons.Laser;
 	import GameCom.GameComponents.Weapons.MachineGun;
@@ -14,6 +15,7 @@ package GameCom.GameComponents {
 	import GameCom.Managers.MissionManager;
 	import GameCom.Managers.NPCManager;
 	import GameCom.Managers.PlacesManager;
+	import GameCom.Managers.WorldManager;
 	import GameCom.States.GameScreen;
 	import GameCom.SystemComponents.Stat;
 	import LORgames.Engine.AudioController;
@@ -91,21 +93,19 @@ package GameCom.GameComponents {
 		private var rightJoint:b2RevoluteJoint;
 		
 		private var Wep:BaseWeapon;
-		private var world:b2World;
 		
 		private var LRotWheel:Sprite = new Sprite();
 		private var RRotWheel:Sprite = new Sprite();
 		
-		private var CurrentLoop:* = null;
-		private var IdleLoop:* = null;
-		private var ReversingLoop:* = null;
-		private var DrivingLoop:* = null;
+		private var CurrentLoop:SoundChannel = null;
+		private var IdleLoop:SoundChannel = null;
+		private var ReversingLoop:SoundChannel = null;
+		private var DrivingLoop:SoundChannel = null;
 		
 		public var Colours:Vector.<ColorTransform> = new Vector.<ColorTransform>();
 		
-		public function PlayerTruck(spawnPosition:b2Vec2, world:b2World, worldSpr:Sprite) {
+		public function PlayerTruck(spawnPosition:b2Vec2, worldSpr:Sprite) {
 			worldSpr.addChild(this);
-			this.world = world;
 			
 			this.addChild(ThemeManager.Get("TruckBits/Truck.swf"));
 			this.getChildAt(0).scaleX = 0.25;
@@ -152,7 +152,7 @@ package GameCom.GameComponents {
 			bodyBodyDef.position = spawnPosition.Copy();
 			
 			//Create the body
-			body = world.CreateBody(bodyBodyDef);
+			body = WorldManager.World.CreateBody(bodyBodyDef);
 			body.CreateFixture(bodyFixtureDef);
 			
 			///////////////////////////
@@ -175,32 +175,32 @@ package GameCom.GameComponents {
 			
 			//Create the body
 			wheelBodyDef.position.Add(leftFrontWheelPosition);
-			leftWheel = world.CreateBody(wheelBodyDef);
+			leftWheel = WorldManager.World.CreateBody(wheelBodyDef);
 			leftWheel.CreateFixture(wheelFixtureDef);
 			wheelBodyDef.position.Subtract(leftFrontWheelPosition);
 			
 			wheelBodyDef.position.Add(rightFrontWheelPosition);
-			rightWheel = world.CreateBody(wheelBodyDef);
+			rightWheel = WorldManager.World.CreateBody(wheelBodyDef);
 			rightWheel.CreateFixture(wheelFixtureDef);
 			wheelBodyDef.position.Subtract(rightFrontWheelPosition);
 			
 			wheelBodyDef.position.Add(leftMidWheelPosition);
-			leftMidWheel = world.CreateBody(wheelBodyDef);
+			leftMidWheel = WorldManager.World.CreateBody(wheelBodyDef);
 			leftMidWheel.CreateFixture(wheelFixtureDef);
 			wheelBodyDef.position.Subtract(leftMidWheelPosition);
 			
 			wheelBodyDef.position.Add(rightMidWheelPosition);
-			rightMidWheel = world.CreateBody(wheelBodyDef);
+			rightMidWheel = WorldManager.World.CreateBody(wheelBodyDef);
 			rightMidWheel.CreateFixture(wheelFixtureDef);
 			wheelBodyDef.position.Subtract(rightMidWheelPosition);
 			
 			wheelBodyDef.position.Add(leftRearWheelPosition);
-			leftRearWheel = world.CreateBody(wheelBodyDef);
+			leftRearWheel = WorldManager.World.CreateBody(wheelBodyDef);
 			leftRearWheel.CreateFixture(wheelFixtureDef);
 			wheelBodyDef.position.Subtract(leftRearWheelPosition);
 			
 			wheelBodyDef.position.Add(rightRearWheelPosition);
-			rightRearWheel = world.CreateBody(wheelBodyDef);
+			rightRearWheel = WorldManager.World.CreateBody(wheelBodyDef);
 			rightRearWheel.CreateFixture(wheelFixtureDef);
 			wheelBodyDef.position.Subtract(rightRearWheelPosition);
 			
@@ -215,8 +215,8 @@ package GameCom.GameComponents {
 			rightJointDef.enableMotor = true;
 			rightJointDef.maxMotorTorque = 100;
 			 
-			leftJoint = b2RevoluteJoint(world.CreateJoint(leftJointDef));
-			rightJoint = b2RevoluteJoint(world.CreateJoint(rightJointDef));
+			leftJoint = b2RevoluteJoint(WorldManager.World.CreateJoint(leftJointDef));
+			rightJoint = b2RevoluteJoint(WorldManager.World.CreateJoint(rightJointDef));
 			
 			var leftMidJointDef:b2PrismaticJointDef = new b2PrismaticJointDef();
 			leftMidJointDef.Initialize(body, leftMidWheel, leftMidWheel.GetWorldCenter(), new b2Vec2(1,0));
@@ -228,8 +228,8 @@ package GameCom.GameComponents {
 			rightMidJointDef.enableLimit = true;
 			rightMidJointDef.lowerTranslation = rightMidJointDef.upperTranslation = 0;
 			
-			world.CreateJoint(leftMidJointDef);
-			world.CreateJoint(rightMidJointDef);
+			WorldManager.World.CreateJoint(leftMidJointDef);
+			WorldManager.World.CreateJoint(rightMidJointDef);
 			
 			var leftRearJointDef:b2PrismaticJointDef = new b2PrismaticJointDef();
 			leftRearJointDef.Initialize(body, leftRearWheel, leftRearWheel.GetWorldCenter(), new b2Vec2(1,0));
@@ -241,8 +241,8 @@ package GameCom.GameComponents {
 			rightRearJointDef.enableLimit = true;
 			rightRearJointDef.lowerTranslation = rightRearJointDef.upperTranslation = 0;
 			 
-			world.CreateJoint(leftRearJointDef);
-			world.CreateJoint(rightRearJointDef);
+			WorldManager.World.CreateJoint(leftRearJointDef);
+			WorldManager.World.CreateJoint(rightRearJointDef);
 			
 			FixUpgradeValues();
 			EquipWeapon(BaseWeapon.ConvertTypeToString(Storage.GetAsInt("CurrentWeapon", -1)));
@@ -300,6 +300,8 @@ package GameCom.GameComponents {
 		}
 		
 		public function Update(dt:Number):void {
+			if (stage == null) return;
+			
 			if (Keys.isKeyDown(Keyboard.E) && Keys.isKeyDown(Keyboard.K)) {
 				MoneyHelper.Credit(2500);
 				GUIManager.I.UpdateCache();
@@ -444,8 +446,8 @@ package GameCom.GameComponents {
 			var closestDist:Number = Number.MAX_VALUE;
 			var bodyP:Point = new Point(this.x, this.y);
 			
-			for (var i:int = 0; i < PlacesManager.instance.SpawnLocations.length; i++) {
-				var spawnPoint:PlaceObject = PlacesManager.instance.SpawnLocations[i];
+			for (var i:int = 0; i < PlacesManager.SpawnLocations.length; i++) {
+				var spawnPoint:PlaceObject = PlacesManager.SpawnLocations[i];
 				
 				var nPOS:Number = MathHelper.DistanceSquared(bodyP, spawnPoint.position);
 				
@@ -512,11 +514,11 @@ package GameCom.GameComponents {
 			
 			switch(weaponName) {
 				case "Machine Gun":
-					Wep = new MachineGun(world); break;
+					Wep = new MachineGun(); break;
 				case "Rocket Pod":
-					Wep = new RocketLauncher(world); break;
+					Wep = new RocketLauncher(); break;
 				case "Laser":
-					Wep = new Laser(world); break;
+					Wep = new Laser(); break;
 				default:
 					break;
 			}

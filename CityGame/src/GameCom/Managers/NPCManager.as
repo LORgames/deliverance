@@ -38,7 +38,7 @@ package GameCom.Managers
 		
 		public static var I:NPCManager;
 		
-		public function NPCManager(player:PlayerTruck, world:b2World, worldSpr:Sprite) {
+		public function NPCManager(player:PlayerTruck, worldSpr:Sprite) {
 			if (I != null) {
 				I.DestroyAllCars();
 			}
@@ -63,6 +63,11 @@ package GameCom.Managers
 		}
 		
 		public function Update():void {
+			if (worldSpr.stage == null) {
+				DestroyAllCars();
+				return;
+			}
+			
 			var fullRect:Rectangle = new Rectangle(player.x - (worldSpr.stage.stageWidth) / 2 - STAGE_OFFSET, player.y - worldSpr.stage.stageHeight / 2 - STAGE_OFFSET, worldSpr.stage.stageWidth + STAGE_OFFSET * 2, worldSpr.stage.stageHeight + STAGE_OFFSET * 2);
 			var screenRect:Rectangle = new Rectangle(player.x - (worldSpr.stage.stageWidth) / 2, player.y - worldSpr.stage.stageHeight / 2, worldSpr.stage.stageWidth, worldSpr.stage.stageHeight);
 			
@@ -74,11 +79,11 @@ package GameCom.Managers
 				
 				var spawnPoint:Point = new Point(randomPositionX, randomPositionY);
 				
-				var nodeID:int = nodeManager.GetNearestNode(randomPositionX, randomPositionY);
-				var nextNode:int = nodeManager.NextNode(nodeID);
+				var nodeID:int = NodeManager.GetNearestNode(randomPositionX, randomPositionY);
+				var nextNode:int = NodeManager.NextNode(nodeID);
 				
-				var a:Point = nodeManager.GetNode(nodeID).p;
-				var b:Point = nodeManager.GetNode(nextNode).p;
+				var a:Point = NodeManager.GetNode(nodeID).p;
+				var b:Point = NodeManager.GetNode(nextNode).p;
 				
 				spawnPoint = MathHelper.NearestPointOnLine(spawnPoint, a, b);
 				
@@ -87,12 +92,12 @@ package GameCom.Managers
 				area.lowerBound = new b2Vec2(spawnPoint.x / Global.PHYSICS_SCALE - 2, spawnPoint.y / Global.PHYSICS_SCALE - 2);
 				area.upperBound = new b2Vec2(spawnPoint.x / Global.PHYSICS_SCALE + 2, spawnPoint.y / Global.PHYSICS_SCALE + 2);
 				
-				world.QueryAABB(HasWorldPhysicsThing, area);
+				WorldManager.World.QueryAABB(HasWorldPhysicsThing, area);
 				
 				if (safeToSpawn && !screenRect.containsPoint(spawnPoint)) {
 					var angle:Number = MathHelper.GetAngleBetween(a, b);
 					
-					cars.push(new NPCCar(new b2Vec2(spawnPoint.x/Global.PHYSICS_SCALE, spawnPoint.y/Global.PHYSICS_SCALE), world, nodeManager, angle, nextNode));
+					cars.push(new NPCCar(new b2Vec2(spawnPoint.x/Global.PHYSICS_SCALE, spawnPoint.y/Global.PHYSICS_SCALE), angle, nextNode));
 					worldSpr.addChild(cars[cars.length - 1]);
 				}
 			}

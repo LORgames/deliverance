@@ -30,7 +30,7 @@ package GameCom.Managers
 			} else if (trigger == "place_Weapons") {
 				GUIManager.I.ActivateStore();
 			} else if (trigger == "place_Collectable") { 
-				var id:int = PlacesManager.instance.CollectableLocations.indexOf(obj);
+				var id:int = PlacesManager.CollectableLocations.indexOf(obj);
 				(obj as PlaceObject).isActive = false;
 				
 				Storage.Set("Collectable_" + id, true);
@@ -39,7 +39,7 @@ package GameCom.Managers
 				Stats.SetHighestInt(Stat.TOTAL_LASER_COMPONENTS, Storage.GetAsInt("TotalCollectablesFound"));
 				
 				if(Storage.GetAsInt("TotalCollectablesFound") < 50) {
-					GUIManager.I.Popup(Storage.GetAsInt("TotalCollectablesFound") + " of " + PlacesManager.instance.CollectableLocations.length + " laser components found.");
+					GUIManager.I.Popup(Storage.GetAsInt("TotalCollectablesFound") + " of " + PlacesManager.CollectableLocations.length + " laser components found.");
 				} else {
 					GUIManager.I.Popup("You found them all! Your laser is ready to collect at any garage!");
 				}

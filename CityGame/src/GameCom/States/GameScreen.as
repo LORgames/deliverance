@@ -27,6 +27,8 @@ package GameCom.States {
 	import GameCom.GameComponents.PlayerTruck;
 	import GameCom.GameComponents.Water;
 	import GameCom.Managers.PlacesManager;
+	import GameCom.Managers.WorldManager;
+	import GameCom.SystemMain;
 	import LORgames.Engine.AudioController;
 	import LORgames.Engine.Keys;
 	import GameCom.Helpers.StaticBoxCreator;
@@ -40,12 +42,6 @@ package GameCom.States {
 	 * @version 1
 	 */
 	public class GameScreen extends Sprite {
-		// Constants
-		public static const SCROLL_DISTANCE:Number = 10; //pixels per frame
-		
-		// World stuff
-		public var world:b2World;
-		
 		// Playing the world
 		private var simulating:Boolean = true;
 		
@@ -62,8 +58,6 @@ package GameCom.States {
 		private var placesLayer:Sprite = new Sprite();
 		private var object1Layer:Sprite = new Sprite();
 		
-		private var debugDrawLayer:Sprite = new Sprite();
-		
 		private var npcManager:NPCManager;
 		private var bgManager:BGManager;
 		private var scenicManager:ScenicManager;
@@ -73,10 +67,10 @@ package GameCom.States {
 		
 		private var player:PlayerTruck;
 		
-		private var previousFrameTime:Number = 0;
-		
 		//olol toggle bool for mute
 		private var mDown:Boolean = false;
+		
+		public static var EndOfTheLine_TerminateASAP:Boolean = false;
 		
 		public function GameScreen() {
 			//Just make sure we're ready to do this...
@@ -85,30 +79,22 @@ package GameCom.States {
 		}
 		
 		private function Init(e:* = null):void {
+			EndOfTheLine_TerminateASAP = false;
+			
 			removeEventListener(Event.ADDED_TO_STAGE, Init);
+			
+			stage.focus = stage;
+			
+			//Clear out all the dead bodies
+			WorldManager.CleanupDynamics();
 			
 			//Load up the helpers
 			MoneyHelper.Initialize();
 			ReputationHelper.Initialize();
-			ResourceHelper.Initialize();
+			ResourceHelper.ResetResources();
+			MissionManager.ResetMissions();
 			
-			//Start the system
-			world = new b2World(new b2Vec2(0, 0), true);
-			
-			// set debug draw
-			var dbgDraw:b2DebugDraw = new b2DebugDraw();
-			dbgDraw.SetSprite(debugDrawLayer);
-			dbgDraw.SetDrawScale(Global.PHYSICS_SCALE);
-			dbgDraw.SetFillAlpha(0.3);
-			dbgDraw.SetLineThickness(1.0);
-			dbgDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
-			world.SetDebugDraw(dbgDraw);
-			
-			this.addEventListener(Event.ENTER_FRAME, Update);
-			stage.addEventListener(Event.RESIZE, Redraw, false, 0, true);
-			Redraw();
-			
-			previousFrameTime = getTimer();
+			this.addEventListener(Event.ENTER_FRAME, Update, false, 0, true);
 			
 			this.addChild(worldSpr);
 			
@@ -118,28 +104,24 @@ package GameCom.States {
 			worldSpr.addChild(placesLayer);
 			worldSpr.addChild(object1Layer);
 			
-			worldSpr.addChild(debugDrawLayer);
-			
-			StaticBoxCreator.CreateBoxes(world);
+			worldSpr.addChild(WorldManager.debugDrawLayer);
 			
 			// player is added to objectLayer
-			player = new PlayerTruck(new b2Vec2(11000/Global.PHYSICS_SCALE, 15450/Global.PHYSICS_SCALE), world, placesLayer);
+			player = new PlayerTruck(new b2Vec2(11000/Global.PHYSICS_SCALE, 15450/Global.PHYSICS_SCALE), placesLayer);
 			
 			// bgManager (ground) is added to groundLayer
 			bgManager = new BGManager(groundLayer, player);
 			
 			// objManager is added to objectLayer
-			npcManager = new NPCManager(player, world, object0Layer);
+			npcManager = new NPCManager(player, object0Layer);
 			
 			// scenic managers for the 2 object layers
-			scenicManager = new ScenicManager(object0Layer, object1Layer, player, world);
+			scenicManager = new ScenicManager(object0Layer, object1Layer, player);
 			
 			// places manager gets its layer
-			placesManager = new PlacesManager(placesLayer, player, world);
+			placesManager = new PlacesManager(placesLayer, player);
 			
-			world.SetContactListener(new CollisionSolver(player, npcManager));
-			
-			WorldPhysicsLoader.InjectPhysicsIntoWorld(world);
+			WorldManager.World.SetContactListener(new CollisionSolver(player, npcManager));
 			
 			gui = new GUIManager(player, Pause, MockUpdate);
 			this.addChild(gui);
@@ -147,26 +129,27 @@ package GameCom.States {
 			//player.Respawn();
 			
 			simulating = true;
-			Update(null);
+			MockUpdate();
 			
-			if (!MissionManager.Initialize()) return;
 			MissionManager.GenerateAllMissions();
 		}
 		
 		private function Update(e:Event):void {
 			if (simulating) {
-				world.Step(Global.TIME_STEP, Global.VELOCITY_ITERATIONS, Global.POSITION_ITERATIONS);
-				world.ClearForces();
+				WorldManager.World.Step(Global.TIME_STEP, Global.VELOCITY_ITERATIONS, Global.POSITION_ITERATIONS);
+				WorldManager.World.ClearForces();
 				
 				//Update the objects
 				player.Update(Global.TIME_STEP);
 				npcManager.Update();
 				
-				worldSpr.x = Math.floor(-player.x + stage.stageWidth/2);
-				worldSpr.y = Math.floor( -player.y + stage.stageHeight / 2);
-				
-				if (Keys.isKeyDown(Keyboard.M)) {
-					GUIManager.I.ActivateMap();
+				if(stage) {
+					worldSpr.x = Math.floor(-player.x + stage.stageWidth/2);
+					worldSpr.y = Math.floor( -player.y + stage.stageHeight / 2);
+					
+					if (Keys.isKeyDown(Keyboard.M)) {
+						GUIManager.I.ActivateMap();
+					}
 				}
 			}
 			
@@ -179,20 +162,25 @@ package GameCom.States {
 			gui.Update();
 			
 			if(Keys.isKeyDown(Keyboard.P)) {
-				world.DrawDebugData();
+				WorldManager.World.DrawDebugData();
 			} else {
-				debugDrawLayer.graphics.clear();
+				WorldManager.debugDrawLayer.graphics.clear();
 			}
 			
 			if (mDown && !Keys.isKeyDown(Keyboard.Q)) {
 				AudioController.SetMuted(!AudioController.GetMuted());
 			}
 			mDown = Keys.isKeyDown(Keyboard.Q);
+			
+			if (EndOfTheLine_TerminateASAP) {
+				Cleanup();
+				SystemMain.instance.StateTo(new EndGame());
+			}
 		}
 		
 		public function MockUpdate():void {
-			world.Step(0, Global.VELOCITY_ITERATIONS, Global.POSITION_ITERATIONS);
-			world.ClearForces();
+			WorldManager.World.Step(0, Global.VELOCITY_ITERATIONS, Global.POSITION_ITERATIONS);
+			WorldManager.World.ClearForces();
 			
 			//Update the objects
 			player.Update(0);
@@ -201,12 +189,35 @@ package GameCom.States {
 			worldSpr.y = Math.floor( -player.y + stage.stageHeight / 2);
 		}
 		
-		public function Redraw(e:*= null):void {
-			//What even is this supposed to do?
-		}
-		
 		private function Pause():void {
 			simulating = !simulating;
+		}
+		
+		private function Cleanup():void {
+			worldSpr = null;
+			
+			waterLayer = null;
+			groundLayer = null;
+			object0Layer = null;
+			placesLayer = null;
+			object1Layer = null;
+			
+			npcManager = null;
+			bgManager = null;
+			scenicManager = null;
+			placesManager = null;
+			
+			gui = null;
+			
+			player = null;
+			
+			simulating = false;
+			
+			this.removeEventListener(Event.ENTER_FRAME, Update);
+			
+			while (this.numChildren > 0) {
+				this.removeChildAt(0);
+			}
 		}
 	}
 }

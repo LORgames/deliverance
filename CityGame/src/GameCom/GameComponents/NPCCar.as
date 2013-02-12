@@ -13,6 +13,7 @@ package GameCom.GameComponents
 	import GameCom.Managers.GUIManager;
 	import GameCom.Managers.MissionManager;
 	import GameCom.Managers.NodeManager;
+	import GameCom.Managers.WorldManager;
 	import GameCom.States.GameScreen;
 	import GameCom.SystemComponents.Stat;
 	import LORgames.Engine.AudioController;
@@ -34,8 +35,6 @@ package GameCom.GameComponents
 	 */
 	
 	public class NPCCar extends Sprite {
-		private var world:b2World;
-		
 		private const MAX_STEER_ANGLE:Number = Math.PI / 5;
 		private const STEER_SPEED:Number = 20.0;
 		
@@ -74,7 +73,6 @@ package GameCom.GameComponents
 		private var myHP:int = NPC_HP;
 		
 		// AI
-		private var nodeManager:NodeManager;
 		private var targetNode:int = 0;
 		private var type:int = VEHICLE_CARA;
 		private const VEHICLE_DEAD:int = -1;
@@ -87,15 +85,11 @@ package GameCom.GameComponents
 		
 		private static var CURRENT_ENEMIES:int = 0;
 		
-		public function NPCCar(spawnPosition:b2Vec2, world:b2World, nodeManager:NodeManager, angle:Number, firstNodeID:int) {
-			this.world = world;
-			
+		public function NPCCar(spawnPosition:b2Vec2, angle:Number, firstNodeID:int) {
 			var leftRearWheelPosition:b2Vec2 = MathHelper.RotateVector(_leftRearWheelPosition, angle - Math.PI / 2);
 			var rightRearWheelPosition:b2Vec2 = MathHelper.RotateVector(_rightRearWheelPosition, angle - Math.PI / 2);
 			var leftFrontWheelPosition:b2Vec2 = MathHelper.RotateVector(_leftFrontWheelPosition, angle - Math.PI / 2);
 			var rightFrontWheelPosition:b2Vec2= MathHelper.RotateVector(_rightFrontWheelPosition, angle - Math.PI / 2);
-			
-			this.nodeManager = nodeManager;
 			
 			var carChance:Number = Math.random();
 			var vehicle:Class;
@@ -141,7 +135,7 @@ package GameCom.GameComponents
 			bodyBodyDef.angle = angle - Math.PI / 2;
 			
 			//Create the body
-			body = world.CreateBody(bodyBodyDef);
+			body = WorldManager.World.CreateBody(bodyBodyDef);
 			body.CreateFixture(bodyFixtureDef);
 			// Car Wheels
 			
@@ -163,22 +157,22 @@ package GameCom.GameComponents
 			
 			//Create the body
 			wheelBodyDef.position.Add(leftFrontWheelPosition);
-			leftWheel = world.CreateBody(wheelBodyDef);
+			leftWheel = WorldManager.World.CreateBody(wheelBodyDef);
 			leftWheel.CreateFixture(wheelFixtureDef);
 			wheelBodyDef.position.Subtract(leftFrontWheelPosition);
 			
 			wheelBodyDef.position.Add(rightFrontWheelPosition);
-			rightWheel = world.CreateBody(wheelBodyDef);
+			rightWheel = WorldManager.World.CreateBody(wheelBodyDef);
 			rightWheel.CreateFixture(wheelFixtureDef);
 			wheelBodyDef.position.Subtract(rightFrontWheelPosition);
 			
 			wheelBodyDef.position.Add(leftRearWheelPosition);
-			leftRearWheel = world.CreateBody(wheelBodyDef);
+			leftRearWheel = WorldManager.World.CreateBody(wheelBodyDef);
 			leftRearWheel.CreateFixture(wheelFixtureDef);
 			wheelBodyDef.position.Subtract(leftRearWheelPosition);
 			
 			wheelBodyDef.position.Add(rightRearWheelPosition);
-			rightRearWheel = world.CreateBody(wheelBodyDef);
+			rightRearWheel = WorldManager.World.CreateBody(wheelBodyDef);
 			rightRearWheel.CreateFixture(wheelFixtureDef);
 			wheelBodyDef.position.Subtract(rightRearWheelPosition);
 			
@@ -193,8 +187,8 @@ package GameCom.GameComponents
 			rightJointDef.enableMotor = true;
 			rightJointDef.maxMotorTorque = 100;
 			 
-			leftJoint = b2RevoluteJoint(world.CreateJoint(leftJointDef));
-			rightJoint = b2RevoluteJoint(world.CreateJoint(rightJointDef));
+			leftJoint = b2RevoluteJoint(WorldManager.World.CreateJoint(leftJointDef));
+			rightJoint = b2RevoluteJoint(WorldManager.World.CreateJoint(rightJointDef));
 			
 			var leftRearJointDef:b2PrismaticJointDef = new b2PrismaticJointDef();
 			leftRearJointDef.Initialize(body, leftRearWheel, leftRearWheel.GetWorldCenter(), new b2Vec2(1,0));
@@ -205,9 +199,9 @@ package GameCom.GameComponents
 			rightRearJointDef.Initialize(body, rightRearWheel, rightRearWheel.GetWorldCenter(), new b2Vec2(1,0));
 			rightRearJointDef.enableLimit = true;
 			rightRearJointDef.lowerTranslation = rightRearJointDef.upperTranslation = 0;
-			 
-			world.CreateJoint(leftRearJointDef);
-			world.CreateJoint(rightRearJointDef);
+			
+			WorldManager.World.CreateJoint(leftRearJointDef);
+			WorldManager.World.CreateJoint(rightRearJointDef);
 			
 			engineSpeed *= (MAX_STEER_ANGLE-Math.abs(steeringAngle)) / (4 * MAX_STEER_ANGLE) + 0.25;
 			
@@ -247,7 +241,7 @@ package GameCom.GameComponents
 			scannerBodyDef.userData = "collisionScanner";
 			scannerBodyDef.angle = angle;
 			
-			collisionScanner = world.CreateBody(scannerBodyDef);
+			collisionScanner = WorldManager.World.CreateBody(scannerBodyDef);
 			collisionScanner.CreateFixture(scannerFixtureDef);
 			
 			/*var scannerJointDef:b2RevoluteJointDef = new b2RevoluteJointDef();
@@ -324,12 +318,12 @@ package GameCom.GameComponents
 			
 			if (targetNode != -1) {
 				// if within reach of targetNode then choose next node
-				if (nodeManager.TouchNode(targetNode, x, y)) {
-					targetNode = nodeManager.NextNode(targetNode);
+				if (NodeManager.TouchNode(targetNode, x, y)) {
+					targetNode = NodeManager.NextNode(targetNode);
 					if (targetNode == -1) return;
 				}
 				
-				var tNode:Node = nodeManager.GetNode(targetNode);
+				var tNode:Node = NodeManager.GetNode(targetNode);
 				
 				// always accelerate toward targetNode UNLESS ABOUT TO COLLIDE OMFG JUST LIKE JACOB'S DRIVING 
 				if (collisions > 0) {
@@ -429,11 +423,11 @@ package GameCom.GameComponents
 			
 			switch(weaponName) {
 				case "MachineGun":
-					Wep = new  MachineGun(world); break;
+					Wep = new  MachineGun(); break;
 				case "Laser":
-					Wep = new Laser(world); break;
+					Wep = new Laser(); break;
 				default:
-					Wep = new MachineGun(world); break;
+					Wep = new MachineGun(); break;
 			}
 			
 			Wep.IgnoreList.push(body.GetFixtureList());
@@ -450,12 +444,12 @@ package GameCom.GameComponents
 				CURRENT_ENEMIES--;
 			}
 			
-			world.DestroyBody(body);
-			world.DestroyBody(leftWheel);
-			world.DestroyBody(rightWheel);
-			world.DestroyBody(leftRearWheel);
-			world.DestroyBody(rightRearWheel);
-			world.DestroyBody(collisionScanner);
+			WorldManager.World.DestroyBody(body);
+			WorldManager.World.DestroyBody(leftWheel);
+			WorldManager.World.DestroyBody(rightWheel);
+			WorldManager.World.DestroyBody(leftRearWheel);
+			WorldManager.World.DestroyBody(rightRearWheel);
+			WorldManager.World.DestroyBody(collisionScanner);
 		}
 		
 		public function Damage(dams:int):void {

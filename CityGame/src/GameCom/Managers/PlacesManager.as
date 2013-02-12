@@ -18,31 +18,25 @@ package GameCom.Managers {
 	 * @author Paul
 	 */
 	public class PlacesManager {
-		public static var instance:PlacesManager;
-		
-		private var Types:Vector.<String> = new Vector.<String>();
-		private var Objects:Vector.<PlaceObject> = new Vector.<PlaceObject>();
+		private static var Types:Vector.<String> = new Vector.<String>();
+		private static var Objects:Vector.<PlaceObject> = new Vector.<PlaceObject>();
 		
 		public var drawList:Vector.<PlaceObject> = new Vector.<PlaceObject>();
 		
-		public var PickupLocations:Vector.<PickupPlace> = new Vector.<PickupPlace>();
-		public var DropatLocations:Vector.<PlaceObject> = new Vector.<PlaceObject>();
-		public var SpawnLocations:Vector.<PlaceObject> = new Vector.<PlaceObject>();
-		public var CollectableLocations:Vector.<PlaceObject> = new Vector.<PlaceObject>();
+		public static var PickupLocations:Vector.<PickupPlace> = new Vector.<PickupPlace>();
+		public static var DropatLocations:Vector.<PlaceObject> = new Vector.<PlaceObject>();
+		public static var SpawnLocations:Vector.<PlaceObject> = new Vector.<PlaceObject>();
+		public static var CollectableLocations:Vector.<PlaceObject> = new Vector.<PlaceObject>();
 		
-		public var DeliveryLocationsByResource:Vector.<Vector.<PlaceObject>> = new Vector.<Vector.<PlaceObject>>();
+		public static var DeliveryLocationsByResource:Vector.<Vector.<PlaceObject>> = new Vector.<Vector.<PlaceObject>>();
+		
+		public static var instance:PlacesManager;
 		
 		private var layer:Sprite;
 		
 		private var player:Sprite;
-		private var world:b2World;
 		
-		public function PlacesManager(layer0:Sprite, player:Sprite, world:b2World) {
-			if (instance != null) {
-				//We've already loaded this before
-				return;
-			}
-			
+		public static function Initialize():void {
 			var i:int;
 			var j:int;
 			var typeID:int;
@@ -51,13 +45,6 @@ package GameCom.Managers {
 			for (i = 0; i < 32; i++) {
 				DeliveryLocationsByResource.push(new Vector.<PlaceObject>());
 			}
-			
-			instance = this;
-			
-			this.layer = layer0;
-			
-			this.player = player;
-			this.world = world;
 			
 			var objectTypes:ByteArray = ThemeManager.Get("3.cache"); //Will be needed for physics
 			var objectFile:ByteArray = ThemeManager.Get("3.map");
@@ -104,14 +91,14 @@ package GameCom.Managers {
 				var po:PlaceObject;
 				
 				if (sourceID == pickupIndex) {
-					po = new PickupPlace(sourceID, locationX, locationY, rotation, world, Types[sourceID], PickupLocations.length);
+					po = new PickupPlace(sourceID, locationX, locationY, rotation, Types[sourceID], PickupLocations.length);
 					
 					po.b_Resource = objectFile.readInt();
 					po.b_NPC = objectFile.readShort();
 					
 					PickupLocations.push(po);
 				} else if (sourceID == dropatIndex) {
-					po = new PlaceObject(sourceID, locationX, locationY, rotation, world, Types[sourceID], DropatLocations.length);
+					po = new PlaceObject(sourceID, locationX, locationY, rotation, Types[sourceID], DropatLocations.length);
 					
 					po.b_Resource = objectFile.readInt();
 					po.b_NPC = objectFile.readShort();
@@ -124,10 +111,10 @@ package GameCom.Managers {
 					
 					DropatLocations.push(po);
 				} else if (sourceID == shopIndex) {
-					po = new PlaceObject(sourceID, locationX, locationY, rotation, world, Types[sourceID], 0);
+					po = new PlaceObject(sourceID, locationX, locationY, rotation, Types[sourceID], 0);
 					po.isActive = true;
 				} else if (sourceID == collectableIndex) {
-					po = new PlaceObject(sourceID, locationX, locationY, rotation, world, Types[sourceID], 0);
+					po = new PlaceObject(sourceID, locationX, locationY, rotation, Types[sourceID], 0);
 					
 					if (!Storage.GetAsBool("Collectable_" + CollectableLocations.length)) {
 						po.isActive = true;
@@ -135,7 +122,7 @@ package GameCom.Managers {
 					
 					CollectableLocations.push(po);
 				} else if (sourceID == spawnIndex) {
-					po = new PlaceObject(sourceID, locationX, locationY, rotation, world, Types[sourceID], 0);
+					po = new PlaceObject(sourceID, locationX, locationY, rotation, Types[sourceID], 0);
 					po.isActive = false;
 					
 					SpawnLocations.push(po);
@@ -143,11 +130,19 @@ package GameCom.Managers {
 				
 				Objects.push(po);
 			}
+		}
+		
+		public function PlacesManager(layer0:Sprite, player:Sprite) {
+			instance = this;
 			
-			trace("Total Collectables: " + CollectableLocations.length);
+			this.layer = layer0;
+			
+			this.player = player;
 		}
 		
         public function DrawObjects():void {
+			if (layer.stage == null) return;
+			
             drawList.sort(BaseObject.Compare);
 			
 			layer.graphics.clear();

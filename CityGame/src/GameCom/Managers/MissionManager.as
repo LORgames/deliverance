@@ -32,7 +32,7 @@ package GameCom.Managers {
 		private static var nextMissionRepRequired:int = 0;
 		private static var highestMissionCompleted:int = -1;
 			
-		public static function Initialize() : Boolean {
+		public static function Initialize() : void {
 			// load in nodes
 			var missionfile:ByteArray = ThemeManager.Get("story.bin");
 			missionfile.position = 0;
@@ -69,30 +69,28 @@ package GameCom.Managers {
 				
 				temp.EnemyQuantity = missionfile.readShort();
 				
-				var f:PlaceObject = PlacesManager.instance.PickupLocations[temp.Origin];
-				var t:PlaceObject = PlacesManager.instance.DropatLocations[temp.Destination];
+				var f:PlaceObject = PlacesManager.PickupLocations[temp.Origin];
+				var t:PlaceObject = PlacesManager.DropatLocations[temp.Destination];
 				
 				temp.TotalDistance = MathHelper.Distance(f.position, t.position);
 				
 				missionArray.push(temp);
 			}
-			
+		}
+		
+		public static function ResetMissions():Boolean {
 			highestMissionCompleted = Storage.GetAsInt("HighestMissionCompleted", -1);
 			return UpdateRepRequiredForNextMission();
 		}
 		
 		private static function UpdateRepRequiredForNextMission():Boolean {
-			if (highestMissionCompleted == missionArray.length) {
+			if (highestMissionCompleted+1 == missionArray.length) {
 				nextMissionRepRequired = int.MAX_VALUE; //LOTS OF REP NEEDED
-			} else {
-				if(highestMissionCompleted+1 < missionArray.length) {
-					nextMissionRepRequired = missionArray[highestMissionCompleted + 1].ReputationRequired;
-				} else {
-					SystemMain.instance.StateTo(new EndGame());
-					return false;
-				}
+				GameScreen.EndOfTheLine_TerminateASAP = true;
+				return false;
 			}
 			
+			nextMissionRepRequired = missionArray[highestMissionCompleted + 1].ReputationRequired;
 			return true;
 		}
 		
@@ -100,16 +98,16 @@ package GameCom.Managers {
 			if (ReputationHelper.GetCurrentReputation() >= nextMissionRepRequired) {
 				SetNextMission(missionArray[highestMissionCompleted + 1]);
 			} else {
-				for (var i:int = 0; i < PlacesManager.instance.PickupLocations.length; i++) {
-					PlacesManager.instance.PickupLocations[i].GenerateMission();
+				for (var i:int = 0; i < PlacesManager.PickupLocations.length; i++) {
+					PlacesManager.PickupLocations[i].GenerateMission();
 				}
 			}
 		}
 		
 		public static function SetNextMission(params:MissionParameters) : void {
 			//Deactivate all places
-			for (var i:int = 0; i < PlacesManager.instance.PickupLocations.length; i++) {
-				PlacesManager.instance.PickupLocations[i].Deactivate();
+			for (var i:int = 0; i < PlacesManager.PickupLocations.length; i++) {
+				PlacesManager.PickupLocations[i].Deactivate();
 			}
 			
 			CurrentMission = params;
@@ -120,12 +118,12 @@ package GameCom.Managers {
 				
 				CurrentMission.hasGoods = true;
 				
-				_CurrentDestination = (PlacesManager.instance.DropatLocations[params.Destination] as PlaceObject);
+				_CurrentDestination = (PlacesManager.DropatLocations[params.Destination] as PlaceObject);
 				
 				CurrentMission.ReputationGain = CurrentMission.ResourceAmount * ResourceHelper.GetResouce(CurrentMission.ResourceType).ReputationGainPerItem;
 				CurrentMission.MonetaryGain = CurrentMission.ResourceAmount * ResourceHelper.GetResouce(CurrentMission.ResourceType).ValuePerItem;
 			} else {
-				_CurrentDestination = (PlacesManager.instance.PickupLocations[params.Origin] as PlaceObject);
+				_CurrentDestination = (PlacesManager.PickupLocations[params.Origin] as PlaceObject);
 				GUIManager.I.Popup(CurrentMission.StartText, CurrentMission.StartNPC1);
 			}
 			
@@ -146,7 +144,7 @@ package GameCom.Managers {
 					GUIManager.I.Popup(CurrentMission.PickupText, CurrentMission.StartNPC1, CurrentMission.StartNPC2);
 				}
 				
-				_CurrentDestination = PlacesManager.instance.DropatLocations[CurrentMission.Destination];
+				_CurrentDestination = PlacesManager.DropatLocations[CurrentMission.Destination];
 				_CurrentDestination.isActive = true;
 				
 				CurrentMission.hasGoods = true;
@@ -162,6 +160,7 @@ package GameCom.Managers {
 				if (CurrentMission.isStoryMission) {
 					GUIManager.I.Popup(CurrentMission.EndText, CurrentMission.EndNPC1, CurrentMission.EndNPC2);
 					highestMissionCompleted++;
+					
 					Storage.Set("HighestMissionCompleted", highestMissionCompleted);
 					UpdateRepRequiredForNextMission();
 					

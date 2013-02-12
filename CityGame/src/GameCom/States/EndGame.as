@@ -44,6 +44,8 @@ package GameCom.States {
 		public function Init(e:Event = null):void {
 			removeEventListener(Event.ADDED_TO_STAGE, Init);
 			
+			stage.focus = stage;
+			
 			background = new Preloader.Logo();
 			
 			//Start Menu

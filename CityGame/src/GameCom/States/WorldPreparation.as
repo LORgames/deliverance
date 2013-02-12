@@ -7,7 +7,13 @@ package GameCom.States {
 	import flash.text.TextFieldAutoSize;
 	import GameCom.Helpers.AudioStore;
 	import GameCom.Helpers.PeopleHelper;
+	import GameCom.Helpers.ResourceHelper;
 	import GameCom.Helpers.UpgradeHelper;
+	import GameCom.Managers.MissionManager;
+	import GameCom.Managers.NodeManager;
+	import GameCom.Managers.PlacesManager;
+	import GameCom.Managers.ScenicManager;
+	import GameCom.Managers.WorldManager;
 	import GameCom.SystemMain;
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
@@ -71,10 +77,24 @@ package GameCom.States {
 		}
 		
 		public function CreateWorldNow():void {
+			ResourceHelper.Initialize();
+			
+			WorldManager.Initialize();
+			
 			UpgradeHelper.Initialize();
 			PeopleHelper.Initialize();
 			
+			ScenicManager.Initialize();
+			PlacesManager.Initialize();
+			
+			NodeManager.Initialize();
+			
+			//Needs places manager to be running first
+			MissionManager.Initialize();
+			
 			AudioController.PlayLoop(AudioStore.Music);
+			
+			WorldManager.World.Step(0, 1, 1);
 			
 			SystemMain.instance.StateTo(new MainMenu());
 		}

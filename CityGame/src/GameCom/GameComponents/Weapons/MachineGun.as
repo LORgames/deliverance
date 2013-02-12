@@ -13,6 +13,7 @@ package GameCom.GameComponents.Weapons
 	import GameCom.GameComponents.PlayerTruck;
 	import GameCom.Helpers.AudioStore;
 	import GameCom.Helpers.MathHelper;
+	import GameCom.Managers.WorldManager;
 	import LORgames.Engine.AudioController;
 	import LORgames.Engine.Mousey;
 	/**
@@ -25,9 +26,7 @@ package GameCom.GameComponents.Weapons
 		
 		private const RANGE:Number = 30;
 		
-		public function MachineGun(world:b2World) {
-			super(world);
-			
+		public function MachineGun() {
 			WeaponType = MACHINE_GUN;
 			FIRE_RATE = 0.1;
 			
@@ -58,7 +57,7 @@ package GameCom.GameComponents.Weapons
 			fixtureHit = null;
 			distance = 1.0;
 			
-			World.RayCast(Wrappey, b1, b3);
+			WorldManager.World.RayCast(Wrappey, b1, b3);
 			
 			if (distance < 1.0) {
 				if (fixtureHit.GetUserData() is NPCCar) {

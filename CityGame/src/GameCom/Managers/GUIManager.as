@@ -140,6 +140,8 @@ package GameCom.Managers {
 		}
 		
 		public function Update() : void {
+			if (stage == null) return;
+			
 			CurrentSpeedText.text = Math.round(player.body.GetLinearVelocity().Length() * 3.6) + "km/h";
 			
 			if (MissionManager.CurrentDestination() != null) {
