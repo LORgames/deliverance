@@ -12,6 +12,12 @@ package LORgames.Engine
 			Storage.Set(statname, stat);
 		}
 		
+		public static function AddValue(statname:String, increaseValue:int):void {
+			var stat:int = Storage.GetAsInt(statname, 0);
+			stat += increaseValue;
+			Storage.Set(statname, stat);
+		}
+		
 		public static function SetHighestInt(statname:String, newHighest:int):void {
 			if (Storage.GetAsInt(statname, 0) < newHighest) {
 				Storage.Set(statname, newHighest);

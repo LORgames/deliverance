@@ -1,6 +1,9 @@
 package GameCom.Helpers {
+	import flash.events.StatusEvent;
 	import GameCom.Managers.GUIManager;
 	import GameCom.SystemComponents.ReputationLevel;
+	import GameCom.SystemComponents.Stat;
+	import LORgames.Engine.Stats;
 	import LORgames.Engine.Storage;
 	/**
 	 * ...
@@ -63,6 +66,8 @@ package GameCom.Helpers {
 					GUIManager.I.player.EquipWeapon("Machine Gun");
 				}
 			}
+			
+			Stats.SetHighestNumber(Stat.HIGHEST_REPUTATION_INCREASE, newRep);
 		}
 		
 		public static function GetCurrentReputation():int {

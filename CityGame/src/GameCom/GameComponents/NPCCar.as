@@ -489,8 +489,8 @@ package GameCom.GameComponents
 					Wep.Update(new Point(GUIManager.I.player.x, GUIManager.I.player.y), false);
 				}
 				
-				body.SetLinearDamping(5);
-				body.SetAngularDamping(5);
+				body.SetLinearDamping(1);
+				body.SetAngularDamping(1);
 				
 				type = VEHICLE_DEAD;
 			}

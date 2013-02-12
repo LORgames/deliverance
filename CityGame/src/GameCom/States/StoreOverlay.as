@@ -2,14 +2,19 @@ package GameCom.States {
 	import Box2D.Common.b2Color;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
+	import flash.events.TextEvent;
 	import flash.filters.GlowFilter;
 	import flash.geom.ColorTransform;
+	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
+	import flash.text.TextFormat;
 	import GameCom.Helpers.AudioStore;
 	import GameCom.Helpers.MoneyHelper;
 	import GameCom.Helpers.ReputationHelper;
 	import GameCom.Helpers.UpgradeHelper;
 	import GameCom.Managers.GUIManager;
 	import LORgames.Components.Button;
+	import LORgames.Components.TextBox;
 	import LORgames.Components.Tooltip;
 	import LORgames.Engine.AudioController;
 	import LORgames.Engine.Storage;
@@ -34,6 +39,8 @@ package GameCom.States {
 		
 		private var CabColourButtons:Vector.<Button> = new Vector.<Button>();
 		private var TrailerColourButtons:Vector.<Button> = new Vector.<Button>();
+		
+		private var CurrencyTB:TextField = new TextField();
 		
 		private var tooltip:Tooltip = new Tooltip("", Tooltip.RIGHT);
 		
@@ -133,6 +140,16 @@ package GameCom.States {
 			
 			CloseButton.addEventListener(MouseEvent.CLICK, OnCloseClicked);
 			
+			CurrencyTB.selectable = false;
+			CurrencyTB.defaultTextFormat = new TextFormat("Verdana", 20, 0xFFFF70);
+			CurrencyTB.x = 128;
+			CurrencyTB.y = 10;
+			CurrencyTB.autoSize = TextFieldAutoSize.LEFT;
+			CurrencyTB.filters = new Array(new GlowFilter(0, 1, 2, 2, 5));
+			this.addChild(CurrencyTB);
+			
+			CurrencyTB.text = "$" + MoneyHelper.GetBalance();
+			
 			tooltip.visible = false;
 			
 			RedrawStats();
@@ -158,6 +175,8 @@ package GameCom.States {
 					Storage.Set(stat + "Upgrade", statVal + 1);
 				}
 			}
+			
+			CurrencyTB.text = "$" + MoneyHelper.GetBalance();
 			
 			OnUpgradeHighlight(me);
 			

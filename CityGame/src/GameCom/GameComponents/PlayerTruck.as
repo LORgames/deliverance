@@ -42,15 +42,15 @@ package GameCom.GameComponents {
 		private const STEERING_CORRECT_SPEED:Number = 5.0;
 		
 		private const SIDEWAYS_FRICTION_FORCE:Number = 1000;
-		private const BASE_HORSEPOWER_MAX:Number = 100;
-		private const BASE_HORSEPOWER_INC:Number = 25;
+		private const BASE_HORSEPOWER_MAX:Number = 75;
+		private const BASE_HORSEPOWER_INC:Number = 20;
 		private const BASE_HEALTH:int = 800;
-		private const BASE_REVERSE_SPEED:int = 20;
+		private const BASE_REVERSE_SPEED:int = 60;
 		
 		private const BASE_DAMAGEFACTOR:Number = 1.0;
 		
-		private const HORSEPOWER_MAX_PER_LEVEL:Number = 10;
-		private const HORSEPOWER_INC_PER_LEVEL:Number = 2.5;
+		private const HORSEPOWER_MAX_PER_LEVEL:Number = 7.5;
+		private const HORSEPOWER_INC_PER_LEVEL:Number = 1.0;
 		private const HEALTH_INC_PER_LEVEL:Number = 100;
 		private const ARMOUR_INC_PER_LEVEL:Number = 0.09;
 		private const DAMAGE_INC_PER_LEVEL:Number = 0.4;
@@ -496,6 +496,7 @@ package GameCom.GameComponents {
 				}
 				
 				Stats.AddOne(Stat.NUMBER_OF_DEATHS);
+				Stats.AddValue(Stat.TOTAL_DEATH_COST, money / 5);
 			}
 			
 			NPCManager.I.DestroyAllCars();

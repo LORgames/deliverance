@@ -4,6 +4,7 @@ package GameCom.Managers {
 	import flash.utils.getTimer;
 	import GameCom.GameComponents.PickupPlace;
 	import GameCom.GameComponents.PlaceObject;
+	import GameCom.Helpers.MathHelper;
 	import GameCom.Helpers.MoneyHelper;
 	import GameCom.Helpers.PeopleHelper;
 	import GameCom.Helpers.ReputationHelper;
@@ -67,6 +68,11 @@ package GameCom.Managers {
 				temp.EndText = missionfile.readMultiByte(endTextLength, "iso-8859-1");
 				
 				temp.EnemyQuantity = missionfile.readShort();
+				
+				var f:PlaceObject = PlacesManager.instance.PickupLocations[temp.Origin];
+				var t:PlaceObject = PlacesManager.instance.DropatLocations[temp.Destination];
+				
+				temp.TotalDistance = MathHelper.Distance(f.position, t.position);
 				
 				missionArray.push(temp);
 			}
@@ -148,6 +154,8 @@ package GameCom.Managers {
 				_CurrentDestination.isActive = false;
 				_CurrentDestination = null;
 				
+				Stats.AddOne(Stat.NUMBER_OF_DELIVERIES);
+				
 				ReputationHelper.GrantReputation(CurrentMission.ReputationGain);
 				MoneyHelper.Credit(CurrentMission.MonetaryGain);
 				
@@ -162,8 +170,13 @@ package GameCom.Managers {
 					Stats.SetHighestInt(Stat.LONGEST_DELIVERY, CurrentMission.TotalDistance);
 					Stats.SetLowestInt(Stat.SHORTEST_DELIVERY, CurrentMission.TotalDistance);
 					
+					Stats.AddOne(Stat.TOTAL_DELIVERY_FROM_PREFIX + CurrentMission.StartNPC1);
+					Stats.AddOne(Stat.TOTAL_DELIVERY_TO_PREFIX + CurrentMission.EndNPC1);
+					
 					GUIManager.I.Popup(PeopleHelper.DropOffMessages[CurrentMission.EndNPC1], CurrentMission.EndNPC1, CurrentMission.EndNPC2);
 				}
+				
+				Stats.AddValue(Stat.TOTAL_DELIVERY_DISTANCE, CurrentMission.TotalDistance);
 				
 				CurrentMission = null;
 				GUIManager.I.UpdateCache();
@@ -178,7 +191,7 @@ package GameCom.Managers {
 		
 		public static function CurrentDestination() : Point {
 			if (_CurrentDestination != null) {
-				return new Point(_CurrentDestination.drawX, _CurrentDestination.drawY);
+				return _CurrentDestination.position;
 			}
 			
 			return null;

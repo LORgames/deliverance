@@ -38,7 +38,7 @@ package GameCom.Managers
 				
 				Stats.SetHighestInt(Stat.TOTAL_LASER_COMPONENTS, Storage.GetAsInt("TotalCollectablesFound"));
 				
-				if(Storage.GetAsInt("TotalCollectablesFound") > 50) {
+				if(Storage.GetAsInt("TotalCollectablesFound") < 50) {
 					GUIManager.I.Popup(Storage.GetAsInt("TotalCollectablesFound") + " of " + PlacesManager.instance.CollectableLocations.length + " laser components found.");
 				} else {
 					GUIManager.I.Popup("You found them all! Your laser is ready to collect at any garage!");

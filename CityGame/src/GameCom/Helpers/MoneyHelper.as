@@ -1,5 +1,7 @@
 package GameCom.Helpers 
 {
+	import GameCom.SystemComponents.Stat;
+	import LORgames.Engine.Stats;
 	import LORgames.Engine.Storage;
 	/**
 	 * ...
@@ -21,12 +23,18 @@ package GameCom.Helpers
 				currentMoney = MAX_MONEY;
 				
 			Storage.Set("Money", currentMoney);
+			
+			Stats.AddValue(Stat.TOTAL_MONEY_GAINED, creditAmount);
+			Stats.SetHighestInt(Stat.HIGHEST_MONEY, currentMoney);
+			Stats.SetHighestInt(Stat.HIGHEST_MONEY_INCREASE, creditAmount);
 		}
 		
 		public static function Debit(debitAmount:int):void {
 			currentMoney -= debitAmount
 			
 			Storage.Set("Money", currentMoney);
+			
+			Stats.AddValue(Stat.TOTAL_MONEY_SPENT, debitAmount);
 		}
 		
 		public static function CanCredit(creditAmount:int):Boolean {

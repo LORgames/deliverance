@@ -71,7 +71,7 @@ package GameCom.GameComponents.Weapons
 				
 				this.graphics.moveTo(0, 0);
 				this.graphics.lineTo(size*distance*Global.PHYSICS_SCALE, 0);
-			} else {
+			} else if(myLaserSound != null) {
 				myLaserSound.stop();
 				myLaserSound = null;
 			}

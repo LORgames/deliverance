@@ -1,6 +1,6 @@
 Tips on main menu
 Turn ads back on
-? Explosions
-Stats API
+<- Explosions
 -> Stats Mochi
 -> Stats Kongregate
+Add laser building message to the "this is the last chance to upgrade" story.

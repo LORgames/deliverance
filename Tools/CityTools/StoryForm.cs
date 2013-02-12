@@ -26,6 +26,9 @@ namespace CityTools {
             instance = this;
             this.scc = scc;
             InitializeComponent();
+
+            txtEndText.SpellCheck.IsEnabled = true;
+            SpellCheck.SetIsEnabled(txtEndText, true);
         }
 
         public bool InStartLocation() {
