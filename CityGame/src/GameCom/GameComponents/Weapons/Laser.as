@@ -6,9 +6,12 @@ package GameCom.GameComponents.Weapons
 	import flash.display.MovieClip;
 	import flash.geom.ColorTransform;
 	import flash.geom.Point;
+	import flash.media.SoundChannel;
 	import flash.sampler.NewObjectSample;
 	import GameCom.GameComponents.NPCCar;
 	import GameCom.GameComponents.PlayerTruck;
+	import GameCom.Helpers.AudioStore;
+	import LORgames.Engine.AudioController;
 	import LORgames.Engine.Mousey;
 	/**
 	 * ...
@@ -18,7 +21,9 @@ package GameCom.GameComponents.Weapons
 		private var fixtureHit:b2Fixture;
 		private var distance:Number;
 		
-		private var LASER_DAMS:int = 13;
+		private const LASER_DAMS:int = 13;
+		
+		private var myLaserSound:SoundChannel;
 		
 		public function Laser(world:b2World) {
 			super(world);
@@ -38,6 +43,10 @@ package GameCom.GameComponents.Weapons
 			this.graphics.lineStyle(1, 0xFF0000);
 			
 			if (wantsToFire) {
+				if (myLaserSound == null) {
+					myLaserSound = AudioController.PlayLoop(AudioStore.Laser);
+				}
+				
 				var b1:b2Vec2 = new b2Vec2(parent.x / Global.PHYSICS_SCALE, parent.y / Global.PHYSICS_SCALE);
 				var b2:b2Vec2 = new b2Vec2(p.x / Global.PHYSICS_SCALE, p.y / Global.PHYSICS_SCALE);
 				
@@ -62,6 +71,9 @@ package GameCom.GameComponents.Weapons
 				
 				this.graphics.moveTo(0, 0);
 				this.graphics.lineTo(size*distance*Global.PHYSICS_SCALE, 0);
+			} else {
+				myLaserSound.stop();
+				myLaserSound = null;
 			}
 		}
 		

@@ -60,7 +60,7 @@ package GameCom.Helpers {
 				ResourceHelper.UpdateAvailableResources();
 				
 				if (CurrentLevel == 4) {
-					GUIManager.I.player.EquipWeapon("MachineGun");
+					GUIManager.I.player.EquipWeapon("Machine Gun");
 				}
 			}
 		}
@@ -89,7 +89,7 @@ package GameCom.Helpers {
 			var cXP:int = Levels[CurrentLevel].ReputationRequired;
 			var nXP:int = Levels[CurrentLevel + 1].ReputationRequired;
 			
-			var x:Number = Math.random() / 5 + 0.1;
+			var x:Number = Math.random() * 0.9 + 0.1;
 			
 			return ((nXP - cXP) * x);
 		}

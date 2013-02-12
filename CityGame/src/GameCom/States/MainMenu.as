@@ -90,15 +90,18 @@ package GameCom.States {
 		}
 		
 		public function PlayFunc(e:MouseEvent):void {
+			AudioController.PlaySound(AudioStore.MenuClick);
 			Storage.Format();
 			SystemMain.instance.StateTo(new GameScreen());
 		}
 		
 		public function ContinueFunc(e:MouseEvent):void {
+			AudioController.PlaySound(AudioStore.MenuClick);
 			SystemMain.instance.StateTo(new GameScreen());
 		}
 		
 		public function WebsiteFunc(e:MouseEvent):void {
+			AudioController.PlaySound(AudioStore.MenuClick);
 			flash.net.navigateToURL(new URLRequest("http://www.lorgames.com"), "_blank");
 		}
 		

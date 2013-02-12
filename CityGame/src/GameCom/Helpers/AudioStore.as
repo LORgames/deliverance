@@ -31,6 +31,15 @@ package GameCom.Helpers
 		
 		[Embed(source="../../../lib/Audio/Explode.mp3")]
 		public static const Explode:Class;
+		
+		[Embed(source="../../../lib/Audio/LaserFire.mp3")]
+		public static const Laser:Class;
+		
+		[Embed(source="../../../lib/Audio/MenuPopup.mp3")]
+		public static const MenuPopup:Class;
+		
+		[Embed(source="../../../lib/Audio/MenuClickSound.mp3")]
+		public static const MenuClick:Class;
 	}
 
 }

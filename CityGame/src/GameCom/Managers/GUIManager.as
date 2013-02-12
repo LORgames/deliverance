@@ -1,7 +1,4 @@
-
-
-package GameCom.Managers 
-{
+package GameCom.Managers {
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	import flash.events.TextEvent;
@@ -14,6 +11,7 @@ package GameCom.Managers
 	import flash.ui.Keyboard;
 	import flash.utils.getTimer;
 	import GameCom.GameComponents.PlayerTruck;
+	import GameCom.Helpers.AudioStore;
 	import GameCom.Helpers.MathHelper;
 	import GameCom.Helpers.MoneyHelper;
 	import GameCom.Helpers.ReputationHelper;
@@ -22,6 +20,7 @@ package GameCom.Managers
 	import GameCom.States.StoreOverlay;
 	import GameCom.SystemComponents.PopupInfo;
 	import LORgames.Components.Tooltip;
+	import LORgames.Engine.AudioController;
 	import LORgames.Engine.Keys;
 	import LORgames.Engine.Mousey;
 	/**
@@ -45,6 +44,7 @@ package GameCom.Managers
 		public var player:PlayerTruck;
 		
 		private var popupMessages:Vector.<PopupInfo> = new Vector.<PopupInfo>();
+		private var popupCloseMessage:TextField = new TextField();
 		private var popupText:TextField = new TextField();
 		private var popupAlpha:Number = 0;
 		private var popupFadeIn:Boolean = false;
@@ -121,6 +121,14 @@ package GameCom.Managers
 			
 			popupText.filters = new Array(new GlowFilter(0x337C8C, 1, 7, 7, 3));
 			PopupSprite.addChild(popupText);
+			PopupSprite.addChild(popupCloseMessage);
+			
+			popupCloseMessage.selectable = false;
+			popupCloseMessage.defaultTextFormat = new TextFormat("Verdana", 10, 0xFFFFFF);
+			popupCloseMessage.autoSize = TextFieldAutoSize.LEFT;
+			popupCloseMessage.text = "Press Enter, Space or Left Click to continue.";
+			popupCloseMessage.filters = new Array(new GlowFilter(0x337C8C, 1, 7, 7, 3));
+			popupCloseMessage.alpha = 0;
 			
 			UpdateCache();
 			
@@ -157,6 +165,9 @@ package GameCom.Managers
 					if (popupAlpha <= 0) {
 						popupText.alpha = 0;
 						popupText.text = "";
+						
+						popupCloseMessage.alpha = 0;
+						
 						popupMessages.splice(0, 1);
 						ShowNextPopup();
 					}
@@ -165,6 +176,8 @@ package GameCom.Managers
 						popupAlpha += 0.08;
 						if (popupAlpha >= 1) {
 							popupText.alpha = 1;
+							popupCloseMessage.alpha = 1;
+							
 							popupFadeIn = false;
 							
 							//Need 1 frame of update if the popup is a blackout to allow respawn to work
@@ -178,6 +191,7 @@ package GameCom.Managers
 				}
 				
 				popupText.alpha = popupAlpha;
+				popupCloseMessage.alpha = popupAlpha;
 				
 				if (popupMessages.length > 0) {
 					PopupSprite.graphics.clear();
@@ -197,6 +211,9 @@ package GameCom.Managers
 					
 					popupText.x = stage.stageWidth / 2 - 285; // PopupSprite.x + 115;
 					popupText.y = stage.stageHeight - 200;// PopupSprite.y + 400;
+					
+					popupCloseMessage.x = stage.stageWidth / 2 - 300;
+					popupCloseMessage.y = stage.stageHeight - 30;
 					
 					if (popupMessages[0].npcNumber != -1) {
 						m.createBox(1, 1, 0, stage.stageWidth/2 + 100, stage.stageHeight - 354);
@@ -331,10 +348,14 @@ package GameCom.Managers
 			hasOverlay = true;
 			Overlay.visible = false;
 			
+			AudioController.PlaySound(AudioStore.MenuPopup);
+			
 			Pause.call();
 		}
 		
 		public function DeactivateStore():void {
+			AudioController.PlaySound(AudioStore.MenuClick);
+			
 			this.removeChild(store);
 			hasOverlay = false;
 			Overlay.visible = true;
@@ -352,6 +373,8 @@ package GameCom.Managers
 				return;
 			}
 			
+			AudioController.PlaySound(AudioStore.MenuPopup);
+			
 			this.addChild(map);
 			map.Redraw();
 			hasOverlay = true;
@@ -361,6 +384,8 @@ package GameCom.Managers
 		}
 		
 		public function DeactivateMap():void {
+			AudioController.PlaySound(AudioStore.MenuClick);
+			
 			this.removeChild(map);
 			hasOverlay = false;
 			Overlay.visible = true;

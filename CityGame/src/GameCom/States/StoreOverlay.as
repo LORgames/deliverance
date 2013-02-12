@@ -2,13 +2,16 @@ package GameCom.States {
 	import Box2D.Common.b2Color;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
+	import flash.filters.GlowFilter;
 	import flash.geom.ColorTransform;
+	import GameCom.Helpers.AudioStore;
 	import GameCom.Helpers.MoneyHelper;
 	import GameCom.Helpers.ReputationHelper;
 	import GameCom.Helpers.UpgradeHelper;
 	import GameCom.Managers.GUIManager;
 	import LORgames.Components.Button;
 	import LORgames.Components.Tooltip;
+	import LORgames.Engine.AudioController;
 	import LORgames.Engine.Storage;
 	/**
 	 * ...
@@ -18,7 +21,7 @@ package GameCom.States {
 		
 		private var StoreBackground:Sprite = new Sprite();
 		
-		private var CloseButton:Button = new Button("Close");
+		private var CloseButton:Button = new Button("Close", 100, 30, 36, [new GlowFilter(0x337C8C)], true);
 		
 		private var SpeedButton:Button = new Button("Speed", 30, 30);
 		private var AccelerationButton:Button = new Button("Acceleration", 30, 30);
@@ -144,6 +147,8 @@ package GameCom.States {
 		}
 		
 		private function OnUpgradePurchased(me:MouseEvent):void {
+			AudioController.PlaySound(AudioStore.MenuClick);
+			
 			var stat:String = me.currentTarget.getLabel();
 			var statVal:int = Storage.GetAsInt(stat + "Upgrade");
 			
@@ -183,6 +188,8 @@ package GameCom.States {
 		}
 		
 		private function ChangeWeapon(me:MouseEvent):void {
+			AudioController.PlaySound(AudioStore.MenuClick);
+			
 			var weapon:String = me.currentTarget.getLabel();
 			var available:Boolean = false;
 			

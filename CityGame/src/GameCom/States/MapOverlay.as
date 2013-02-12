@@ -4,6 +4,7 @@ package GameCom.States {
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
+	import flash.filters.GlowFilter;
 	import flash.geom.Matrix;
 	import flash.ui.Keyboard;
 	import flash.utils.getTimer;
@@ -21,7 +22,7 @@ package GameCom.States {
 	 * @author ...
 	 */
 	public class MapOverlay extends Sprite {
-		private var CloseButton:Button = new Button("Close");
+		private var CloseButton:Button = new Button("Close", 100, 30, 36, [new GlowFilter(0x337C8C)], true);
 		
 		private var tooltip:Tooltip = new Tooltip("", Tooltip.RIGHT);
 		
@@ -36,8 +37,8 @@ package GameCom.States {
 			
 			CloseButton.addEventListener(MouseEvent.CLICK, OnCloseClicked);
 			this.addChild(CloseButton);
-			CloseButton.x = 0;
-			CloseButton.y = 0;
+			CloseButton.x = 20;
+			CloseButton.y = 20;
 		}
 		
 		public function Redraw():void {

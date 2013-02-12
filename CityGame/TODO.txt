@@ -1,7 +1,3 @@
-* Popup should have enter/space/click to continue.
-* Laser Sound
-* Sound for opening and closing GUI overlay
-Disgusting close on shop and map
 Tips on main menu
 Turn ads back on
 ? Explosions

@@ -15,13 +15,18 @@ package LORgames.Components {
 		private var m_w:int;
 		private var m_h:int;
 		
-		public function Button(label:String = "", width:int = 100, height:int = 30) {
+		private var m_invis:Boolean = false;
+		
+		public function Button(label:String = "", width:int = 100, height:int = 30, fontsize:int = 10, filters:Array = null, invisible:Boolean = false) {
 			tf.selectable = false;
-			tf.defaultTextFormat = new TextFormat("Verdana", 10, 0xFFFFFF);
+			tf.defaultTextFormat = new TextFormat("Verdana", fontsize, 0xFFFFFF);
 			tf.text = label;
 			tf.autoSize = TextFieldAutoSize.LEFT;
+			tf.filters = filters;
 			this.tabEnabled = false;
 			this.addChild(tf);
+			
+			m_invis = invisible;
 			
 			this.size(width, height);
 			
@@ -56,8 +61,8 @@ package LORgames.Components {
 		
 		public function draw(innerColour:uint = 0x303030, alpha:Number = 0.85):void {
 			this.graphics.clear();
-			this.graphics.beginFill(innerColour, alpha);
-			this.graphics.lineStyle(0, 0xFFFFFF, 1, true);
+			this.graphics.beginFill(innerColour, alpha * (m_invis?0.000001:1));
+			this.graphics.lineStyle(0, 0xFFFFFF, 1 * (m_invis?0.000001:1), true);
 			this.graphics.drawRect(0, 0, m_w, m_h);
 			this.graphics.endFill();
 		}
