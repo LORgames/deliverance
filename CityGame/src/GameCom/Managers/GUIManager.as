@@ -2,6 +2,7 @@ package GameCom.Managers {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
+	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
 	import flash.filters.GlowFilter;
 	import flash.geom.Matrix;
@@ -20,6 +21,7 @@ package GameCom.Managers {
 	import GameCom.States.MapOverlay;
 	import GameCom.States.StoreOverlay;
 	import GameCom.SystemComponents.PopupInfo;
+	import LORgames.Components.Button;
 	import LORgames.Components.Tooltip;
 	import LORgames.Engine.AudioController;
 	import LORgames.Engine.Keys;
@@ -41,6 +43,9 @@ package GameCom.Managers {
 		private var PopupSprite:Sprite = new Sprite();
 		
 		private var MinimapSprite:Sprite = new Sprite();
+		private var MinimapOverlay:Bitmap = new Bitmap(ThemeManager.Get("GUI/Minimap Border.png"));
+		private var MinimapOverlaySoundOn:Bitmap = new Bitmap(ThemeManager.Get("GUI/Minimap Sound On.png"));
+		private var MuteButton:Button = new Button("MUTE", 30, 30);
 		
 		private var CurrentLevelText:TextField = new TextField();
 		private var CurrentMoneyText:TextField = new TextField();
@@ -78,6 +83,8 @@ package GameCom.Managers {
 			Overlay.y = 10;
 			
 			Overlay.addChild(MinimapSprite);
+			Overlay.addChild(MinimapOverlay);
+			Overlay.addChild(MinimapOverlaySoundOn);
 			
 			GPSArrow = ThemeManager.Get("SWFs/Arrow.swf");
 			this.addChild(GPSArrow);
@@ -144,6 +151,10 @@ package GameCom.Managers {
 			
 			store = new StoreOverlay();
 			map = new MapOverlay();
+			
+			this.addChild(MuteButton);
+			MuteButton.addEventListener(MouseEvent.CLICK, MuteClicked, false, 0, true);
+			MuteButton.alpha = 0;
 		}
 		
 		public function Update() : void {
@@ -168,6 +179,67 @@ package GameCom.Managers {
 				GPSArrow.visible = false;
 				GPSDistance.text = "";
 			}
+			
+			////////////////////////////////////////// MINIMAP UPDATES
+			var mapScale:Number = (ThemeManager.Get("GUI/Minimap.png") as BitmapData).width / 18688;
+				
+			MinimapSprite.x = stage.stageWidth - MINIMAP_SIZE_R;
+			MinimapSprite.y = stage.stageHeight - MINIMAP_SIZE_R;
+			
+			var mapOffsetX:int = -player.x * mapScale;
+			var mapOffsetY:int = -player.y * mapScale;
+			
+			var mapMAT:Matrix = new Matrix(1, 0, 0, 1, mapOffsetX, mapOffsetY);
+			
+			MinimapSprite.graphics.lineStyle(1, 0x0);
+			MinimapSprite.graphics.beginFill(0x0080C0);
+			MinimapSprite.graphics.drawCircle(0, 0, MINIMAP_SIZE_R);
+			MinimapSprite.graphics.endFill();
+			
+			MinimapSprite.graphics.lineStyle();
+			MinimapSprite.graphics.beginBitmapFill(ThemeManager.Get("GUI/Minimap.png"), mapMAT, false, false);
+			MinimapSprite.graphics.drawCircle(0, 0, MINIMAP_SIZE_R);
+			MinimapSprite.graphics.endFill();
+			
+			MinimapSprite.graphics.beginFill(0xFFFF00);
+			MinimapSprite.graphics.drawCircle(0, 0, 3);
+			MinimapSprite.graphics.endFill();
+			
+			if (MissionManager.CurrentDestination() != null) {
+				var mapOffsetX2:int;
+				var mapOffsetY2:int;
+				
+				if (MathHelper.Distance(MissionManager.CurrentDestination(), new Point(player.x, player.y)) < MINIMAP_SIZE_R/mapScale) {
+					mapOffsetX2 = mapOffsetX + (MissionManager.CurrentDestination().x * mapScale);
+					mapOffsetY2 = mapOffsetY + (MissionManager.CurrentDestination().y * mapScale);
+				} else {
+					var minimap_angle:Number = MathHelper.GetAngleBetween(MissionManager.CurrentDestination(), new Point(player.x, player.y));
+					
+					mapOffsetX2 = Math.cos(minimap_angle) * MINIMAP_SIZE_R;
+					mapOffsetY2 = Math.sin(minimap_angle) * MINIMAP_SIZE_R;
+				}
+				
+				MinimapSprite.graphics.beginFill(0xFF0000);
+				MinimapSprite.graphics.drawCircle(mapOffsetX2, mapOffsetY2, 3);
+				MinimapSprite.graphics.endFill();
+			}
+			
+			MinimapOverlay.x = stage.stageWidth - MinimapOverlay.width - Overlay.x;
+			MinimapOverlay.y = stage.stageHeight - MinimapOverlay.height - Overlay.y;
+			
+			MinimapOverlaySoundOn.x = stage.stageWidth - MinimapOverlaySoundOn.width - Overlay.x;
+			MinimapOverlaySoundOn.y = stage.stageHeight - MinimapOverlaySoundOn.height - Overlay.y;
+			
+			MuteButton.x = MinimapOverlaySoundOn.x;
+			MuteButton.y = MinimapOverlaySoundOn.y;
+			
+			if (!AudioController.GetMuted()) {
+				MinimapOverlaySoundOn.visible = true;
+			} else {
+				MinimapOverlaySoundOn.visible = false;
+			}
+			
+			///////////////////////////////////////////////// END MINIMAP UPDATES
 			
 			if (popupAlpha > 0) {
 				if (popupFadeOut) {
@@ -256,49 +328,6 @@ package GameCom.Managers {
 				store.y = (stage.stageHeight - store.height) / 2;
 				
 				map.Update();
-			} else {
-				var mapScale:Number = (ThemeManager.Get("GUI/Minimap.png") as BitmapData).width / 18688;
-				
-				MinimapSprite.x = stage.stageWidth - MINIMAP_SIZE_R;
-				MinimapSprite.y = stage.stageHeight - MINIMAP_SIZE_R;
-				
-				var mapOffsetX:int = -player.x * mapScale;
-				var mapOffsetY:int = -player.y * mapScale;
-				
-				var mapMAT:Matrix = new Matrix(1, 0, 0, 1, mapOffsetX, mapOffsetY);
-				
-				MinimapSprite.graphics.lineStyle(1, 0x0);
-				MinimapSprite.graphics.beginFill(0x0080C0);
-				MinimapSprite.graphics.drawCircle(0, 0, MINIMAP_SIZE_R);
-				MinimapSprite.graphics.endFill();
-				
-				MinimapSprite.graphics.lineStyle();
-				MinimapSprite.graphics.beginBitmapFill(ThemeManager.Get("GUI/Minimap.png"), mapMAT, false, false);
-				MinimapSprite.graphics.drawCircle(0, 0, MINIMAP_SIZE_R);
-				MinimapSprite.graphics.endFill();
-				
-				MinimapSprite.graphics.beginFill(0xFFFF00);
-				MinimapSprite.graphics.drawCircle(0, 0, 3);
-				MinimapSprite.graphics.endFill();
-				
-				if (MissionManager.CurrentDestination() != null) {
-					var mapOffsetX2:int;
-					var mapOffsetY2:int;
-					
-					if (MathHelper.Distance(MissionManager.CurrentDestination(), new Point(player.x, player.y)) < MINIMAP_SIZE_R/mapScale) {
-						mapOffsetX2 = mapOffsetX + (MissionManager.CurrentDestination().x * mapScale);
-						mapOffsetY2 = mapOffsetY + (MissionManager.CurrentDestination().y * mapScale);
-					} else {
-						var minimap_angle:Number = MathHelper.GetAngleBetween(MissionManager.CurrentDestination(), new Point(player.x, player.y));
-						
-						mapOffsetX2 = Math.cos(minimap_angle) * MINIMAP_SIZE_R;
-						mapOffsetY2 = Math.sin(minimap_angle) * MINIMAP_SIZE_R;
-					}
-					
-					MinimapSprite.graphics.beginFill(0xFF0000);
-					MinimapSprite.graphics.drawCircle(mapOffsetX2, mapOffsetY2, 3);
-					MinimapSprite.graphics.endFill();
-				}
 			}
 		}
 		
@@ -447,6 +476,10 @@ package GameCom.Managers {
 			Pause.call();
 			
 			this.graphics.clear();
+		}
+		
+		private function MuteClicked(me:MouseEvent):void {
+			AudioController.SetMuted(!AudioController.GetMuted());
 		}
 		
 	}

@@ -47,6 +47,8 @@ package LORgames.Engine
 				tr.volume = vol;
 				s.soundTransform = tr;
 			}
+			
+			Storage.SaveSetting("isMuted", b);
 		}
 		
 		/**
@@ -68,10 +70,11 @@ package LORgames.Engine
 		
 		public static function PlayLoop(soundCLS:Class, hasVolume:Boolean = true):SoundChannel {
 			//Check that the system has the capability to play audio
-			if (Capabilities.hasAudio && !GetMuted()) {
+			if (Capabilities.hasAudio) {
 				var mySound:Sound = new soundCLS();
 				var channel:SoundChannel = null;
-				channel = mySound.play(0, int.MAX_VALUE, new SoundTransform((hasVolume?1:0)));
+				channel = mySound.play(0, int.MAX_VALUE, new SoundTransform((hasVolume?(GetMuted()?0:1):0)));
+				
 				loopsPlaying.push(channel);
 				
 				return channel;

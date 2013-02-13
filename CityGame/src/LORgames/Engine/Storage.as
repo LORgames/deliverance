@@ -9,7 +9,9 @@ package LORgames.Engine
 	 */
 	public class Storage {
 		private static var storageObject:SharedObject = null;
+		
 		private static var storageArray:Array = new Array();
+		private static var settingsArray:Array = new Array();
 		
 		private static var mb:MessageBox;
 		
@@ -22,11 +24,19 @@ package LORgames.Engine
 				storageArray = storageObject.data.D as Array;
 			}
 			
+			if (storageObject.data.S == null) {
+				settingsArray = new Array();
+			} else {
+				settingsArray = storageObject.data.S as Array;
+			}
+			
 			if (GetAsInt("StorageRevision") != 0 && GetAsInt("StorageRevision") < Global.WipeStorageBelowRevision) {
 				Storage.Format();
 			}
 			
 			Set("StorageRevision", Global.StorageRevision);
+			
+			AudioController.SetMuted(GetSetting("isMuted"));
 		}
 		
 		public static function GetAsVoid(index:String):* {
@@ -83,6 +93,7 @@ package LORgames.Engine
 			}
 			
 			storageObject.data.D = storageArray;
+			storageObject.data.S = settingsArray;
             
             var flushStatus:String = null;
 			
@@ -123,6 +134,24 @@ package LORgames.Engine
 			
 			storageArray = new Array();
 			Save();
+		}
+		
+		public static function SaveSetting(index:String, newValue:Boolean = true):void {
+			if (storageObject == null) Initialize();
+			
+			settingsArray[index] = newValue;
+			
+			Save();
+		}
+		
+		public static function GetSetting(index:String, defaultValue:Boolean = true):Boolean {
+			if(storageObject == null) Initialize();
+			
+			if (settingsArray[index] is Boolean) {
+				return settingsArray[index];
+			}
+			
+			return defaultValue;
 		}
 		
 	}

@@ -7,6 +7,7 @@ package GameCom.States {
 	import flash.text.TextFormat;
 	import flash.text.TextFieldAutoSize;
 	import GameCom.Helpers.AudioStore;
+	import GameCom.SystemComponents.SettingsPane;
 	import GameCom.SystemMain;
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
@@ -38,6 +39,8 @@ package GameCom.States {
 		private var WebsiteText:TextField = new TextField();
 		private var CreditsText:TextField = new TextField();
 		
+		private var settings:SettingsPane = new SettingsPane();
+		
 		public function MainMenu() {
 			//Just make sure we're ready to do this...
 			if (this.stage) Init();
@@ -46,6 +49,10 @@ package GameCom.States {
 		
 		public function Init(e:Event = null):void {
 			removeEventListener(Event.ADDED_TO_STAGE, Init);
+			
+			this.addChild(settings);
+			settings.x = 100;
+			settings.y = 200;
 			
 			//Start Menu
 			this.addChild(TextContainer);
@@ -80,7 +87,7 @@ package GameCom.States {
 			CreditsText.selectable = false;
 			CreditsText.defaultTextFormat = new TextFormat("Verdana", 10, 0xFFFFFF);
 			CreditsText.autoSize = TextFieldAutoSize.CENTER;
-			CreditsText.htmlText = "LORgames: Paul 'OsiJr' Fox, Ryan 'HarkonX' Furlong, Ying 'ohoshiio' Luo, Samuel 'samsinsane' Surtees, Miles 'mozza_26' Till and Nathan 'Nazka' Wentwoth-Perry.\n\nPowered by FZip and Box2DFlashAS3.";
+			CreditsText.htmlText = "LORgames: Paul 'OsiJr' Fox, Ryan 'HarkonX' Furlong, Ying 'ohoshiio' Luo, Samuel 'Samsinsane' Surtees, Miles 'Mozza26' Till and Nathan 'Nazka' Wentwoth-Perry.\n\nPowered by FZip and Box2DFlashAS3.";
 			CreditsText.wordWrap = true;
 			CreditsText.width = 274;
 			this.addChild(CreditsText);

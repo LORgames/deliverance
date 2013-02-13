@@ -27,7 +27,7 @@ package  {
 		public static const WipeStorageBelowRevision:int = 0;
 		
 		//Driving direction
-		public static const DriveOnLeft:Boolean = false;
+		public static var DriveOnLeft:Boolean = false;
 	}
 
 }
