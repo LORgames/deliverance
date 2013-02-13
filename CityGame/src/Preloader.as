@@ -70,7 +70,7 @@ package {
 			TextContainer.addChild(DisplayText);
 			
 			this.addChild(adContainer);
-			MochiAd.showPreGameAd({clip:adContainer, id:"c3ebe5c39a9741ba", res:stage.stageWidth+"x"+stage.stageHeight, ad_finished:fAdFinished});
+			MochiAd.showPreGameAd({clip:adContainer, id:"c3ebe5c39a9741ba", res:stage.stageWidth+"x"+stage.stageHeight, ad_finished:fAdFinished, no_progress_bar:true});
 			
 			resize(null);
 		}
@@ -132,9 +132,6 @@ package {
 			
 			DisplayText.x = -DisplayText.width / 2;
 			DisplayText.y = 50;
-			
-			//adContainer.x = (stage.stageWidth - AD_SIZE_X) / 2;
-			//adContainer.y = (stage.stageHeight - AD_SIZE_Y) / 2;
 		}
 		
 		private function loadingFinished():void {
@@ -145,7 +142,7 @@ package {
 			loaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, ioError);
 			
 			PercentageText.text = "";
-			DisplayText.text = "Watching Ad";
+			DisplayText.text = "Waiting for advertising network.";
 			
 			CleanUp();
 		}

@@ -23,6 +23,7 @@ package GameCom.States {
 	import LORgames.Components.TextBox;
 	import LORgames.Engine.AudioController;
 	import LORgames.Engine.Keys;
+	import LORgames.Engine.Stats;
 	import LORgames.Engine.Storage;
 	import LORgames.Localization.Strings;
 	import mx.core.BitmapAsset;
@@ -95,6 +96,8 @@ package GameCom.States {
 			AudioController.PlayLoop(AudioStore.Music);
 			
 			WorldManager.World.Step(0, 1, 1);
+			
+			Stats.Connect();
 			
 			SystemMain.instance.StateTo(new MainMenu());
 		}

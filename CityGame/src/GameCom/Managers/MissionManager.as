@@ -166,8 +166,6 @@ package GameCom.Managers {
 					
 					Stats.SetHighestInt(Stat.HIGHEST_STORY_MISSION, highestMissionCompleted);
 				} else {
-					Stats.SetHighestInt(Stat.LONGEST_DELIVERY, CurrentMission.TotalDistance);
-					Stats.SetLowestInt(Stat.SHORTEST_DELIVERY, CurrentMission.TotalDistance);
 					
 					Stats.AddOne(Stat.TOTAL_DELIVERY_FROM_PREFIX + CurrentMission.StartNPC1);
 					Stats.AddOne(Stat.TOTAL_DELIVERY_TO_PREFIX + CurrentMission.EndNPC1);
@@ -175,6 +173,8 @@ package GameCom.Managers {
 					GUIManager.I.Popup(PeopleHelper.DropOffMessages[CurrentMission.EndNPC1], CurrentMission.EndNPC1, CurrentMission.EndNPC2);
 				}
 				
+				Stats.SetHighestInt(Stat.LONGEST_DELIVERY, CurrentMission.TotalDistance);
+				Stats.SetLowestInt(Stat.SHORTEST_DELIVERY, CurrentMission.TotalDistance);
 				Stats.AddValue(Stat.TOTAL_DELIVERY_DISTANCE, CurrentMission.TotalDistance);
 				
 				CurrentMission = null;

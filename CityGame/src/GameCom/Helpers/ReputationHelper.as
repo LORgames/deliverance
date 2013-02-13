@@ -48,6 +48,8 @@ package GameCom.Helpers {
 			while (CurrentLevel < 19 && Levels[CurrentLevel + 1].ReputationRequired < CurrentReputation) {
 				CurrentLevel++;
 			}
+			
+			Stats.StartLevel(CurrentLevel);
 		}
 		
 		/**
@@ -60,12 +62,16 @@ package GameCom.Helpers {
 			Storage.Set("Reputation", CurrentReputation);
 			
 			while (CurrentLevel < 19 && CurrentReputation >= Levels[CurrentLevel + 1].ReputationRequired) {
+				Stats.EndLevel();
+				
 				CurrentLevel++;
 				ResourceHelper.UpdateAvailableResources();
 				
 				if (CurrentLevel == 4) {
 					GUIManager.I.player.EquipWeapon("Machine Gun");
 				}
+				
+				Stats.StartLevel(CurrentLevel);
 			}
 			
 			Stats.SetHighestNumber(Stat.HIGHEST_REPUTATION_INCREASE, newRep);

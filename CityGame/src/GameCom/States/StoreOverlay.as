@@ -2,6 +2,7 @@ package GameCom.States {
 	import Box2D.Common.b2Color;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
+	import flash.events.StatusEvent;
 	import flash.events.TextEvent;
 	import flash.filters.GlowFilter;
 	import flash.geom.ColorTransform;
@@ -13,10 +14,12 @@ package GameCom.States {
 	import GameCom.Helpers.ReputationHelper;
 	import GameCom.Helpers.UpgradeHelper;
 	import GameCom.Managers.GUIManager;
+	import GameCom.SystemComponents.Stat;
 	import LORgames.Components.Button;
 	import LORgames.Components.TextBox;
 	import LORgames.Components.Tooltip;
 	import LORgames.Engine.AudioController;
+	import LORgames.Engine.Stats;
 	import LORgames.Engine.Storage;
 	/**
 	 * ...
@@ -157,6 +160,8 @@ package GameCom.States {
 		
 		public function Redraw():void {
 			if (!stage) return;
+			
+			CurrencyTB.text = "$" + MoneyHelper.GetBalance();
 		}
 		
 		private function OnCloseClicked(me:MouseEvent):void {
@@ -173,6 +178,13 @@ package GameCom.States {
 				if (MoneyHelper.CanDebit(UpgradeHelper.GetCost(stat, statVal+1))) {
 					MoneyHelper.Debit(UpgradeHelper.GetCost(stat, statVal+1));
 					Storage.Set(stat + "Upgrade", statVal + 1);
+					
+					Stats.AddOne(Stat.TOTAL_UPGRADES);
+					Stats.AddOne(Stat.UPGRADE_HIGHEST_PREFIX + stat);
+					
+					if (statVal+1 == 10) {
+						Stats.AddOne(Stat.TOTAL_UPGRADES_MAXES);
+					}
 				}
 			}
 			

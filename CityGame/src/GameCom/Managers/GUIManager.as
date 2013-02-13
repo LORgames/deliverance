@@ -351,6 +351,7 @@ package GameCom.Managers {
 			Overlay.visible = false;
 			
 			AudioController.PlaySound(AudioStore.MenuPopup);
+			store.Redraw();
 			
 			Pause.call();
 		}
