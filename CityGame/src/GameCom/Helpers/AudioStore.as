@@ -5,9 +5,6 @@ package GameCom.Helpers
 	 * @author ...
 	 */
 	public class AudioStore {
-		[Embed(source="../../../lib/Audio/BackgroundMusic.mp3")]
-		public static const Music:Class;
-		
 		[Embed(source="../../../lib/Audio/MachineGunFire.mp3")]
 		public static const MachineGunBullet:Class;
 		

@@ -25,6 +25,9 @@ package  {
 		//Storage things
 		public static const StorageRevision:int = 1;
 		public static const WipeStorageBelowRevision:int = 0;
+		
+		//Driving direction
+		public static const DriveOnLeft:Boolean = false;
 	}
 
 }

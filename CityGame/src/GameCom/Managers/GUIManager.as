@@ -1,5 +1,6 @@
 package GameCom.Managers {
 	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	import flash.display.Sprite;
 	import flash.events.TextEvent;
 	import flash.filters.GlowFilter;
@@ -31,11 +32,15 @@ package GameCom.Managers {
 		
 		public static var I:GUIManager;
 		
+		private static const MINIMAP_SIZE_R:int = 75;
+		
 		private var GPSArrow:Sprite;
 		private var GPSDistance:TextField = new TextField();
 		
 		private var Overlay:Sprite;
 		private var PopupSprite:Sprite = new Sprite();
+		
+		private var MinimapSprite:Sprite = new Sprite();
 		
 		private var CurrentLevelText:TextField = new TextField();
 		private var CurrentMoneyText:TextField = new TextField();
@@ -71,6 +76,8 @@ package GameCom.Managers {
 			this.addChild(Overlay);
 			Overlay.x = 10;
 			Overlay.y = 10;
+			
+			Overlay.addChild(MinimapSprite);
 			
 			GPSArrow = ThemeManager.Get("SWFs/Arrow.swf");
 			this.addChild(GPSArrow);
@@ -142,6 +149,7 @@ package GameCom.Managers {
 		public function Update() : void {
 			if (stage == null) return;
 			
+			MinimapSprite.graphics.clear();
 			CurrentSpeedText.text = Math.round(player.body.GetLinearVelocity().Length() * 3.6) + "km/h";
 			
 			if (MissionManager.CurrentDestination() != null) {
@@ -248,6 +256,49 @@ package GameCom.Managers {
 				store.y = (stage.stageHeight - store.height) / 2;
 				
 				map.Update();
+			} else {
+				var mapScale:Number = (ThemeManager.Get("GUI/Minimap.png") as BitmapData).width / 18688;
+				
+				MinimapSprite.x = stage.stageWidth - MINIMAP_SIZE_R;
+				MinimapSprite.y = stage.stageHeight - MINIMAP_SIZE_R;
+				
+				var mapOffsetX:int = -player.x * mapScale;
+				var mapOffsetY:int = -player.y * mapScale;
+				
+				var mapMAT:Matrix = new Matrix(1, 0, 0, 1, mapOffsetX, mapOffsetY);
+				
+				MinimapSprite.graphics.lineStyle(1, 0x0);
+				MinimapSprite.graphics.beginFill(0x0080C0);
+				MinimapSprite.graphics.drawCircle(0, 0, MINIMAP_SIZE_R);
+				MinimapSprite.graphics.endFill();
+				
+				MinimapSprite.graphics.lineStyle();
+				MinimapSprite.graphics.beginBitmapFill(ThemeManager.Get("GUI/Minimap.png"), mapMAT, false, false);
+				MinimapSprite.graphics.drawCircle(0, 0, MINIMAP_SIZE_R);
+				MinimapSprite.graphics.endFill();
+				
+				MinimapSprite.graphics.beginFill(0xFFFF00);
+				MinimapSprite.graphics.drawCircle(0, 0, 3);
+				MinimapSprite.graphics.endFill();
+				
+				if (MissionManager.CurrentDestination() != null) {
+					var mapOffsetX2:int;
+					var mapOffsetY2:int;
+					
+					if (MathHelper.Distance(MissionManager.CurrentDestination(), new Point(player.x, player.y)) < MINIMAP_SIZE_R/mapScale) {
+						mapOffsetX2 = mapOffsetX + (MissionManager.CurrentDestination().x * mapScale);
+						mapOffsetY2 = mapOffsetY + (MissionManager.CurrentDestination().y * mapScale);
+					} else {
+						var minimap_angle:Number = MathHelper.GetAngleBetween(MissionManager.CurrentDestination(), new Point(player.x, player.y));
+						
+						mapOffsetX2 = Math.cos(minimap_angle) * MINIMAP_SIZE_R;
+						mapOffsetY2 = Math.sin(minimap_angle) * MINIMAP_SIZE_R;
+					}
+					
+					MinimapSprite.graphics.beginFill(0xFF0000);
+					MinimapSprite.graphics.drawCircle(mapOffsetX2, mapOffsetY2, 3);
+					MinimapSprite.graphics.endFill();
+				}
 			}
 		}
 		

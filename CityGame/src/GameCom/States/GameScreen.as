@@ -107,7 +107,7 @@ package GameCom.States {
 			worldSpr.addChild(WorldManager.debugDrawLayer);
 			
 			// player is added to objectLayer
-			player = new PlayerTruck(new b2Vec2(11000/Global.PHYSICS_SCALE, 15450/Global.PHYSICS_SCALE), placesLayer);
+			player = new PlayerTruck(new b2Vec2(11050/Global.PHYSICS_SCALE, 15640/Global.PHYSICS_SCALE), placesLayer);
 			
 			// bgManager (ground) is added to groundLayer
 			bgManager = new BGManager(groundLayer, player);
@@ -161,7 +161,7 @@ package GameCom.States {
 			
 			gui.Update();
 			
-			if(Keys.isKeyDown(Keyboard.P)) {
+			if(Keys.isKeyDown(Keyboard.B) && Keys.isKeyDown(Keyboard.U) && Keys.isKeyDown(Keyboard.G)) {
 				WorldManager.World.DrawDebugData();
 			} else {
 				WorldManager.debugDrawLayer.graphics.clear();

@@ -80,7 +80,7 @@ package GameCom.States {
 			CreditsText.selectable = false;
 			CreditsText.defaultTextFormat = new TextFormat("Verdana", 10, 0xFFFFFF);
 			CreditsText.autoSize = TextFieldAutoSize.CENTER;
-			CreditsText.htmlText = "LORgames: Paul Fox, Ryan Furlong, Ying Luo, Nathan Perry, Samuel Surtees and Miles Till.\n\nPowered by FZip and Box2DFlashAS3.";
+			CreditsText.htmlText = "LORgames: Paul 'OsiJr' Fox, Ryan 'HarkonX' Furlong, Ying 'ohoshiio' Luo, Samuel 'samsinsane' Surtees, Miles 'mozza_26' Till and Nathan 'Nazka' Wentwoth-Perry.\n\nPowered by FZip and Box2DFlashAS3.";
 			CreditsText.wordWrap = true;
 			CreditsText.width = 274;
 			this.addChild(CreditsText);

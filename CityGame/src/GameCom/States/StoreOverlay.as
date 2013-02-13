@@ -144,14 +144,15 @@ package GameCom.States {
 			CloseButton.addEventListener(MouseEvent.CLICK, OnCloseClicked);
 			
 			CurrencyTB.selectable = false;
-			CurrencyTB.defaultTextFormat = new TextFormat("Verdana", 20, 0xFFFF70);
-			CurrencyTB.x = 128;
-			CurrencyTB.y = 10;
+			CurrencyTB.defaultTextFormat = new TextFormat("Verdana", 26, 0xFF0000);
 			CurrencyTB.autoSize = TextFieldAutoSize.LEFT;
-			CurrencyTB.filters = new Array(new GlowFilter(0, 1, 2, 2, 5));
+			CurrencyTB.filters = new Array(new GlowFilter(0xFFFF70, 1, 2, 2, 5));
 			this.addChild(CurrencyTB);
 			
 			CurrencyTB.text = "$" + MoneyHelper.GetBalance();
+			
+			CurrencyTB.x = CloseButton.x - 10 - CurrencyTB.width;
+			CurrencyTB.y = 10;
 			
 			tooltip.visible = false;
 			
@@ -162,6 +163,7 @@ package GameCom.States {
 			if (!stage) return;
 			
 			CurrencyTB.text = "$" + MoneyHelper.GetBalance();
+			CurrencyTB.x = CloseButton.x - 10 - CurrencyTB.width;
 		}
 		
 		private function OnCloseClicked(me:MouseEvent):void {
@@ -189,6 +191,7 @@ package GameCom.States {
 			}
 			
 			CurrencyTB.text = "$" + MoneyHelper.GetBalance();
+			CurrencyTB.x = CloseButton.x - 10 - CurrencyTB.width;
 			
 			OnUpgradeHighlight(me);
 			
@@ -208,7 +211,13 @@ package GameCom.States {
 			if (statVal == 10) {
 				tooltip.SetText("ALREADY MAX");
 			} else {
-				tooltip.SetText("Level " + (statVal+1) + " " + stat + " costs $" + UpgradeHelper.GetCost(stat, statVal+1) + ".\n\nCurrent Benefit: " + UpgradeHelper.GetBenefit(stat, statVal) + "\nNext Level: " + UpgradeHelper.GetBenefit(me.currentTarget.getLabel(), statVal+1) + "\n\nBalance After Purchase: " + MoneyHelper.GetBalanceAfterPurchase(UpgradeHelper.GetCost(stat, statVal+1)) + "\n\n" + (MoneyHelper.CanDebit(UpgradeHelper.GetCost(stat, statVal+1))?"<font color='#00FF00'>Click To Purchase</font>":"<font color='#FF0000'>You cannot purchase at this time</font>"));
+				var tooltipMessage:String = "Level " + (statVal + 1) + " " + stat + " costs $" + UpgradeHelper.GetCost(stat, statVal + 1) + ".\n\n";
+				tooltipMessage += "Current Benefit: " + UpgradeHelper.GetBenefit(stat, statVal) + "\n";
+				tooltipMessage += "Next Level: " + UpgradeHelper.GetBenefit(me.currentTarget.getLabel(), statVal + 1) + "\n\n";
+				tooltipMessage += "Balance After Purchase: " + MoneyHelper.GetBalanceAfterPurchase(UpgradeHelper.GetCost(stat, statVal + 1)) + "\n\n";
+				tooltipMessage += (MoneyHelper.CanDebit(UpgradeHelper.GetCost(stat, statVal + 1))?"<font color = '#00FF00' > Click To Purchase </font>":"<font color='#FF0000'>You cannot purchase at this time</font >");
+				
+				tooltip.SetText(tooltipMessage);
 			}
 			
 			tooltip.visible = true;

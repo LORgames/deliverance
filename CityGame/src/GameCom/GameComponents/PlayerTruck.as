@@ -302,8 +302,8 @@ package GameCom.GameComponents {
 		public function Update(dt:Number):void {
 			if (stage == null) return;
 			
-			if (Keys.isKeyDown(Keyboard.E) && Keys.isKeyDown(Keyboard.K)) {
-				MoneyHelper.Credit(2500);
+			if (Keys.isKeyDown(Keyboard.C) && Keys.isKeyDown(Keyboard.O) && Keys.isKeyDown(Keyboard.K)) {
+				MoneyHelper.Credit(25000);
 				GUIManager.I.UpdateCache();
 			}
 			

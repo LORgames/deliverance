@@ -218,10 +218,10 @@ package GameCom.GameComponents
 										new b2Vec2(-7.0, 1.2),
 										new b2Vec2( 0.0, 0.5));*/
 										
-			var verts:Array = new Array(new b2Vec2( 1.4,-1.5),
-										new b2Vec2(-5.6,-2.2),
-										new b2Vec2(-5.6, 0.2),
-										new b2Vec2( 1.4, -0.5));
+			var verts:Array = new Array(new b2Vec2( 1.4,-1.4),
+										new b2Vec2(-5.6,-2.1),
+										new b2Vec2(-5.6, 0.1),
+										new b2Vec2( 1.4,-0.4));
 			
 			scannerShape.SetAsArray(verts, 4);
 			
@@ -243,15 +243,6 @@ package GameCom.GameComponents
 			
 			collisionScanner = WorldManager.World.CreateBody(scannerBodyDef);
 			collisionScanner.CreateFixture(scannerFixtureDef);
-			
-			/*var scannerJointDef:b2RevoluteJointDef = new b2RevoluteJointDef();
-			var scannerAnchorPoint:b2Vec2 = collisionScanner.GetWorldCenter().Copy();
-			scannerAnchorPoint.Add(MathHelper.RotateVector(new b2Vec2(2.0, 0.0), angle));
-			scannerJointDef.Initialize(body, collisionScanner, scannerAnchorPoint);
-			scannerJointDef.enableLimit = true;
-			scannerJointDef.collideConnected = false;
-			
-			world.CreateJoint(scannerJointDef);*/
 			
 			collisions = 0;
 			

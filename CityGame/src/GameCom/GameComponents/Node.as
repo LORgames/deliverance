@@ -10,7 +10,9 @@ package GameCom.GameComponents
 		
 		public var x:Number;
 		public var y:Number;
-		private var children:Array;
+		
+		public var parents:Array = new Array();
+		public var children:Array;
 		
 		public function Node(x:Number, y:Number, children:Array) {
 			this.x = x;
@@ -22,8 +24,14 @@ package GameCom.GameComponents
 		}
 		
 		public function NextChild():int {
-			if(children) {
-				return children[Math.floor(Math.random() * children.length)];
+			if(Global.DriveOnLeft) {
+				if(children) {
+					return children[Math.floor(Math.random() * children.length)];
+				}
+			} else {
+				if(parents) {
+					return parents[Math.floor(Math.random() * parents.length)];
+				}
 			}
 			
 			return -1;

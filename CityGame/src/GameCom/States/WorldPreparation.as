@@ -93,7 +93,7 @@ package GameCom.States {
 			//Needs places manager to be running first
 			MissionManager.Initialize();
 			
-			AudioController.PlayLoop(AudioStore.Music);
+			//AudioController.PlayLoop(AudioStore.Music);
 			
 			WorldManager.World.Step(0, 1, 1);
 			

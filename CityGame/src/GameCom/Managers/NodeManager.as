@@ -31,11 +31,18 @@ package GameCom.Managers
 				var totalChildren:int = nodefile.readByte();
 				
 				children = new Array();
-				for (var j:int = 0; j < totalChildren; j++) {
+				
+				for (var l:int = 0; l < totalChildren; l++) {
 					children.push(nodefile.readInt());
 				}
 				
 				nodeArray.push(new Node(x, y, children));
+			}
+			
+			for (var j:int = 0; j < numnodes; j++) {
+				for (var k:int = 0; k < nodeArray[j].children.length; k++) {
+					nodeArray[nodeArray[j].children[k]].parents.push(j);
+				}
 			}
 		}
 		
