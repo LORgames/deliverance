@@ -45,7 +45,7 @@ package GameCom.Helpers {
 			CurrentReputation = Storage.GetAsInt("Reputation");
 			CurrentLevel = 0;
 			
-			while (CurrentLevel < 19 && Levels[CurrentLevel + 1].ReputationRequired < CurrentReputation) {
+			while (CurrentLevel < 19 && Levels[CurrentLevel + 1].ReputationRequired <= CurrentReputation) {
 				CurrentLevel++;
 			}
 			

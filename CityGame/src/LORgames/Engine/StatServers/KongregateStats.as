@@ -5,6 +5,7 @@ package LORgames.Engine.StatServers
 	import flash.events.Event;
 	import flash.net.URLRequest;
 	import flash.system.Security;
+	import LORgames.Engine.MessageBox;
 	/**
 	 * ...
 	 * @author Paul
@@ -19,10 +20,10 @@ package LORgames.Engine.StatServers
 			
 			// Pull the API path from the FlashVars
 			var paramObj:Object = LoaderInfo(Main.GetStage().loaderInfo).parameters;
-
-			// The API path. The "shadow" API will load if testing locally. 
+			
+			// The API path. The "shadow" API will load if testing locally.
 			var apiPath:String = paramObj.kongregate_api_path || "http://www.kongregate.com/flash/API_AS3_Local.swf";
-
+			
 			// Allow the API access to this SWF
 			Security.allowDomain(apiPath);
 
@@ -34,14 +35,15 @@ package LORgames.Engine.StatServers
 		}
 		
 		private function loadComplete(event:Event):void {
-			trace("KONG LOADED");
-			
 			// Save Kongregate API reference
 			kongregate = event.target.content;
+			Main.GetStage().addChild(kongregate);
 			
 			// Connect to the back-end
-			if(kongregate.services != null) {
+			try {
 				kongregate.services.connect();
+			} catch (ex:Error) {
+				new MessageBox("Connect error:\n" + ex.name + "\n\n" + ex.message, 0, null, "OK?");
 			}
 			
 			// You can now access the API via:
@@ -57,8 +59,10 @@ package LORgames.Engine.StatServers
 		
 		public function Submit(statname:String, statvalue:int):void {
 			if (statname.indexOf("stat_") == 0) {
-				if (kongregate.stats != null) {
+				try {
 					kongregate.stats.submit(statname.substr(5), statvalue);
+				} catch (ex:Error) {
+					new MessageBox("A wild Kongregate Bug has appeared!\n\n " + ex.name + "\n\n" + ex.message, 0, null, "OK?");
 				}
 			}
 			
