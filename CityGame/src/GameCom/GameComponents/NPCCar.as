@@ -9,10 +9,13 @@ package GameCom.GameComponents
 	import GameCom.GameComponents.Weapons.RocketLauncher;
 	import GameCom.Helpers.AudioStore;
 	import GameCom.Helpers.MathHelper;
+	import GameCom.Helpers.MoneyHelper;
 	import GameCom.Helpers.ReputationHelper;
+	import GameCom.Managers.ExplosionManager;
 	import GameCom.Managers.GUIManager;
 	import GameCom.Managers.MissionManager;
 	import GameCom.Managers.NodeManager;
+	import GameCom.Managers.NPCManager;
 	import GameCom.Managers.WorldManager;
 	import GameCom.States.GameScreen;
 	import GameCom.SystemComponents.Stat;
@@ -444,15 +447,20 @@ package GameCom.GameComponents
 		}
 		
 		public function Damage(dams:int):void {
-			if (type == VEHICLE_DEAD) return;
-			
 			myHP -= dams;
-			
 			AudioController.PlaySound(AudioStore.NPCHit);
+			
+			if (type == VEHICLE_DEAD) {
+				if (myHP <= 0) {
+					ExplosionManager.I.RequestExplosionAt(new Point(this.x, this.y));
+					NPCManager.I.DestroyMe(this);
+				}
+				
+				return;
+			}
 			
 			if (myHP <= 0) {
 				Stats.AddOne(Stat.TOTAL_CARS_WRECKED);
-				AudioController.PlaySound(AudioStore.Explode);
 				
 				var cls:Class;
 				
@@ -472,12 +480,16 @@ package GameCom.GameComponents
 					this.addChildAt(new cls(), 2);
 					
 					Wep.Update(new Point(GUIManager.I.player.x, GUIManager.I.player.y), false);
+					
+					MoneyHelper.Credit(250);
 				}
 				
-				body.SetLinearDamping(2.5);
-				body.SetAngularDamping(2.5);
+				body.SetLinearDamping(5);
+				body.SetAngularDamping(5);
 				
 				type = VEHICLE_DEAD;
+				
+				myHP = 100;
 			}
 		}
 	}

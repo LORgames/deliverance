@@ -11,6 +11,7 @@ package GameCom.GameComponents {
 	import GameCom.Helpers.AudioStore;
 	import GameCom.Helpers.MathHelper;
 	import GameCom.Helpers.MoneyHelper;
+	import GameCom.Managers.ExplosionManager;
 	import GameCom.Managers.GUIManager;
 	import GameCom.Managers.MissionManager;
 	import GameCom.Managers.NPCManager;
@@ -104,7 +105,7 @@ package GameCom.GameComponents {
 		
 		public var Colours:Vector.<ColorTransform> = new Vector.<ColorTransform>();
 		
-		public function PlayerTruck(spawnPosition:b2Vec2, worldSpr:Sprite) {
+		public function PlayerTruck(spawnPosition:b2Vec2, worldSpr:Sprite, rootWorld:Sprite) {
 			worldSpr.addChild(this);
 			
 			this.addChild(ThemeManager.Get("TruckBits/Truck.swf"));
@@ -383,11 +384,20 @@ package GameCom.GameComponents {
 			var contacts:b2ContactEdge = body.GetContactList();
 			
 			while (contacts != null) {
-				if (contacts.other.GetUserData() is PlaceObject && contacts.contact.IsTouching()) {
-					var place:PlaceObject = contacts.other.GetUserData() as PlaceObject;
-					
-					if(place.isActive) {
-						TriggerManager.ReportTrigger("place_" + place.TriggerValue, place);
+				if(contacts.contact.IsTouching()) {
+					if (contacts.other.GetUserData() is PlaceObject) {
+						var place:PlaceObject = contacts.other.GetUserData() as PlaceObject;
+						
+						if(place.isActive) {
+							TriggerManager.ReportTrigger("place_" + place.TriggerValue, place);
+						}
+					} else if (contacts.other.GetUserData() is ScenicObject) {
+						var scenic:ScenicObject = contacts.other.GetUserData() as ScenicObject;
+						
+						if(scenic.typeID == 47) { //Street lamp
+							ExplosionManager.I.RequestDeadLamppostAt(scenic.position, scenic.rotation);
+							scenic.CleanUp();
+						}
 					}
 				}
 				

@@ -35,7 +35,7 @@ package GameCom.SystemComponents {
 			
 			SettingsHeaderTF = GenerateTextfield(36, "Settings", [new GlowFilter(0x337C8C, 1, 10, 10, 5, 1)], true, -20);
 			
-			DriveOnLeftLabel = GenerateTextfield(18, "Traffic on Left or Right?", [], true, 30);
+			DriveOnLeftLabel = GenerateTextfield(18, "What side do you drive on?", [], true, 30);
 			
 			DriveOnLeftText = GenerateTextfield(16, "Left", [], true, 55);
 			DriveOnLeftText.x = 274 / 2 - DriveOnLeftText.width - 10;

@@ -128,6 +128,17 @@ package GameCom.Managers
 			}
 		}
 		
+		public function DestroyMe(car:NPCCar):void {
+			car.Destroy();
+			worldSpr.removeChild(car);
+			
+			for (var i:int = 0; i < cars.length; i++) {
+				if (cars[i] == car) {
+					cars.splice(i, 1);
+				}
+			}
+		}
+		
 		private function HasWorldPhysicsThing(fixture:b2Fixture):Boolean {
 			if (fixture.IsSensor()) {
 				return true;

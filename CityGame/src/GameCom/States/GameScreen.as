@@ -21,6 +21,7 @@ package GameCom.States {
 	import GameCom.Helpers.ReputationHelper;
 	import GameCom.Helpers.ResourceHelper;
 	import GameCom.Helpers.WorldPhysicsLoader;
+	import GameCom.Managers.ExplosionManager;
 	import GameCom.Managers.GUIManager;
 	import GameCom.Managers.MissionManager;
 	import GameCom.Managers.NPCManager;
@@ -62,6 +63,8 @@ package GameCom.States {
 		private var bgManager:BGManager;
 		private var scenicManager:ScenicManager;
 		private var placesManager:PlacesManager;
+		
+		private var explosionManager:ExplosionManager;
 		
 		private var gui:GUIManager;
 		
@@ -107,7 +110,7 @@ package GameCom.States {
 			worldSpr.addChild(WorldManager.debugDrawLayer);
 			
 			// player is added to objectLayer
-			player = new PlayerTruck(new b2Vec2(11050/Global.PHYSICS_SCALE, 15640/Global.PHYSICS_SCALE), placesLayer);
+			player = new PlayerTruck(new b2Vec2(11050/Global.PHYSICS_SCALE, 15640/Global.PHYSICS_SCALE), placesLayer, object1Layer);
 			
 			// bgManager (ground) is added to groundLayer
 			bgManager = new BGManager(groundLayer, player);
@@ -126,6 +129,8 @@ package GameCom.States {
 			gui = new GUIManager(player, Pause, MockUpdate);
 			this.addChild(gui);
 			
+			explosionManager = new ExplosionManager(placesLayer, object1Layer);
+			
 			//player.Respawn();
 			
 			simulating = true;
@@ -142,6 +147,8 @@ package GameCom.States {
 				//Update the objects
 				player.Update(Global.TIME_STEP);
 				npcManager.Update();
+				
+				explosionManager.Update();
 				
 				if(stage) {
 					worldSpr.x = Math.floor(-player.x + stage.stageWidth/2);

@@ -9,6 +9,7 @@ package GameCom.GameComponents
 	import flash.display.BitmapData;
 	import flash.display.Graphics;
 	import flash.geom.Matrix;
+	import flash.geom.Point;
 	import GameCom.Managers.ScenicManager;
 	import GameCom.Managers.WorldManager;
 	import GameCom.SystemComponents.ScenicObjectType;
@@ -18,7 +19,10 @@ package GameCom.GameComponents
 	 */
 	public class ScenicObject extends BaseObject {
 		public var typeID:int = 0;
-
+		
+		public var position:Point;
+		public var rotation:Number;
+		
 		public var drawX:int = 0;
 		public var drawY:int = 0;
 		public var drawW:int = 0;
@@ -27,8 +31,13 @@ package GameCom.GameComponents
 		
 		public var drawM:Matrix = new Matrix();
 		
+		private var body:b2Body;
+		
         public function ScenicObject(type:int, posX:Number, posY:Number, angle:int, sot:ScenicObjectType) {
             this.typeID = type;
+			
+			this.position = new Point(posX, posY);
+			this.rotation = angle;
 			
             var radians:Number = 0.0174532925;
 			
@@ -49,14 +58,15 @@ package GameCom.GameComponents
 			var bodyBodyDef:b2BodyDef = new b2BodyDef();
 			bodyBodyDef.type = b2Body.b2_staticBody;
 			bodyBodyDef.position.Set(posX / Global.PHYSICS_SCALE, posY / Global.PHYSICS_SCALE);
-			bodyBodyDef.angle = angle*radians;
+			bodyBodyDef.angle = angle * radians;
+			bodyBodyDef.userData = this;
 			
 			//Create the body
-			baseBody = WorldManager.World.CreateBody(bodyBodyDef);
-			baseBody.CreateFixture(bodyFixtureDef);
+			body = WorldManager.World.CreateBody(bodyBodyDef);
+			body.CreateFixture(bodyFixtureDef);
 			
 			if (sot.Physics != null) {
-				sot.Physics.GenerateBody(baseBody);
+				sot.Physics.GenerateBody(body);
 			}
 			
 			//Fix the position stuffs
@@ -97,5 +107,9 @@ package GameCom.GameComponents
 			buffer.drawRect(drawX, drawY, drawW, drawH);
 			buffer.endFill();
         }
+		
+		public function CleanUp():void {
+			body.GetWorld().DestroyBody(body);
+		}
 	}
 }

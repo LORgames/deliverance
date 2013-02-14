@@ -1,8 +1,10 @@
 package GameCom.Managers 
 {
+	import Box2D.Collision.b2AABB;
 	import Box2D.Common.Math.b2Vec2;
 	import Box2D.Dynamics.b2Body;
 	import Box2D.Dynamics.b2DebugDraw;
+	import Box2D.Dynamics.b2Fixture;
 	import Box2D.Dynamics.b2World;
 	import flash.display.Sprite;
 	import GameCom.Helpers.StaticBoxCreator;
@@ -46,6 +48,47 @@ package GameCom.Managers
 			}
 		}
 		
+		private static var bodies:Vector.<b2Fixture>
+        private static function ExplosionSearch(fix:b2Fixture):Boolean {
+            if (!fix.IsSensor() && fix.GetBody().GetType() == b2Body.b2_dynamicBody) {
+                bodies.push(fix);
+            }
+			
+            return true;
+        }
+		
+		public static function Explode(position:b2Vec2, radius:Number, strength:Number):void {
+			var aabb:b2AABB = new b2AABB();
+			
+			var vMin:b2Vec2 = position.Copy();
+			vMin.Subtract(new b2Vec2(radius, radius));
+			
+			var vMax:b2Vec2 = position.Copy();
+			vMax.Add(new b2Vec2(radius, radius));
+			
+			aabb.lowerBound = vMin;
+			aabb.upperBound = vMax;
+			
+			bodies = new Vector.<b2Fixture>();
+			World.QueryAABB(ExplosionSearch, aabb);
+			
+			var b:b2Body;
+			var forceVec:b2Vec2;
+			
+			for (var i:int = 0; i < bodies.length; i++) {
+				b = bodies[i].GetBody();
+				
+				forceVec = b.GetWorldCenter().Copy();
+				
+				forceVec.Subtract(position);
+				
+				forceVec.Normalize();
+				forceVec.Multiply(strength);
+				
+				b.SetAwake(true);
+				b.ApplyForce(forceVec, b.GetWorldCenter());
+			}
+		}
 	}
 
 }
