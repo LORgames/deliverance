@@ -75,8 +75,15 @@ package GameCom.GameComponents
 		
 		private var myHP:int = NPC_HP;
 		
-		// AI
-		private var targetNode:int = 0;
+		// Driving info
+		private var previousTargetNode:int = -1;
+		private var currentTargetNode:int = 0;
+		private var nextTargetNode:int = 0;
+		
+		private var needToIndicate:Boolean = false;
+		private var leftIndicate:Boolean = false;
+		
+		//Car details
 		private var type:int = VEHICLE_CARA;
 		private const VEHICLE_DEAD:int = -1;
 		private const VEHICLE_CARA:int = 0;
@@ -111,6 +118,12 @@ package GameCom.GameComponents
 			
 			this.addChild(new vehicle());
 			(this.getChildAt(0) as MovieClip).stop();
+			
+			//Turn off lights
+			(this.getChildAt(0) as MovieClip).getChildAt(1).visible = false; //LEFT INDICATOR
+			(this.getChildAt(0) as MovieClip).getChildAt(2).visible = false; //RIGHT INDICATOR
+			(this.getChildAt(0) as MovieClip).getChildAt(3).visible = false; //BRAKE LIGHT 1
+			(this.getChildAt(0) as MovieClip).getChildAt(4).visible = false; //BRAKE LIGHT 2
 			
 			if(type != VEHICLE_ENEMYVAN) {
 				(this.getChildAt(0) as MovieClip).getChildAt(0).transform.colorTransform = ct;
@@ -259,7 +272,7 @@ package GameCom.GameComponents
 			leftWheel.ApplyForce(ldirection, leftWheel.GetPosition());
 			rightWheel.ApplyForce(rdirection, rightWheel.GetPosition());
 			
-			targetNode = firstNodeID;
+			currentTargetNode = firstNodeID;
 			
 			//DRAW TIRES
 			LRotWheel.graphics.beginFill(0x0);
@@ -286,6 +299,8 @@ package GameCom.GameComponents
 					EquipWeapon("MachineGun");
 				}
 			}
+			
+			UpdateNodes(false);
 		}
 		
 		private function killOrthogonalVelocity(targetBody:b2Body):void {
@@ -303,6 +318,8 @@ package GameCom.GameComponents
 		}
 		
 		public function Update():void {
+			var showBrakeLights:Boolean = false;
+			
 			if (type == VEHICLE_DEAD) {
 				this.x = body.GetPosition().x * Global.PHYSICS_SCALE;
 				this.y = body.GetPosition().y * Global.PHYSICS_SCALE;
@@ -310,14 +327,13 @@ package GameCom.GameComponents
 				return;
 			}
 			
-			if (targetNode != -1) {
+			if (currentTargetNode != -1) {
 				// if within reach of targetNode then choose next node
-				if (NodeManager.TouchNode(targetNode, x, y)) {
-					targetNode = NodeManager.NextNode(targetNode);
-					if (targetNode == -1) return;
+				if (NodeManager.TouchNode(currentTargetNode, x, y)) {
+					UpdateNodes();
 				}
 				
-				var tNode:Node = NodeManager.GetNode(targetNode);
+				var tNode:Node = NodeManager.GetNode(currentTargetNode);
 				
 				// always accelerate toward targetNode UNLESS ABOUT TO COLLIDE OMFG JUST LIKE JACOB'S DRIVING 
 				if (collisions > 0) {
@@ -327,6 +343,8 @@ package GameCom.GameComponents
 					if (Math.random() < 0.001) {
 						AudioController.PlaySound(AudioStore.Horn);
 					}
+					
+					showBrakeLights = true;
 				} else {
 					body.SetLinearDamping(1.0);
 					if(engineSpeed > -HORSEPOWER_MAX) {
@@ -399,7 +417,6 @@ package GameCom.GameComponents
 			mspeed = steeringAngle - rightJoint.GetJointAngle();
 			rightJoint.SetMotorSpeed(mspeed * STEER_SPEED);
 			
-			//TODO: Find out how expensive this is...
 			collisionScanner.SetPositionAndAngle(leftWheel.GetPosition(), leftWheel.GetAngle() + Math.PI/2);
 			
 			LRotWheel.rotation = leftWheel.GetAngle() / Math.PI * 180 - this.rotation;
@@ -408,6 +425,57 @@ package GameCom.GameComponents
 			this.x = body.GetPosition().x * Global.PHYSICS_SCALE;
 			this.y = body.GetPosition().y * Global.PHYSICS_SCALE;
 			this.rotation = body.GetAngle() * 180 / Math.PI;
+			
+			(this.getChildAt(2) as MovieClip).getChildAt(3).visible = showBrakeLights; //BRAKE LIGHT 1
+			(this.getChildAt(2) as MovieClip).getChildAt(4).visible = showBrakeLights; //BRAKE LIGHT 2
+		}
+		
+		private function UpdateNodes(progressing:Boolean = true):void {
+			if(progressing) {
+				previousTargetNode = currentTargetNode;
+				currentTargetNode = nextTargetNode;
+			}
+			
+			nextTargetNode = NodeManager.NextNode(currentTargetNode);
+			
+			needToIndicate = !NodeManager.OnlyOneChild(currentTargetNode);
+			
+			(this.getChildAt(2) as MovieClip).getChildAt(1).visible = false; //RIGHT INDICATOR
+			(this.getChildAt(2) as MovieClip).getChildAt(2).visible = false; //LEFT INDICATOR
+			
+			if (needToIndicate) {
+				//figure out which way to indicate
+				var angle1:Number = MathHelper.GetAngleBetween(NodeManager.GetNode(currentTargetNode).p, NodeManager.GetNode(nextTargetNode).p);
+				var angle2:Number;
+				
+				if (previousTargetNode == -1) {
+					angle2 = body.GetAngle() - Math.PI/2;
+				} else { 
+					angle2 = MathHelper.GetAngleBetween(NodeManager.GetNode(previousTargetNode).p, NodeManager.GetNode(currentTargetNode).p);
+				}
+				
+				while (angle1 < 0) angle1 += Math.PI * 2;				
+				while (angle1 >= 2*Math.PI) angle1 -= Math.PI * 2;
+				
+				while (angle2 < 0) angle2 += Math.PI * 2;
+				while (angle2 >= 2*Math.PI) angle2 -= Math.PI * 2;
+				
+				var change:Number = angle2 - angle1;
+				while (change > Math.PI) change -= Math.PI * 2;
+				while (change < -Math.PI) change += Math.PI * 2;
+					
+				if (change > 0.1) {
+					leftIndicate = false;
+					//(this.getChildAt(2) as MovieClip).getChildAt(1).visible = true; //RIGHT INDICATOR
+				} else if (change < -0.1) {
+					leftIndicate = true;
+					//(this.getChildAt(2) as MovieClip).getChildAt(2).visible = true; //LEFT INDICATOR
+				} else {
+					needToIndicate = false;
+				}
+			}
+			
+			if (currentTargetNode == -1) return;
 		}
 		
 		public function EquipWeapon(weaponName:String):void {

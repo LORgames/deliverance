@@ -3,6 +3,8 @@ package GameCom.Managers
 	import flash.display.Bitmap;
 	import GameCom.GameComponents.PickupPlace;
 	import GameCom.GameComponents.PlaceObject;
+	import GameCom.Helpers.MoneyHelper;
+	import GameCom.Helpers.ReputationHelper;
 	import GameCom.SystemComponents.Stat;
 	import LORgames.Engine.Keys;
 	import flash.ui.Keyboard;
@@ -37,6 +39,8 @@ package GameCom.Managers
 				Storage.Set("TotalCollectablesFound", 1 + Storage.GetAsInt("TotalCollectablesFound"));
 				
 				Stats.SetHighestInt(Stat.TOTAL_LASER_COMPONENTS, Storage.GetAsInt("TotalCollectablesFound"));
+				
+				MoneyHelper.Credit(50 * ReputationHelper.GetCurrentLevel() * ReputationHelper.GetCurrentLevel());
 				
 				if(Storage.GetAsInt("TotalCollectablesFound") < 50) {
 					GUIManager.I.Popup(Storage.GetAsInt("TotalCollectablesFound") + " of " + PlacesManager.CollectableLocations.length + " laser components found.");

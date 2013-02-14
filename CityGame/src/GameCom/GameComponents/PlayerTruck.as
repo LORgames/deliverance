@@ -16,6 +16,7 @@ package GameCom.GameComponents {
 	import GameCom.Managers.MissionManager;
 	import GameCom.Managers.NPCManager;
 	import GameCom.Managers.PlacesManager;
+	import GameCom.Managers.ScenicManager;
 	import GameCom.Managers.WorldManager;
 	import GameCom.States.GameScreen;
 	import GameCom.SystemComponents.Stat;
@@ -55,7 +56,7 @@ package GameCom.GameComponents {
 		private const HORSEPOWER_MAX_PER_LEVEL:Number = 7.5;
 		private const HORSEPOWER_INC_PER_LEVEL:Number = 1.0;
 		private const HEALTH_INC_PER_LEVEL:Number = 100;
-		private const ARMOUR_INC_PER_LEVEL:Number = 0.09;
+		private const ARMOUR_INC_PER_LEVEL:Number = 0.075;
 		private const DAMAGE_INC_PER_LEVEL:Number = 0.4;
 		
 		private var speedUpgradeLevel:int = 0;
@@ -63,6 +64,7 @@ package GameCom.GameComponents {
 		private var healthUpgradeLevel:int = 0;
 		private var armourUpgradeLevel:int = 0;
 		private var damageUpgradeLevel:int = 0;
+		
 		public var HealthMax:Number;
 		private var healthCurrent:Number;
 		
@@ -246,7 +248,12 @@ package GameCom.GameComponents {
 			WorldManager.World.CreateJoint(rightRearJointDef);
 			
 			FixUpgradeValues();
-			EquipWeapon(BaseWeapon.ConvertTypeToString(Storage.GetAsInt("CurrentWeapon", -1)));
+			
+			if (Storage.GetAsInt("CurrentWeapon", -1) == -1) {
+				EquipWeapon("Machine Gun");
+			} else {
+				EquipWeapon(BaseWeapon.ConvertTypeToString(Storage.GetAsInt("CurrentWeapon", -1)));
+			}
 			
 			Colours.push(new ColorTransform(238/255, 223/255, 221/255),
 						 new ColorTransform(104/255, 102/255, 089/255),
@@ -397,6 +404,8 @@ package GameCom.GameComponents {
 						if(scenic.typeID == 47) { //Street lamp
 							ExplosionManager.I.RequestDeadLamppostAt(scenic.position, scenic.rotation);
 							scenic.CleanUp();
+						} else if (scenic.typeID == 50) { //Hedge piece
+							scenic.typeID = 116;
 						}
 					}
 				}

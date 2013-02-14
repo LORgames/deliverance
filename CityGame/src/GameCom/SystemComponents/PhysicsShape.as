@@ -21,9 +21,11 @@ package GameCom.SystemComponents {
 			//Not sure if anything needs to be done here.
 		}
 		
-		public function GenerateBody(body:b2Body):void {
+		public function GenerateBody(body:b2Body, isSensor:Boolean = false):void {
 			for (var i:int = 0; i < FixtureList.length; i++) {
 				var bfd:b2FixtureDef = FixtureList[i];
+				bfd.isSensor = isSensor;
+				
 				body.CreateFixture(bfd);
 			}
 		}

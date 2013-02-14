@@ -211,10 +211,8 @@ package GameCom.States {
 			if (statVal == 10) {
 				tooltip.SetText("ALREADY MAX");
 			} else {
-				var tooltipMessage:String = "Level " + (statVal + 1) + " " + stat + " costs $" + UpgradeHelper.GetCost(stat, statVal + 1) + ".\n\n";
-				tooltipMessage += "Current Benefit: " + UpgradeHelper.GetBenefit(stat, statVal) + "\n";
-				tooltipMessage += "Next Level: " + UpgradeHelper.GetBenefit(me.currentTarget.getLabel(), statVal + 1) + "\n\n";
-				tooltipMessage += "Balance After Purchase: " + MoneyHelper.GetBalanceAfterPurchase(UpgradeHelper.GetCost(stat, statVal + 1)) + "\n\n";
+				var tooltipMessage:String = UpgradeHelper.GetBenefit(stat, statVal) + "\n\n";
+				tooltipMessage += "Balance After Purchase: " + MoneyHelper.GetBalanceAfterPurchase(UpgradeHelper.GetCost(stat, statVal + 1)) + "\n";
 				tooltipMessage += (MoneyHelper.CanDebit(UpgradeHelper.GetCost(stat, statVal + 1))?"<font color = '#00FF00' > Click To Purchase </font>":"<font color='#FF0000'>You cannot purchase at this time</font >");
 				
 				tooltip.SetText(tooltipMessage);

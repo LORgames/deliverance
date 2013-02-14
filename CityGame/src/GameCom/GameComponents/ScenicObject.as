@@ -66,7 +66,7 @@ package GameCom.GameComponents
 			body.CreateFixture(bodyFixtureDef);
 			
 			if (sot.Physics != null) {
-				sot.Physics.GenerateBody(body);
+				sot.Physics.GenerateBody(body, type==50); //50 is hedge, needs to be a sensor
 			}
 			
 			//Fix the position stuffs

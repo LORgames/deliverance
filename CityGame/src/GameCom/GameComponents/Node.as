@@ -36,5 +36,19 @@ package GameCom.GameComponents
 			
 			return -1;
 		}
+		
+		public function TotalChildren():int {
+			if(Global.DriveOnLeft) {
+				if(children) {
+					return children.length;
+				}
+			} else {
+				if(parents) {
+					return parents.length;
+				}
+			}
+			
+			return 0;
+		}
 	}
 }

@@ -50,6 +50,10 @@ package GameCom.Managers
 			return nodeArray[node].NextChild();
 		}
 		
+		public static function OnlyOneChild(node:int):Boolean {
+			return (nodeArray[node].TotalChildren() < 2);
+		}
+		
 		public static function FirstNode(carX:Number, carY:Number):int {
 			return 0;
 		}

@@ -21,7 +21,7 @@ package GameCom.Helpers {
 				var d:Array = lines[i].split(',');
 				
 				Costs[d[0] + d[1]] = d[2];
-				Benefits[d[0] + d[1]] = d[3];
+				Benefits[d[0] + d[1]] = d[4];
 			}
 		}
 		
@@ -29,12 +29,12 @@ package GameCom.Helpers {
 			return Costs[stat + level];
 		}
 		
-		public static function GetBenefit(stat:String, level:int, def:Number = 0.0):Number {
+		public static function GetBenefit(stat:String, level:int):String {
 			if(Benefits[stat + level]) {
 				return Benefits[stat + level];
-			} else {
-				return def;
 			}
+			
+			return "";
 		}
 	}
 
