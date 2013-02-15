@@ -1,11 +1,13 @@
 package GameCom.SystemComponents {
 	import flash.display.Sprite;
+	import flash.display.StageQuality;
 	import flash.events.MouseEvent;
 	import flash.events.TextEvent;
 	import flash.filters.GlowFilter;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
+	import GameCom.Managers.ScenicManager;
 	import LORgames.Engine.AudioController;
 	import LORgames.Engine.Storage;
 	/**
@@ -24,16 +26,23 @@ package GameCom.SystemComponents {
 		private var SoundOnText:TextField;
 		private var SoundOffText:TextField;
 		
+		private var QualityLabel:TextField;
+		private var QualityHighText:TextField;
+		private var QualityLowText:TextField;
+		
+		private const PANE_HEIGHT:int = 200;
+		
 		public function SettingsPane() {
 			this.graphics.beginFill(0x0, 0.7);
 			this.graphics.lineStyle(2);
 			
-			this.graphics.drawRoundRect(0, 0, 274, 140, 20);
+			this.graphics.drawRoundRect(0, 0, 274, PANE_HEIGHT, 20);
 			this.graphics.endFill();
 			
-			Global.DriveOnLeft = Storage.GetSetting("DriveOnLeft");
-			
 			SettingsHeaderTF = GenerateTextfield(36, "Settings", [new GlowFilter(0x337C8C, 1, 10, 10, 5, 1)], true, -20);
+			
+			////////////////////////// DRIVING DIRECTION
+			Global.DriveOnLeft = Storage.GetSetting("DriveOnLeft");
 			
 			DriveOnLeftLabel = GenerateTextfield(18, "What side do you drive on?", [], true, 30);
 			
@@ -47,6 +56,9 @@ package GameCom.SystemComponents {
 			FilterSetting(DriveOnRightText, !Global.DriveOnLeft);
 			GenerateListeners(DriveOnRightText, RightMouseOver, RightMouseClick, RightMouseLeave);
 			
+			/////////////////////////// SOUND
+			AudioController.SetMuted(Storage.GetSetting("isMuted"));
+			
 			SoundOnLabel = GenerateTextfield(18, "Sound on or off?", [], true, 90);
 			
 			SoundOnText = GenerateTextfield(16, "On", [], true, 115);
@@ -58,6 +70,28 @@ package GameCom.SystemComponents {
 			SoundOffText.x = 274 / 2 + 10;
 			FilterSetting(SoundOffText, AudioController.GetMuted());
 			GenerateListeners(SoundOffText, SoundOffMouseOver, SoundOffMouseClick, SoundOffMouseLeave);
+			
+			////////////////////////// QUALITY
+			Global.HIGH_QUALITY = Storage.GetSetting("HighQuality");
+			
+			if (!Global.HIGH_QUALITY) {
+				ScenicManager.UpdateQuality(true);
+				Main.GetStage().quality = StageQuality.LOW;
+			} else {
+				Main.GetStage().quality = StageQuality.HIGH;
+			}
+			
+			QualityLabel = GenerateTextfield(18, "Visual Quality?", [], true, 150);
+			
+			QualityLowText = GenerateTextfield(16, "Low", [], true, 175);
+			QualityLowText.x = 274 / 2 - QualityLowText.width - 10;
+			FilterSetting(QualityLowText, !Global.HIGH_QUALITY);
+			GenerateListeners(QualityLowText, QualityLowMouseOver, QualityLowMouseClick, QualityLowMouseLeave);
+			
+			QualityHighText = GenerateTextfield(16, "High", [], true, 175);
+			QualityHighText.x = 274 / 2 + 10;
+			FilterSetting(QualityHighText, Global.HIGH_QUALITY);
+			GenerateListeners(QualityHighText, QualityHighMouseOver, QualityHighMouseClick, QualityHighMouseLeave);
 		}
 		
 		private function GenerateTextfield(size:int, text:String, filters:Array = null, center:Boolean = true, yPos:int = 0):TextField {
@@ -106,6 +140,38 @@ package GameCom.SystemComponents {
 		private function SoundOffMouseOver(me:MouseEvent):void { if (!AudioController.GetMuted()) SoundOffText.filters = [new GlowFilter(0x7C8C33, 1, 10, 10, 5, 1)]; }
 		private function SoundOffMouseClick(me:MouseEvent):void { if (!AudioController.GetMuted()) { AudioController.SetMuted(true); Storage.SaveSetting("isMuted", true); FilterSetting(SoundOffText, true); FilterSetting(SoundOnText, false);} }
 		private function SoundOffMouseLeave(me:MouseEvent):void { if (!AudioController.GetMuted()) SoundOffText.filters = []; }
+		
+		private function QualityLowMouseOver(me:MouseEvent):void  { if (Global.HIGH_QUALITY) QualityLowText.filters = [new GlowFilter(0x7C8C33, 1, 10, 10, 5, 1)]; }
+		private function QualityLowMouseLeave(me:MouseEvent):void { if (Global.HIGH_QUALITY) QualityLowText.filters = []; }
+		
+		private function QualityHighMouseOver(me:MouseEvent):void  { if (!Global.HIGH_QUALITY) QualityHighText.filters = [new GlowFilter(0x7C8C33, 1, 10, 10, 5, 1)]; }
+		private function QualityHighMouseLeave(me:MouseEvent):void { if (!Global.HIGH_QUALITY) QualityHighText.filters = []; }
+		
+		private function QualityLowMouseClick(me:MouseEvent):void {
+			if (Global.HIGH_QUALITY) {
+				Global.HIGH_QUALITY = false;
+				Storage.SaveSetting("HighQuality", false);
+				
+				FilterSetting(QualityHighText, false);
+				FilterSetting(QualityLowText, true);
+				
+				ScenicManager.UpdateQuality(true);
+				Main.GetStage().quality = StageQuality.LOW;
+			}
+		}
+		
+		private function QualityHighMouseClick(me:MouseEvent):void {
+			if (!Global.HIGH_QUALITY) {
+				Global.HIGH_QUALITY = true;
+				Storage.SaveSetting("HighQuality", true);
+				
+				FilterSetting(QualityHighText, true);
+				FilterSetting(QualityLowText, false);
+				
+				ScenicManager.UpdateQuality(false);
+				Main.GetStage().quality = StageQuality.HIGH;
+			}
+		}
 		
 	}
 

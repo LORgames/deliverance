@@ -94,7 +94,7 @@ package GameCom.Managers {
 			GPSDistance.autoSize = TextFieldAutoSize.CENTER;
 			GPSDistance.x = GPSArrow.x;
 			GPSDistance.y = GPSArrow.y;
-			GPSDistance.filters = new Array(new GlowFilter(0, 1, 2, 2, 5));
+			if(Global.HIGH_QUALITY) GPSDistance.filters = new Array(new GlowFilter(0, 1, 2, 2, 5));
 			this.addChild(GPSDistance);
 			
 			CurrentLevelText.selectable = false;
@@ -102,7 +102,7 @@ package GameCom.Managers {
 			CurrentLevelText.x = 26;
 			CurrentLevelText.y = 3;
 			CurrentLevelText.autoSize = TextFieldAutoSize.CENTER;
-			CurrentLevelText.filters = new Array(new GlowFilter(0, 1, 2, 2, 5));
+			if(Global.HIGH_QUALITY) CurrentLevelText.filters = new Array(new GlowFilter(0, 1, 2, 2, 5));
 			Overlay.addChild(CurrentLevelText);
 			
 			CurrentMoneyText.selectable = false;
@@ -110,7 +110,7 @@ package GameCom.Managers {
 			CurrentMoneyText.x = 75;
 			CurrentMoneyText.y = 50;
 			CurrentMoneyText.autoSize = TextFieldAutoSize.LEFT;
-			CurrentMoneyText.filters = new Array(new GlowFilter(0, 1, 2, 2, 5));
+			if(Global.HIGH_QUALITY) CurrentMoneyText.filters = new Array(new GlowFilter(0, 1, 2, 2, 5));
 			Overlay.addChild(CurrentMoneyText);
 			
 			CurrentSpeedText.selectable = false;
@@ -118,7 +118,7 @@ package GameCom.Managers {
 			CurrentSpeedText.x = 140;
 			CurrentSpeedText.y = -6;
 			CurrentSpeedText.autoSize = TextFieldAutoSize.LEFT;
-			CurrentSpeedText.filters = new Array(new GlowFilter(0, 1, 2, 2, 5));
+			if(Global.HIGH_QUALITY) CurrentSpeedText.filters = new Array(new GlowFilter(0, 1, 2, 2, 5));
 			Overlay.addChild(CurrentSpeedText);
 			
 			this.addChild(PopupSprite);
@@ -133,7 +133,7 @@ package GameCom.Managers {
 			popupText.width = 411;
 			popupText.height = 191;
 			
-			popupText.filters = new Array(new GlowFilter(0x337C8C, 1, 7, 7, 3));
+			if(Global.HIGH_QUALITY) popupText.filters = new Array(new GlowFilter(0x337C8C, 1, 7, 7, 3));
 			PopupSprite.addChild(popupText);
 			PopupSprite.addChild(popupCloseMessage);
 			
@@ -141,7 +141,7 @@ package GameCom.Managers {
 			popupCloseMessage.defaultTextFormat = new TextFormat("Verdana", 10, 0xFFFFFF);
 			popupCloseMessage.autoSize = TextFieldAutoSize.LEFT;
 			popupCloseMessage.text = "Press Enter, Space or Left Click to continue.";
-			popupCloseMessage.filters = new Array(new GlowFilter(0x337C8C, 1, 7, 7, 3));
+			if(Global.HIGH_QUALITY) popupCloseMessage.filters = new Array(new GlowFilter(0x337C8C, 1, 7, 7, 3));
 			popupCloseMessage.alpha = 0;
 			
 			UpdateCache();
@@ -263,7 +263,7 @@ package GameCom.Managers {
 							popupFadeIn = false;
 							
 							//Need 1 frame of update if the popup is a blackout to allow respawn to work
-							MockUpdateWorld.call();
+							if(popupMessages[0].blackOut) MockUpdateWorld.call();
 						}
 					}
 					

@@ -153,6 +153,7 @@ package GameCom.GameComponents {
 			bodyBodyDef.linearDamping = 2;
 			bodyBodyDef.angularDamping = 1;
 			bodyBodyDef.position = spawnPosition.Copy();
+			bodyBodyDef.bullet = true;
 			
 			//Create the body
 			body = WorldManager.World.CreateBody(bodyBodyDef);
@@ -310,11 +311,6 @@ package GameCom.GameComponents {
 		public function Update(dt:Number):void {
 			if (stage == null) return;
 			
-			if (Keys.isKeyDown(Keyboard.C) && Keys.isKeyDown(Keyboard.O) && Keys.isKeyDown(Keyboard.K)) {
-				MoneyHelper.Credit(25000);
-				GUIManager.I.UpdateCache();
-			}
-			
 			if (Keys.isKeyDown(Keyboard.UP) || Keys.isKeyDown(Keyboard.W)) {
 				if (CurrentLoop != DrivingLoop) {
 					AudioController.PlaySound(AudioStore.TruckTakeoff);
@@ -421,7 +417,7 @@ package GameCom.GameComponents {
 			var p:Point = new Point(mX, mY);
 			
 			if (Wep != null)
-				Wep.Update(p, Mousey.IsClicking(), currentDamageFactor);
+				Wep.Update(p, Mousey.IsClicking(), dt, currentDamageFactor);
 			
 			if (healthCurrent < 0) Respawn(true);
 		}

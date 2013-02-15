@@ -62,7 +62,7 @@ package GameCom.Managers
 			return null;
 		}
 		
-		public function Update():void {
+		public function Update(dt:Number):void {
 			if (worldSpr.stage == null) {
 				DestroyAllCars();
 				return;
@@ -104,7 +104,7 @@ package GameCom.Managers
 			
 			for (var i:int = 0; i < cars.length; ) {
 				var car:NPCCar = cars[i];
-				car.Update();
+				car.Update(dt);
 				
 				// if car not visible destroy
 				var carRect:Rectangle = new Rectangle(car.x - car.width / 2, car.y - car.height / 2, car.width, car.height);

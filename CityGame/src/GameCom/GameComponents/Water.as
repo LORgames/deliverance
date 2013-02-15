@@ -61,6 +61,8 @@ package GameCom.GameComponents  {
 		}
 		
 		public function Update():void {
+			if (!Global.HIGH_QUALITY) return;
+			
 			animationTick++;
 			
 			if(stage != null && this.parent != null) {

@@ -67,6 +67,10 @@ package GameCom.SystemComponents {
 			FixtureList.push(bodyFixtureDef);
 		}
 		
+		public function IsEmpty():Boolean {
+			return (FixtureList.length == 0);
+		}
+		
 	}
 
 }

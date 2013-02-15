@@ -18,6 +18,8 @@ package GameCom.GameComponents
 	 * @author Paul
 	 */
 	public class ScenicObject extends BaseObject {
+		public static const radians:Number = 0.0174532925;
+		
 		public var typeID:int = 0;
 		
 		public var position:Point;
@@ -33,37 +35,17 @@ package GameCom.GameComponents
 		
 		private var body:b2Body;
 		
+		private var im:BitmapData;
+		
         public function ScenicObject(type:int, posX:Number, posY:Number, angle:int, sot:ScenicObjectType) {
             this.typeID = type;
 			
 			this.position = new Point(posX, posY);
 			this.rotation = angle;
 			
-            var radians:Number = 0.0174532925;
+			im = ThemeManager.Get("obj/" + type + ".png");
 			
-			var im:BitmapData = ThemeManager.Get("obj/" + type + ".png");
-			
-			//Create the shape
-			var bodyShape:b2PolygonShape = new b2PolygonShape();
-			bodyShape.SetAsBox(im.width / 2 / Global.PHYSICS_SCALE, im.height / 2 / Global.PHYSICS_SCALE);
-			
-			//Create the fixture
-			var bodyFixtureDef:b2FixtureDef = new b2FixtureDef();
-			bodyFixtureDef.shape = bodyShape;
-			bodyFixtureDef.isSensor = true;
-			bodyFixtureDef.userData = this;
-			bodyFixtureDef.filter.categoryBits = 0x0; // This should be a major speedup
-			
-			//Create the defintion
-			var bodyBodyDef:b2BodyDef = new b2BodyDef();
-			bodyBodyDef.type = b2Body.b2_staticBody;
-			bodyBodyDef.position.Set(posX / Global.PHYSICS_SCALE, posY / Global.PHYSICS_SCALE);
-			bodyBodyDef.angle = angle * radians;
-			bodyBodyDef.userData = this;
-			
-			//Create the body
-			body = WorldManager.World.CreateBody(bodyBodyDef);
-			body.CreateFixture(bodyFixtureDef);
+			AddToWorld();
 			
 			if (sot.Physics != null) {
 				sot.Physics.GenerateBody(body, type==50); //50 is hedge, needs to be a sensor
@@ -103,13 +85,37 @@ package GameCom.GameComponents
         }
 		
         public override function Draw(buffer:Graphics):void {
-            buffer.beginBitmapFill(ThemeManager.Get("obj/" + typeID + ".png"), drawM, false);
+            buffer.beginBitmapFill(im, drawM, false);
 			buffer.drawRect(drawX, drawY, drawW, drawH);
 			buffer.endFill();
         }
 		
 		public function CleanUp():void {
 			body.GetWorld().DestroyBody(body);
+		}
+		
+		public function AddToWorld():void {
+			//Create the shape
+			var bodyShape:b2PolygonShape = new b2PolygonShape();
+			bodyShape.SetAsBox(im.width / 2 / Global.PHYSICS_SCALE, im.height / 2 / Global.PHYSICS_SCALE);
+			
+			//Create the fixture
+			var bodyFixtureDef:b2FixtureDef = new b2FixtureDef();
+			bodyFixtureDef.shape = bodyShape;
+			bodyFixtureDef.isSensor = true;
+			bodyFixtureDef.userData = this;
+			bodyFixtureDef.filter.categoryBits = 0x0; // This should be a major speedup
+			
+			//Create the defintion
+			var bodyBodyDef:b2BodyDef = new b2BodyDef();
+			bodyBodyDef.type = b2Body.b2_staticBody;
+			bodyBodyDef.position.Set(position.x / Global.PHYSICS_SCALE, position.y / Global.PHYSICS_SCALE);
+			bodyBodyDef.angle = rotation * radians;
+			bodyBodyDef.userData = this;
+			
+			//Create the body
+			body = WorldManager.World.CreateBody(bodyBodyDef);
+			body.CreateFixture(bodyFixtureDef);
 		}
 	}
 }

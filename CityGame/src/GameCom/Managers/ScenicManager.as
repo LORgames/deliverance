@@ -20,6 +20,9 @@ package GameCom.Managers {
 		private static var Types:Vector.<ScenicObjectType> = new Vector.<ScenicObjectType>();
 		private static var Objects:Vector.<ScenicObject> = new Vector.<ScenicObject>();
 		
+		//Vector of objects that get removed from the world if the quality is LOW
+		private static var LowQualityObjects:Vector.<ScenicObject> = new Vector.<ScenicObject>();
+		
 		private var drawList:Vector.<ScenicObject> = new Vector.<ScenicObject>();
 		
 		private var layer0:Sprite;
@@ -80,7 +83,25 @@ package GameCom.Managers {
 				var locationY:Number = objectFile.readFloat();
 				var rotation:int = objectFile.readInt();
 				
-				Objects.push(new ScenicObject(sourceID, locationX, locationY, rotation, Types[sourceID]));
+				var so:ScenicObject = new ScenicObject(sourceID, locationX, locationY, rotation, Types[sourceID]);
+				
+				Objects.push(so);
+				
+				if (Types[sourceID].Physics == null || Types[sourceID].Physics.IsEmpty()) {
+					LowQualityObjects.push(so);
+				}
+			}
+			
+			trace(Objects.length + " total objects " + LowQualityObjects.length + " clutter objects");
+		}
+		
+		public static function UpdateQuality(isLow:Boolean = true):void {
+			for (var i:int = 0; i < LowQualityObjects.length; i++) {
+				if (isLow) {
+					//LowQualityObjects[i].CleanUp();
+				} else {
+					//LowQualityObjects[i].AddToWorld();
+				}
 			}
 		}
 		

@@ -8,6 +8,9 @@ package  {
 		//The name of the game
 		public static const GAME_NAME:String = "Deliverance";
 		
+		// Quality Settings
+		public static var HIGH_QUALITY:Boolean = true;
+		
 		// Pixels per Meter
 		public static const PHYSICS_SCALE:Number = 10.0;
 		
@@ -16,8 +19,8 @@ package  {
 		public static const INV_TIME_STEP:Number = 1 / TIME_STEP;
 		
 		//Number of iterations for things
-		public static const VELOCITY_ITERATIONS:int = 3;
-		public static const POSITION_ITERATIONS:int = 7;
+		public static const VELOCITY_ITERATIONS:int = 1;
+		public static const POSITION_ITERATIONS:int = 1;
 		
 		//Mochi authentication
 		private var _mochiads_game_id:String = "c3ebe5c39a9741ba";

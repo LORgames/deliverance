@@ -70,10 +70,13 @@ package GameCom.States {
 		
 		private var player:PlayerTruck;
 		
+		private var lastUpdate:int = 0;
+		
 		//olol toggle bool for mute
 		private var mDown:Boolean = false;
 		
 		public static var EndOfTheLine_TerminateASAP:Boolean = false;
+		
 		
 		public function GameScreen() {
 			//Just make sure we're ready to do this...
@@ -137,16 +140,24 @@ package GameCom.States {
 			MockUpdate();
 			
 			MissionManager.GenerateAllMissions();
+			
+			lastUpdate = getTimer();
 		}
 		
 		private function Update(e:Event):void {
+			var _tu:int = getTimer();
+			var _dt:Number = (Global.HIGH_QUALITY?Global.TIME_STEP:(_tu - lastUpdate) / 1000);
+			lastUpdate = _tu;
+			
+			if (_dt > 0.05) _dt = 0.05;
+			
 			if (simulating) {
-				WorldManager.World.Step(Global.TIME_STEP, Global.VELOCITY_ITERATIONS, Global.POSITION_ITERATIONS);
+				WorldManager.World.Step(_dt, Global.VELOCITY_ITERATIONS, Global.POSITION_ITERATIONS);
 				WorldManager.World.ClearForces();
 				
 				//Update the objects
-				player.Update(Global.TIME_STEP);
-				npcManager.Update();
+				player.Update(_dt);
+				npcManager.Update(_dt);
 				
 				explosionManager.Update();
 				

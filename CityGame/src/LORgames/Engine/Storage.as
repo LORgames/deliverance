@@ -35,8 +35,6 @@ package LORgames.Engine
 			}
 			
 			Set("StorageRevision", Global.StorageRevision);
-			
-			AudioController.SetMuted(GetSetting("isMuted"));
 		}
 		
 		public static function GetAsVoid(index:String):* {

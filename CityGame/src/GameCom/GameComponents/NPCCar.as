@@ -317,7 +317,7 @@ package GameCom.GameComponents
 			var j:Number = targetBody.GetPosition().y * Global.PHYSICS_SCALE - this.y;
 		}
 		
-		public function Update():void {
+		public function Update(dt:Number):void {
 			var showBrakeLights:Boolean = false;
 			
 			if (type == VEHICLE_DEAD) {
@@ -387,9 +387,9 @@ package GameCom.GameComponents
 			if (Wep != null) {
 				var playerDist:Number = MathHelper.Distance(new Point(this.x, this.y), new Point(GUIManager.I.player.x, GUIManager.I.player.y));
 				if (playerDist < 300) {
-					Wep.Update(new Point(GUIManager.I.player.x, GUIManager.I.player.y), true);
+					Wep.Update(new Point(GUIManager.I.player.x, GUIManager.I.player.y), true, dt, 1.0);
 				} else {
-					Wep.Update(new Point(GUIManager.I.player.x, GUIManager.I.player.y), false);
+					Wep.Update(new Point(GUIManager.I.player.x, GUIManager.I.player.y), false, dt, 1.0);
 				}
 			}
 			
@@ -547,7 +547,7 @@ package GameCom.GameComponents
 					cls = ThemeManager.GetClassFromSWF("SWFs/Cars.swf", "LORgames.DeadEnemyCar");
 					this.addChildAt(new cls(), 2);
 					
-					Wep.Update(new Point(GUIManager.I.player.x, GUIManager.I.player.y), false);
+					Wep.Update(new Point(GUIManager.I.player.x, GUIManager.I.player.y), false, 0, 0);
 					
 					MoneyHelper.Credit(250);
 				}

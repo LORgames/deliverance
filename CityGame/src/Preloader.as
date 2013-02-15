@@ -69,9 +69,9 @@ package {
 			DisplayText.selectable = false;
 			TextContainer.addChild(DisplayText);
 			
-			//isAdFinished = true;
-			this.addChild(adContainer);
-			MochiAd.showPreGameAd({clip:adContainer, id:"c3ebe5c39a9741ba", res:stage.stageWidth+"x"+stage.stageHeight, ad_finished:fAdFinished, no_progress_bar:true});
+			isAdFinished = true;
+			//this.addChild(adContainer);
+			//MochiAd.showPreGameAd({clip:adContainer, id:"c3ebe5c39a9741ba", res:stage.stageWidth+"x"+stage.stageHeight, ad_finished:fAdFinished, no_progress_bar:true});
 			
 			resize(null);
 		}

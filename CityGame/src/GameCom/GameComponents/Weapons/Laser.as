@@ -37,8 +37,8 @@ package GameCom.GameComponents.Weapons
 			(this.getChildAt(0) as MovieClip).stop();
 		}
 		
-		override public function Update(p:Point, wantsToFire:Boolean, damageMultipler:Number = 1.0):void {
-			super.Update(p, wantsToFire);
+		override public function Update(p:Point, wantsToFire:Boolean, dt:Number, damageMultipler:Number):void {
+			super.Update(p, wantsToFire, dt, damageMultipler);
 			
 			this.graphics.clear();
 			this.graphics.lineStyle(1, 0xFF0000);

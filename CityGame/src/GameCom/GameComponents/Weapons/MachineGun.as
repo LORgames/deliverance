@@ -76,10 +76,10 @@ package GameCom.GameComponents.Weapons
 			this.graphics.lineTo(Math.cos(angleBecauseInaccurate)*size*distance*Global.PHYSICS_SCALE, Math.sin(angleBecauseInaccurate)*size*distance*Global.PHYSICS_SCALE);
 		}
 		
-		override public function Update(p:Point, wantsToFire:Boolean, damageMultipler:Number = 1.0):void {
+		override public function Update(p:Point, wantsToFire:Boolean, dt:Number, damageMultipler:Number):void {
 			this.graphics.clear();
 			
-			super.Update(p, wantsToFire);
+			super.Update(p, wantsToFire, dt, damageMultipler);
 		}
 		
 		private function Wrappey(fixture:b2Fixture, point:b2Vec2, normal:b2Vec2, fraction:Number):Number {

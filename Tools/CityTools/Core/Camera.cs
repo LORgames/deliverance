@@ -12,6 +12,8 @@ namespace CityTools.Core {
         public static float ZoomLevel = 1.0f;
 
         public static void FixViewArea(Rectangle drawArea) {
+            System.Diagnostics.Debug.WriteLine("CZ: " + ZoomLevel);
+
             if (Offset.X < 0.0f) Offset.X = 0.0f;
             if (Offset.X > MainWindow.MAP_SIZE_X - drawArea.Width / ZoomLevel) Offset.X = MainWindow.MAP_SIZE_X - drawArea.Width / ZoomLevel;
 

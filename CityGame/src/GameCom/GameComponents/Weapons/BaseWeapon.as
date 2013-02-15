@@ -60,7 +60,7 @@ package GameCom.GameComponents.Weapons {
 			}
 		}
 		
-		public function Update(p:Point, wantsToFire:Boolean, damageMultipler:Number = 1.0):void {
+		public function Update(p:Point, wantsToFire:Boolean, dt:Number, damageMultipler:Number):void {
 			this.p = p;
 			this.wantsToFire = wantsToFire;
 			
@@ -68,7 +68,7 @@ package GameCom.GameComponents.Weapons {
 			this.rotation = angle / Math.PI * 180 - parent.rotation;
 			
 			if(_fireDelay < FIRE_RATE) {
-				_fireDelay += Global.TIME_STEP;
+				_fireDelay += dt;
 			}
 			
 			while (wantsToFire && _fireDelay >= FIRE_RATE) {

@@ -503,37 +503,51 @@ namespace CityTools {
         }
 
         private void gameQualityMinimapBtn_Click(object sender, EventArgs e) {
-            int mapSize = 4096;
+            int mapSize = 18688;
+            int piecesSqr = 4;
 
-            Camera.Offset.X = 0;
-            Camera.Offset.Y = 0;
-            Camera.ZoomLevel = (float)mapSize / (MapCache.TILE_SIZE_X * MapCache.TILE_TOTAL_X);
+            int pieceSize = mapSize / piecesSqr;
+            Camera.ZoomLevel = (float)mapSize / MAP_SIZE_X;
 
-            Camera.FixViewArea(new Rectangle(0, 0, mapSize, mapSize));
+            LBuffer m0 = new LBuffer(new Rectangle(0, 0, pieceSize, pieceSize));
+            LBuffer m1 = new LBuffer(new Rectangle(0, 0, pieceSize, pieceSize));
+            LBuffer m2 = new LBuffer(new Rectangle(0, 0, pieceSize, pieceSize));
+            LBuffer m3 = new LBuffer(new Rectangle(0, 0, pieceSize, pieceSize));
+            LBuffer m4 = new LBuffer(new Rectangle(0, 0, pieceSize, pieceSize));
+            LBuffer t = new LBuffer(new Rectangle(0, 0, pieceSize, pieceSize));
 
-            LBuffer m0 = new LBuffer(new Rectangle(0, 0, mapSize, mapSize));
-            LBuffer m1 = new LBuffer(new Rectangle(0, 0, mapSize, mapSize));
-            LBuffer m2 = new LBuffer(new Rectangle(0, 0, mapSize, mapSize));
-            LBuffer m3 = new LBuffer(new Rectangle(0, 0, mapSize, mapSize));
-            LBuffer m4 = new LBuffer(new Rectangle(0, 0, mapSize, mapSize));
+            for (int i = 0; i < piecesSqr; i++) {
+                for (int j = 0; j < piecesSqr; j++) {
+                    Camera.Offset.X = i * piecesSqr * MAP_SIZE_X;
+                    Camera.Offset.Y = j * piecesSqr * MAP_SIZE_X;
 
-            Terrain.TerrainHelper.DrawTerrain(m0);
-            BaseObjectDrawer.DrawObjects(m1, m2, m3, m4);
+                    Camera.FixViewArea(new Rectangle(0, 0, pieceSize, pieceSize));
 
-            LBuffer t = new LBuffer(new Rectangle(0, 0, mapSize, mapSize));
+                    System.Diagnostics.Debug.WriteLine(Camera.Offset + ", " + Camera.ZoomLevel + ", " + Camera.ViewArea + ", " + pieceSize);
 
-            t.gfx.DrawImage(m0.bmp, Point.Empty);
-            t.gfx.DrawImage(m1.bmp, Point.Empty);
-            t.gfx.DrawImage(m2.bmp, Point.Empty);
+                    Terrain.TerrainHelper.DrawTerrain(m0);
+                    BaseObjectDrawer.DrawObjects(m1, m2, m3, m4);
 
-            t.gfx.Dispose();
-            t.bmp.Save(Program.CACHE + "HQ_Minimap.png");
-            t.bmp.Save(Program.CACHE + "HQ_Minimap.jpg");
+                    t.gfx.DrawImage(m0.bmp, Point.Empty);
+                    t.gfx.DrawImage(m1.bmp, Point.Empty);
+                    t.gfx.DrawImage(m2.bmp, Point.Empty);
 
-            LBuffer minimapB = new LBuffer(minimap.DisplayRectangle);
-            minimapB.gfx.DrawImage(t.bmp, minimap.DisplayRectangle);
-            minimapB.gfx.Dispose();
-            minimapB.bmp.Save("minimap_new.jpg");
+                    t.bmp.Save(Program.CACHE + "HQ_Minimap_" + i + "_" + j + ".png");
+                    t.bmp.Save(Program.CACHE + "HQ_Minimap_" + i + "_" + j + ".jpg");
+
+                    m0.gfx.Clear(Color.Transparent);
+                    m1.gfx.Clear(Color.Transparent);
+                    m2.gfx.Clear(Color.Transparent);
+                    m3.gfx.Clear(Color.Transparent);
+                    m4.gfx.Clear(Color.Transparent);
+                    t.gfx.Clear(Color.Transparent);
+                }
+            }
+
+            //LBuffer minimapB = new LBuffer(minimap.DisplayRectangle);
+            //minimapB.gfx.DrawImage(t.bmp, minimap.DisplayRectangle);
+            //minimapB.gfx.Dispose();
+            //minimapB.bmp.Save("minimap_new.jpg");
 
             this.Close();
         }
